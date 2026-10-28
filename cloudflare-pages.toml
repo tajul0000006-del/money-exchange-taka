@@ -1,0 +1,5 @@
+# Cloudflare Pages static starter.
+# Connect this repository in the Cloudflare Pages dashboard.
+# Build command: leave empty
+# Build output directory: /
+# A deployment-time Firebase config injection workflow is required for a live Firebase connection.

@@ -1,0 +1,56 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function validRequest() {
+      return request.resource.data.keys().hasOnly([
+        'trackingCode', 'direction', 'currency', 'amount', 'paymentMethod',
+        'contact', 'paymentAccount', 'note', 'referralCode', 'uid',
+        'requestType', 'status', 'createdAt'
+      ])
+      && request.resource.data.trackingCode is string
+      && request.resource.data.trackingCode.size() >= 8
+      && request.resource.data.trackingCode.size() <= 32
+      && request.resource.data.direction in ['buy', 'sell']
+      && request.resource.data.currency == 'USD'
+      && request.resource.data.amount is number
+      && request.resource.data.amount > 0
+      && request.resource.data.amount <= 1000000
+      && request.resource.data.paymentMethod in ['bKash', 'Nagad', 'Rocket', 'Upay', 'ePay', 'TunePay', 'Bank', 'Other']
+      && request.resource.data.contact is string
+      && request.resource.data.contact.size() >= 6
+      && request.resource.data.contact.size() <= 25
+      && request.resource.data.paymentAccount is string
+      && request.resource.data.paymentAccount.size() >= 3
+      && request.resource.data.paymentAccount.size() <= 80
+      && request.resource.data.status == 'pending'
+      && request.resource.data.requestType in ['guest', 'member']
+      && request.resource.data.createdAt == request.time
+      && (
+        (request.resource.data.requestType == 'guest' && request.resource.data.uid == null)
+        || (signedIn() && request.resource.data.requestType == 'member' && request.resource.data.uid == request.auth.uid)
+      );
+    }
+
+    match /exchangeRequests/{requestId} {
+      allow create: if validRequest();
+      allow read: if signedIn() && resource.data.uid == request.auth.uid;
+      // Never allow client-side approval, status changes, deletion, or wallet credit.
+      allow update, delete: if false;
+    }
+
+    match /users/{userId} {
+      allow read, write: if signedIn() && request.auth.uid == userId;
+    }
+
+    // Wallets, ledger, exchange rates, admin roles and audit logs are server-only.
+    match /wallets/{document=**} { allow read, write: if false; }
+    match /ledger/{document=**} { allow read, write: if false; }
+    match /rates/{document=**} { allow read, write: if false; }
+    match /paymentMethods/{document=**} { allow read, write: if false; }
+    match /currencies/{document=**} { allow read, write: if false; }
+    match /adminRoles/{document=**} { allow read, write: if false; }
+    match /auditLogs/{document=**} { allow read, write: if false; }
+    match /{document=**} { allow read, write: if false; }
+  }
+}
