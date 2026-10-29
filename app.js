@@ -164,18 +164,71 @@ $("#exchangeForm").addEventListener("submit", async e => {
   }
 });
 
-$("#trackForm").addEventListener("submit", async e => {
+
+
+
+
+/* ===== নিরাপদ পাবলিক Tracking API ===== */
+const TRACKING_API =
+  "https://calm-field-e3f8.taijulsheikh60.workers.dev";
+
+$("#trackForm").addEventListener("submit", async (e) => {
   e.preventDefault();
+
   const code = safeText($("#trackingCode").value, 32).toUpperCase();
-  if (!db) {
-    $("#trackResult").textContent = "Firebase সংযুক্ত হলে ট্র্যাকিং স্ট্যাটাস দেখা যাবে।";
+  const result = $("#trackResult");
+
+  if (!/^MET-[A-Z0-9]{7}$/.test(code)) {
+    result.textContent = "সঠিক ট্র্যাকিং কোড লিখুন। যেমন: MET-NVYQZK7";
     return;
   }
-  // Public tracking lookup needs a server endpoint or a carefully designed token-based access rule.
-  // Do not expose private contact/payment details through a public Firestore query.
-  $("#trackResult").textContent = "নিরাপদ পাবলিক ট্র্যাকিং যাচাই সার্ভার-সাইডে যোগ করতে হবে। আপাতত অ্যাডমিনের কাছ থেকে স্ট্যাটাস নিশ্চিত করুন।";
-  toast("নিরাপদ ট্র্যাকিং এন্ডপয়েন্ট পরবর্তী ধাপে তৈরি হবে।");
+
+  result.textContent = "ট্র্যাকিং স্ট্যাটাস যাচাই হচ্ছে...";
+
+  try {
+    const response = await fetch(
+      `${TRACKING_API}/track?code=${encodeURIComponent(code)}`,
+      {
+        method: "GET",
+        headers: { "Accept": "application/json" }
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`API_ERROR_${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (!data.found) {
+      result.textContent = "এই ট্র্যাকিং কোডটি পাওয়া যায়নি। কোডটি যাচাই করুন।";
+      return;
+    }
+
+    const statusLabels = {
+      pending: "অপেক্ষমাণ — আপনার রিকোয়েস্ট যাচাই করা হচ্ছে।",
+      processing: "প্রক্রিয়াধীন — আপনার রিকোয়েস্ট নিয়ে কাজ চলছে।",
+      completed: "সম্পন্ন — রিকোয়েস্ট সম্পন্ন হয়েছে।",
+      rejected: "বাতিল — আপনার রিকোয়েস্ট বাতিল করা হয়েছে।",
+      cancelled: "বাতিল — রিকোয়েস্টটি বন্ধ করা হয়েছে।"
+    };
+
+    const status = String(data.status || "").toLowerCase();
+    const message = statusLabels[status];
+
+    result.textContent = message
+      ? `ট্র্যাকিং কোড: ${data.trackingCode || code}\nস্ট্যাটাস: ${message}`
+      : `ট্র্যাকিং কোড: ${code}\nস্ট্যাটাস: ${status || "অজানা"} — বিস্তারিত জানতে সাপোর্টে যোগাযোগ করুন।`;
+
+  } catch (error) {
+    console.error("Tracking API error:", error);
+    result.textContent =
+      "এখন স্ট্যাটাস দেখা যাচ্ছে না। ইন্টারনেট বা সার্ভার পরীক্ষা করে আবার চেষ্টা করুন।";
+  }
 });
+/* ===== Tracking API শেষ ===== */
+
+
 
 function loadMemberRequests(uid) {
   // Member history is intentionally not rendered until the collection/rules are tested.
