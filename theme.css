@@ -1,0 +1,13 @@
+/* Unified dark navy / cyan / mint theme matching the existing header. */
+:root{--navy:#06152d;--blue:#35e6f2;--cyan:#35e6f2;--mint:#39f5a5;--ink:#eefaff;--muted:#aac3d9;--line:rgba(116,207,235,.22);--paper:#07172c;--white:#102b4d;--green:#39f5a5}
+body{background:linear-gradient(145deg,#061329,#0b2140 55%,#07172c);color:var(--ink)}
+.hero h1 span,.eyebrow,.buy-rate,.sell-rate{color:var(--cyan)}
+.hero-card,.form-card,.table-wrap,.history-item,.empty-state,.admin-panel details,.modal-card{background:linear-gradient(145deg,#102b4d,#0a203d);border-color:var(--line);color:var(--ink);box-shadow:0 12px 35px #0003}
+.hero-rate strong,.modal-card h2,.payment-address strong,.tracking-box strong,.rate-limit-note strong{color:#e9fbff}
+th{background:#112e50;color:#d6ecfa}th,td,.admin-rate-row{border-bottom-color:var(--line)}tbody tr:hover{background:#153759}
+.primary-link,.submit-btn{background:linear-gradient(110deg,#35e6f2,#39f5a5);color:#06152d}.primary-link:hover,.submit-btn:hover{background:#35e6f2;color:#06152d}
+.field input,.field select,.field textarea,.admin-rate-row input,.admin-payment-row input,.amount-input,.secondary-btn{background:#071b34;color:#eefaff;border-color:var(--line)}.field input::placeholder,.field textarea::placeholder{color:#a6bbcd}.field input:focus,.field select:focus,.field textarea:focus{border-color:#35e6f2;box-shadow:0 0 0 3px #35e6f225}
+.amount-input span,.wallet-preview,.payment-summary,.payment-address,.tracking-box,.rate-limit-note{background:#0c2947;color:#d9effb;border-color:var(--line)}.preview-row{border-bottom-color:var(--line)}.preview-row span,.check-row,.admin-payment-row label,.payment-address span,.tracking-box span{color:#b9d2e5}
+.modal-close{background:#183b5d;color:#e9fbff}.modal-step,.admin-shortcut{background:#103b50;color:#39f5a5;border-color:var(--line)}.modal-copy{color:var(--muted)}
+.currency-logo{background:#eaf7ff;color:#075985;border-color:#7cb6d0}.success-icon,.success-mark{background:#103f37;color:#39f5a5}
+footer{background:#041126;border-top:1px solid var(--line)}

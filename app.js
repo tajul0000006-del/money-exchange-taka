@@ -1,585 +1,306 @@
-/* =====================================================
-   MoneyExchangeTaka - Frontend JavaScript
-   Client-side code never approves requests or edits balances.
-   ===================================================== */
+/* MoneyExchangeTaka frontend interactions. Server-side verification is required before live transactions. */
+(() => {
+  "use strict";
+  const $ = (id) => document.getElementById(id);
+  const FEE_PERCENT = 1;
+  // Cloudinary public upload configuration. Never place the API Secret in frontend code.
+  const CLOUDINARY_CLOUD_NAME = "rac2a5d3";
+  const CLOUDINARY_UPLOAD_PRESET = "moneyexchange_upload";
+  const CLOUDINARY_MAX_LOGO_BYTES = 2 * 1024 * 1024;
+  const DEFAULT_WALLETS = [
+    {id:"bkash",name:"bKash",subtitle:"মোবাইল ফাইন্যান্সিয়াল সার্ভিস",currency:"BDT",type:"bdt",logo:"assets/logos/bkash.png",buy:0,sell:0,short:"bK"},
+    {id:"nagad",name:"Nagad",subtitle:"মোবাইল ফাইন্যান্সিয়াল সার্ভিস",currency:"BDT",type:"bdt",logo:"assets/logos/nagad.png",buy:0,sell:0,short:"NG"},
+    {id:"rocket",name:"Rocket",subtitle:"DBBL Mobile Banking",currency:"BDT",type:"bdt",logo:"assets/logos/rocket.png",buy:0,sell:0,short:"RK"},
+    {id:"upay",name:"Upay",subtitle:"মোবাইল ফাইন্যান্সিয়াল সার্ভিস",currency:"BDT",type:"bdt",logo:"assets/logos/upay.png",buy:0,sell:0,short:"UP"},
+    {id:"paypal",name:"PayPal USD",subtitle:"USD Wallet",currency:"USD",type:"usd",logo:"assets/logos/paypal.png",buy:122,sell:118,short:"PP"},
+    {id:"perfectmoney",name:"Perfect Money",subtitle:"USD Wallet",currency:"USD",type:"usd",logo:"assets/logos/perfectmoney.png",buy:125,sell:121,short:"PM"},
+    {id:"webmoney",name:"WebMoney",subtitle:"USD Wallet",currency:"USD",type:"usd",logo:"assets/logos/webmoney.png",buy:124,sell:120,short:"WM"},
+    {id:"volet",name:"Volet",subtitle:"USD Wallet",currency:"USD",type:"usd",logo:"assets/logos/volet.png",buy:123,sell:119,short:"VO"},
+    {id:"binance",name:"Binance USDT TRC20",subtitle:"USDT · TRON network",currency:"USDT",type:"crypto",logo:"assets/logos/binance.png",buy:121,sell:118,short:"BN"},
+    {id:"kucoin",name:"KuCoin USDT TRC20",subtitle:"USDT · TRON network",currency:"USDT",type:"crypto",logo:"assets/logos/kucoin.png",buy:121,sell:117,short:"KC"},
+    {id:"bybit",name:"Bybit USDT TRC20",subtitle:"USDT · TRON network",currency:"USDT",type:"crypto",logo:"assets/logos/bybit.png",buy:122,sell:118,short:"BY"},
+    {id:"epay",name:"ePay",subtitle:"USD / service wallet",currency:"USD",type:"usd",logo:"assets/logos/epay.png",buy:123,sell:119,short:"EP"},
+    {id:"tunepay",name:"TunePay",subtitle:"USD / service wallet",currency:"USD",type:"usd",logo:"assets/logos/tunepay.png",buy:123,sell:119,short:"TP"}
+  ];
+  const RATE_KEY = "met_wallet_rates_v1";
+  const HISTORY_KEY = "met_request_history_v1";
+  let wallets = loadRates();
 
-import {
-  initializeApp
-} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut,
-  updateProfile
-} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
-
-import { firebaseConfig } from "./firebase-config.js";
-
-
-/* =====================================================
-   1. GLOBAL VARIABLES AND HELPERS
-   ===================================================== */
-
-const $ = (selector) => document.querySelector(selector);
-
-let auth;
-let db;
-let currentUser = null;
-let signupMode = false;
-let toastTimer;
-
-const trackingPrefix = "MET";
-
-const TRACKING_API =
-  "https://calm-field-e3f8.taijulsheikh60.workers.dev";
-
-const safeText = (value, max = 300) =>
-  String(value || "").trim().slice(0, max);
-
-
-/* =====================================================
-   2. TOAST NOTIFICATION
-   ===================================================== */
-
-function toast(message) {
-  const element = $("#toast");
-
-  if (!element) {
-    console.log(message);
-    return;
+  function loadRates(){
+    try {
+      const saved = JSON.parse(localStorage.getItem(RATE_KEY) || "null");
+      if (Array.isArray(saved)) return DEFAULT_WALLETS.map(w => ({...w, ...(saved.find(s => s.id === w.id) || {})}));
+    } catch (_) {}
+    return DEFAULT_WALLETS.map(w => ({...w}));
   }
-
-  element.textContent = message;
-  element.classList.add("show");
-
-  clearTimeout(toastTimer);
-
-  toastTimer = setTimeout(() => {
-    element.classList.remove("show");
-  }, 3400);
-}
-
-
-/* =====================================================
-   3. FIREBASE CONFIGURATION CHECK
-   ===================================================== */
-
-function firebaseConfigured() {
-  return Boolean(
-    firebaseConfig?.apiKey &&
-    !firebaseConfig.apiKey.startsWith("PASTE_") &&
-    firebaseConfig?.projectId &&
-    !firebaseConfig.projectId.startsWith("YOUR_")
-  );
-}
-
-
-/* =====================================================
-   4. GENERATE TRACKING CODE
-   ===================================================== */
-
-function makeTrackingCode() {
-  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  const bytes = new Uint8Array(7);
-
-  crypto.getRandomValues(bytes);
-
-  return `${trackingPrefix}-${Array.from(
-    bytes,
-    (byte) => alphabet[byte % alphabet.length]
-  ).join("")}`;
-}
-
-
-/* =====================================================
-   5. USER-FRIENDLY FIREBASE ERRORS
-   ===================================================== */
-
-function friendlyError(error) {
-  const code = (error?.code || "").replace("auth/", "");
-
-  const messages = {
-    "email-already-in-use":
-      "এই ইমেইল দিয়ে আগে অ্যাকাউন্ট খোলা হয়েছে।",
-
-    "invalid-email":
-      "সঠিক ইমেইল লিখুন।",
-
-    "weak-password":
-      "আরও শক্তিশালী পাসওয়ার্ড দিন (কমপক্ষে ৮ অক্ষর)।",
-
-    "invalid-credential":
-      "ইমেইল বা পাসওয়ার্ড সঠিক নয়।",
-
-    "network-request-failed":
-      "ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।",
-
-    "permission-denied":
-      "Firebase Rules বা অনুমতি পরীক্ষা করতে হবে।"
-  };
-
-  return messages[code] ||
-    "কাজটি সম্পন্ন হয়নি। সেটিংস পরীক্ষা করে আবার চেষ্টা করুন।";
-}
-
-
-/* =====================================================
-   6. LOGIN AND SIGNUP MODAL
-   ===================================================== */
-
-function showAuth(isSignup) {
-  signupMode = isSignup;
-
-  $("#authModal").hidden = false;
-
-  $("#authTitle").textContent = isSignup
-    ? "অ্যাকাউন্ট খুলুন"
-    : "লগইন করুন";
-
-  $("#authHelp").textContent = isSignup
-    ? "আপনার নিজের ইমেইল ব্যবহার করুন।"
-    : "আপনার অ্যাকাউন্টে প্রবেশ করুন।";
-
-  $("#displayNameWrap").hidden = !isSignup;
-  $("#displayName").required = isSignup;
-
-  $("#authPassword").autocomplete = isSignup
-    ? "new-password"
-    : "current-password";
-
-  $("#authSubmit").textContent = isSignup
-    ? "অ্যাকাউন্ট তৈরি করুন"
-    : "লগইন করুন";
-
-  $("#switchLine").innerHTML = isSignup
-    ? 'আগে থেকেই অ্যাকাউন্ট আছে? <button type="button" id="switchMode">লগইন করুন</button>'
-    : 'নতুন ব্যবহারকারী? <button type="button" id="switchMode">অ্যাকাউন্ট খুলুন</button>';
-
-  $("#switchMode").addEventListener("click", () => {
-    showAuth(!signupMode);
-  });
-}
-
-
-/* =====================================================
-   7. INITIAL PAGE SETUP AND NAVIGATION
-   ===================================================== */
-
-$("#year").textContent = new Date().getFullYear();
-
-$("#menuToggle").addEventListener("click", () => {
-  const opened = $("#mainNav").classList.toggle("open");
-
-  $("#menuToggle").setAttribute(
-    "aria-expanded",
-    String(opened)
-  );
-});
-
-$("#mainNav").querySelectorAll("a").forEach((link) => {
-  link.addEventListener("click", () => {
-    $("#mainNav").classList.remove("open");
-
-    $("#menuToggle").setAttribute(
-      "aria-expanded",
-      "false"
-    );
-  });
-});
-
-
-/* =====================================================
-   8. AUTH BUTTONS AND MODAL EVENTS
-   ===================================================== */
-
-$("#loginBtn").addEventListener("click", () => {
-  showAuth(false);
-});
-
-$("#signupBtn").addEventListener("click", () => {
-  showAuth(true);
-});
-
-$("#referralSignupBtn").addEventListener("click", () => {
-  showAuth(true);
-});
-
-$("#closeModal").addEventListener("click", () => {
-  $("#authModal").hidden = true;
-});
-
-$("#authModal").addEventListener("click", (event) => {
-  if (event.target === $("#authModal")) {
-    $("#authModal").hidden = true;
+  function saveRates(){ localStorage.setItem(RATE_KEY, JSON.stringify(wallets)); }
+  function money(n, currency){ return `${Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})} ${currency}`; }
+  function walletById(id){ return wallets.find(w => w.id === id); }
+  function logoMarkup(w){
+    const fallback = `<span class="currency-logo" aria-hidden="true">${escapeHtml(w.short)}</span>`;
+    if (!w.logo) return fallback;
+    return `<span class="currency-logo"><img src="${escapeHtml(w.logo)}" alt="" loading="lazy" onerror="this.parentElement.innerHTML='${escapeHtml(w.short)}'"></span>`;
   }
-});
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") {
-    $("#authModal").hidden = true;
+  function renderRateTable(){
+    $("rateTableBody").innerHTML = wallets.map(w => `
+      <tr>
+        <td><div class="currency-cell">${logoMarkup(w)}<div><span class="currency-name">${escapeHtml(w.name)}</span><span class="currency-sub">${escapeHtml(w.subtitle)}</span></div></div></td>
+        <td><b>${escapeHtml(w.currency)}</b></td>
+        <td class="money buy-rate">${w.type === "bdt" ? "—" : `৳${Number(w.buy).toFixed(2)}`}</td>
+        <td class="money sell-rate">${w.type === "bdt" ? "—" : `৳${Number(w.sell).toFixed(2)}`}</td>
+      </tr>`).join("");
   }
-});
-
-
-/* =====================================================
-   9. BUY / SELL SEGMENT BUTTONS
-   ===================================================== */
-
-document.querySelectorAll(".segment").forEach((button) => {
-  button.addEventListener("click", () => {
-    document.querySelectorAll(".segment").forEach((item) => {
-      item.classList.toggle("active", item === button);
-    });
-
-    $("#direction").value = button.dataset.direction;
-
-    $("#amountHelp").textContent =
-      button.dataset.direction === "sell"
-        ? "আপনি যে পরিমাণ USD বিক্রি করতে চান তা লিখুন।"
-        : "আপনি যে পরিমাণ USD কিনতে চান তা লিখুন।";
-  });
-});
-
-
-/* =====================================================
-   10. INITIALIZE FIREBASE AND WATCH LOGIN STATE
-   ===================================================== */
-
-if (!firebaseConfigured()) {
-  $("#trackResult").textContent =
-    "Firebase সেটআপের পর ট্র্যাকিং চালু হবে।";
-
-  $("#authHelp").textContent =
-    "Firebase সেটআপের পর লগইন ব্যবহার করা যাবে।";
-
-} else {
-  const app = initializeApp(firebaseConfig);
-
-  auth = getAuth(app);
-  db = getFirestore(app);
-
-  onAuthStateChanged(auth, (user) => {
-    currentUser = user;
-
-    $("#logoutBtn").hidden = !user;
-    $("#loginBtn").hidden = !!user;
-    $("#signupBtn").hidden = !!user;
-
-    if (user) {
-      toast(`স্বাগতম, ${user.displayName || "ব্যবহারকারী"}!`);
-
-      // ব্যক্তিগত ইতিহাসের ফিচার পরে যোগ করা হবে।
-      loadMemberRequests(user.uid);
+  function allowedWallets(side, direction){
+    if (direction === "buy") return side === "from" ? wallets.filter(w=>w.type==="bdt") : wallets.filter(w=>w.type!=="bdt");
+    if (direction === "sell") return side === "from" ? wallets.filter(w=>w.type!=="bdt") : wallets.filter(w=>w.type==="bdt");
+    return wallets;
+  }
+  function fillWalletSelect(selectId, side, preserve=true){
+    const select = $(selectId), direction = $("direction").value, old = preserve ? select.value : "";
+    const list = allowedWallets(side, direction);
+    select.innerHTML = list.map(w=>`<option value="${w.id}">${escapeHtml(w.name)} · ${w.currency}${w.type === "bdt" ? " · পার্সোনাল BDT" : ""}</option>`).join("");
+    if(list.some(w=>w.id===old)) select.value=old;
+  }
+  function updateWalletOptions(){
+    fillWalletSelect("fromWallet","from");
+    fillWalletSelect("toWallet","to");
+    if($("fromWallet").value===$("toWallet").value){
+      const alternate=allowedWallets("to","exchange").find(w=>w.id!==$("fromWallet").value);
+      if(alternate) $("toWallet").value=alternate.id;
     }
-  });
-}
-
-
-/* =====================================================
-   11. LOGOUT
-   ===================================================== */
-
-$("#logoutBtn").addEventListener("click", async () => {
-  if (!auth) {
-    return toast("আগে Firebase সেটআপ করুন।");
+    updateAmountCurrency(); updateCalculation();
   }
-
-  try {
-    await signOut(auth);
-    toast("আপনি লগআউট করেছেন।");
-  } catch (error) {
-    toast(friendlyError(error));
-  }
-});
-
-
-/* =====================================================
-   12. LOGIN AND SIGNUP FORM
-   ===================================================== */
-
-$("#authForm").addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  if (!auth) {
-    return toast("আগে README_SETUP.md অনুযায়ী Firebase সেটআপ করুন।");
-  }
-
-  const email = safeText($("#authEmail").value, 150);
-  const password = $("#authPassword").value;
-
-  try {
-    if (signupMode) {
-      const credential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-
-      const name = safeText($("#displayName").value, 80);
-
-      if (name) {
-        await updateProfile(credential.user, {
-          displayName: name
-        });
-      }
-
-      toast(
-        "অ্যাকাউন্ট তৈরি হয়েছে। ইমেইল যাচাইয়ের ব্যবস্থা পরবর্তী ধাপে যোগ করুন।"
-      );
-
+  function updateAmountCurrency(){
+    const from=walletById($("fromWallet").value);
+    const to=walletById($("toWallet").value);
+    $("amountCurrency").textContent=from ? from.currency : "—";
+    $("amountHelp").textContent=from ? `পরিমাণ ${from.currency}-এ লিখুন।` : "প্রতি লেনদেনের সীমা: ৳৫০০–৳১০,০০০ (সমমূল্যের USD/USDT)।";
+    const account=$("account");
+    const help=$("accountHelp");
+    if(to){
+      const hints={
+        bkash:"যেমন: 01XXXXXXXXX (bKash নম্বর)",
+        nagad:"যেমন: 01XXXXXXXXX (Nagad নম্বর)",
+        rocket:"যেমন: 01XXXXXXXXX বা Rocket অ্যাকাউন্ট নম্বর",
+        upay:"যেমন: 01XXXXXXXXX (Upay নম্বর)",
+        paypal:"যেমন: আপনার PayPal ইমেইল ঠিকানা",
+        perfectmoney:"যেমন: U12345678 (Perfect Money অ্যাকাউন্ট)",
+        webmoney:"যেমন: WMZ purse / wallet ID",
+        volet:"যেমন: আপনার Volet অ্যাকাউন্ট ইমেইল বা ID",
+        binance:"যেমন: USDT TRC20 ডিপোজিট অ্যাড্রেস (T নেটওয়ার্ক ঠিকানা)",
+        kucoin:"যেমন: KuCoin USDT TRC20 ডিপোজিট অ্যাড্রেস",
+        bybit:"যেমন: Bybit USDT TRC20 ডিপোজিট অ্যাড্রেস",
+        epay:"যেমন: আপনার ePay অ্যাকাউন্ট ID",
+        tunepay:"যেমন: আপনার TunePay অ্যাকাউন্ট ID"
+      };
+      account.placeholder=hints[to.id] || `আপনার ${to.name} ${to.currency} অ্যাকাউন্ট নম্বর / ঠিকানা`;
+      help.textContent = to.type === "bdt" ? `${to.name} পার্সোনাল BDT পেমেন্ট ঠিকানা দিন। যে নম্বর/অ্যাকাউন্টে টাকা গ্রহণ করবেন, সেটি সঠিকভাবে লিখুন।` : `${to.name} (${to.currency}) ওয়ালেটের সঠিক ইমেইল, অ্যাকাউন্ট ID বা ডিপোজিট অ্যাড্রেস দিন। ক্রিপ্টো হলে সঠিক নেটওয়ার্কের ঠিকানা ব্যবহার করুন।`;
+    const contactLabel=$("contactLabel"); if(contactLabel) contactLabel.textContent="WhatsApp / Telegram / Email (যোগাযোগের ঠিকানা)";
+    $("contact").placeholder="WhatsApp নম্বর, Telegram username বা ইমেইল দিন";
     } else {
-      await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-
-      toast("লগইন সফল হয়েছে।");
+      account.placeholder="প্রথমে যে ওয়ালেটে পাবেন সেটি নির্বাচন করুন";
+      help.textContent="আপনার নির্বাচিত গ্রহণকারী ওয়ালেট অনুযায়ী নম্বর বা ঠিকানা লিখুন।";
     }
-
-    $("#authModal").hidden = true;
-    $("#authForm").reset();
-
-  } catch (error) {
-    toast(friendlyError(error));
   }
-});
-
-
-/* =====================================================
-   13. EXCHANGE REQUEST FORM
-   Saves a request only; does not transfer money.
-   ===================================================== */
-
-$("#exchangeForm").addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const direction = $("#direction").value;
-  const currency = $("#currency").value;
-  const amount = Number($("#amount").value);
-  const paymentMethod = $("#paymentMethod").value;
-  const contact = safeText($("#contact").value, 25);
-  const paymentAccount = safeText(
-    $("#paymentAccount").value,
-    80
-  );
-  const note = safeText($("#note").value, 300);
-
-  const referralCode = safeText(
-    $("#referralCode").value,
-    24
-  ).toUpperCase();
-
-  if (
-    !Number.isFinite(amount) ||
-    amount <= 0 ||
-    amount > 1000000
-  ) {
-    return toast("সঠিক পরিমাণ লিখুন।");
+  function rateFor(from,to){
+    if(!from||!to||from.id===to.id) return null;
+    // Convert every wallet through its approximate BDT value.
+    // BDT wallet = 1 BDT; USD/USDT wallet uses its configured sell/buy rate.
+    const fromSell = from.type === "bdt" ? 1 : Number(from.sell);
+    const toBuy = to.type === "bdt" ? 1 : Number(to.buy);
+    if(!Number.isFinite(fromSell)||!Number.isFinite(toBuy)||fromSell<=0||toBuy<=0) return null;
+    const rate = fromSell / toBuy; // units received per 1 unit paid
+    let text;
+    if(from.type === "bdt" && to.type === "bdt") text = `1 ${from.currency} = 1 ${to.currency}`;
+    else if(from.type === "bdt") text = `৳${to.buy.toFixed(2)} = 1 ${to.currency}`;
+    else if(to.type === "bdt") text = `1 ${from.currency} = ৳${from.sell.toFixed(2)}`;
+    else text = `1 ${from.currency} ≈ ${rate.toFixed(6)} ${to.currency}`;
+    return {rate, text};
   }
-
-  if (currency !== "USD") {
-    return toast(
-      "এই কারেন্সি এখনো চালু হয়নি। আপাতত USD নির্বাচন করুন।"
-    );
+  function updateCalculation(){
+    const from=walletById($("fromWallet").value), to=walletById($("toWallet").value);
+    const amount=Number($("amount").value);
+    const r=rateFor(from,to);
+    if(!from||!to||!r||!Number.isFinite(amount)||amount<=0){
+      $("payPreview").textContent="—"; $("receivePreview").textContent="—"; $("ratePreview").textContent=r?r.text:"—"; $("feePreview").textContent="—";
+      $("calcMessage").textContent=(!from||!to) ? "দেওয়ার ও পাওয়ার ওয়ালেট নির্বাচন করুন।" : (from.id===to.id ? "দুটি আলাদা ওয়ালেট নির্বাচন করুন।" : "পরিমাণ ০-এর বেশি লিখুন।"); return;
+    }
+    const gross = amount * r.rate;
+    const fee=gross*FEE_PERCENT/100, receive=Math.max(0,gross-fee);
+    $("payPreview").textContent=money(amount,from.currency);
+    $("receivePreview").textContent=money(receive,to.currency);
+    $("ratePreview").textContent=r.text;
+    $("feePreview").textContent=money(fee,to.currency);
+    $("calcMessage").textContent="হিসাবটি প্রদর্শিত রেট ও ফি অনুযায়ী করা হয়েছে। পেমেন্টের আগে রেট ও নেটওয়ার্ক যাচাই করুন।";
   }
-
-  if (contact.length < 6 || paymentAccount.length < 3) {
-    return toast("যোগাযোগ ও পেমেন্টের প্রয়োজনীয় তথ্য যাচাই করুন।");
+  function renderHistory(){
+    let items=[]; try{items=JSON.parse(localStorage.getItem(HISTORY_KEY)||"[]");}catch(_){}
+    const root=$("historyList");
+    if(!items.length){root.innerHTML='<div class="empty-state">এখনো কোনো অনুরোধ জমা হয়নি।</div>';return;}
+    root.innerHTML=items.slice().reverse().map(item=>`<article class="history-item">
+      <div><h3>${escapeHtml(item.code)} · ${escapeHtml(item.fromName)} → ${escapeHtml(item.toName)}</h3>
+      <div class="history-meta">${escapeHtml(item.date)} · ${escapeHtml(item.customer)}</div>
+      <span class="status-pill">অনুরোধ জমা হয়েছে</span></div>
+      <div class="history-amount"><div>${escapeHtml(item.pay)}</div><div>↓ ${escapeHtml(item.receive)}</div></div>
+    </article>`).join("");
   }
-
-  // Firebase unavailable: demo mode only.
-  if (!db) {
-    const code = makeTrackingCode();
-    const requestResult = $("#requestResult");
-
-    requestResult.hidden = false;
-    requestResult.replaceChildren();
-
-    const heading = document.createElement("strong");
-    heading.textContent = "ডেমো রিকোয়েস্ট তৈরি হয়েছে";
-
-    const tracking = document.createElement("span");
-    tracking.className = "tracking-code";
-    tracking.textContent = code;
-
-    const noteText = document.createElement("small");
-    noteText.textContent =
-      "এটি শুধু এই ডেমো সেশনের কোড; Firebase সংযুক্ত না থাকায় সার্ভারে সংরক্ষিত হয়নি।";
-
-    requestResult.append(heading, tracking, noteText);
-
-    toast("ডেমো মোড: রিকোয়েস্ট সার্ভারে জমা হয়নি।");
-    return;
+  function renderAdminEditor(){
+    $("adminRateEditor").innerHTML=wallets.filter(w=>w.type!=="bdt").map(w=>`<div class="admin-rate-row">
+      <div class="admin-currency"><b>${escapeHtml(w.name)}</b><div class="currency-sub">${w.currency}</div></div>
+      <div><label for="buy-${w.id}">আমরা কিনি (৳)</label><input id="buy-${w.id}" type="number" min="0.01" step="0.01" value="${w.buy}"></div>
+      <div><label for="sell-${w.id}">আমরা বিক্রি করি (৳)</label><input id="sell-${w.id}" type="number" min="0.01" step="0.01" value="${w.sell}"></div>
+    </div>`).join("");
   }
-
-  const trackingCode = makeTrackingCode();
-
-  try {
-    const payload = {
-      trackingCode,
-      direction,
-      currency,
-      amount,
-      paymentMethod,
-      contact,
-      paymentAccount,
-      note: note || null,
-      referralCode: referralCode || null,
-      uid: currentUser?.uid || null,
-      requestType: currentUser ? "member" : "guest",
-      status: "pending",
-      createdAt: serverTimestamp()
-    };
-
-    await addDoc(
-      collection(db, "exchangeRequests"),
-      payload
-    );
-
-    const requestResult = $("#requestResult");
-    requestResult.hidden = false;
-    requestResult.replaceChildren();
-
-    const heading = document.createElement("strong");
-    heading.textContent = "আপনার রিকোয়েস্ট জমা হয়েছে";
-
-    const tracking = document.createElement("span");
-    tracking.className = "tracking-code";
-    tracking.textContent = trackingCode;
-
-    const noteText = document.createElement("small");
-    noteText.textContent =
-      "কোডটি সংরক্ষণ করুন। যাচাই শেষ না হওয়া পর্যন্ত কোনো লেনদেন সম্পন্ন হয়েছে বলে ধরে নেবেন না।";
-
-    requestResult.append(heading, tracking, noteText);
-
-    $("#trackingCode").value = trackingCode;
-
-    $("#exchangeForm").reset();
-    $("#direction").value = "sell";
-
-    document.querySelectorAll(".segment").forEach((button) => {
-      button.classList.toggle(
-        "active",
-        button.dataset.direction === "sell"
-      );
-    });
-
-    toast("রিকোয়েস্ট জমা হয়েছে। ট্র্যাকিং কোডটি সংরক্ষণ করুন।");
-
-  } catch (error) {
-    toast(friendlyError(error));
+  function renderLogoEditor(){
+    const root=$("adminLogoEditor"); if(!root)return;
+    root.innerHTML=wallets.map(w=>`<div class="admin-logo-row">
+      <div class="admin-logo-preview">${logoMarkup(w)}</div>
+      <div class="admin-logo-info"><b>${escapeHtml(w.name)}</b><small>${escapeHtml(w.currency)} · ${escapeHtml(w.id)}</small>
+      <label for="logo-upload-${w.id}">নতুন লোগো আপলোড (PNG/JPG/WebP, সর্বোচ্চ 2MB)</label>
+      <input id="logo-upload-${w.id}" type="file" accept="image/png,image/jpeg,image/webp" data-logo-id="${escapeHtml(w.id)}">
+      </div>
+    </div>`).join("");
   }
-});
-
-
-/* =====================================================
-   14. PUBLIC TRACKING API
-   ===================================================== */
-
-$("#trackForm").addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const code = safeText(
-    $("#trackingCode").value,
-    32
-  ).toUpperCase();
-
-  const result = $("#trackResult");
-
-  // Validate tracking code before sending the request.
-  if (!/^MET-[A-Z0-9]{7}$/.test(code)) {
-    result.textContent =
-      "সঠিক ট্র্যাকিং কোড লিখুন। যেমন: MET-NVYQZK7";
-    return;
+  async function uploadCurrencyLogo(file, walletId){
+    if(!file || !walletById(walletId)) return;
+    if(!["image/png","image/jpeg","image/webp"].includes(file.type)){
+      $("adminStatus").textContent="শুধু PNG, JPG অথবা WebP ছবি আপলোড করুন।";
+      $("adminStatus").classList.add("error"); return;
+    }
+    if(file.size > CLOUDINARY_MAX_LOGO_BYTES){
+      $("adminStatus").textContent="ছবির সাইজ 2MB-এর কম হতে হবে।";
+      $("adminStatus").classList.add("error"); return;
+    }
+    const input=$(`logo-upload-${walletId}`);
+    if(input) input.disabled=true;
+    $("adminStatus").classList.remove("error");
+    $("adminStatus").textContent="Cloudinary-তে লোগো আপলোড হচ্ছে…";
+    try{
+      const body=new FormData();
+      body.append("file",file);
+      body.append("upload_preset",CLOUDINARY_UPLOAD_PRESET);
+      const response=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,{method:"POST",body});
+      const result=await response.json();
+      if(!response.ok || !result.secure_url) throw new Error(result.error?.message || "Cloudinary upload failed");
+      wallets=wallets.map(w=>w.id===walletId?{...w,logo:result.secure_url}:w);
+      saveRates();
+      renderRateTable(); renderLogoEditor();
+      $("adminStatus").textContent=`${walletById(walletId).name} লোগো Cloudinary-তে আপলোড ও এই ডিভাইসে সংরক্ষণ হয়েছে।`;
+    }catch(error){
+      $("adminStatus").textContent=`লোগো আপলোড হয়নি: ${error.message}`;
+      $("adminStatus").classList.add("error");
+      if(input) input.disabled=false;
+    }
   }
-
-  result.textContent =
-    "ট্র্যাকিং স্ট্যাটাস যাচাই হচ্ছে...";
-
-  try {
-    const response = await fetch(
-      `${TRACKING_API}/track?code=${encodeURIComponent(code)}`,
-      {
-        method: "GET",
-        headers: {
-          "Accept": "application/json"
-        }
+  const ADDRESS_KEY="met_payment_addresses_v1";
+  const DEFAULT_ADDRESSES={bkash:"পেমেন্ট ঠিকানা এখনো যুক্ত করা হয়নি",nagad:"পেমেন্ট ঠিকানা এখনো যুক্ত করা হয়নি",rocket:"পেমেন্ট ঠিকানা এখনো যুক্ত করা হয়নি",upay:"পেমেন্ট ঠিকানা এখনো যুক্ত করা হয়নি",paypal:"অ্যাকাউন্ট ইমেইল এখনো যুক্ত করা হয়নি",perfectmoney:"অ্যাকাউন্ট ID এখনো যুক্ত করা হয়নি",webmoney:"ওয়ালেট ID এখনো যুক্ত করা হয়নি",volet:"অ্যাকাউন্ট ID এখনো যুক্ত করা হয়নি",binance:"USDT নেটওয়ার্ক ঠিকানা এখনো যুক্ত করা হয়নি",kucoin:"USDT নেটওয়ার্ক ঠিকানা এখনো যুক্ত করা হয়নি",bybit:"USDT নেটওয়ার্ক ঠিকানা এখনো যুক্ত করা হয়নি",epay:"অ্যাকাউন্ট ID এখনো যুক্ত করা হয়নি",tunepay:"অ্যাকাউন্ট ID এখনো যুক্ত করা হয়নি"};
+  let paymentAddresses={...DEFAULT_ADDRESSES};
+  try{paymentAddresses={...paymentAddresses,...JSON.parse(localStorage.getItem(ADDRESS_KEY)||"{}")};}catch(_){}
+  let pendingRequest=null;
+  function renderPaymentEditor(){const root=$("adminPaymentEditor");if(!root)return;root.innerHTML=wallets.map(w=>`<div class="admin-payment-row"><label for="address-${w.id}">${escapeHtml(w.name)}<small>${escapeHtml(w.currency)} · পেমেন্ট ঠিকানা</small></label><input id="address-${w.id}" value="${escapeHtml(paymentAddresses[w.id]||"")}" maxlength="220" placeholder="পেমেন্ট নম্বর / ID / ঠিকানা"></div>`).join("");}
+  $("adminLogoEditor")?.addEventListener("change",event=>{
+    const input=event.target.closest("input[data-logo-id]");
+    if(input && input.files && input.files[0]) uploadCurrencyLogo(input.files[0],input.dataset.logoId);
+  });
+  function openModal(id){$(id).classList.add("open");$(id).setAttribute("aria-hidden","false");document.body.style.overflow="hidden";}
+  function closeModal(id){$(id).classList.remove("open");$(id).setAttribute("aria-hidden","true");if(!document.querySelector(".modal-backdrop.open"))document.body.style.overflow="";}
+  document.querySelectorAll("[data-close-modal]").forEach(b=>b.addEventListener("click",()=>closeModal(b.dataset.closeModal)));
+  document.querySelectorAll(".modal-backdrop").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)closeModal(m.id)}));
+  $("copyPaymentAddress").addEventListener("click",async()=>{try{await navigator.clipboard.writeText($("paymentAddress").textContent);$("copyPaymentAddress").textContent="কপি হয়েছে";}catch(_){$("paymentAddress").focus?.();}});
+  $("goProof").addEventListener("click",()=>{closeModal("paymentModal");openModal("proofModal");});
+  $("proofForm").addEventListener("submit",e=>{e.preventDefault();if(!pendingRequest)return;pendingRequest.proofReference=$("proofReference").value.trim();pendingRequest.proofEmail=$("proofEmail").value.trim();pendingRequest.proofFileName=$("proofScreenshot").files[0]?.name||"";let items=[];try{items=JSON.parse(localStorage.getItem(HISTORY_KEY)||"[]");}catch(_){}items.push(pendingRequest);localStorage.setItem(HISTORY_KEY,JSON.stringify(items));renderHistory();closeModal("proofModal");$("successTrackingCode").textContent=pendingRequest.code;openModal("successModal");$("formStatus").textContent="আপনার অনুরোধ গ্রহণ করা হয়েছে।";$("formStatus").classList.remove("error");pendingRequest=null;$("proofForm").reset();$("exchangeForm").reset();updateWalletOptions();});
+  $("copyTrackingCode").addEventListener("click",async()=>{try{await navigator.clipboard.writeText($("successTrackingCode").textContent);$("copyTrackingCode").textContent="কপি হয়েছে";}catch(_){}});
+  $("successDone").addEventListener("click",()=>{closeModal("successModal");$("history").scrollIntoView({behavior:"smooth",block:"start"});});
+  function showError(message){$("formStatus").textContent=message;$("formStatus").classList.add("error");}
+  function clearError(){$("formStatus").textContent="";$("formStatus").classList.remove("error");}
+  function validate(){
+    document.querySelectorAll(".invalid").forEach(el=>el.classList.remove("invalid"));
+    const required=["fromWallet","toWallet","amount","customerName","contact","account"];
+    let first=null;
+    for(const id of required){const el=$(id);let invalid=!el.value.trim();
+      if(id==="amount") invalid=!Number.isFinite(Number(el.value))||Number(el.value)<=0||Number(el.value)>100000000;
+      if(id==="customerName") invalid=el.value.trim().length<2||el.value.trim().length>80;
+      if(id==="contact") {
+        const value=el.value.trim();
+        const isPhone=/^[0-9+\-()\s]{7,20}$/.test(value);
+        const isEmail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+        const isTelegram=/^@?[A-Za-z0-9_]{5,32}$/.test(value);
+        invalid=!(isPhone||isEmail||isTelegram);
       }
-    );
-
-    if (!response.ok) {
-      throw new Error(`API_ERROR_${response.status}`);
+      if(id==="account") invalid=el.value.trim().length<3||el.value.trim().length>120;
+      if(invalid){el.classList.add("invalid");if(!first)first=el;}
     }
-
-    const data = await response.json();
-
-    if (data.found !== true) {
-      result.textContent =
-        "এই ট্র্যাকিং কোডটি পাওয়া যায়নি। কোডটি যাচাই করুন।";
-      return;
+    if(!$("terms").checked){showError("শর্তাবলিতে সম্মতি দিন।");return false;}
+    const from=walletById($("fromWallet").value),to=walletById($("toWallet").value);
+    if(!from||!to||from.id===to.id||!rateFor(from,to)){showError("ভিন্ন ও বৈধ দুটি ওয়ালেট নির্বাচন করুন।");$("fromWallet").classList.add("invalid");$("toWallet").classList.add("invalid");return false;}
+    if(Number.isFinite(Number($("amount").value)) && Number($("amount").value)>0){
+      const amountValue=Number($("amount").value);
+      const bdtEquivalent=from.type==="bdt" ? amountValue : amountValue*Number(from.sell);
+      if(!Number.isFinite(bdtEquivalent)||bdtEquivalent<500||bdtEquivalent>10000){
+        showError("প্রতি রিকোয়েস্টের সীমা ৳৫০০ থেকে ৳১০,০০০ (সমমূল্যের USD/USDT)। পরিমাণ পরিবর্তন করুন।");
+        $("amount").classList.add("invalid");$("amount").focus();return false;
+      }
     }
-
-    const status = String(
-      data.status || ""
-    ).toLowerCase();
-
-    const statusLabels = {
-      pending:
-        "অপেক্ষমাণ — আপনার রিকোয়েস্ট যাচাই করা হচ্ছে।",
-
-      processing:
-        "প্রক্রিয়াধীন — আপনার রিকোয়েস্ট নিয়ে কাজ চলছে।",
-
-      completed:
-        "সম্পন্ন — রিকোয়েস্ট সম্পন্ন হয়েছে।",
-
-      rejected:
-        "বাতিল — আপনার রিকোয়েস্ট বাতিল করা হয়েছে।",
-
-      cancelled:
-        "বাতিল — রিকোয়েস্টটি বন্ধ করা হয়েছে।"
+    if(first){showError("লাল চিহ্নিত ঘরগুলো সঠিকভাবে পূরণ করুন।");first.focus();return false;}
+    clearError();return true;
+  }
+  $("direction").addEventListener("change",updateWalletOptions);
+  // Keep the two wallet selections different so the calculator never gets stuck on dashes.
+  $("fromWallet").addEventListener("change",()=>{
+    if($("fromWallet").value === $("toWallet").value){
+      const alternative = wallets.find(w => w.id !== $("fromWallet").value);
+      if(alternative) $("toWallet").value = alternative.id;
+    }
+    updateAmountCurrency(); updateCalculation();
+  });
+  $("toWallet").addEventListener("change",()=>{
+    if($("toWallet").value === $("fromWallet").value){
+      const alternative = wallets.find(w => w.id !== $("toWallet").value);
+      if(alternative) $("fromWallet").value = alternative.id;
+    }
+    updateAmountCurrency(); updateCalculation();
+  });
+  $("amount").addEventListener("input",updateCalculation);
+  $("exchangeForm").addEventListener("submit",event=>{
+    event.preventDefault();
+    if(!validate()) return;
+    const from=walletById($("fromWallet").value),to=walletById($("toWallet").value),amount=Number($("amount").value),r=rateFor(from,to);
+    const gross=amount*r.rate;
+    const fee=gross*FEE_PERCENT/100,receive=gross-fee;
+    const item={
+      code:"MET-"+Math.random().toString(36).slice(2,8).toUpperCase(),
+      date:new Date().toLocaleString("bn-BD"),
+      customer:$("customerName").value.trim(),fromName:from.name,toName:to.name,
+      pay:money(amount,from.currency),receive:money(receive,to.currency),
+      amount,fromId:from.id,toId:to.id,rate:r.rate,fee,reference:$("reference").value.trim(),note:$("note").value.trim()
     };
-
-    const message = statusLabels[status];
-
-    if (message) {
-      result.textContent =
-        `ট্র্যাকিং কোড: ${data.trackingCode || code}\n` +
-        `স্ট্যাটাস: ${message}`;
-
-    } else {
-      result.textContent =
-        `ট্র্যাকিং কোড: ${code}\n` +
-        `স্ট্যাটাস: ${status || "অজানা"} — বিস্তারিত জানতে সাপোর্টে যোগাযোগ করুন।`;
-    }
-
-  } catch (error) {
-    console.error("Tracking API error:", error);
-
-    result.textContent =
-      "এখন স্ট্যাটাস দেখা যাচ্ছে না। ইন্টারনেট বা সার্ভার পরীক্ষা করে আবার চেষ্টা করুন।";
-  }
-});
-
-
-/* =====================================================
-   15. MEMBER REQUEST HISTORY PLACEHOLDER
-   Does not overwrite the tracking result.
-   ===================================================== */
-
-function loadMemberRequests(uid) {
-  // ব্যক্তিগত রিকোয়েস্টের ইতিহাস পরে নিরাপদভাবে যুক্ত করা হবে।
-  // এখানে Tracking ফলাফল পরিবর্তন করা হবে না।
-  }
+    pendingRequest=item;
+    $("paymentIntro").textContent=`${from.name} (${from.currency}) দিয়ে ${money(amount,from.currency)} পাঠানোর নির্দেশনা। পেমেন্ট ঠিকানা ও পরিমাণ যাচাই করুন।`;
+    $("paymentSummary").innerHTML=`<div class="preview-row"><span>আপনি পাঠাবেন</span><strong>${escapeHtml(money(amount,from.currency))}</strong></div><div class="preview-row"><span>আপনি পাবেন</span><strong>${escapeHtml(money(receive,to.currency))}</strong></div><div class="preview-row"><span>রিকোয়েস্ট রেফারেন্স</span><strong>${escapeHtml(item.code)}</strong></div>`;
+    $("paymentAddress").textContent=paymentAddresses[from.id]||"পেমেন্ট নির্দেশনা প্রস্তুত করা হচ্ছে। অনুগ্রহ করে পরবর্তী ধাপে এগিয়ে তথ্য জমা দিন।";
+    $("goProof").disabled=false;
+    $("copyPaymentAddress").textContent="ঠিকানা কপি";
+    openModal("paymentModal");
+  });
+  $("clearHistory").addEventListener("click",()=>{
+    if(confirm("এই ডিভাইসে সংরক্ষিত সব রিকোয়েস্ট মুছে ফেলবেন?")){localStorage.removeItem(HISTORY_KEY);renderHistory();}
+  });
+  $("saveRates").addEventListener("click",()=>{
+    let valid=true;
+    wallets=wallets.map(w=>{
+      if(w.type==="bdt")return w;
+      const buy=Number($(`buy-${w.id}`).value),sell=Number($(`sell-${w.id}`).value);
+      if(!Number.isFinite(buy)||!Number.isFinite(sell)||buy<=0||sell<=0){valid=false;return w;}
+      return {...w,buy,sell};
+    });
+    if(!valid){$("adminStatus").textContent="সব রেট শূন্যের বেশি দিতে হবে।";$("adminStatus").classList.add("error");return;}
+    saveRates();
+    wallets.forEach(w=>{const el=$("address-"+w.id);if(el)paymentAddresses[w.id]=el.value.trim();});
+    localStorage.setItem(ADDRESS_KEY,JSON.stringify(paymentAddresses));
+    renderRateTable();renderAdminEditor();renderLogoEditor();renderPaymentEditor();updateWalletOptions();
+    $("adminStatus").classList.remove("error");$("adminStatus").textContent="রেট ও পেমেন্ট ঠিকানা সংরক্ষণ করা হয়েছে।";
+  });
+  renderRateTable();renderAdminEditor();renderLogoEditor();renderPaymentEditor();updateWalletOptions();renderHistory();
+})();

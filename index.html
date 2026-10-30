@@ -1,150 +1,413 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#102a43">
-  <meta name="description" content="MoneyExchangeTaka — ডলার ও ডিজিটাল পেমেন্ট এক্সচেঞ্জের অনুরোধ, রেট ও লেনদেনের অবস্থা দেখার সহজ বাংলা প্ল্যাটফর্ম।">
-  <title>MoneyExchangeTaka | সহজ ডিজিটাল এক্সচেঞ্জ</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#082f49">
+  <meta name="description" content="MoneyExchangeTaka - ডিজিটাল ওয়ালেট ও কারেন্সি এক্সচেঞ্জ, রেট এবং রিকোয়েস্ট ট্র্যাকিং।">
+  <title>MoneyExchangeTaka | Currency Exchange</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-</head>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./header.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <script src="./app.js" defer></script>
+  <script src="./header.js" defer></script>
+  <link rel="stylesheet" href="./theme.css">\n  <link rel="stylesheet" href="./about.css">
+<link rel="stylesheet" href="./stats.css">
+<link rel="stylesheet" href="./faq.css">
+<link rel="stylesheet" href="./footer.css">\n</head>
 <body>
-  <header class="site-header">
-    <a class="brand" href="#" aria-label="MoneyExchangeTaka হোম">
-      <span class="brand-mark">৳</span>
-      <span><strong>MoneyExchange</strong><small>Taka · সহজ এক্সচেঞ্জ</small></span>
-    </a>
-    <button class="menu-toggle" id="menuToggle" aria-label="মেনু খুলুন" aria-expanded="false">☰</button>
-    <nav class="nav" id="mainNav">
-      <a href="#exchange">এক্সচেঞ্জ</a>
-      <a href="#how">যেভাবে কাজ করে</a>
-      <a href="#track">রিকোয়েস্ট ট্র্যাক</a>
-      <a href="#referral">রেফারেল</a>
-      <button class="btn btn-light" id="loginBtn">লগইন</button>
-      <button class="btn btn-primary" id="signupBtn">অ্যাকাউন্ট খুলুন</button>
-      <button class="btn btn-light" id="logoutBtn" hidden>লগআউট</button>
+    <header class="main-header" id="mainHeader">
+
+    <div class="header-container">
+
+      <!-- LEFT: MODERN CSS LOGO -->
+      <a href="#home"
+         class="brand-logo"
+         aria-label="MoneyExchangeTaka Home">
+
+        <!-- Logo Symbol -->
+        <div class="logo-mark">
+
+          <div class="logo-orbit"></div>
+
+          <i class="fa-solid fa-arrow-right-arrow-left exchange-icon"></i>
+
+          <span class="logo-coin taka-coin">৳</span>
+          <span class="logo-coin dollar-coin">$</span>
+
+        </div>
+
+        <!-- Brand Name and Tagline -->
+        <div class="logo-content">
+
+          <div class="brand-name">
+            <span>Money</span><span class="brand-highlight">Exchange</span><span class="brand-taka">Taka</span>
+          </div>
+
+          <div class="brand-tagline">
+            <i class="fa-solid fa-bolt"></i>
+            <span>AI Fast Pement</span>
+            <strong>Instant</strong>
+          </div>
+
+        </div>
+
+      </a>
+      <!-- LOGO END -->
+
+
+      <!-- CENTER: ANIMATED HEADER TEXT -->
+      <div class="header-tagline">
+
+        <span class="tagline-line"></span>
+
+        <i class="fa-solid fa-bolt tagline-bolt"></i>
+
+        <div class="tagline-text">
+          <span>AI Fast Pement</span>
+          <strong>Instant</strong>
+        </div>
+
+        <span class="tagline-line"></span>
+
+      </div>
+      <!-- CENTER TEXT END -->
+
+
+      <!-- RIGHT: DESKTOP NAVIGATION -->
+      <nav class="desktop-nav" aria-label="প্রধান নেভিগেশন">
+
+        <a href="#home" class="nav-link active">
+          <i class="fa-solid fa-house"></i>
+          <span>হোম</span>
+        </a>
+
+        <a href="#rates" class="nav-link">
+          <i class="fa-solid fa-arrows-rotate"></i>
+          <span>এক্সচেঞ্জ রেট</span>
+        </a>
+
+        <a href="#exchange" class="nav-link">
+          <i class="fa-solid fa-file-circle-check"></i>
+          <span>কীভাবে কাজ করে</span>
+        </a>
+
+        <a href="#history" class="nav-link">
+          <i class="fa-solid fa-headset"></i>
+          <span>সাপোর্ট</span>
+        </a>
+
+
+        <button type="button" class="nav-link nav-auth-login" data-auth-action="Login"><i class="fa-solid fa-right-to-bracket"></i><span>Login</span></button>
+        <button type="button" class="nav-link nav-auth-signup" data-auth-action="Sign Up"><i class="fa-solid fa-user-plus"></i><span>Sign Up</span></button>
+      </nav>
+      <!-- DESKTOP NAVIGATION END -->
+
+
+      <!-- MOBILE MENU BUTTON -->
+      <button
+        class="menu-toggle"
+        id="menuToggle"
+        type="button"
+        aria-label="মেনু খুলুন"
+        aria-expanded="false"
+        aria-controls="mobileMenu">
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+      </button>
+      <!-- MOBILE MENU BUTTON END -->
+
+    </div>
+
+
+    <!-- =====================================
+         MOBILE NAVIGATION
+    ====================================== -->
+    <nav
+      class="mobile-nav"
+      id="mobileMenu"
+      aria-label="মোবাইল নেভিগেশন"
+      aria-hidden="true">
+
+      <a href="#home" class="mobile-nav-link active">
+
+        <i class="fa-solid fa-house"></i>
+
+        <span>হোম</span>
+
+        <i class="fa-solid fa-chevron-right nav-arrow"></i>
+
+      </a>
+
+      <a href="#rates" class="mobile-nav-link">
+
+        <i class="fa-solid fa-arrows-rotate"></i>
+
+        <span>এক্সচেঞ্জ রেট</span>
+
+        <i class="fa-solid fa-chevron-right nav-arrow"></i>
+
+      </a>
+
+      <a href="#exchange" class="mobile-nav-link">
+
+        <i class="fa-solid fa-file-circle-check"></i>
+
+        <span>কীভাবে কাজ করে</span>
+
+        <i class="fa-solid fa-chevron-right nav-arrow"></i>
+
+      </a>
+
+      <a href="#history" class="mobile-nav-link">
+
+        <i class="fa-solid fa-headset"></i>
+
+        <span>সাপোর্ট</span>
+
+        <i class="fa-solid fa-chevron-right nav-arrow"></i>
+
+      </a>
+
+
+
+      <button type="button" class="mobile-nav-link mobile-auth-login" data-auth-action="Login"><i class="fa-solid fa-right-to-bracket"></i><span>Login</span><i class="fa-solid fa-chevron-right nav-arrow"></i></button>
+      <button type="button" class="mobile-nav-link mobile-auth-signup" data-auth-action="Sign Up"><i class="fa-solid fa-user-plus"></i><span>Sign Up</span><i class="fa-solid fa-chevron-right nav-arrow"></i></button>
+      <!-- Mobile Menu Tagline -->
+      <div class="mobile-menu-footer">
+
+        <i class="fa-solid fa-bolt"></i>
+
+        <span>AI Fast Pement Instant</span>
+
+      </div>
+
     </nav>
+    <!-- MOBILE NAVIGATION END -->
   </header>
 
-  <main>
-    <section class="hero shell">
-      <div class="hero-copy">
-        <span class="eyebrow"><span class="pulse"></span> সহজ · পরিষ্কার · যাচাইভিত্তিক</span>
-        <h1>আপনার এক্সচেঞ্জ,<br><em>এখন আরও সহজ।</em></h1>
-        <p class="hero-text">ডলার ও ডিজিটাল পেমেন্ট এক্সচেঞ্জের অনুরোধ দিন, রেট জানুন এবং আপনার রিকোয়েস্টের অবস্থা ট্র্যাক করুন—সহজ বাংলায়।</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary btn-large" href="#exchange">এক্সচেঞ্জ শুরু করুন <span>↗</span></a>
-          <a class="btn btn-outline btn-large" href="#how">কীভাবে কাজ করে?</a>
-        </div>
-        <div class="trust-points"><span>✓ স্পষ্ট রিকোয়েস্ট নম্বর</span><span>✓ অ্যাডমিন যাচাই</span><span>✓ মোবাইল-ফ্রেন্ডলি</span></div>
-      </div>
-      <aside class="hero-card">
-        <div class="card-top"><span class="card-icon">↔</span><span class="status-pill"><i></i> অনুরোধভিত্তিক</span></div>
-        <p class="muted">আপনি শুরু করতে পারেন</p>
-        <h2>অ্যাকাউন্ট ছাড়াই</h2>
-        <p>গেস্ট হিসেবে রিকোয়েস্ট দিন। পরে আপনার ট্র্যাকিং কোড দিয়ে অবস্থা দেখুন।</p>
-        <a class="text-link" href="#exchange">রিকোয়েস্ট ফর্মে যান <span>→</span></a>
-        <div class="mini-rate"><span>পেমেন্ট মাধ্যম</span><strong>পরিবর্তনযোগ্য</strong></div>
-        <div class="mini-rate"><span>কারেন্সি</span><strong>USD · BDT*</strong></div>
-        <small>*প্রকৃত রেট ও সেবা অ্যাডমিন কনফিগার না করা পর্যন্ত ডেমো তথ্য।</small>
-      </aside>
-    </section>
-
-    <section class="shell methods-section">
-      <div class="section-heading">
-        <div><span class="eyebrow">পেমেন্ট অপশন</span><h2>আপনার পছন্দের মাধ্যম</h2></div>
-        <p>নতুন মাধ্যম ভবিষ্যতে অ্যাডমিন সেটিংস থেকে যোগ করার জন্য সিস্টেম প্রস্তুত করা হবে।</p>
-      </div>
-      <div class="method-grid" id="methodCards">
-        <div class="method-card"><span class="method-logo bkash">b</span><strong>বিকাশ</strong><small>মোবাইল ফাইন্যান্স</small></div>
-        <div class="method-card"><span class="method-logo nagad">ন</span><strong>নগদ</strong><small>মোবাইল ফাইন্যান্স</small></div>
-        <div class="method-card"><span class="method-logo rocket">R</span><strong>রকেট</strong><small>মোবাইল ফাইন্যান্স</small></div>
-        <div class="method-card"><span class="method-logo upay">উ</span><strong>উপায়</strong><small>মোবাইল ফাইন্যান্স</small></div>
-        <div class="method-card"><span class="method-logo epay">e</span><strong>ই-পে</strong><small>ডিজিটাল পেমেন্ট</small></div>
-        <div class="method-card"><span class="method-logo tunepay">T</span><strong>টিউনপে</strong><small>ডিজিটাল পেমেন্ট</small></div>
-        <div class="method-card"><span class="method-logo usd">$</span><strong>মার্কিন ডলার</strong><small>USD</small></div>
-      </div>
-    </section>
-
-    <section class="section shell" id="exchange">
-      <div class="section-heading">
-        <div><span class="eyebrow">এক্সচেঞ্জ রিকোয়েস্ট</span><h2>আপনি কী করতে চান?</h2></div>
-        <span class="soft-tag">গেস্ট ও সদস্য—দুইভাবেই</span>
-      </div>
-      <div class="exchange-layout">
-        <form class="panel form-panel" id="exchangeForm">
-          <div class="form-intro"><span class="form-symbol">↔</span><div><h3>নতুন রিকোয়েস্ট</h3><p>তথ্য পূরণ করুন। জমা দেওয়ার পর একটি ট্র্যাকিং কোড পাবেন।</p></div></div>
-          <div class="segmented" role="group" aria-label="এক্সচেঞ্জের ধরন">
-            <button type="button" class="segment active" data-direction="sell">ডলার বিক্রি</button>
-            <button type="button" class="segment" data-direction="buy">ডলার কিনুন</button>
-          </div>
-          <input type="hidden" id="direction" value="sell">
-          <div class="field-row">
-            <div class="field"><label for="currency">কারেন্সি</label><select id="currency" required><option value="USD">মার্কিন ডলার (USD)</option><option value="EUR">ইউরো (EUR) — ভবিষ্যৎ অপশন</option><option value="GBP">পাউন্ড (GBP) — ভবিষ্যৎ অপশন</option></select></div>
-            <div class="field"><label for="amount">পরিমাণ</label><input id="amount" type="number" min="1" max="1000000" step="0.01" placeholder="যেমন 50" required><small id="amountHelp">পরিমাণ USD-এ লিখুন।</small></div>
-          </div>
-          <div class="field-row">
-            <div class="field"><label for="paymentMethod">আপনার পেমেন্ট মাধ্যম</label><select id="paymentMethod" required><option value="bKash">বিকাশ</option><option value="Nagad">নগদ</option><option value="Rocket">রকেট</option><option value="Upay">উপায়</option><option value="ePay">ই-পে</option><option value="TunePay">টিউনপে</option><option value="Bank">ব্যাংক ট্রান্সফার</option><option value="Other">অন্যান্য</option></select></div>
-            <div class="field"><label for="contact">যোগাযোগের নম্বর</label><input id="contact" type="tel" maxlength="25" placeholder="01XXXXXXXXX" required autocomplete="tel"></div>
-          </div>
-          <div class="field"><label for="paymentAccount">পেমেন্ট অ্যাকাউন্ট / প্রয়োজনীয় পরিচিতি</label><input id="paymentAccount" maxlength="80" placeholder="শুধু প্রয়োজনীয় তথ্য দিন" required><small>কখনো PIN, OTP বা পাসওয়ার্ড দেবেন না।</small></div>
-          <div class="field"><label for="note">অতিরিক্ত তথ্য (ঐচ্ছিক)</label><textarea id="note" maxlength="300" rows="3" placeholder="প্রয়োজন হলে সংক্ষিপ্ত তথ্য লিখুন"></textarea></div>
-          <div class="field" id="referralField"><label for="referralCode">রেফারেল কোড (ঐচ্ছিক)</label><input id="referralCode" maxlength="24" placeholder="বন্ধুর কোড থাকলে লিখুন"></div>
-          <label class="check-row"><input id="termsCheck" type="checkbox" required><span>আমি বুঝেছি এটি একটি রিকোয়েস্ট; যাচাই ও অনুমোদনের আগে কোনো লেনদেন সম্পন্ন হয়েছে বলে গণ্য হবে না।</span></label>
-          <button class="btn btn-primary btn-submit" type="submit">রিকোয়েস্ট জমা দিন <span>→</span></button>
-          <p class="form-footnote">এখন এটি প্রাথমিক অনুরোধ-সিস্টেম। বাস্তব অর্থ লেনদেন, রেট ও পেমেন্ট যাচাই সক্রিয় করার আগে অ্যাডমিন ও সার্ভার সেটআপ প্রয়োজন।</p>
-        </form>
-        <aside class="side-stack">
-          <div class="panel info-panel">
-            <span class="info-icon">◎</span><h3>কীভাবে এগোবে?</h3>
-            <ol class="process-list"><li><b>রিকোয়েস্ট দিন</b><span>পরিমাণ ও যোগাযোগের তথ্য দিন।</span></li><li><b>ট্র্যাকিং কোড নিন</b><span>কোডটি নিরাপদে সংরক্ষণ করুন।</span></li><li><b>যাচাইয়ের অপেক্ষা করুন</b><span>অ্যাডমিন যাচাই করে স্ট্যাটাস আপডেট করবে।</span></li></ol>
-          </div>
-          <div class="panel safety-panel"><span class="info-icon">✓</span><div><h3>নিরাপত্তা আগে</h3><p>PIN, OTP, পাসওয়ার্ড বা কার্ডের গোপন তথ্য কখনো শেয়ার করবেন না। শুধু পরিচিত ও অনুমোদিত সেবার নিয়ম অনুসরণ করুন।</p></div></div>
-        </aside>
-      </div>
-      <div class="result-panel" id="requestResult" hidden aria-live="polite"></div>
-    </section>
-
-    <section class="section shell two-col" id="track">
-      <div><span class="eyebrow">রিকোয়েস্ট খুঁজুন</span><h2>ট্র্যাকিং কোড দিয়ে অবস্থা দেখুন</h2><p class="muted">গেস্ট রিকোয়েস্টের জন্য জমা দেওয়ার পর পাওয়া কোড লিখুন। এটি সংযুক্ত হলে নিরাপদ যাচাইয়ের মাধ্যমে স্ট্যাটাস দেখাবে।</p></div>
-      <form class="panel track-form" id="trackForm"><label for="trackingCode">ট্র্যাকিং কোড</label><input id="trackingCode" maxlength="32" placeholder="যেমন MET-ABC123" required><button class="btn btn-dark full" type="submit">স্ট্যাটাস দেখুন</button><div id="trackResult" class="track-result"></div></form>
-    </section>
-
-    <section class="section shell" id="how">
-      <div class="section-heading"><div><span class="eyebrow">সহজ প্রক্রিয়া</span><h2>যেভাবে কাজ করে</h2></div></div>
-      <div class="steps-grid"><article class="step-card"><span>01</span><h3>রিকোয়েস্ট জমা</h3><p>ডলার কেনা বা বিক্রির ধরন, পরিমাণ ও যোগাযোগের তথ্য দিন।</p></article><article class="step-card"><span>02</span><h3>অ্যাডমিন যাচাই</h3><p>প্রয়োজনীয় তথ্য ও পেমেন্ট যাচাই করে সিদ্ধান্ত নেওয়া হবে।</p></article><article class="step-card"><span>03</span><h3>স্ট্যাটাস আপডেট</h3><p>আপনার রিকোয়েস্টের অগ্রগতি ট্র্যাকিং কোড দিয়ে দেখুন।</p></article></div>
-    </section>
-
-    <section class="section shell referral-section" id="referral">
-      <div class="referral-card"><div><span class="eyebrow light-eyebrow">বন্ধুকে আমন্ত্রণ</span><h2>রেফারেল সুবিধা আসছে</h2><p>অ্যাকাউন্ট খুলে নিজের রেফারেল কোড পাবেন। বোনাসের নিয়ম অ্যাডমিন সেট করবে; যাচাই ছাড়া বোনাস ব্যালেন্সে যোগ হবে না।</p></div><button class="btn btn-white" id="referralSignupBtn">অ্যাকাউন্ট খুলুন</button></div>
-    </section>
-
-    <section class="section shell faq-section">
-      <div class="section-heading"><div><span class="eyebrow">সাধারণ প্রশ্ন</span><h2>জেনে নিন</h2></div></div>
-      <details><summary>অ্যাকাউন্ট ছাড়া রিকোয়েস্ট দেওয়া যাবে?</summary><p>হ্যাঁ, এই প্রাথমিক ফর্মে গেস্ট রিকোয়েস্টের ব্যবস্থা আছে। নিরাপদ স্ট্যাটাস ট্র্যাকিং Firebase সেটআপের পর সক্রিয় হবে।</p></details>
-      <details><summary>এক্সচেঞ্জ রেট কোথায় দেখব?</summary><p>অ্যাডমিন রেট কনফিগার করার পর এখানে বর্তমান রেট দেখানো হবে। এখন কোনো লাইভ রেট দেখানো হচ্ছে না।</p></details>
-      <details><summary>পরে নতুন পেমেন্ট বা কারেন্সি যোগ করা যাবে?</summary><p>হ্যাঁ। ডেটাবেস ও অ্যাডমিন কনফিগারেশন তৈরি হলে নতুন পেমেন্ট মাধ্যম, কারেন্সি, রেট ও সীমা যোগ করার ব্যবস্থা থাকবে।</p></details>
-    </section>
-  </main>
-
-  <div class="modal-backdrop" id="authModal" hidden>
-    <form class="auth-modal" id="authForm">
-      <button type="button" class="modal-close" id="closeModal" aria-label="বন্ধ করুন">×</button>
-      <span class="brand-mark modal-mark">৳</span><h2 id="authTitle">লগইন করুন</h2><p id="authHelp">আপনার অ্যাকাউন্টে প্রবেশ করুন।</p>
-      <div id="displayNameWrap" hidden><label for="displayName">আপনার নাম</label><input id="displayName" maxlength="80" autocomplete="name"></div>
-      <label for="authEmail">ইমেইল</label><input id="authEmail" type="email" autocomplete="email" required>
-      <label for="authPassword">পাসওয়ার্ড</label><input id="authPassword" type="password" minlength="8" autocomplete="current-password" required>
-      <button class="btn btn-primary full" id="authSubmit" type="submit">লগইন</button>
-      <p class="switch-line" id="switchLine">নতুন ব্যবহারকারী? <button type="button" id="switchMode">অ্যাকাউন্ট খুলুন</button></p>
-      <small>পাসওয়ার্ড এই ওয়েবসাইটে সংরক্ষণ করা হয় না; Firebase Authentication ব্যবহার করা হবে।</small>
-    </form>
+<div class="exchange-ticker" aria-label="ওয়েবসাইটের ঘোষণা">
+  <div class="ticker-label">
+    <span class="ticker-live-dot"></span>
+    <i class="fa-solid fa-bolt"></i>
+    <span>আপডেট</span>
   </div>
 
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <footer class="site-footer"><div class="shell footer-inner"><a class="brand footer-brand" href="#"><span class="brand-mark">৳</span><span><strong>MoneyExchangeTaka</strong><small>সহজ এক্সচেঞ্জ, স্পষ্ট প্রক্রিয়া</small></span></a><div class="footer-links"><a href="#how">কীভাবে কাজ করে</a><a href="#track">রিকোয়েস্ট ট্র্যাক</a><a href="#faq">সাধারণ প্রশ্ন</a></div><p>© <span id="year"></span> MoneyExchangeTaka · প্রাথমিক সংস্করণ</p><p class="footer-note">এই প্রোটোটাইপ নিজে থেকে টাকা পাঠায় না, ডলার কেনাবেচা সম্পন্ন করে না বা ওয়ালেট ব্যালেন্স পরিবর্তন করে না।</p></div></footer>
-  <script type="module" src="app.js"></script>
+  <div class="ticker-window">
+    <div class="ticker-track">
+
+      <div class="ticker-content">
+        <span class="ticker-item">
+          <i class="fa-solid fa-bolt"></i>
+          MoneyExchangeTaka-তে স্বাগতম
+        </span>
+
+        <span class="ticker-separator">✦</span>
+
+        <span class="ticker-item">
+          <i class="fa-solid fa-arrows-rotate"></i>
+          সহজ ও দ্রুত ডিজিটাল এক্সচেঞ্জ
+        </span>
+
+        <span class="ticker-separator">✦</span>
+
+        <span class="ticker-item">
+          <i class="fa-solid fa-shield-halved"></i>
+          প্রতিটি রিকোয়েস্ট যাচাই সাপেক্ষে সম্পন্ন হবে
+        </span>
+
+        <span class="ticker-separator">✦</span>
+
+        <span class="ticker-item">
+          <i class="fa-solid fa-headset"></i>
+          সহায়তার জন্য সাপোর্টে যোগাযোগ করুন
+        </span>
+
+        <span class="ticker-separator">✦</span>
+      </div>
+
+      <!-- Repeat for seamless scrolling -->
+      <div class="ticker-content" aria-hidden="true">
+        <span class="ticker-item">
+          <i class="fa-solid fa-bolt"></i>
+          MoneyExchangeTaka-তে স্বাগতম
+        </span>
+
+        <span class="ticker-separator">✦</span>
+
+        <span class="ticker-item">
+          <i class="fa-solid fa-arrows-rotate"></i>
+          সহজ ও দ্রুত ডিজিটাল এক্সচেঞ্জ
+        </span>
+
+        <span class="ticker-separator">✦</span>
+
+        <span class="ticker-item">
+          <i class="fa-solid fa-shield-halved"></i>
+          প্রতিটি রিকোয়েস্ট যাচাই সাপেক্ষে সম্পন্ন হবে
+        </span>
+
+        <span class="ticker-separator">✦</span>
+
+        <span class="ticker-item">
+          <i class="fa-solid fa-headset"></i>
+          সহায়তার জন্য সাপোর্টে যোগাযোগ করুন
+        </span>
+
+        <span class="ticker-separator">✦</span>
+      </div>
+
+    </div>
+  </div>
+</div><br>
+
+
+
+  <main class="container">
+    <section class="hero" id="home">
+      <div>
+        <p class="eyebrow">সহজ · স্বচ্ছ · হিসাবসহ</p>
+        <h1>আপনার ডিজিটাল এক্সচেঞ্জ,<br><span>এক জায়গায়</span></h1>
+        <p class="hero-copy">স্বচ্ছ রেট, সহজ হিসাব এবং ধাপে ধাপে পেমেন্ট যাচাই—আপনার ডিজিটাল ওয়ালেট এক্সচেঞ্জ এক জায়গায়।</p>
+        <a class="primary-link" href="#exchange">এক্সচেঞ্জ শুরু করুন <span>→</span></a>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-top"><span class="live-dot"></span> এক্সচেঞ্জ রেট</div>
+        <div class="hero-rate"><small>USD / BDT</small><strong>৳ ১২০.০০</strong></div>
+        <p>প্রতিটি সার্ভিসের রেট আলাদা হতে পারে। চূড়ান্ত রেট অ্যাডমিন নিশ্চিত করবেন।</p>
+      </div>
+    </section>
+
+    <section id="rates" class="section">
+      <div class="section-heading">
+        <div><p class="eyebrow">EXCHANGE RATES</p><h2>কারেন্সি ও ওয়ালেট রেট</h2></div>
+        <span class="hint">লোগো + নাম + কেনা/বিক্রি</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>ওয়ালেট / কারেন্সি</th><th>কারেন্সি</th><th>আমরা কিনি</th><th>আমরা বিক্রি করি</th></tr></thead>
+          <tbody id="rateTableBody"></tbody>
+        </table>
+      </div>
+      <p class="note rate-limit-note"><strong>প্রতি লেনদেনের সীমা:</strong> সর্বনিম্ন ৳৫০০ এবং সর্বোচ্চ ৳১০,০০০ (সমমূল্যের USD/USDT)।</p>
+    </section>
+
+    <section id="exchange" class="section">
+      <div class="section-heading">
+        <div><p class="eyebrow">START EXCHANGE</p><h2>এক্সচেঞ্জ রিকোয়েস্ট</h2></div>
+      </div>
+      <form id="exchangeForm" class="exchange-layout" novalidate>
+        <div class="form-card">
+          <div class="field">
+            <label for="direction">আপনি কী করতে চান?</label>
+            <select id="direction" required>
+              <option value="sell">আমি USD/USDT বিক্রি করে BDT নেব</option>
+              <option value="buy">আমি BDT দিয়ে USD/USDT কিনব</option>
+              <option value="exchange">এক ওয়ালেট থেকে অন্য ওয়ালেটে এক্সচেঞ্জ</option>
+            </select>
+          </div>
+          <div class="wallet-grid">
+            <div class="field">
+              <label for="fromWallet">যে ওয়ালেট থেকে দেবেন</label>
+              <select id="fromWallet" required></select>
+            </div>
+            <div class="field">
+              <label for="toWallet">যে ওয়ালেটে পাবেন</label>
+              <select id="toWallet" required></select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="amount">পরিমাণ</label>
+            <div class="amount-input"><input id="amount" type="number" min="0.01" max="100000000" step="any" placeholder="যেমন 10.00" required><span id="amountCurrency">USD</span></div>
+            <small id="amountHelp">আপনি যে পরিমাণ দেবেন তা লিখুন। সর্বনিম্ন ৳৫০০ এবং সর্বোচ্চ ৳১০,০০০ সমমূল্য।</small>
+          </div>
+          <div class="wallet-preview">
+            <div class="preview-row"><span>আপনি দেবেন</span><strong id="payPreview">—</strong></div>
+            <div class="preview-row"><span>আনুমানিক পাবেন</span><strong id="receivePreview">—</strong></div>
+            <div class="preview-row"><span>প্রযোজ্য রেট</span><strong id="ratePreview">—</strong></div>
+            <div class="preview-row"><span>সার্ভিস ফি (১%)</span><strong id="feePreview">—</strong></div>
+            <p class="note" id="calcMessage">চূড়ান্ত রেট ও ফি অর্ডার যাচাইয়ের সময় নিশ্চিত হবে.</p>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <h3>আপনার তথ্য</h3>
+          <div class="field"><label for="customerName">নাম</label><input id="customerName" type="text" minlength="2" maxlength="80" placeholder="আপনার নাম" required></div>
+          <div class="field"><label for="contact" id="contactLabel">WhatsApp / Telegram / Email</label><input id="contact" type="text" minlength="5" maxlength="160" placeholder="WhatsApp নম্বর, Telegram username বা ইমেইল" required autocomplete="email"></div>
+          <div class="field">
+            <label for="account">যে অ্যাকাউন্ট / ঠিকানায় পেমেন্ট পাবেন</label>
+            <input id="account" type="text" minlength="3" maxlength="160" placeholder="প্রথমে যে ওয়ালেটে পাবেন সেটি নির্বাচন করুন" required autocomplete="off">
+            <small id="accountHelp">আপনার নির্বাচিত গ্রহণকারী ওয়ালেট অনুযায়ী নম্বর বা ঠিকানা লিখুন।</small>
+            <p class="address-warning"><strong>সতর্কতা:</strong> ভুল নম্বর, ওয়ালেট অ্যাড্রেস বা নেটওয়ার্ক নির্বাচন করলে আপনার অ্যাসেট হারাতে পারেন। এ ধরনের ভুলের জন্য কর্তৃপক্ষ দায়ী থাকবে না। সাবমিট করার আগে ঠিকানা ও নেটওয়ার্ক ভালোভাবে যাচাই করুন।</p>
+          </div>
+          <div class="field"><label for="reference">রেফারেন্স কোড (ঐচ্ছিক)</label><input id="reference" type="text" maxlength="40" placeholder="রেফারেল কোড"></div>
+          <div class="field"><label for="note">নোট (ঐচ্ছিক)</label><textarea id="note" rows="3" maxlength="500" placeholder="অতিরিক্ত তথ্য"></textarea></div>
+          <label class="check-row"><input id="terms" type="checkbox" required> আমি পেমেন্টের তথ্য ও নির্বাচিত ওয়ালেট যাচাই করেছি।</label>
+          <button class="submit-btn" type="submit">রিকোয়েস্ট তৈরি করুন</button>
+          <p id="formStatus" class="form-status" role="status" aria-live="polite"></p>
+        </div>
+      </form>
+    </section>
+
+
+<section class="about-premium section" id="about" aria-labelledby="aboutTitle">
+  <div class="about-intro reveal-about"><span class="about-eyebrow">ABOUT MONEYEXCHANGETAKA</span><h2 id="aboutTitle">One Platform. Multiple Payment Possibilities.</h2><p>MoneyExchangeTaka — ডিজিটাল ওয়ালেট ও কারেন্সি এক্সচেঞ্জের জন্য একটি আধুনিক প্ল্যাটফর্ম। সহজে মেথড নির্বাচন, রেট দেখা ও রিকোয়েস্ট ট্র্যাক করুন।</p></div>
+  <div class="about-grid">
+    <article class="about-feature reveal-about"><span class="about-icon">⚡</span><span class="about-index">● / SPEED</span><h3>Instant Transaction AI</h3><p>দ্রুত ও সহজ এক্সচেঞ্জ রিকোয়েস্টের জন্য স্মার্ট ডিজিটাল অভিজ্ঞতা। প্রতিটি রিকোয়েস্ট যাচাই সাপেক্ষে প্রক্রিয়াকরণ করা হয়।</p></article>
+    <article class="about-feature about-currencies reveal-about"><span class="about-icon">◈</span><span class="about-index">● / NETWORK</span><h3>Diverse Currency</h3><div class="currency-tags"><span>Perfect Money</span><span>WebMoney</span><span>Bitcoin</span><span>Crypto</span><span>Binance USDT</span><span>BingX USDT</span><span>KuCoin USDT</span><span>Bybit USDT</span><span>ePay</span><span>Volet USD</span><span>RedotPay USD</span><span>bKash</span><span>Nagad</span><span>Rocket</span><span>Upay</span><span>TunePay</span><span>PayPal</span></div></article>
+    <article class="about-feature reveal-about"><span class="about-icon">♢</span><span class="about-index">● / TRUST</span><h3>Secure &amp; Reliable</h3><p>পেমেন্টের তথ্য, নির্বাচিত নেটওয়ার্ক ও রিকোয়েস্টের বিবরণ যাচাই করে পরবর্তী ধাপে এগোনোর ব্যবস্থা।</p></article>
+    <article class="about-feature reveal-about"><span class="about-icon">☏</span><span class="about-index">● / ASSISTANCE</span><h3>24/7 Support</h3><p>এক্সচেঞ্জ প্রক্রিয়া, পেমেন্ট তথ্য ও রিকোয়েস্ট স্ট্যাটাস সম্পর্কে সহায়তার জন্য সাপোর্টে যোগাযোগ করুন।</p></article>
+  </div>
+  <div class="about-bottom reveal-about"><div><span class="about-eyebrow">EXCHANGE NETWORK</span><h3>From global wallets to local payments.</h3><p>Perfect Money · WebMoney · Crypto · USDT · ePay · Volet · RedotPay · bKash · Nagad · Rocket · Upay</p></div><div class="about-fee"><strong>Binance Pay ID</strong><span>Transaction fee: 0* </span><small>*শুধু অনুমোদিত Binance Pay ID ট্রান্সফারের ক্ষেত্রে; অর্ডারের চূড়ান্ত ফি আগে যাচাই করুন।</small></div></div>
+</section>
+    <section id="history" class="section">
+      <div class="section-heading">
+        <div><p class="eyebrow">REQUEST TRACKING</p><h2>আমার রিকোয়েস্টসমূহ</h2></div>
+        <button id="clearHistory" class="secondary-btn" type="button">হিসাব মুছুন</button>
+      </div>
+      <div id="historyList" class="history-list"></div>
+      
+    </section>
+
+    <section id="adminSettings" class="admin-panel section">
+      <details>
+        <summary>অ্যাডমিন সেটিংস · রেট ও পেমেন্ট ঠিকানা</summary>
+        
+        <div class="admin-cloudinary-note">কারেন্সি লোগো পরিবর্তন করতে নিচে ছবি আপলোড করুন। ছবি Cloudinary-তে সংরক্ষিত হবে।</div>
+        <h3 class="admin-subtitle">কারেন্সি লোগো ব্যবস্থাপনা</h3>
+        <div id="adminLogoEditor" class="admin-rate-editor"></div>
+        <div id="adminRateEditor" class="admin-rate-editor"></div>
+        <div id="adminPaymentEditor" class="admin-rate-editor"></div><button id="saveRates" class="submit-btn" type="button">রেট ও ঠিকানা সংরক্ষণ</button>
+        <p id="adminStatus" class="form-status" role="status"></p>
+      </details>
+    </section>
+<section class="stats-section" id="transaction-stats" aria-labelledby="statsTitle">
+<div class="stats-heading"><span>EXCHANGE ACTIVITY</span><h2 id="statsTitle">Transaction Overview</h2><p>সর্বশেষ যাচাইকৃত লেনদেনের তথ্য</p></div>
+<div class="stats-panel"><div class="stats-panel-title"><h3>মোট লেনদেন</h3><span id="statsUpdated">সর্বশেষ আপডেট —</span></div><div class="stats-scroll-shell"><p class="stats-baseline-note">Starting display allocation: $10,000 · Verified orders are added separately below.</p><div class="stats-list" id="statsCurrencyList" tabindex="0" role="region" aria-label="Currency transaction list; scroll up or down to browse"></div><div class="stats-scroll-hint">↕ উপরে–নিচে স্ক্রল করে সব Currency দেখুন</div></div></div>
+<div class="stats-panel"><div class="stats-panel-title"><h3>Order Status</h3><span id="statsStatus">তথ্য সংযোগের অপেক্ষায়</span></div><div class="stats-columns"><div><h4>Pending <span id="statsPending">—</span></h4><div id="statsPendingList" class="stats-orders"><p class="stats-empty">কোনো যাচাইকৃত তথ্য পাওয়া যায়নি</p></div></div><div><h4>Approved <span id="statsApproved">—</span></h4><div id="statsApprovedList" class="stats-orders"><p class="stats-empty">কোনো যাচাইকৃত তথ্য পাওয়া যায়নি</p></div></div></div></div>
+</section>
+
+<section class="faq-section" id="faq" aria-labelledby="faqTitle"><div class="faq-heading"><span>HELP CENTER</span><h2 id="faqTitle">Frequently Asked Questions</h2><p>আপনার সাধারণ প্রশ্নের উত্তর এক জায়গায়</p></div><div class="faq-card"><details class="faq-item"><summary>MoneyExchangeTaka কীভাবে কাজ করে?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">Send ও Receive Payment Method এবং পরিমাণ নির্বাচন করে প্রয়োজনীয় তথ্য দিয়ে Exchange Request জমা দিতে পারবেন। রেট ও পেমেন্ট নির্দেশনা নিশ্চিত করে পরবর্তী ধাপে এগোবেন।</div></details><details class="faq-item"><summary>Exchange Rate কোথায় দেখতে পাব?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">ওয়েবসাইটের Exchange Rate অংশে উপলব্ধ তথ্য দেখুন। অর্ডার নিশ্চিত করার আগে প্রযোজ্য রেট ও ফি যাচাই করুন।</div></details><details class="faq-item"><summary>কোন কোন Payment Method রয়েছে?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">Perfect Money, WebMoney, Binance USDT, KuCoin USDT, BingX USDT, Bybit USDT, ePay, Volet, RedotPay, bKash, Nagad, Rocket, Upay এবং ওয়েবসাইটে প্রদর্শিত অন্যান্য মেথড।</div></details><details class="faq-item"><summary>আমার Exchange Request কীভাবে Track করব?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">রিকোয়েস্ট জমা দেওয়ার পর পাওয়া Tracking Code ব্যবহার করে Request Tracking অংশে স্ট্যাটাস যাচাই করুন।</div></details><details class="faq-item"><summary>Pending ও Approved বলতে কী বোঝায়?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">Pending মানে রিকোয়েস্ট যাচাই বা প্রক্রিয়াকরণের অপেক্ষায়। Approved মানে সংশ্লিষ্ট অর্ডার অনুমোদিত হয়েছে; পেমেন্ট সম্পন্ন হওয়ার নিশ্চয়তা জানতে চূড়ান্ত স্ট্যাটাস দেখুন।</div></details><button class="faq-more" id="faqMore" type="button" aria-haspopup="dialog" aria-controls="faqModal">More Questions <span aria-hidden="true">↗</span></button></div></section><div class="faq-overlay" id="faqModal" aria-hidden="true"><section class="faq-dialog" role="dialog" aria-modal="true" aria-labelledby="faqModalTitle" tabindex="-1"><header class="faq-dialog-head"><div><span>HELP CENTER</span><h2 id="faqModalTitle">More Questions & Answers</h2><p>আপনার প্রয়োজনীয় তথ্য খুঁজে নিন</p></div><button type="button" class="faq-close" id="faqClose" aria-label="Close questions">×</button></header><div class="faq-dialog-body"><details class="faq-item"><summary>একটি Exchange Request কীভাবে জমা দেব?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">পেমেন্ট মেথড, পরিমাণ ও প্রয়োজনীয় অ্যাকাউন্ট তথ্য দিন। দেখানো নির্দেশনা যাচাই করে ফর্ম জমা দিন।</div></details><details class="faq-item"><summary>ভুল Wallet Address দিলে কী করব?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">যত দ্রুত সম্ভব সাপোর্টে যোগাযোগ করুন। ভুল নেটওয়ার্ক বা ঠিকানায় পাঠানো অর্থ ফেরত পাওয়া নাও যেতে পারে।</div></details><details class="faq-item"><summary>কোন নেটওয়ার্কে USDT পাঠাব?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">রিকোয়েস্টের পেমেন্ট নির্দেশনায় যে নেটওয়ার্ক উল্লেখ থাকবে, শুধু সেটিই ব্যবহার করুন। নেটওয়ার্ক ও ওয়ালেট ঠিকানা মিলিয়ে নিন।</div></details><details class="faq-item"><summary>Exchange Fee কীভাবে জানা যাবে?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">অর্ডার নিশ্চিত করার আগে প্রযোজ্য রেট, নেটওয়ার্ক ফি এবং সার্ভিস চার্জ যাচাই করুন। ফি পেমেন্ট মেথডভেদে ভিন্ন হতে পারে।</div></details><details class="faq-item"><summary>Binance Pay ID ব্যবহার করা যাবে?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">উপলব্ধ থাকলে নির্দেশনায় দেওয়া Binance Pay ID ব্যবহার করুন। প্রযোজ্য ফি ও সীমা অর্ডার নিশ্চিত করার আগে দেখে নিন।</div></details><details class="faq-item"><summary>Payment Proof কীভাবে জমা দেব?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">প্রদর্শিত ধাপে Transaction ID বা Reference দিন এবং প্রয়োজন হলে Payment Screenshot সংযুক্ত করুন।</div></details><details class="faq-item"><summary>একই Tracking Code দিয়ে একাধিক অর্ডার দেখা যাবে?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">প্রতিটি রিকোয়েস্টের জন্য পাওয়া নিজস্ব Tracking Code ব্যবহার করুন।</div></details><details class="faq-item"><summary>অর্ডার বাতিল বা পরিবর্তন করতে চাইলে কী করব?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">অর্ডারের বর্তমান অবস্থা ও পরিবর্তনের সম্ভাবনা জানতে দ্রুত সাপোর্টে যোগাযোগ করুন।</div></details><details class="faq-item"><summary>সাপোর্টের সঙ্গে কীভাবে যোগাযোগ করব?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">ওয়েবসাইটের Support অংশে দেওয়া যোগাযোগের মাধ্যম ব্যবহার করুন।</div></details><details class="faq-item"><summary>আমার তথ্য কীভাবে নিরাপদ রাখব?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">নিজের Password, OTP বা Recovery Phrase কাউকে দেবেন না। Payment Account ও Tracking তথ্য শেয়ার করার সময় সতর্ক থাকুন।</div></details></div></section></div>
+  </main>
+
+  <footer class="met-footer"><div class="met-footer-inner"><div class="met-footer-brand"><a href="./index.html" class="met-footer-logo">Money<span>Exchange</span>Taka</a><p>ডিজিটাল এক্সচেঞ্জ সম্পর্কিত তথ্য, সহায়তা ও প্রয়োজনীয় নীতিমালা এক জায়গায়।</p></div><nav class="met-footer-links" aria-label="Footer navigation"><h3>Quick Links</h3><a href="./about.html">About</a><a href="./affiliate.html">Affiliate</a><a href="./terms-and-conditions.html">Terms &amp; Conditions</a><a href="./privacy-policy.html">Privacy Policy</a><a href="./guidelines.html">Guidelines</a><a href="./licence.html">Licence</a></nav><div class="met-footer-help"><h3>Help &amp; Information</h3><p>কোনো লেনদেনের আগে প্রযোজ্য শর্ত, ফি এবং পরিচয় যাচাইয়ের নিয়ম দেখে নিন।</p><a href="./index.html#faq">Frequently Asked Questions</a></div></div><div class="met-footer-bottom"><span>© <span id="footerYear">2026</span> MoneyExchangeTaka. All rights reserved.</span><span>Clear information · Responsive design</span></div></footer><script>document.getElementById("footerYear").textContent=new Date().getFullYear();</script>
+  <div class="modal-backdrop" id="paymentModal" aria-hidden="true"><section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="paymentTitle"><button class="modal-close" type="button" data-close-modal="paymentModal">×</button><div class="modal-step">ধাপ ১ / ৩</div><h2 id="paymentTitle">পেমেন্ট সম্পন্ন করুন</h2><p id="paymentIntro" class="modal-copy">নিচের ঠিকানার তথ্য যাচাই করুন।</p><div class="payment-summary" id="paymentSummary"></div><div class="payment-address"><span>পেমেন্ট ঠিকানা</span><strong id="paymentAddress">—</strong><button id="copyPaymentAddress" type="button" class="secondary-btn">ঠিকানা কপি</button></div><p class="address-warning"><strong>গুরুত্বপূর্ণ:</strong> পেমেন্ট পাঠানোর আগে ঠিকানা, পরিমাণ এবং ক্রিপ্টো নেটওয়ার্ক ভালোভাবে যাচাই করুন। ভুল ঠিকানায় পাঠানো সম্পদ ফেরত পাওয়া নাও যেতে পারে।</p><button id="goProof" type="button" class="submit-btn">পেমেন্ট করেছি · পরবর্তী ধাপ</button></section></div>
+  <div class="modal-backdrop" id="proofModal" aria-hidden="true"><section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="proofTitle"><button class="modal-close" type="button" data-close-modal="proofModal">×</button><div class="modal-step">ধাপ ২ / ৩</div><h2 id="proofTitle">পেমেন্ট প্রমাণ জমা দিন</h2><p class="modal-copy">ট্রানজ্যাকশন আইডি / রেফারেন্স দিন এবং সম্ভব হলে স্ক্রিনশট যুক্ত করুন।</p><form id="proofForm"><div class="field"><label for="proofReference">ট্রানজ্যাকশন ID / রেফারেন্স</label><input id="proofReference" required maxlength="160" placeholder="পেমেন্ট রেফারেন্স লিখুন"></div><div class="field"><label for="proofEmail">ইমেইল (যদি প্রযোজ্য হয়)</label><input id="proofEmail" type="email" maxlength="160" placeholder="name@example.com"></div><div class="field"><label for="proofScreenshot">পেমেন্ট স্ক্রিনশট</label><input id="proofScreenshot" type="file" accept="image/*"></div><button class="submit-btn" type="submit">রিকোয়েস্ট জমা দিন</button></form></section></div>
+
+  <div class="modal-backdrop" id="successModal" aria-hidden="true"><section class="modal-card success-card" role="dialog" aria-modal="true" aria-labelledby="successTitle"><div class="success-mark" aria-hidden="true">✓</div><h2 id="successTitle">আপনার অনুরোধ গ্রহণ করা হয়েছে</h2><p class="modal-copy">আপনার অনুরোধটি গ্রহণ করা হয়েছে। অনুগ্রহ করে কিছুক্ষণ অপেক্ষা করুন, আপনার অনুরোধ দ্রুত সম্পন্ন করার ব্যবস্থা নেওয়া হবে।</p><div class="tracking-box"><span>আপনার ট্র্যাকিং কোড</span><strong id="successTrackingCode">MET-XXXXXX</strong><button id="copyTrackingCode" type="button" class="secondary-btn">কোড কপি করুন</button></div><p class="modal-copy">এই কোড দিয়ে আপনি আপনার অনুরোধের অগ্রগতি যাচাই করতে পারবেন।</p><button id="successDone" type="button" class="submit-btn">ঠিক আছে</button></section></div>
+<script>
+  document.querySelectorAll('[data-auth-action]').forEach(button => {
+    button.addEventListener('click', () => {
+      alert(button.dataset.authAction + ' ফিচার চালু করতে authentication backend সংযোগ প্রয়োজন।');
+    });
+  });
+</script>
+<script src="./about.js" defer></script>\n<script src="./stats.js" defer></script>
+<script src="./faq.js" defer></script>
 </body>
 </html>
