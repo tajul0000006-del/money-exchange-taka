@@ -41,16 +41,3 @@ footer{text-align:center;background:#06283c;color:#d7e7ef;padding:27px 15px;marg
 .site-header, .hero, #history, #adminSettings { display: none !important; }
 .rate-limit-note { margin-top: 14px; padding: 12px 14px; border-radius: 12px; background: #eef9fc; border: 1px solid #d6e9ee; color: #17445a; font-size: 14px; }
 .rate-limit-note strong { color: #082f49; }
-
-/* Cloudinary currency-logo manager */
-.admin-cloudinary-note{margin:14px 0 8px;padding:12px 14px;border:1px solid #cfe6da;border-radius:10px;background:#f0faf4;color:#17613d;font-size:13px;line-height:1.6}
-.admin-subtitle{margin:16px 0 8px;font-size:16px;color:#12364a}
-.admin-logo-row{display:flex;align-items:center;gap:13px;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff}
-.admin-logo-preview{width:58px;height:58px;flex:0 0 58px;display:grid;place-items:center;border-radius:12px;background:#f4f7fa;overflow:hidden}
-.admin-logo-preview .currency-logo{width:48px;height:48px;display:grid;place-items:center}
-.admin-logo-preview .currency-logo img{max-width:100%;max-height:100%;object-fit:contain}
-.admin-logo-info{display:grid;gap:5px;min-width:0;flex:1}
-.admin-logo-info small{color:var(--muted);font-size:11px}
-.admin-logo-info label{font-size:12px;color:var(--muted)}
-.admin-logo-info input{width:100%;max-width:100%;font:inherit;font-size:12px}
-@media(max-width:520px){.admin-logo-row{align-items:flex-start}.admin-logo-preview{width:48px;height:48px;flex-basis:48px}}

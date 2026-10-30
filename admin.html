@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow"><title>Admin Panel | MoneyExchangeTaka</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./admin.css">
+</head>
+<body>
+<header class="top"><a class="brand" href="./index.html">Money<span>Exchange</span>Taka</a><span class="admin-tag">ADMIN PANEL</span><a class="back" href="./index.html">← ওয়েবসাইটে ফিরুন</a></header>
+<main class="wrap">
+  <section class="notice"><b>নিরাপত্তা নোটিশ</b><p>এটি Admin Panel-এর প্রাথমিক UI। Firebase Admin role ও server-side permission যুক্ত না হওয়া পর্যন্ত এখানে কোনো রেট, ব্যালেন্স বা রিকোয়েস্ট পরিবর্তন করা যাবে না।</p></section>
+  <section class="login card" id="loginCard"><div class="eyebrow">SECURE ACCESS</div><h1>অ্যাডমিন লগইন</h1><p>শুধুমাত্র অনুমোদিত অ্যাডমিন অ্যাকাউন্ট ব্যবহার করুন।</p><form id="loginForm"><label>ইমেইল<input type="email" id="adminEmail" placeholder="admin@example.com" required></label><label>পাসওয়ার্ড<input type="password" id="adminPassword" placeholder="আপনার পাসওয়ার্ড" required></label><button type="submit">লগইন যাচাই</button></form><p class="status" id="loginStatus">Firebase Authentication সংযোগ না করা পর্যন্ত লগইন নিষ্ক্রিয়।</p></section>
+  <section class="dashboard" id="dashboard" hidden>
+    <div class="heading"><div><div class="eyebrow">OVERVIEW</div><h1>অ্যাডমিন ড্যাশবোর্ড</h1></div><button class="outline" id="logout">লগআউট</button></div>
+    <div class="stats"><article class="card"><span>মোট রিকোয়েস্ট</span><strong>—</strong><small>ডেটা সংযোগ অপেক্ষমাণ</small></article><article class="card"><span>Pending</span><strong>—</strong><small>ডেটা সংযোগ অপেক্ষমাণ</small></article><article class="card"><span>Approved</span><strong>—</strong><small>ডেটা সংযোগ অপেক্ষমাণ</small></article><article class="card"><span>মোট ইউজার</span><strong>—</strong><small>ডেটা সংযোগ অপেক্ষমাণ</small></article></div>
+    <nav class="tabs"><a href="#requests">রিকোয়েস্ট</a><a href="#currencies">কারেন্সি ও লোগো</a><a href="#payments">পেমেন্ট সেটিংস</a><a href="#users">ইউজার</a><a href="#referrals">রেফারেল</a><a href="#site">ওয়েবসাইট সেটিংস</a></nav>
+    <section class="card panel" id="requests"><h2>Exchange Requests</h2><p>Firestore-এর নিরাপদ Admin API যুক্ত হলে এখানে রিকোয়েস্ট তালিকা, বিস্তারিত, Approve/Reject এবং Tracking Status দেখা যাবে।</p><div class="empty">এখনো কোনো লাইভ ডেটা লোড করা হয়নি।</div></section>
+    <section class="card panel" id="currencies"><h2>Currency &amp; Logo Management</h2><p>কারেন্সির নাম, Buy/Sell Rate, সীমা ও Cloudinary Logo URL পরিচালনার জায়গা।</p><label>কারেন্সি লোগো আপলোড (PNG/JPG/WebP)<input type="file" id="logoFile" accept="image/png,image/jpeg,image/webp" disabled></label><p class="status">Cloudinary upload-ও নিরাপদ backend যাচাই যুক্ত হওয়ার পর চালু করা হবে।</p></section>
+    <section class="card panel" id="payments"><h2>Payment Settings</h2><p>পেমেন্ট নম্বর, Wallet ID, Network এবং নির্দেশনা — সার্ভার-সুরক্ষিত সেটিংস থেকে পরিচালিত হবে।</p></section>
+    <section class="card panel" id="users"><h2>User Management</h2><p>ইউজার তালিকা, অ্যাকাউন্ট অবস্থা এবং ভূমিকা পরিবর্তন।</p></section>
+    <section class="card panel" id="referrals"><h2>Referral Management</h2><p>রেফারেল কোড, কমিশন ও রেফারেল রিপোর্ট।</p></section>
+    <section class="card panel" id="site"><h2>Website Settings</h2><p>Exchange limit, fee, support contact এবং হোমপেজের তথ্য।</p></section>
+  </section>
+</main><script src="./admin.js" defer></script>
+</body></html>

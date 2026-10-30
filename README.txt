@@ -33,24 +33,10 @@ Keep the same filename and PNG format so the website updates without editing app
 
 UPDATE: Header-এর নিচে এবং scrolling ticker-এর উপরে Login / Sign Up buttons যুক্ত করা হয়েছে। Authentication backend পূর্বের প্রজেক্টে নেই; বোতামগুলো আপাতত এ বিষয়ে জানায়।
 
-
-CLOUDINARY CURRENCY LOGO UPLOAD
---------------------------------
-Cloud name: rac2a5d3
-Unsigned upload preset: moneyexchange_upload
-
-The Admin Settings section now includes a currency-logo uploader. Choose a
-PNG/JPG/WebP image up to 2 MB. The image is uploaded to Cloudinary and its
-secure URL is saved in this browser's localStorage for the current device.
-
-IMPORTANT SECURITY / DEPLOYMENT NOTES
-- Never put the Cloudinary API Secret in browser code.
-- This unsigned preset is public. Restrict allowed formats and maximum file
-  size in Cloudinary preset settings, and monitor usage.
-- The current Admin Settings panel is not protected by server-side admin
-  authentication. Do not treat it as a secure production admin panel.
-- Logo URL changes currently save only in this browser (localStorage); they
-  are not yet synchronized to Firestore for other users/devices.
-- Customer payment-proof images are not uploaded to Cloudinary in this
-  frontend update. Add a trusted server-side upload flow before storing
-  sensitive payment receipts.
+ADMIN PANEL (INITIAL UI)
+------------------------
+Open admin.html to view the initial Green Premium admin panel interface.
+This is a UI scaffold only. Login, request moderation, wallet changes, user
+management and Cloudinary uploads are intentionally disabled until trusted
+Firebase Authentication role checks, Firestore Security Rules and server-side
+Cloud Functions are deployed. Never grant admin rights from browser JavaScript.

@@ -3,10 +3,6 @@
   "use strict";
   const $ = (id) => document.getElementById(id);
   const FEE_PERCENT = 1;
-  // Cloudinary public upload configuration. Never place the API Secret in frontend code.
-  const CLOUDINARY_CLOUD_NAME = "rac2a5d3";
-  const CLOUDINARY_UPLOAD_PRESET = "moneyexchange_upload";
-  const CLOUDINARY_MAX_LOGO_BYTES = 2 * 1024 * 1024;
   const DEFAULT_WALLETS = [
     {id:"bkash",name:"bKash",subtitle:"মোবাইল ফাইন্যান্সিয়াল সার্ভিস",currency:"BDT",type:"bdt",logo:"assets/logos/bkash.png",buy:0,sell:0,short:"bK"},
     {id:"nagad",name:"Nagad",subtitle:"মোবাইল ফাইন্যান্সিয়াল সার্ভিস",currency:"BDT",type:"bdt",logo:"assets/logos/nagad.png",buy:0,sell:0,short:"NG"},
@@ -153,57 +149,12 @@
       <div><label for="sell-${w.id}">আমরা বিক্রি করি (৳)</label><input id="sell-${w.id}" type="number" min="0.01" step="0.01" value="${w.sell}"></div>
     </div>`).join("");
   }
-  function renderLogoEditor(){
-    const root=$("adminLogoEditor"); if(!root)return;
-    root.innerHTML=wallets.map(w=>`<div class="admin-logo-row">
-      <div class="admin-logo-preview">${logoMarkup(w)}</div>
-      <div class="admin-logo-info"><b>${escapeHtml(w.name)}</b><small>${escapeHtml(w.currency)} · ${escapeHtml(w.id)}</small>
-      <label for="logo-upload-${w.id}">নতুন লোগো আপলোড (PNG/JPG/WebP, সর্বোচ্চ 2MB)</label>
-      <input id="logo-upload-${w.id}" type="file" accept="image/png,image/jpeg,image/webp" data-logo-id="${escapeHtml(w.id)}">
-      </div>
-    </div>`).join("");
-  }
-  async function uploadCurrencyLogo(file, walletId){
-    if(!file || !walletById(walletId)) return;
-    if(!["image/png","image/jpeg","image/webp"].includes(file.type)){
-      $("adminStatus").textContent="শুধু PNG, JPG অথবা WebP ছবি আপলোড করুন।";
-      $("adminStatus").classList.add("error"); return;
-    }
-    if(file.size > CLOUDINARY_MAX_LOGO_BYTES){
-      $("adminStatus").textContent="ছবির সাইজ 2MB-এর কম হতে হবে।";
-      $("adminStatus").classList.add("error"); return;
-    }
-    const input=$(`logo-upload-${walletId}`);
-    if(input) input.disabled=true;
-    $("adminStatus").classList.remove("error");
-    $("adminStatus").textContent="Cloudinary-তে লোগো আপলোড হচ্ছে…";
-    try{
-      const body=new FormData();
-      body.append("file",file);
-      body.append("upload_preset",CLOUDINARY_UPLOAD_PRESET);
-      const response=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,{method:"POST",body});
-      const result=await response.json();
-      if(!response.ok || !result.secure_url) throw new Error(result.error?.message || "Cloudinary upload failed");
-      wallets=wallets.map(w=>w.id===walletId?{...w,logo:result.secure_url}:w);
-      saveRates();
-      renderRateTable(); renderLogoEditor();
-      $("adminStatus").textContent=`${walletById(walletId).name} লোগো Cloudinary-তে আপলোড ও এই ডিভাইসে সংরক্ষণ হয়েছে।`;
-    }catch(error){
-      $("adminStatus").textContent=`লোগো আপলোড হয়নি: ${error.message}`;
-      $("adminStatus").classList.add("error");
-      if(input) input.disabled=false;
-    }
-  }
   const ADDRESS_KEY="met_payment_addresses_v1";
   const DEFAULT_ADDRESSES={bkash:"পেমেন্ট ঠিকানা এখনো যুক্ত করা হয়নি",nagad:"পেমেন্ট ঠিকানা এখনো যুক্ত করা হয়নি",rocket:"পেমেন্ট ঠিকানা এখনো যুক্ত করা হয়নি",upay:"পেমেন্ট ঠিকানা এখনো যুক্ত করা হয়নি",paypal:"অ্যাকাউন্ট ইমেইল এখনো যুক্ত করা হয়নি",perfectmoney:"অ্যাকাউন্ট ID এখনো যুক্ত করা হয়নি",webmoney:"ওয়ালেট ID এখনো যুক্ত করা হয়নি",volet:"অ্যাকাউন্ট ID এখনো যুক্ত করা হয়নি",binance:"USDT নেটওয়ার্ক ঠিকানা এখনো যুক্ত করা হয়নি",kucoin:"USDT নেটওয়ার্ক ঠিকানা এখনো যুক্ত করা হয়নি",bybit:"USDT নেটওয়ার্ক ঠিকানা এখনো যুক্ত করা হয়নি",epay:"অ্যাকাউন্ট ID এখনো যুক্ত করা হয়নি",tunepay:"অ্যাকাউন্ট ID এখনো যুক্ত করা হয়নি"};
   let paymentAddresses={...DEFAULT_ADDRESSES};
   try{paymentAddresses={...paymentAddresses,...JSON.parse(localStorage.getItem(ADDRESS_KEY)||"{}")};}catch(_){}
   let pendingRequest=null;
   function renderPaymentEditor(){const root=$("adminPaymentEditor");if(!root)return;root.innerHTML=wallets.map(w=>`<div class="admin-payment-row"><label for="address-${w.id}">${escapeHtml(w.name)}<small>${escapeHtml(w.currency)} · পেমেন্ট ঠিকানা</small></label><input id="address-${w.id}" value="${escapeHtml(paymentAddresses[w.id]||"")}" maxlength="220" placeholder="পেমেন্ট নম্বর / ID / ঠিকানা"></div>`).join("");}
-  $("adminLogoEditor")?.addEventListener("change",event=>{
-    const input=event.target.closest("input[data-logo-id]");
-    if(input && input.files && input.files[0]) uploadCurrencyLogo(input.files[0],input.dataset.logoId);
-  });
   function openModal(id){$(id).classList.add("open");$(id).setAttribute("aria-hidden","false");document.body.style.overflow="hidden";}
   function closeModal(id){$(id).classList.remove("open");$(id).setAttribute("aria-hidden","true");if(!document.querySelector(".modal-backdrop.open"))document.body.style.overflow="";}
   document.querySelectorAll("[data-close-modal]").forEach(b=>b.addEventListener("click",()=>closeModal(b.dataset.closeModal)));
@@ -299,8 +250,8 @@
     saveRates();
     wallets.forEach(w=>{const el=$("address-"+w.id);if(el)paymentAddresses[w.id]=el.value.trim();});
     localStorage.setItem(ADDRESS_KEY,JSON.stringify(paymentAddresses));
-    renderRateTable();renderAdminEditor();renderLogoEditor();renderPaymentEditor();updateWalletOptions();
+    renderRateTable();renderAdminEditor();renderPaymentEditor();updateWalletOptions();
     $("adminStatus").classList.remove("error");$("adminStatus").textContent="রেট ও পেমেন্ট ঠিকানা সংরক্ষণ করা হয়েছে।";
   });
-  renderRateTable();renderAdminEditor();renderLogoEditor();renderPaymentEditor();updateWalletOptions();renderHistory();
+  renderRateTable();renderAdminEditor();renderPaymentEditor();updateWalletOptions();renderHistory();
 })();
