@@ -1569,3 +1569,28 @@
   .met-brand-image{width:min(220px,65vw)}
   .met-logo-image{max-height:52px}
 }
+
+
+/* LOGO CONTRAST FIX: clear white backing against the blue header */
+.met-brand-image{
+  padding:5px 12px !important;
+  width:min(410px,42vw);
+  border-radius:12px !important;
+  background:#ffffff !important;
+  box-shadow:0 2px 12px rgba(0,0,0,.16) !important;
+}
+.met-brand-image:hover{
+  background:#ffffff !important;
+  box-shadow:0 2px 12px rgba(0,0,0,.16) !important;
+}
+.met-logo-image{
+  max-height:82px;
+}
+@media(max-width:900px){
+  .met-brand-image{padding:4px 9px !important;width:min(320px,68vw)}
+  .met-logo-image{max-height:68px}
+}
+@media(max-width:480px){
+  .met-brand-image{padding:4px 8px !important;width:min(245px,66vw)}
+  .met-logo-image{max-height:52px}
+}
