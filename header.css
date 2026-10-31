@@ -1734,3 +1734,21 @@ header a, .site-header a, .main-header a{
 .support-ai-card>small{display:block;margin-top:9px;color:#64748b;font-size:10px;line-height:1.5}
 @media(max-width:760px){.header-support{margin-left:auto;margin-right:8px}.header-support>summary{padding:9px 11px;font-size:12px;gap:6px}.support-panel{right:-46px}}
 @media(max-width:360px){.header-support>summary{padding:8px 9px}.header-support>summary .support-chevron{display:none}}
+
+
+/* SUPPORT MENU: subtle downward reveal; does not alter header/navigation layout */
+.header-support{position:relative;flex:0 0 auto;margin-left:0}
+.support-panel{
+  top:calc(100% + 9px);
+  transform-origin:top right;
+  animation:supportDropDown .28s cubic-bezier(.2,.75,.25,1) both;
+}
+@keyframes supportDropDown{
+  from{opacity:0;transform:translateY(-5px) scale(.985)}
+  to{opacity:1;transform:translateY(5px) scale(1)}
+}
+.livechat-option>i:first-child{background:#ede9fe;color:#7c3aed}
+@media(max-width:760px){
+  .header-support{margin-left:auto;margin-right:8px}
+  .support-panel{right:-42px}
+}
