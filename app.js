@@ -1,11 +1,6 @@
 /* MoneyExchangeTaka frontend interactions. Server-side verification is required before live transactions. */
 (() => {
   "use strict";
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
-  import { firebaseConfig } from "./firebase-config.js";
-  const firebaseApp = initializeApp(firebaseConfig);
-  const db = getFirestore(firebaseApp);
   const $ = (id) => document.getElementById(id);
   const FEE_PERCENT = 1;
   const DEFAULT_WALLETS = [
