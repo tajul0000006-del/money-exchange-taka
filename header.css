@@ -31,7 +31,7 @@
       rgba(190, 130, 255, 0.18),
       transparent 65%
     ),
-    linear-gradient(115deg, #16082b 0%, #2b1050 52%, #190a35 100%);
+    linear-gradient(115deg, #10091d 0%, #211331 52%, #130b20 100%);
   border-bottom: 1px solid var(--border);
   box-shadow: var(--header-shadow);
   isolation: isolate;
@@ -61,7 +61,7 @@
 }
 
 .main-header.scrolled {
-  background: rgba(31, 10, 55, 0.98);
+  background: rgba(18, 10, 29, 0.99);
   box-shadow: 0 14px 38px rgba(0, 0, 0, 0.3);
   border-bottom-color: rgba(53, 230, 242, 0.24);
   backdrop-filter: blur(18px);
@@ -471,7 +471,7 @@
   left: 0;
   right: 0;
   padding: 14px 20px 18px;
-  background: linear-gradient(150deg, #35145b, #1a0a32);
+  background: linear-gradient(150deg, #28163b, #130d20);
   border-top: 1px solid rgba(53, 230, 242, 0.12);
   border-bottom: 1px solid rgba(53, 230, 242, 0.2);
   box-shadow: 0 20px 35px rgba(0, 0, 0, 0.32);
