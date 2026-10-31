@@ -1524,3 +1524,48 @@
   .met-letters{font-size:15px}
   .met-name{font-size:12px}
 }
+
+
+/* NEW GENERATED MET LOGO IMAGE */
+.met-brand-image{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  flex:0 1 430px;
+  width:min(430px,42vw);
+  min-width:0;
+  padding:0;
+  margin:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  overflow:visible;
+}
+.met-brand-image:hover{
+  transform:none;
+  border:0;
+  background:transparent;
+  box-shadow:none;
+}
+.met-logo-image{
+  display:block;
+  width:100%;
+  max-width:430px;
+  height:auto;
+  max-height:100px;
+  object-fit:contain;
+  object-position:left center;
+}
+@media(max-width:900px){
+  .met-brand-image{flex:0 1 330px;width:min(330px,70vw)}
+  .met-logo-image{max-height:78px}
+}
+@media(max-width:480px){
+  .met-brand-image{flex:0 1 250px;width:min(250px,68vw)}
+  .met-logo-image{max-height:60px}
+}
+@media(max-width:350px){
+  .met-brand-image{width:min(220px,65vw)}
+  .met-logo-image{max-height:52px}
+}
