@@ -27,7 +27,8 @@ import { firebaseConfig } from "./firebase-config.js";
   function showDashboard(profile) {
     loginCard.hidden = true;
     dashboard.hidden = false;
-    setupFirestoreTest();\n    setupRequestList();
+    setupFirestoreTest();
+    setupRequestList();
     let identity = $("adminIdentity");
     if (!identity) {
       identity = document.createElement("p");
