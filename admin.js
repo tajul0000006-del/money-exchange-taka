@@ -56,6 +56,39 @@ import { firebaseConfig } from "./firebase-config.js";
     head?.insertAdjacentElement("afterend", wrap);
     const table = section.querySelector("tbody");
     if (table) table.id = "requestTableBody";
+    // Request details popup (read-only; no status or wallet changes).
+    let detailModal = $("requestDetailModal");
+    if (!detailModal) {
+      detailModal = document.createElement("div");
+      detailModal.id = "requestDetailModal";
+      detailModal.hidden = true;
+      detailModal.setAttribute("role", "dialog");
+      detailModal.setAttribute("aria-modal", "true");
+      detailModal.setAttribute("aria-labelledby", "requestDetailTitle");
+      detailModal.style.cssText = "position:fixed;inset:0;z-index:9999;background:rgba(8,15,30,.72);padding:18px;display:none;overflow:auto;align-items:center;justify-content:center";
+      detailModal.innerHTML = '<div style="background:#fff;color:#172033;width:min(680px,100%);max-height:90vh;overflow:auto;border-radius:16px;padding:20px;box-shadow:0 20px 60px #0005"><div style="display:flex;justify-content:space-between;gap:12px;align-items:center"><h2 id="requestDetailTitle" style="margin:0">রিকোয়েস্টের বিস্তারিত</h2><button type="button" id="closeRequestDetail" class="outline">বন্ধ করুন ✕</button></div><div id="requestDetailContent" style="margin-top:16px"></div></div>';
+      document.body.appendChild(detailModal);
+      const closeDetails = () => { detailModal.hidden = true; detailModal.style.display = "none"; };
+      $("closeRequestDetail").addEventListener("click", closeDetails);
+      detailModal.addEventListener("click", event => { if (event.target === detailModal) closeDetails(); });
+      document.addEventListener("keydown", event => { if (event.key === "Escape" && !detailModal.hidden) closeDetails(); });
+    }
+    const safeText = value => String(value ?? "—").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+    const showRequestDetails = request => {
+      const content = $("requestDetailContent");
+      const rows = Object.entries(request).map(([key, value]) => {
+        let display = value;
+        if (value && typeof value === "object") {
+          if (value._seconds) display = new Date(value._seconds * 1000).toLocaleString("bn-BD");
+          else display = JSON.stringify(value, null, 2);
+        }
+        return '<div style="display:grid;grid-template-columns:minmax(115px, .8fr) 1.2fr;gap:12px;padding:10px 0;border-bottom:1px solid #e7eaf0"><strong>' + safeText(key) + '</strong><span style="white-space:pre-wrap;overflow-wrap:anywhere">' + safeText(display) + '</span></div>';
+      }).join("");
+      content.innerHTML = rows || "<p>কোনো বিস্তারিত তথ্য নেই।</p>";
+      detailModal.hidden = false;
+      detailModal.style.display = "flex";
+    };
+
     const btn = $("loadRequestsButton");
     btn.addEventListener("click", async () => {
       const user = auth.currentUser;
@@ -76,8 +109,15 @@ import { firebaseConfig } from "./firebase-config.js";
         } else {
           body.innerHTML = data.requests.map(r => {
             const safe = v => String(v ?? "—").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
-            return `<tr><td>${safe(r.requestId)}</td><td>${safe(r.customer)}</td><td>${safe(r.type)}</td><td>${safe(r.amount)}</td><td>${safe(r.status)}</td><td>শুধু দেখা</td></tr>`;
+            const detailIndex = data.requests.indexOf(r);
+            return `<tr><td>${safe(r.requestId)}</td><td>${safe(r.customer)}</td><td>${safe(r.type)}</td><td>${safe(r.amount)}</td><td>${safe(r.status)}</td><td><button type="button" class="request-detail-button" data-request-index="${detailIndex}">Details / বিস্তারিত</button></td></tr>`;
           }).join("");
+          body.querySelectorAll(".request-detail-button").forEach(detailButton => {
+            detailButton.addEventListener("click", () => {
+              const selected = data.requests[Number(detailButton.dataset.requestIndex)];
+              if (selected) showRequestDetails(selected);
+            });
+          });
         }
         const pending = data.requests.filter(r => String(r.status || "").toLowerCase() === "pending").length;
         const statCards = document.querySelectorAll(".stats .stat");
