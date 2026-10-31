@@ -110,7 +110,16 @@ import { firebaseConfig } from "./firebase-config.js";
     }
   });
 
-  $("logout")?.addEventListener("click", async () => {
+
+  // Dashboard section navigation (UI only; management actions remain disabled until APIs exist).
+  const navItems = document.querySelectorAll(".nav-item[data-panel]");
+  const modules = document.querySelectorAll(".module[id^='panel-']");
+  navItems.forEach(item => item.addEventListener("click", () => {
+    const target = item.dataset.panel;
+    navItems.forEach(button => button.classList.toggle("active", button === item));
+    modules.forEach(panel => panel.classList.toggle("active", panel.id === `panel-${target}`));
+  }));
+\n  $("logout")?.addEventListener("click", async () => {
     await signOut(auth);
     showLogin("আপনি নিরাপদে লগআউট করেছেন।");
   });
