@@ -1,0 +1,25 @@
+/* =========================================================
+   MoneyExchangeTaka — About page
+   Clean editorial layout: typography and whitespace only.
+========================================================= */
+.about-page{width:min(100% - 40px,1080px);margin:0 auto;padding:clamp(48px,8vw,100px) 0 76px;color:#eefaff}
+.about-hero{max-width:850px;margin:0 auto 76px;text-align:center}
+.about-kicker,.about-label{display:inline-block;color:#39f5a5;font:700 11px/1.5 Arial,sans-serif;letter-spacing:2.2px;text-transform:uppercase}
+.about-hero h1{margin:18px 0 20px;font-size:clamp(38px,7vw,70px);line-height:1.04;letter-spacing:-2.5px;font-weight:800;color:#f5fbff}
+.about-hero h1 span{color:#35e6f2}
+.about-lead{max-width:720px;margin:0 auto;color:#b9d0e2;font-size:clamp(17px,2.2vw,21px);line-height:1.85}
+.about-content{max-width:850px;margin:0 auto}
+.about-section{padding:0 0 48px;margin:0 0 46px;border-bottom:1px solid rgba(116,207,235,.16)}
+.about-section:last-child{border-bottom:0;margin-bottom:0}
+.about-section h2{margin:10px 0 17px;color:#f5fbff;font-size:clamp(25px,4vw,35px);line-height:1.2;letter-spacing:-.8px}
+.about-section h3{margin:27px 0 10px;color:#dffaff;font-size:19px;line-height:1.35}
+.about-section p{margin:0 0 15px;color:#b8cee0;font-size:16px;line-height:1.9}
+.about-section p:last-child{margin-bottom:0}
+.about-list{margin:15px 0 0;padding:0 0 0 22px;color:#b8cee0}
+.about-list li{padding:5px 0 5px 5px;font-size:16px;line-height:1.8}
+.about-list li::marker{color:#39f5a5}
+.about-closing{max-width:850px;margin:8px auto 0;padding:12px 0 0}
+.about-closing p{color:#b8cee0;font-size:17px;line-height:1.9}
+.about-closing strong{color:#39f5a5}
+@media(max-width:600px){.about-page{width:calc(100% - 34px);padding-top:48px}.about-hero{margin-bottom:58px}.about-hero h1{letter-spacing:-1.5px}.about-section{padding-bottom:35px;margin-bottom:35px}.about-section p,.about-list li{font-size:15px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
