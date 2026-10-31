@@ -1605,3 +1605,46 @@ header, .site-header, .main-header{
 header a, .site-header a, .main-header a{
   color:#172033;
 }
+
+
+/* FULL PURE-WHITE HEADER — all header layers */
+.main-header,
+.main-header.scrolled,
+.main-header .header-container,
+.main-header .desktop-nav,
+.main-header .header-tagline{
+  background:#fff !important;
+}
+.main-header{
+  background:#fff !important;
+  border-bottom:1px solid #e8edf3 !important;
+  box-shadow:0 4px 18px rgba(20,35,55,.07) !important;
+}
+.main-header::before,
+.main-header::after{
+  background:none !important;
+  opacity:0 !important;
+}
+.main-header .brand-logo,
+.main-header .brand-name,
+.main-header .brand-name > span:first-child,
+.main-header .nav-link,
+.main-header .tagline-text span{
+  color:#172b4d !important;
+}
+.main-header .brand-highlight{color:#0876c9 !important}
+.main-header .brand-taka,
+.main-header .tagline-text strong{color:#15965c !important}
+.main-header .nav-link i{color:#39749c !important}
+.main-header .nav-link:hover,
+.main-header .nav-link.active{
+  color:#075da8 !important;
+  background:#edf6ff !important;
+  border-color:#d6eaff !important;
+}
+.main-header .menu-toggle{
+  background:#f2f7fc !important;
+  border:1px solid #dce7f1 !important;
+}
+.main-header .menu-toggle span{background:#173c60 !important}
+.main-header .met-brand-image{background:#fff !important;box-shadow:none !important}
