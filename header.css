@@ -1847,3 +1847,27 @@ header a, .site-header a, .main-header a{
 @media(max-width:760px){
   .desktop-nav .nav-support{display:none!important}
 }
+
+
+/* MOBILE MENU CLEANUP: no heading/blank space; scroll the menu vertically */
+@media(max-width:760px){
+  #mobileMenu{
+    top:100%;
+    max-height:calc(100dvh - 70px);
+    overflow-y:auto;
+    overflow-x:hidden;
+    overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+    padding:8px 18px 18px!important;
+    margin-top:0!important;
+    scroll-behavior:smooth;
+  }
+  #mobileMenu .mobile-menu-heading{
+    display:none!important;
+    height:0!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+  }
+}
