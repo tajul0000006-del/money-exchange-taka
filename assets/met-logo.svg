@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 395" role="img" aria-labelledby="title desc">
+<title id="title">MET Money Exchange Taka</title><desc id="desc">Blue and green MET monogram with globe and currency coins, followed by Money Exchange Taka wordmark.</desc>
+<defs>
+ <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0879e8"/><stop offset="1" stop-color="#061e68"/></linearGradient>
+ <linearGradient id="green" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#43ef24"/><stop offset="1" stop-color="#008c22"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff4a3"/><stop offset=".5" stop-color="#e6ad22"/><stop offset="1" stop-color="#a86a00"/></linearGradient>
+ <linearGradient id="globe" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e9f8ff"/><stop offset=".5" stop-color="#1683e8"/><stop offset="1" stop-color="#063c9c"/></linearGradient>
+</defs>
+<g transform="translate(18 12)">
+ <circle cx="280" cy="142" r="116" fill="url(#globe)" stroke="#0878e8" stroke-width="7"/>
+ <path d="M214 40l-25 30 15 24-11 26 30 18 15 37 32 14 17-35-18-30 10-30-23-25zM298 35l25 20-7 28 25 17-13 27-27-8-15-31 8-28zM355 132l27 12-9 38-25 21-22-19 8-31z" fill="#f4fbff" opacity=".94"/>
+ <circle cx="446" cy="72" r="59" fill="url(#gold)"/><circle cx="446" cy="72" r="51" fill="#0bbd28" stroke="#fff2a1" stroke-width="3"/>
+ <text x="446" y="96" text-anchor="middle" font-family="Arial,sans-serif" font-size="70" font-weight="900" fill="white">৳</text>
+ <circle cx="532" cy="126" r="51" fill="url(#gold)"/><circle cx="532" cy="126" r="44" fill="url(#blue)" stroke="#fff2a1" stroke-width="3"/>
+ <text x="532" y="150" text-anchor="middle" font-family="Arial,sans-serif" font-size="61" font-weight="900" fill="white">$</text>
+ <path d="M30 125C-12 179 2 267 90 307c120 55 343 45 500-18-114 83-373 111-516 42C-35 278-32 185 30 125z" fill="url(#green)"/>
+ <path d="M88 308c110 50 305 47 463-17-105 70-302 89-435 50z" fill="url(#blue)"/>
+ <path d="M87 134h143l-38 60 39 65h-99l-28-43-26 43H0l39-65-38-60h86l23 36z" transform="translate(86 0)" fill="url(#blue)"/>
+ <path d="M292 134h130l-22 57h-91l-7 18h92l-25 51H270l-9-29z" fill="url(#blue)" transform="translate(0 0)"/>
+ <path d="M423 134h190l-31 58h-65l-31 68h-83l31-68h-43z" fill="url(#green)"/>
+ <path d="M630 14v300" stroke="#0a2863" stroke-width="4"/>
+</g>
+<g transform="translate(690 0)">
+ <text x="0" y="174" font-family="Arial,sans-serif" font-size="105" font-weight="900" letter-spacing="-5" fill="#071b55">Money Exchange</text>
+ <rect x="6" y="203" width="675" height="130" rx="34" fill="url(#green)"/>
+ <path d="M0 250h-42m42 25h-55m55 25h-42M692 250h42m-42 25h55m-55 25h42" stroke="#13c72a" stroke-width="8" stroke-linecap="round"/>
+ <text x="343" y="300" text-anchor="middle" font-family="Arial,sans-serif" font-size="100" font-style="italic" font-weight="900" fill="#fff">Taka</text>
+</g></svg>
