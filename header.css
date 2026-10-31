@@ -1648,3 +1648,13 @@ header a, .site-header a, .main-header a{
 }
 .main-header .menu-toggle span{background:#173c60 !important}
 .main-header .met-brand-image{background:#fff !important;box-shadow:none !important}
+
+
+/* LOGO AREA MUST BE TRANSPARENT — no white box or background */
+.main-header .met-brand-image,
+.main-header .met-brand-image:hover{
+  background:transparent !important;
+  box-shadow:none !important;
+  border:0 !important;
+  padding:0 !important;
+}
