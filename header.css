@@ -1297,3 +1297,33 @@
   .logo-mark{width:38px;height:38px}
   .logo-orbit{width:29px;height:29px}
 }
+
+
+/* FINAL LOGO TUNING: heavier wordmark + completely static symbol */
+.brand-name{
+  font-weight:950;
+  letter-spacing:-.75px;
+  -webkit-font-smoothing:antialiased;
+  text-shadow:0 1px 0 rgba(255,255,255,.08),0 3px 12px rgba(0,0,0,.22);
+}
+.brand-name > span{font-weight:950}
+.brand-highlight{font-weight:950}
+.brand-taka{font-weight:950}
+.logo-orbit,
+.logo-orbit::before,
+.exchange-icon,
+.tagline-bolt{
+  animation:none !important;
+}
+.logo-orbit{transform:none !important}
+.exchange-icon{transform:none !important;filter:none}
+.brand-logo:hover .logo-mark{
+  transform:none;
+  border-radius:18px;
+}
+@media(max-width:900px){
+  .brand-name{font-weight:950;letter-spacing:-.65px}
+}
+@media(max-width:480px){
+  .brand-name{font-weight:950;letter-spacing:-.55px}
+}
