@@ -1698,3 +1698,39 @@ header a, .site-header a, .main-header a{
 @media(max-width:760px){.header-container{min-height:70px;width:calc(100% - 28px)}.desktop-nav{display:none!important}.menu-toggle{display:flex!important}.met-logo-image{width:clamp(165px,52vw,205px);max-height:58px}.mobile-nav{display:block!important}}
 @media(min-width:761px){.mobile-nav{display:none!important}}
 @media(prefers-reduced-motion:reduce){.main-header,.nav-link,.mobile-nav{transition:none!important}}
+
+
+/* ==================================================
+   HEADER SUPPORT DROPDOWN — WhatsApp / Telegram / AI
+================================================== */
+.header-support{position:relative;flex:0 0 auto;margin-left:auto;font-family:inherit}
+.header-support>summary{list-style:none;display:flex;align-items:center;gap:9px;padding:11px 16px;border:1px solid #bfdbfe;border-radius:12px;background:linear-gradient(135deg,#eff6ff,#ecfdf5);color:#14538a;font-size:14px;font-weight:800;cursor:pointer;white-space:nowrap;transition:all .2s ease}
+.header-support>summary::-webkit-details-marker{display:none}
+.header-support>summary:hover,.header-support[open]>summary{background:#e0f2fe;border-color:#93c5fd;box-shadow:0 5px 16px rgba(37,99,235,.12)}
+.header-support>summary>i:first-child{font-size:17px;color:#0f766e}
+.support-chevron{font-size:10px;color:#64748b;transition:transform .2s ease}
+.header-support[open] .support-chevron{transform:rotate(180deg)}
+.support-panel{position:absolute;right:0;top:calc(100% + 12px);z-index:1200;width:min(340px,calc(100vw - 28px));padding:15px;border:1px solid #e2e8f0;border-radius:18px;background:#fff;box-shadow:0 18px 48px rgba(15,35,65,.18);animation:supportDrop .2s ease}
+@keyframes supportDrop{from{opacity:0;transform:translateY(-7px)}to{opacity:1;transform:translateY(0)}}
+.support-panel-title{display:flex;flex-direction:column;gap:3px;padding:3px 4px 12px}
+.support-panel-title strong{font-size:16px;color:#0f172a}
+.support-panel-title small{font-size:12px;color:#64748b}
+.support-option{display:flex;align-items:center;gap:11px;padding:11px 10px;margin:6px 0;border:1px solid #edf2f7;border-radius:12px;color:#1e293b;text-decoration:none;transition:background .2s ease,border-color .2s ease}
+.support-option:hover{background:#f8fafc;border-color:#cbd5e1}
+.support-option>i:first-child{display:grid;place-items:center;width:38px;height:38px;border-radius:11px;font-size:21px}
+.whatsapp-option>i:first-child{background:#dcfce7;color:#16a34a}
+.telegram-option>i:first-child{background:#e0f2fe;color:#0284c7}
+.support-option span{display:flex;flex:1;flex-direction:column;gap:2px}
+.support-option b{font-size:14px}
+.support-option small{font-size:12px;color:#64748b}
+.support-option>i:last-child{font-size:11px;color:#94a3b8}
+.support-ai-card{margin-top:11px;padding:13px;border:1px solid #dbeafe;border-radius:13px;background:linear-gradient(145deg,#eff6ff,#f0fdfa)}
+.support-ai-card>div{display:flex;align-items:center;gap:8px;color:#164e63}
+.support-ai-card>div>i{font-size:18px;color:#2563eb}
+.support-ai-card>div>b{font-size:14px}
+.support-beta{margin-left:auto;padding:3px 6px;border-radius:20px;background:#dbeafe;color:#1d4ed8;font-size:9px;font-weight:800}
+.support-ai-card p{margin:8px 0;color:#475569;font-size:12px;line-height:1.6}
+.support-ai-card>a{display:inline-flex;align-items:center;gap:7px;color:#1d4ed8;font-size:12px;font-weight:800;text-decoration:none}
+.support-ai-card>small{display:block;margin-top:9px;color:#64748b;font-size:10px;line-height:1.5}
+@media(max-width:760px){.header-support{margin-left:auto;margin-right:8px}.header-support>summary{padding:9px 11px;font-size:12px;gap:6px}.support-panel{right:-46px}}
+@media(max-width:360px){.header-support>summary{padding:8px 9px}.header-support>summary .support-chevron{display:none}}
