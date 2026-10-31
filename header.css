@@ -1752,3 +1752,93 @@ header a, .site-header a, .main-header a{
   .header-support{margin-left:auto;margin-right:8px}
   .support-panel{right:-42px}
 }
+
+
+/* SUPPORT IS A NAVIGATION CATEGORY — reveal its choices directly underneath */
+.desktop-nav .nav-support{
+  margin:0 2px 0 3px;
+  align-self:center;
+}
+.desktop-nav .nav-support>summary{
+  list-style:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  padding:10px 11px;
+  border:1px solid transparent;
+  border-radius:10px;
+  background:transparent;
+  color:#334155;
+  font:700 13px inherit;
+  white-space:nowrap;
+  cursor:pointer;
+  transition:background .2s ease,color .2s ease,border-color .2s ease;
+}
+.desktop-nav .nav-support>summary::-webkit-details-marker,
+.mobile-support>summary::-webkit-details-marker{display:none}
+.desktop-nav .nav-support>summary:hover,
+.desktop-nav .nav-support[open]>summary{
+  color:#1d4ed8;
+  background:#eff6ff;
+  border-color:#dbeafe;
+}
+.desktop-nav .nav-support>summary>i:first-child{color:#2563eb}
+.desktop-nav .nav-support .support-panel{
+  position:absolute;
+  top:calc(100% + 8px);
+  right:0;
+  width:285px;
+  margin:0;
+  animation:supportNavReveal .28s cubic-bezier(.2,.75,.25,1) both;
+}
+@keyframes supportNavReveal{
+  from{opacity:0;transform:translateY(-8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.desktop-nav .nav-support .support-panel-title{padding-bottom:8px}
+.desktop-nav .nav-support .support-option{margin:5px 0}
+
+/* On phones, Support is a category inside the slide-down mobile navigation.
+   Its options expand in the menu flow, not as a floating popup. */
+.mobile-support{
+  display:block;
+  width:100%;
+  margin:0 0 7px;
+}
+.mobile-support>summary{
+  list-style:none;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  width:100%;
+  min-height:48px;
+  padding:11px 13px;
+  border:1px solid #edf1f6;
+  border-radius:11px;
+  background:#fff;
+  color:#334155;
+  font:600 14px inherit;
+  cursor:pointer;
+}
+.mobile-support>summary>i:first-child{width:21px;color:#2563eb;text-align:center}
+.mobile-support .support-chevron{margin-left:auto;transition:transform .2s ease}
+.mobile-support[open] .support-chevron{transform:rotate(180deg)}
+.mobile-support .support-panel{
+  position:static;
+  width:100%;
+  margin:7px 0 5px;
+  padding:9px;
+  border:1px solid #e2e8f0;
+  border-radius:13px;
+  box-shadow:none;
+  animation:supportNavReveal .28s ease both;
+}
+.mobile-support .support-panel-title{padding:2px 4px 7px}
+.mobile-support .support-option{margin:5px 0;padding:9px}
+@media(min-width:761px){
+  .mobile-support{display:none!important}
+}
+@media(max-width:760px){
+  .desktop-nav .nav-support{display:none!important}
+}
