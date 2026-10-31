@@ -1756,8 +1756,9 @@ header a, .site-header a, .main-header a{
 
 /* SUPPORT IS A NAVIGATION CATEGORY — reveal its choices directly underneath */
 .desktop-nav .nav-support{
-  margin:0 2px 0 3px;
+  margin:0 2px 0 auto;
   align-self:center;
+  flex:0 0 auto;
 }
 .desktop-nav .nav-support>summary{
   list-style:none;
@@ -1770,7 +1771,9 @@ header a, .site-header a, .main-header a{
   border-radius:10px;
   background:transparent;
   color:#334155;
-  font:700 13px inherit;
+  font-family:inherit;
+  font-size:13px;
+  font-weight:700;
   white-space:nowrap;
   cursor:pointer;
   transition:background .2s ease,color .2s ease,border-color .2s ease;
@@ -1818,7 +1821,9 @@ header a, .site-header a, .main-header a{
   border-radius:11px;
   background:#fff;
   color:#334155;
-  font:600 14px inherit;
+  font-family:inherit;
+  font-size:14px;
+  font-weight:600;
   cursor:pointer;
 }
 .mobile-support>summary>i:first-child{width:21px;color:#2563eb;text-align:center}
