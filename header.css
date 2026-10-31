@@ -1423,3 +1423,104 @@
   .logo-mark{width:38px;height:38px}
   .logo-orbit{width:26px;height:26px}
 }
+
+
+/* ==================================================
+   NEW MET LETTERMARK + MONEY EXCHANGE TAKA WORDMARK
+   Old currency-orbit logo replaced with a static monogram.
+================================================== */
+.met-brand{
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+  padding:5px 13px 5px 5px;
+  border:1px solid rgba(113,226,238,.22);
+  border-radius:15px;
+  background:linear-gradient(115deg,rgba(255,255,255,.075),rgba(255,255,255,.018));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 6px 18px rgba(0,0,0,.14);
+  transition:border-color .2s ease,background .2s ease,box-shadow .2s ease;
+}
+.met-brand:hover{
+  transform:none;
+  border-color:rgba(53,230,242,.5);
+  background:linear-gradient(115deg,rgba(53,230,242,.09),rgba(57,245,165,.035));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 7px 20px rgba(0,0,0,.18);
+}
+.met-mark{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 57px;
+  width:57px;
+  height:53px;
+  overflow:hidden;
+  border:1px solid rgba(150,246,239,.72);
+  border-radius:13px;
+  background:linear-gradient(145deg,#137c8c 0%,#0b4968 52%,#08253f 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.25),inset 0 -7px 14px rgba(0,0,0,.2),0 3px 10px rgba(0,0,0,.22);
+}
+.met-letters{
+  position:relative;
+  z-index:1;
+  color:#fff;
+  font-family:Arial,sans-serif;
+  font-size:22px;
+  font-weight:950;
+  letter-spacing:-2.1px;
+  line-height:1;
+  text-shadow:0 2px 4px rgba(0,0,0,.28);
+}
+.met-letters span{color:#72f0d0}
+.met-mark-line{
+  position:absolute;
+  left:10px;
+  right:10px;
+  bottom:8px;
+  height:2px;
+  border-radius:4px;
+  background:linear-gradient(90deg,#39f5a5,#35e6f2);
+}
+.met-wordmark{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:3px;
+  white-space:nowrap;
+  line-height:1;
+}
+.met-name{
+  color:#f8fcff;
+  font-family:Arial,"Hind Siliguri",sans-serif;
+  font-size:clamp(17px,1.55vw,23px);
+  font-weight:950;
+  letter-spacing:-.75px;
+}
+.met-name strong{color:#68eaf2;font-weight:950}
+.met-subname{
+  color:#9fffd2;
+  font-family:Arial,sans-serif;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:3.4px;
+}
+@media(max-width:900px){
+  .met-brand{gap:9px;padding:4px 9px 4px 4px}
+  .met-mark{flex-basis:49px;width:49px;height:47px;border-radius:12px}
+  .met-letters{font-size:20px}
+  .met-name{font-size:clamp(15px,4vw,20px)}
+}
+@media(max-width:480px){
+  .met-brand{gap:7px;padding:4px 7px 4px 4px;border-radius:12px}
+  .met-mark{flex-basis:42px;width:42px;height:41px;border-radius:10px}
+  .met-letters{font-size:17px;letter-spacing:-1.8px}
+  .met-mark-line{left:8px;right:8px;bottom:6px}
+  .met-name{font-size:14px;letter-spacing:-.55px}
+  .met-subname{font-size:8px;letter-spacing:2.8px}
+}
+@media(max-width:350px){
+  .met-mark{flex-basis:37px;width:37px;height:37px}
+  .met-letters{font-size:15px}
+  .met-name{font-size:12px}
+}
