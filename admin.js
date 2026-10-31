@@ -27,6 +27,7 @@ import { firebaseConfig } from "./firebase-config.js";
   function showDashboard(profile) {
     loginCard.hidden = true;
     dashboard.hidden = false;
+    setupFirestoreTest();
     let identity = $("adminIdentity");
     if (!identity) {
       identity = document.createElement("p");
@@ -40,6 +41,68 @@ import { firebaseConfig } from "./firebase-config.js";
     dashboard.hidden = true;
     loginCard.hidden = false;
     if (message) setStatus(message, error);
+  }
+
+  // Read-only Firestore connection test; this never changes exchange or wallet data.
+  function setupFirestoreTest() {
+    const overview = $("panel-overview");
+    if (!overview || $("firestoreTestButton")) return;
+
+    const area = document.createElement("div");
+    area.className = "info-strip";
+    area.style.marginTop = "16px";
+
+    const button = document.createElement("button");
+    button.id = "firestoreTestButton";
+    button.type = "button";
+    button.textContent = "Test Firestore Connection";
+
+    const result = document.createElement("p");
+    result.id = "firestoreTestResult";
+    result.setAttribute("role", "status");
+    result.setAttribute("aria-live", "polite");
+    result.style.marginBottom = "0";
+    result.textContent = "Firestore সংযোগ এখনো পরীক্ষা করা হয়নি।";
+
+    button.addEventListener("click", async () => {
+      const user = auth.currentUser;
+      if (!user) {
+        result.textContent = "সেশন পাওয়া যায়নি। আবার Admin Login করুন।";
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "পরীক্ষা চলছে...";
+      result.textContent = "Firebase token দিয়ে Firestore read-only সংযোগ পরীক্ষা হচ্ছে...";
+
+      try {
+        const token = await user.getIdToken(true);
+        const response = await fetch(`${API_BASE}/api/admin/firestore-check`, {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+          cache: "no-store"
+        });
+
+        let data = {};
+        try { data = await response.json(); } catch (_) {}
+
+        if (!response.ok || data.ok !== true || data.firestore?.readable !== true) {
+          throw new Error(data.error || `Firestore test failed (${response.status})`);
+        }
+
+        result.textContent = data.firestore.hasDocuments
+          ? "সফল! Firestore-এর exchangeRequests collection পড়া যাচ্ছে এবং অন্তত ১টি রেকর্ড আছে।"
+          : "সংযোগ সফল! Firestore-এর exchangeRequests collection পড়া যাচ্ছে, তবে এখনো কোনো রেকর্ড পাওয়া যায়নি।";
+      } catch (error) {
+        result.textContent = `সংযোগ পরীক্ষা ব্যর্থ: ${error.message || "অজানা সমস্যা"}`;
+      } finally {
+        button.disabled = false;
+        button.textContent = "আবার পরীক্ষা করুন";
+      }
+    });
+
+    area.append(button, result);
+    overview.querySelector(".module-head")?.insertAdjacentElement("afterend", area);
   }
   async function verifyWithApi(user) {
     if (!user.emailVerified) throw new Error("আপনার ইমেইল এখনো Verified নয়। Gmail থেকে Verification Link-এ চাপ দিন।");
