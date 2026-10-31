@@ -27,7 +27,7 @@ import { firebaseConfig } from "./firebase-config.js";
   function showDashboard(profile) {
     loginCard.hidden = true;
     dashboard.hidden = false;
-    setupFirestoreTest();
+    setupFirestoreTest();\n    setupRequestList();
     let identity = $("adminIdentity");
     if (!identity) {
       identity = document.createElement("p");
@@ -41,6 +41,58 @@ import { firebaseConfig } from "./firebase-config.js";
     dashboard.hidden = true;
     loginCard.hidden = false;
     if (message) setStatus(message, error);
+  }
+
+  // Read-only exchange request list and Overview pending count.
+  function setupRequestList() {
+    const section = $("panel-requests");
+    if (!section || $("loadRequestsButton")) return;
+    const head = section.querySelector(".module-head");
+    const wrap = document.createElement("div");
+    wrap.className = "info-strip";
+    wrap.style.margin = "14px 0";
+    wrap.innerHTML = '<button type="button" id="loadRequestsButton">রিকোয়েস্ট তালিকা লোড করুন</button><p id="requestListStatus" role="status" aria-live="polite">Firestore থেকে সর্বোচ্চ ৫০টি রেকর্ড পড়া হবে।</p>';
+    head?.insertAdjacentElement("afterend", wrap);
+    const table = section.querySelector("tbody");
+    if (table) table.id = "requestTableBody";
+    const btn = $("loadRequestsButton");
+    btn.addEventListener("click", async () => {
+      const user = auth.currentUser;
+      const msg = $("requestListStatus");
+      if (!user) { msg.textContent = "সেশন পাওয়া যায়নি। আবার লগইন করুন।"; return; }
+      btn.disabled = true; btn.textContent = "লোড হচ্ছে...";
+      msg.textContent = "Firestore থেকে নিরাপদে Request পড়া হচ্ছে...";
+      try {
+        const token = await user.getIdToken(true);
+        const response = await fetch(`${API_BASE}/api/admin/requests?limit=50`, {
+          headers: { Authorization: `Bearer ${token}` }, cache: "no-store"
+        });
+        const data = await response.json();
+        if (!response.ok || data.ok !== true || !Array.isArray(data.requests)) throw new Error(data.error || `API error (${response.status})`);
+        const body = $("requestTableBody");
+        if (!data.requests.length) {
+          body.innerHTML = '<tr><td colspan="6">Firestore-এ কোনো Exchange Request পাওয়া যায়নি।</td></tr>';
+        } else {
+          body.innerHTML = data.requests.map(r => {
+            const safe = v => String(v ?? "—").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+            return `<tr><td>${safe(r.requestId)}</td><td>${safe(r.customer)}</td><td>${safe(r.type)}</td><td>${safe(r.amount)}</td><td>${safe(r.status)}</td><td>শুধু দেখা</td></tr>`;
+          }).join("");
+        }
+        const pending = data.requests.filter(r => String(r.status || "").toLowerCase() === "pending").length;
+        const statCards = document.querySelectorAll(".stats .stat");
+        if (statCards[0]) statCards[0].querySelector("strong").textContent = String(data.total ?? data.requests.length);
+        if (statCards[0]) statCards[0].querySelector("small").textContent = "Firestore থেকে পাওয়া রেকর্ড";
+        if (statCards[1]) statCards[1].querySelector("strong").textContent = String(pending);
+        if (statCards[1]) statCards[1].querySelector("small").textContent = "লোড করা রেকর্ডের মধ্যে Pending";
+        const badge = section.querySelector(".module-head .pending-tag");
+        if (badge) badge.textContent = "Read-only · সংযুক্ত";
+        msg.textContent = `সফল! ${data.requests.length}টি Request লোড হয়েছে। Pending: ${pending}টি।`;
+      } catch (error) {
+        msg.textContent = `Request লোড হয়নি: ${error.message || "অজানা সমস্যা"}`;
+      } finally {
+        btn.disabled = false; btn.textContent = "আবার লোড করুন";
+      }
+    });
   }
 
   // Read-only Firestore connection test; this never changes exchange or wallet data.
