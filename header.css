@@ -1658,3 +1658,43 @@ header a, .site-header a, .main-header a{
   border:0 !important;
   padding:0 !important;
 }
+
+/* FINAL CLEAN WHITE FINTECH HEADER */
+.main-header{background:#fff!important;border-bottom:1px solid #e7edf4!important;box-shadow:0 5px 24px rgba(15,35,65,.07)!important}
+.main-header::after{height:2px;background:linear-gradient(90deg,transparent,#2563eb,#10b981,transparent);opacity:.55}
+.main-header.scrolled{background:rgba(255,255,255,.97)!important;box-shadow:0 8px 28px rgba(15,35,65,.10)!important}
+.header-container{width:min(100% - 40px,1380px);gap:18px}
+.met-brand-image{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important}
+.met-logo-image{display:block;width:clamp(175px,19vw,235px);height:auto;max-height:66px;object-fit:contain}
+.desktop-nav{gap:3px}
+.desktop-nav .nav-link{color:#334155!important;background:transparent!important;border:1px solid transparent!important;border-radius:10px;padding:10px 11px;font-family:inherit;font-size:13px;font-weight:700;transform:none!important;box-shadow:none!important}
+.desktop-nav .nav-link i{color:#64748b!important}
+.desktop-nav .nav-link:hover{color:#1d4ed8!important;background:#eff6ff!important;border-color:#dbeafe!important}
+.desktop-nav .nav-link:hover i{color:#2563eb!important}
+.desktop-nav .nav-link.active{color:#1d4ed8!important;background:#eff6ff!important;border-color:#dbeafe!important}
+.desktop-nav .nav-link.active i{color:#2563eb!important}
+.desktop-nav .nav-link.active::after{background:linear-gradient(90deg,#2563eb,#10b981);box-shadow:none}
+.nav-auth-group{display:flex;align-items:center;gap:7px;margin-left:7px}
+.desktop-nav .nav-auth-login{border-color:#cbd5e1!important;color:#1e293b!important}
+.desktop-nav .nav-auth-signup{background:linear-gradient(135deg,#2563eb,#0f766e)!important;color:#fff!important;border-color:transparent!important;padding-inline:15px}
+.desktop-nav .nav-auth-signup i{color:#fff!important}
+.desktop-nav .nav-auth-signup:hover{background:linear-gradient(135deg,#1d4ed8,#0f766e)!important;color:#fff!important}
+.menu-toggle{background:#f1f5f9!important;border:1px solid #dbe3ed!important;border-radius:12px}
+.menu-toggle span{background:#1e293b!important}
+.mobile-nav{background:#fff!important;border-top:1px solid #edf1f6!important;border-bottom:1px solid #e2e8f0!important;box-shadow:0 18px 35px rgba(15,35,65,.13)!important;padding:15px 18px 20px!important}
+.mobile-menu-heading{display:flex;flex-direction:column;padding:5px 8px 13px;border-bottom:1px solid #edf1f6;margin-bottom:9px}
+.mobile-menu-heading span{font-size:17px;font-weight:800;color:#0f172a}
+.mobile-menu-heading small{font-size:12px;color:#64748b}
+.mobile-nav-link{width:100%;min-height:48px;color:#334155!important;background:#fff!important;border:1px solid #edf1f6!important;border-radius:11px!important;margin:0 0 7px!important;padding:11px 13px!important;text-align:left;font-family:inherit;font-size:14px;font-weight:600}
+.mobile-nav-link>i:first-child{width:21px;color:#2563eb!important}
+.mobile-nav-link .nav-arrow{margin-left:auto;color:#94a3b8!important}
+.mobile-nav-link:hover,.mobile-nav-link.active{background:#eff6ff!important;border-color:#dbeafe!important;color:#1d4ed8!important}
+.mobile-auth-group{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.mobile-auth-group .mobile-nav-link{justify-content:center;margin:0!important}
+.mobile-auth-group .mobile-auth-login{background:#fff!important;border-color:#cbd5e1!important}
+.mobile-auth-group .mobile-auth-signup{background:linear-gradient(135deg,#2563eb,#0f766e)!important;color:#fff!important;border-color:transparent!important}
+.mobile-auth-group .mobile-auth-signup i{color:#fff!important}
+@media(max-width:1100px){.header-container{width:calc(100% - 28px);gap:12px}.desktop-nav{gap:1px}.desktop-nav .nav-link{padding:9px 8px;font-size:12px}.met-logo-image{width:178px}}
+@media(max-width:760px){.header-container{min-height:70px;width:calc(100% - 28px)}.desktop-nav{display:none!important}.menu-toggle{display:flex!important}.met-logo-image{width:clamp(165px,52vw,205px);max-height:58px}.mobile-nav{display:block!important}}
+@media(min-width:761px){.mobile-nav{display:none!important}}
+@media(prefers-reduced-motion:reduce){.main-header,.nav-link,.mobile-nav{transition:none!important}}
