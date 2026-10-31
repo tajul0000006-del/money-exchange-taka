@@ -1,6 +1,11 @@
 /* MoneyExchangeTaka frontend interactions. Server-side verification is required before live transactions. */
 (() => {
   "use strict";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+  import { firebaseConfig } from "./firebase-config.js";
+  const firebaseApp = initializeApp(firebaseConfig);
+  const db = getFirestore(firebaseApp);
   const $ = (id) => document.getElementById(id);
   const FEE_PERCENT = 1;
   const DEFAULT_WALLETS = [
@@ -161,7 +166,57 @@
   document.querySelectorAll(".modal-backdrop").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)closeModal(m.id)}));
   $("copyPaymentAddress").addEventListener("click",async()=>{try{await navigator.clipboard.writeText($("paymentAddress").textContent);$("copyPaymentAddress").textContent="কপি হয়েছে";}catch(_){$("paymentAddress").focus?.();}});
   $("goProof").addEventListener("click",()=>{closeModal("paymentModal");openModal("proofModal");});
-  $("proofForm").addEventListener("submit",e=>{e.preventDefault();if(!pendingRequest)return;pendingRequest.proofReference=$("proofReference").value.trim();pendingRequest.proofEmail=$("proofEmail").value.trim();pendingRequest.proofFileName=$("proofScreenshot").files[0]?.name||"";let items=[];try{items=JSON.parse(localStorage.getItem(HISTORY_KEY)||"[]");}catch(_){}items.push(pendingRequest);localStorage.setItem(HISTORY_KEY,JSON.stringify(items));renderHistory();closeModal("proofModal");$("successTrackingCode").textContent=pendingRequest.code;openModal("successModal");$("formStatus").textContent="আপনার অনুরোধ গ্রহণ করা হয়েছে।";$("formStatus").classList.remove("error");pendingRequest=null;$("proofForm").reset();$("exchangeForm").reset();updateWalletOptions();});
+  $("proofForm").addEventListener("submit",async e=>{
+    e.preventDefault();
+    if(!pendingRequest)return;
+    const submitButton=$("proofForm").querySelector('button[type="submit"]');
+    if(submitButton){submitButton.disabled=true;submitButton.dataset.oldText=submitButton.textContent;submitButton.textContent="জমা হচ্ছে...";}
+    try{
+      const item=pendingRequest;
+      const from=walletById(item.fromId),to=walletById(item.toId);
+      const usdIds=["paypal","perfectmoney","webmoney","volet","epay","tunepay"];
+      const isUsdSell=usdIds.includes(item.fromId)&&to?.type==="bdt";
+      const isUsdBuy=from?.type==="bdt"&&usdIds.includes(item.toId);
+      if(!isUsdSell&&!isUsdBuy) throw new Error("এই ধাপে শুধু USD থেকে BDT অথবা BDT থেকে USD রিকোয়েস্ট নেওয়া হচ্ছে।");
+      const methodId=isUsdSell?item.toId:item.fromId;
+      const methodNames={bkash:"bKash",nagad:"Nagad",rocket:"Rocket",upay:"Upay",epay:"ePay",tunepay:"TunePay"};
+      const paymentMethod=methodNames[methodId];
+      if(!paymentMethod) throw new Error("এই পেমেন্ট মাধ্যমটি এখনো Request জমার জন্য চালু হয়নি।");
+      const proofReference=$("proofReference").value.trim();
+      const proofEmail=$("proofEmail").value.trim();
+      const note=[item.customer, item.note, item.reference?("Reference: "+item.reference):"", proofReference?("Payment reference: "+proofReference):"", proofEmail?("Proof contact: "+proofEmail):""].filter(Boolean).join(" | ").slice(0,500);
+      const payload={
+        trackingCode:item.code,
+        direction:isUsdSell?"sell":"buy",
+        currency:"USD",
+        amount:Number(item.amount),
+        paymentMethod,
+        contact:String($("contact").value.trim()).slice(0,25),
+        paymentAccount:String($("account").value.trim()).slice(0,80),
+        note,
+        referralCode:"",
+        uid:null,
+        requestType:"guest",
+        status:"pending",
+        createdAt:serverTimestamp()
+      };
+      await addDoc(collection(db,"exchangeRequests"),payload);
+      item.proofReference=proofReference;
+      item.proofEmail=proofEmail;
+      item.proofFileName=$("proofScreenshot").files[0]?.name||"";
+      item.status="pending";
+      let items=[];try{items=JSON.parse(localStorage.getItem(HISTORY_KEY)||"[]");}catch(_){}
+      items.push(item);localStorage.setItem(HISTORY_KEY,JSON.stringify(items));renderHistory();
+      closeModal("proofModal");$("successTrackingCode").textContent=item.code;openModal("successModal");
+      $("formStatus").textContent="আপনার অনুরোধ Firestore-এ জমা হয়েছে।";$("formStatus").classList.remove("error");
+      pendingRequest=null;$("proofForm").reset();$("exchangeForm").reset();updateWalletOptions();
+    }catch(error){
+      console.error("Firestore request submission failed:",error);
+      showError(error?.message==="Missing or insufficient permissions"?"Firestore অনুমতি দেয়নি। Firebase Rules পরীক্ষা করতে হবে।":(error?.message||"রিকোয়েস্ট জমা হয়নি। আবার চেষ্টা করুন।"));
+    }finally{
+      if(submitButton){submitButton.disabled=false;submitButton.textContent=submitButton.dataset.oldText||"জমা দিন";}
+    }
+  });
   $("copyTrackingCode").addEventListener("click",async()=>{try{await navigator.clipboard.writeText($("successTrackingCode").textContent);$("copyTrackingCode").textContent="কপি হয়েছে";}catch(_){}});
   $("successDone").addEventListener("click",()=>{closeModal("successModal");$("history").scrollIntoView({behavior:"smooth",block:"start"});});
   function showError(message){$("formStatus").textContent=message;$("formStatus").classList.add("error");}
