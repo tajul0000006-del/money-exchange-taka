@@ -382,4 +382,23 @@
     $("adminStatus").classList.remove("error");$("adminStatus").textContent="রেট ও পেমেন্ট ঠিকানা সংরক্ষণ করা হয়েছে।";
   });
   renderRateTable();renderAdminEditor();renderPaymentEditor();updateWalletOptions();renderHistory();
+
+  // Load Owner-approved plain-text overrides for elements marked with data-content-key.
+  (async function loadWebsiteTextOverrides(){
+    try {
+      const response = await fetch("https://bold-surf-9356.taijulsheikh60.workers.dev/api/content", {cache:"no-store"});
+      if (!response.ok) return;
+      const data = await response.json();
+      const entries = data && data.entries && typeof data.entries === "object" ? data.entries : {};
+      document.querySelectorAll("[data-content-key]").forEach(element => {
+        const item = entries[element.getAttribute("data-content-key")];
+        if (!item || typeof item.text !== "string") return;
+        // Replace only the element's own text content, never parse admin text as HTML.
+        element.textContent = item.text;
+        element.style.textDecoration = item.struck ? "line-through" : "";
+      });
+    } catch (error) {
+      console.warn("Website text overrides unavailable:", error);
+    }
+  })();
 })();
