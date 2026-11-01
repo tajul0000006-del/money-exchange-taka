@@ -1057,7 +1057,7 @@
   align-items: center;
   gap: 9px;
   color: #102b4d;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.1px;
 }
@@ -1132,7 +1132,7 @@
 
   .ticker-item {
     gap: 7px;
-    font-size: 12px;
+    font-size: 15px;
   }
 
   .ticker-item i {
