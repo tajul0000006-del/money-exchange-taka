@@ -1944,3 +1944,39 @@ header .met-brand-image:hover,
   transform: none !important;
   translate: none !important;
 }
+
+
+/* FINAL LOGO POSITION: anchor the website logo neatly at the left edge.
+   Keep its own box and image aligned left on desktop and mobile. */
+.main-header .header-container{
+  justify-content:flex-start !important;
+}
+.main-header .met-brand-image{
+  order:0 !important;
+  align-self:center !important;
+  justify-content:flex-start !important;
+  text-align:left !important;
+  margin-left:0 !important;
+  margin-right:auto !important;
+  position:relative !important;
+  left:0 !important;
+  right:auto !important;
+  flex-shrink:0 !important;
+}
+.main-header .met-logo-image{
+  margin-left:0 !important;
+  margin-right:auto !important;
+  object-position:left center !important;
+  transform:none !important;
+}
+/* Logo stays completely still, including keyboard focus and touch/click states. */
+.main-header .met-brand-image:active,
+.main-header .met-brand-image:focus,
+.main-header .met-brand-image:focus-visible,
+.main-header .met-logo-image:active,
+.main-header .met-logo-image:focus{
+  animation:none !important;
+  transition:none !important;
+  transform:none !important;
+  outline-offset:2px;
+}
