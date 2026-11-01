@@ -41,3 +41,8 @@ footer{text-align:center;background:#06283c;color:#d7e7ef;padding:27px 15px;marg
 .site-header, .hero, #adminSettings { display: none !important; }
 .rate-limit-note { margin-top: 14px; padding: 12px 14px; border-radius: 12px; background: #eef9fc; border: 1px solid #d6e9ee; color: #17445a; font-size: 14px; }
 .rate-limit-note strong { color: #082f49; }
+
+
+/* Homepage cleanup: keep request tracking on its dedicated page only. */
+#history,
+#transaction-stats { display: none !important; }
