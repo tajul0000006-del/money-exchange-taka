@@ -858,3 +858,10 @@ body:has(.exchange-ticker){padding-top:108px!important}
   }
   body:has(.exchange-ticker){padding-top:98px!important}
 }
+
+
+/* Reduce only the moving-text window height by 5px; keep the ticker bar fixed. */
+.exchange-ticker .ticker-window{
+  height:calc(100% - 5px)!important;
+  align-self:center!important;
+}
