@@ -1,0 +1,50 @@
+/* MoneyExchangeTaka responsive layer — loaded after page styles */
+*,*::before,*::after{box-sizing:border-box}
+html{width:100%;max-width:100%;overflow-x:hidden;scroll-behavior:smooth}
+body{width:100%;max-width:100%;min-width:0;margin-left:auto;margin-right:auto;overflow-x:hidden}
+img,svg,video,canvas{max-width:100%;height:auto}
+input,select,textarea,button{max-width:100%;font:inherit}
+main,section,article,form,header,footer,nav,div{min-width:0}
+a,button{overflow-wrap:anywhere}
+table{max-width:100%}
+@media(min-width:1100px){
+ .container,.chat-wrap,.dash-wrap{width:min(1440px,calc(100% - 72px));max-width:1440px;margin-left:auto;margin-right:auto}
+ .track-page{width:min(760px,calc(100% - 72px))}
+ .about-page{width:min(900px,calc(100% - 72px))}
+}
+@media(max-width:900px){
+ .desktop-nav{gap:10px}
+ .header-container{width:calc(100% - 28px);gap:12px}
+ .exchange-layout,.chat-layout{grid-template-columns:minmax(0,1fr)!important}
+ .dash-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:600px){
+ html{scroll-padding-top:76px}
+ .container,.chat-wrap,.dash-wrap,.track-page{width:calc(100% - 24px);max-width:100%}
+ .header-container{width:calc(100% - 20px);min-height:68px}
+ .form-card,.chat-panel,.question-panel,.track-card{padding:16px}
+ .section{margin:28px 0 40px}
+ .section-heading{align-items:flex-start;flex-direction:column;gap:7px}
+ .hero{grid-template-columns:minmax(0,1fr);gap:20px;padding:30px 0 22px}
+ .hero h1{font-size:clamp(28px,8vw,40px)}
+ .wallet-grid,.dash-grid{grid-template-columns:minmax(0,1fr)}
+ .field input,.field select,.field textarea,.auth-field input,.forgot-field input,.track-field input{width:100%;min-width:0;font-size:16px}
+ .amount-input{width:100%;min-width:0}
+ .amount-input input{min-width:0}
+ .table-wrap{width:100%;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+ .table-wrap table,table{min-width:600px}
+ .auth-wrap,.forgot-wrap{width:calc(100% - 24px);max-width:430px;padding:0;margin:24px auto}
+ .auth-card,.forgot-card{padding:20px 16px}
+ .chat-form{flex-wrap:wrap}
+ .chat-form input{min-width:0;flex:1 1 180px}
+ .chat-form button{min-height:44px}
+ .contact-actions,.dash-actions{flex-wrap:wrap}
+ .contact-btn,.dash-btn{max-width:100%}
+ .about-page{width:calc(100% - 32px);padding:38px 0 50px}
+ .track-top,.dash-top{flex-wrap:wrap}
+}
+@media(max-width:360px){
+ .header-container{width:calc(100% - 14px)}
+ .form-card,.chat-panel,.question-panel{padding:13px}
+ .auth-wrap,.forgot-wrap{width:calc(100% - 16px)}
+}
