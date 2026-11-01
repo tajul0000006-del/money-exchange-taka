@@ -1895,3 +1895,9 @@ header a, .site-header a, .main-header a{
     -webkit-overflow-scrolling:touch;
   }
 }
+
+/* Ensure the uploaded header logo is visible on desktop and mobile */
+.main-header .met-brand-image{display:flex!important;visibility:visible!important;opacity:1!important;flex:0 1 410px!important;width:min(410px,42vw)!important;min-width:0!important;padding:5px 12px!important;background:#fff!important;border-radius:12px!important;overflow:visible!important}
+.main-header .met-logo-image{display:block!important;visibility:visible!important;opacity:1!important;width:100%!important;height:auto!important;max-width:430px!important;max-height:82px!important;object-fit:contain!important;object-position:left center!important}
+@media(max-width:900px){.main-header .met-brand-image{width:min(320px,68vw)!important;flex-basis:320px!important}.main-header .met-logo-image{max-height:72px!important}}
+@media(max-width:480px){.main-header .met-brand-image{width:min(240px,65vw)!important;flex-basis:240px!important}.main-header .met-logo-image{max-height:58px!important}}
