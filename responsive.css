@@ -860,8 +860,11 @@ body:has(.exchange-ticker){padding-top:108px!important}
 }
 
 
-/* Reduce only the moving-text window height by 24px total; keep the ticker bar fixed. */
+/* Reduce the scrolling text window; min-height:0 lets the flex item actually shrink. */
 .exchange-ticker .ticker-window{
-  height:calc(100% - 24px)!important;
+  height:calc(100% - 27px)!important;
+  min-height:0!important;
+  box-sizing:border-box!important;
   align-self:center!important;
+  overflow:hidden!important;
 }
