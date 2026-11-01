@@ -678,3 +678,12 @@ table{max-width:100%}
   }
   .main-header .mobile-nav.open{transform:translateY(0) translateX(0)!important}
 }
+
+
+/* Mobile: keep a clean 2px gap below the fixed header.
+   Navigation links remain semantic links for crawlability. */
+@media(max-width:760px){
+  .main-header .mobile-nav{
+    top:64px!important; /* 62px header + 2px gap */
+  }
+}
