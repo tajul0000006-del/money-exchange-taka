@@ -178,63 +178,69 @@ const replyGroups = [
  ]}
 ];
 
-const log = document.getElementById("chatLog");
-const input = document.getElementById("chatInput");
-const note = document.getElementById("contactNote");
-const form = document.getElementById("chatForm");
 
-function addBubble(text, kind) {
- const el = document.createElement("div");
- el.className = "bubble " + kind;
- el.textContent = text;
- log.appendChild(el);
- log.scrollTop = log.scrollHeight;
-}
-function normalizeQuestion(value) {
- return value.toLowerCase()
-  .replace(/[?؟!.,;:(){}\[\]"]/g, " ")
-  .replace(/\s+/g, " ").trim();
-}
-function chooseRandom(list) {
- return list[Math.floor(Math.random() * list.length)];
-}
-function findReply(question) {
- const q = normalizeQuestion(question);
- if (!q) return null;
- // Choose the most specific matching category instead of a random unrelated answer.
- const matches = replyGroups
-  .map(group => ({group, score: group.keys.reduce((n, key) => n + (q.includes(normalizeQuestion(key)) ? normalizeQuestion(key).length : 0), 0)}))
-  .filter(item => item.score > 0)
-  .sort((a,b) => b.score - a.score);
- if (!matches.length) return null;
- const bestScore = matches[0].score;
- const best = matches.filter(item => item.score === bestScore);
- return chooseRandom(chooseRandom(best).group.replies);
-}
-function ask(question) {
- const q = question.trim();
- if (!q) return;
- if (q.length > 500) {
-  addBubble("অনুগ্রহ করে ৫০০ অক্ষরের মধ্যে প্রশ্ন লিখুন।", "bot");
-  return;
+const log=document.getElementById("chatLog"),input=document.getElementById("chatInput"),note=document.getElementById("contactNote"),form=document.getElementById("chatForm");
+let lastIntent="welcome", awaiting="", lastQuestion="";
+const bank={
+welcome:["ওয়ালাইকুম আসসালাম! বলুন, কীভাবে সাহায্য করতে পারি?","হ্যালো! আপনার এক্সচেঞ্জ বা রিকোয়েস্ট নিয়ে কী জানতে চান?"],
+exchange:["হোমপেজের Exchange ফর্ম খুলে Buy অথবা Sell নির্বাচন করুন। প্রয়োজনীয় তথ্য পূরণ করে Request Submit করুন। Tracking Code সংরক্ষণ করুন।","প্রথমে Exchange ফর্মে যান, লেনদেনের ধরন বাছুন, তারপর তথ্য দিন। জমা দেওয়ার আগে রেট ও পেমেন্ট মাধ্যম নিশ্চিত করুন।"],
+buy:["ডলার কিনতে Exchange অংশে Buy নির্বাচন করে পরিমাণ ও প্রয়োজনীয় তথ্য দিন। জমা দেওয়ার আগে রেট ও পেমেন্ট নির্দেশনা নিশ্চিত করুন।","Buy Request জমা দেওয়ার পর Tracking Code সংরক্ষণ করুন। সাপোর্টের নির্দেশনা নিশ্চিত না হয়ে টাকা পাঠাবেন না।"],
+sell:["ডলার বিক্রি করতে Exchange অংশে Sell নির্বাচন করুন, তথ্য পূরণ করে অনুরোধ জমা দিন। Tracking Code রেখে দিন।","Sell Request দেওয়ার আগে পরিমাণ, রেট ও পেমেন্ট মাধ্যম সাপোর্টে নিশ্চিত করুন।"],
+tracking:["Navigation থেকে Track Request পেজ খুলুন। Tracking Code এবং ফোন নম্বরের শেষ ৪টি সংখ্যা দিয়ে খুঁজুন।","আপনার MET Tracking Code দিয়ে Track Request পেজে যান। চাওয়া যাচাইয়ের তথ্য দিয়ে Search করুন।"],
+pending:["Pending মানে অনুরোধটি এখনো যাচাই বা প্রক্রিয়াধীন। Tracking Code দিয়ে অবস্থা দেখুন; দেরি হলে সাপোর্টে যোগাযোগ করুন।","প্রসেসিংয়ের সময় নিশ্চিত নয়। একই অনুরোধ আবার জমা না দিয়ে Tracking Code দিয়ে আপডেট চান।"],
+payment:["পেমেন্ট সমস্যা হলে Transaction ID, সময়, পরিমাণ ও Tracking Code সংরক্ষণ করুন। একই টাকা আবার পাঠাবেন না। PIN/OTP কাউকে দেবেন না।","লেনদেন যাচাইয়ের জন্য TrxID প্রয়োজন হতে পারে। আপনার Tracking Code-সহ সাপোর্ট টিমকে মেসেজ করুন।"],
+rates:["রেট পরিবর্তিত হতে পারে। ওয়েবসাইটের Rates অংশ দেখুন এবং অনুরোধ জমা দেওয়ার আগে সাপোর্টে নিশ্চিত করুন।","আমি লাইভ রেট দেখতে পারি না। বর্তমান রেট হোমপেজে দেখুন বা সাপোর্টে যাচাই করুন।"],
+methods:["ফর্মে যে পেমেন্ট মাধ্যমগুলো দেখানো আছে সেগুলো থেকেই নির্বাচন করুন। কোনো মাধ্যম চালু আছে কি না নিশ্চিত না হলে আগে সাপোর্টে জিজ্ঞাসা করুন।"],
+account:["Login করতে নিবন্ধিত ইমেইল ও পাসওয়ার্ড ব্যবহার করুন। পাসওয়ার্ড বা OTP কারও সঙ্গে শেয়ার করবেন না।"],
+signup:["Sign Up নির্বাচন করে প্রয়োজনীয় তথ্য দিন। নিজের নিয়ন্ত্রণে থাকা ইমেইল ব্যবহার করুন এবং নিরাপদ পাসওয়ার্ড রাখুন।"],
+guest:["ফর্মে Guest Request অপশন থাকলে নির্দিষ্ট অনুরোধ অ্যাকাউন্ট ছাড়াই জমা দেওয়া যায়। সব ধরনের অনুরোধ Guest হিসেবে করা যাবে এমন নিশ্চয়তা নেই।"],
+support:["সরাসরি সহায়তার জন্য নিচের WhatsApp বা Telegram বাটন ব্যবহার করুন। আপনার Tracking Code থাকলে মেসেজে উল্লেখ করুন।"],
+thanks:["আপনাকে স্বাগতম! আর কোনো বিষয়ে সাহায্য লাগলে লিখুন।","সহায়তা করতে পেরে ভালো লাগল। নিরাপদে লেনদেন করুন!"]
+};
+const rules=[
+["tracking",["track","tracking","ট্র্যাক","রিকোয়েস্টের অবস্থা","স্ট্যাটাস","status","tracking code","request id"]],
+["pending",["pending","পেন্ডিং","অপেক্ষা","এখনো হয়নি","এখনও হয়নি","কতক্ষণ","কত সময়","কখন হবে","দেরি","delay"]],
+["payment",["payment","পেমেন্ট","টাকা পাঠ","টাকা কাটা","লেনদেন","transaction","trx","পেমেন্ট সমস্যা"]],
+["buy",["ডলার কিন","কিনতে চাই","buy","ডলার নেব"]],
+["sell",["ডলার বিক্রি","বিক্রি করতে","sell","ডলার দেব"]],
+["rates",["rate","রেট","দর","ডলার দাম"]],
+["methods",["পেমেন্ট মাধ্যম","বিকাশ","bkash","নগদ","nagad","rocket","রকেট","upay","উপায়","epay","টিউনপে","ব্যাংক"]],
+["signup",["signup","sign up","register","রেজিস্টার","সাইন আপ","নিবন্ধন"]],
+["guest",["guest","অ্যাকাউন্ট ছাড়া","লগইন ছাড়া","গেস্ট"]],
+["support",["সাপোর্ট","support","কাস্টমার কেয়ার","agent","যোগাযোগ","whatsapp","হোয়াটসঅ্যাপ","telegram","টেলিগ্রাম"]],
+["account",["login","লগইন","অ্যাকাউন্ট"]],
+["thanks",["ধন্যবাদ","thanks","thank you"]],
+["welcome",["hello","hi","হ্যালো","হাই","আসসালামু","সালাম"]]
+];
+function norm(s){return s.toLocaleLowerCase("bn").replace(/[?؟!.,;:(){}\[\]"]/g," ").replace(/\s+/g," ").trim();}
+function bubble(t,k){const d=document.createElement("div");d.className="bubble "+k;d.textContent=t;log.appendChild(d);log.scrollTop=log.scrollHeight;}
+function pick(a){return a[Math.floor(Math.random()*a.length)];}
+function detect(q){const m=rules.map(([id,keys])=>({id,score:keys.reduce((n,k)=>n+(q.includes(norm(k))?norm(k).length+2:0),0)})).filter(x=>x.score).sort((a,b)=>b.score-a.score);return m[0]?.id||null;}
+function follow(q){
+ const yes=/^(হ্যাঁ|হ্যা|জি|জী|ঠিক আছে|আচ্ছা|ওকে|ok|okay|yes|অবশ্যই|এখনই|এখন|করুন|করো|sure|বুঝেছি)(\s|$)/i.test(q);
+ const no=/^(না|নাহ|no|লাগবে না|চাই না)(\s|$)/i.test(q);
+ const how=/কীভাবে|কিভাবে|এখন কি|এখন কী|এরপর|তারপর|কোথায়|কোথায়|কী করব|কি করব|করতে হবে|বুঝিনি|আরও বুঝিয়ে/i.test(q);
+ if(yes){
+  if(lastIntent==="tracking")return "ঠিক আছে। Track Request পেজ খুলে Tracking Code ও ফোন নম্বরের শেষ ৪টি সংখ্যা লিখে Search চাপুন।";
+  if(["buy","sell","exchange"].includes(lastIntent))return "ঠিক আছে। হোমপেজের Exchange ফর্মে যান। Buy বা Sell নির্বাচন করে নির্দেশনা অনুযায়ী তথ্য পূরণ করুন।";
+  if(lastIntent==="support")return "ঠিক আছে। নিচের WhatsApp বাটনে চাপ দিয়ে আপনার প্রশ্ন ও Tracking Code পাঠান।";
+  return "অবশ্যই! আপনি কোন বিষয়ে সাহায্য চান—এক্সচেঞ্জ, রিকোয়েস্ট ট্র্যাক, নাকি পেমেন্ট?";
  }
- addBubble(q, "user");
- const answer = findReply(q);
- if (answer) {
-  addBubble(answer, "bot");
-  note.hidden = true;
- } else {
-  addBubble("দুঃখিত, এই প্রশ্নটির নির্ভরযোগ্য উত্তর আমার FAQ-তে নেই। সঠিক তথ্যের জন্য সরাসরি সাপোর্ট টিমকে মেসেজ করুন।", "bot");
-  note.hidden = false;
- }
- input.value = "";
+ if(no)return "ঠিক আছে, কোনো সমস্যা নেই। অন্য কোনো প্রশ্ন থাকলে লিখুন।";
+ if(how&&lastIntent==="tracking")return "এখন Track Request পেজে যান। MET Tracking Code এবং ফোন নম্বরের শেষ ৪টি সংখ্যা লিখে Search করুন।";
+ if(how&&["buy","sell","exchange"].includes(lastIntent))return "এখন হোমপেজে Exchange ফর্ম খুলুন। Buy/Sell বেছে পরিমাণ, পেমেন্ট মাধ্যম ও যোগাযোগের তথ্য দিন। জমা দেওয়ার আগে সব তথ্য যাচাই করুন।";
+ if(how&&lastIntent==="payment")return "এখন Transaction ID, পেমেন্টের সময় ও পরিমাণ লিখে রাখুন। টাকা দ্বিতীয়বার পাঠাবেন না। Tracking Code-সহ WhatsApp সাপোর্টে যোগাযোগ করুন।";
+ if(how&&lastIntent==="support")return "নিচের WhatsApp বাটনে চাপুন। মেসেজে সমস্যাটি ও Tracking Code লিখুন; PIN বা OTP দেবেন না।";
+ if(how&&bank[lastIntent])return pick(bank[lastIntent]);
+ return null;
 }
-form.addEventListener("submit", event => {
- event.preventDefault();
- ask(input.value);
-});
-document.querySelectorAll(".quick-question").forEach(button => {
- button.addEventListener("click", () => ask(button.dataset.q || ""));
-});
+function ask(raw){
+ const s=raw.trim();if(!s)return;if(s.length>500){bubble("অনুগ্রহ করে ৫০০ অক্ষরের মধ্যে প্রশ্ন লিখুন।","bot");return;}
+ bubble(s,"user");const q=norm(s);let answer=follow(q);
+ if(!answer){const id=detect(q);if(id){lastIntent=id;lastQuestion=q;answer=pick(bank[id]||bank.support);}else answer="আপনার কথাটি পুরোপুরি বুঝতে পারিনি। একটু অন্যভাবে লিখবেন? যেমন: “ডলার কিনব কীভাবে”, “রিকোয়েস্ট Pending”, অথবা “পেমেন্ট সমস্যা”।";}
+ bubble(answer,"bot");note.hidden=!answer.includes("বুঝতে পারিনি");input.value="";
+}
+form.addEventListener("submit",e=>{e.preventDefault();ask(input.value);});
+document.querySelectorAll(".quick-question").forEach(b=>b.addEventListener("click",()=>ask(b.dataset.q||"")));
 </script>
 </body></html>
