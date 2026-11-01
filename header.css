@@ -2096,3 +2096,64 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
   .desktop-nav{gap:3px}
   .desktop-nav .nav-link{padding:8px 7px;font-size:11px}
 }
+
+
+/* DESKTOP SUPPORT MENU: expand horizontally inside the header, not as a floating card. */
+@media (min-width:901px){
+  .desktop-nav{
+    align-items:center;
+    align-content:center;
+  }
+  .desktop-nav .nav-support{
+    position:relative;
+  }
+  .desktop-nav .nav-support[open]{
+    flex:1 1 100%;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:center;
+    gap:8px 14px;
+    padding:7px 10px;
+    border:1px solid #dbeafe;
+    border-radius:12px;
+    background:#f8fbff;
+  }
+  .desktop-nav .nav-support[open]>summary{
+    flex:0 0 auto;
+  }
+  .desktop-nav .nav-support .support-panel{
+    position:static!important;
+    inset:auto!important;
+    display:flex!important;
+    flex:1 1 auto;
+    flex-direction:row;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    width:auto!important;
+    max-width:100%;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    animation:supportNavReveal .22s ease both;
+  }
+  .desktop-nav .nav-support .support-panel-title{
+    display:none!important;
+  }
+  .desktop-nav .nav-support .support-option{
+    display:inline-flex;
+    flex:0 1 190px;
+    align-items:center;
+    width:auto;
+    min-width:150px;
+    max-width:230px;
+    margin:0!important;
+    padding:9px 12px;
+    white-space:normal;
+  }
+}
