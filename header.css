@@ -1906,3 +1906,41 @@ header a, .site-header a, .main-header a{
 .main-header .brand-logo,.main-header .brand-logo:hover,.main-header .logo-mark,.main-header .logo-orbit,.main-header .exchange-icon,.main-header .met-brand,.main-header .met-brand:hover,.main-header .met-brand-image,.main-header .met-brand-image:hover,.main-header .met-mark,.main-header .met-logo-image,.main-header .logo-coin,.main-header .brand-name,.main-header .met-wordmark,.main-header .met-letters,.main-header .met-mark-line{animation:none!important;transition:none!important;transform:none!important;filter:none!important}
 .main-header .brand-logo:hover .logo-mark,.main-header .met-brand:hover,.main-header .met-brand-image:hover{transform:none!important;border-radius:inherit;box-shadow:none!important}
 .main-header .logo-orbit,.main-header .exchange-icon{animation:none!important}
+
+
+/* FINAL FIX: keep every header logo fixed on page load and on click/hover.
+   Covers all shared header variants used across the site. */
+header .brand-logo,
+header .brand-logo *,
+header .met-brand,
+header .met-brand *,
+header .met-brand-image,
+header .met-brand-image *,
+header .met-logo-image,
+.site-header .brand,
+.site-header .brand *,
+.main-header .brand-logo,
+.main-header .brand-logo *,
+.main-header .met-brand,
+.main-header .met-brand *,
+.main-header .met-brand-image,
+.main-header .met-brand-image *,
+.main-header .met-logo-image {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  translate: none !important;
+  filter: none !important;
+  will-change: auto !important;
+}
+header .brand-logo:hover,
+header .met-brand:hover,
+header .met-brand-image:hover,
+.site-header .brand:hover,
+.main-header .brand-logo:hover,
+.main-header .met-brand:hover,
+.main-header .met-brand-image:hover {
+  animation: none !important;
+  transform: none !important;
+  translate: none !important;
+}
