@@ -29,6 +29,7 @@ import { firebaseConfig } from "./firebase-config.js";
     dashboard.hidden = false;
     setupFirestoreTest();
     setupRequestList();
+    setupWebsiteContentEditor();
     let identity = $("adminIdentity");
     if (!identity) {
       identity = document.createElement("p");
@@ -293,6 +294,71 @@ import { firebaseConfig } from "./firebase-config.js";
     }
   });
 
+
+
+  // Owner-only website text editor. Text is stored as plain text; no HTML is executed.
+  function setupWebsiteContentEditor() {
+    const panel = $("panel-website");
+    if (!panel || $("contentEditor")) return;
+    const root = document.createElement("div");
+    root.id = "contentEditor";
+    root.className = "info-strip";
+    root.style.cssText = "margin-top:18px;background:#f7fbff;border:1px solid #cfe0ef;padding:16px;border-radius:12px";
+    root.innerHTML = '<h3 style="margin:0 0 8px">Website Text Control</h3><p>HTML-এর যেসব লেখায় data-content-key দেওয়া আছে, সেগুলো এখানে পরিবর্তন, Strike-through বা Restore করা যাবে।</p><div style="display:grid;gap:9px"><label>Text Key <input id="contentKey" maxlength="80" placeholder="যেমন: home.hero.title"></label><label>Website Text <textarea id="contentText" rows="3" maxlength="2000" placeholder="ওয়েবসাইটে যে লেখা দেখাতে চান"></textarea></label><label style="display:flex;gap:8px;align-items:center"><input id="contentStruck" type="checkbox"> Strike-through (লেখা কাটা দেখান)</label><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" id="contentSave">Save Text</button><button type="button" class="outline" id="contentLoad">Load Saved Text</button><button type="button" class="outline" id="contentRestore">Restore / Remove Strike-through</button></div><p id="contentStatus" role="status" aria-live="polite"></p><div id="contentEntries" style="display:grid;gap:8px"></div></div>';
+    panel.appendChild(root);
+    const status = $("contentStatus");
+    const keyInput = $("contentKey"), textInput = $("contentText"), struckInput = $("contentStruck");
+    let entries = {};
+    const api = async (method, path, body) => {
+      const user = auth.currentUser;
+      if (!user) throw new Error("Admin session পাওয়া যায়নি। আবার লগইন করুন।");
+      const token = await user.getIdToken(true);
+      const response = await fetch(API_BASE + path, {
+        method, headers: { Authorization: "Bearer " + token, ...(body ? {"content-type":"application/json"} : {}) },
+        ...(body ? {body: JSON.stringify(body)} : {}), cache: "no-store"
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || data.ok !== true) throw new Error(data.error || "Content API error (" + response.status + ")");
+      return data;
+    };
+    const render = () => {
+      const list = $("contentEntries");
+      list.replaceChildren();
+      Object.entries(entries).forEach(([key, item]) => {
+        const row = document.createElement("div");
+        row.style.cssText = "background:#fff;border:1px solid #dbe5ec;border-radius:9px;padding:10px;display:flex;justify-content:space-between;gap:10px;align-items:center";
+        const info = document.createElement("div");
+        const title = document.createElement("strong"); title.textContent = key;
+        const preview = document.createElement("div"); preview.textContent = item.text; preview.style.cssText = "font-size:13px;overflow-wrap:anywhere";
+        if (item.struck) preview.style.textDecoration = "line-through";
+        info.append(title, preview);
+        const edit = document.createElement("button"); edit.type = "button"; edit.textContent = "Edit";
+        edit.addEventListener("click", () => { keyInput.value = key; textInput.value = item.text; struckInput.checked = !!item.struck; });
+        row.append(info, edit); list.append(row);
+      });
+    };
+    async function load() {
+      status.textContent = "লোড হচ্ছে...";
+      try { const data = await api("GET", "/api/admin/content"); entries = data.entries || {}; render(); status.textContent = "সংরক্ষিত লেখা লোড হয়েছে।"; }
+      catch (e) { status.textContent = "লোড হয়নি: " + e.message; }
+    }
+    async function save(struck) {
+      const key = keyInput.value.trim();
+      const text = textInput.value;
+      if (!/^[a-zA-Z0-9._-]{1,80}$/.test(key)) { status.textContent = "Text Key-তে শুধু English অক্ষর, সংখ্যা, dot, underscore ও hyphen ব্যবহার করুন।"; return; }
+      if (!text.trim() || text.length > 2000) { status.textContent = "লেখা খালি রাখা যাবে না; সর্বোচ্চ ২০০০ অক্ষর।"; return; }
+      status.textContent = "সংরক্ষণ হচ্ছে...";
+      try {
+        entries[key] = {text, struck: !!struck};
+        const data = await api("POST", "/api/admin/content", {entries});
+        entries = data.entries || entries; render(); status.textContent = "সফল! Website text সংরক্ষিত হয়েছে।";
+      } catch (e) { status.textContent = "সংরক্ষণ হয়নি: " + e.message; }
+    }
+    $("contentSave").addEventListener("click", () => save(struckInput.checked));
+    $("contentRestore").addEventListener("click", () => { struckInput.checked = false; save(false); });
+    $("contentLoad").addEventListener("click", load);
+    load();
+  }
 
   // Dashboard section navigation (UI only; management actions remain disabled until APIs exist).
   const navItems = document.querySelectorAll(".nav-item[data-panel]");
