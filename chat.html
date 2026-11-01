@@ -56,21 +56,185 @@
 <a class="back-home" href="./index.html"><i class="fa-solid fa-arrow-left"></i> হোমপেজে ফিরে যান</a>
 </main>
 <script>
-const answers=[
-{keys:["কীভাবে এক্সচেঞ্জ","এক্সচেঞ্জ করব","exchange","কিভাবে শুরু"],answer:"এক্সচেঞ্জ করতে হোমপেজের Exchange অংশে যান। Buy বা Sell নির্বাচন করুন, প্রয়োজনীয় তথ্য ও যোগাযোগ নম্বর দিন, শর্তে সম্মতি দিয়ে Request Submit করুন। রিকোয়েস্ট নম্বরটি সংরক্ষণ করুন। অ্যাডমিন যাচাই করার পর পরবর্তী ধাপ জানানো হবে।"},
-{keys:["ট্র্যাক","রিকোয়েস্টের অবস্থা","request status","tracking"],answer:"রিকোয়েস্ট ট্র্যাক করতে Navigation থেকে Request Track পেজ খুলুন। আপনার MET Request ID লিখে Search করুন। রিকোয়েস্ট জমা দেওয়ার পর পাওয়া আইডি ব্যবহার করবেন।"},
-{keys:["কত সময়","সময় লাগে","কখন পাব","how long"],answer:"রিকোয়েস্ট সম্পন্ন হওয়ার নির্দিষ্ট সময় পেমেন্ট মাধ্যম, তথ্য যাচাই এবং অ্যাডমিনের কাজের ওপর নির্ভর করে। নিশ্চিত সময় জানতে আপনার Request ID সহ WhatsApp বা Telegram-এ যোগাযোগ করুন।"},
-{keys:["পেমেন্ট মাধ্যম","কোন কোন","বিকাশ","নগদ","রকেট","উপায়","payment method"],answer:"ওয়েবসাইটে bKash, Nagad, Rocket, Upay এবং অন্যান্য পেমেন্ট মাধ্যমের অপশন দেখানো হতে পারে। কোন মাধ্যম বর্তমানে চালু আছে এবং তার সীমা কত, তা রিকোয়েস্ট দেওয়ার আগে সাপোর্ট টিমের কাছে নিশ্চিত করুন।"},
-{keys:["অ্যাকাউন্ট ছাড়া","গেস্ট","guest","লগইন ছাড়া"],answer:"ওয়েবসাইটে Guest Request অপশন থাকলে অ্যাকাউন্ট ছাড়াই নির্দিষ্ট ধরনের রিকোয়েস্ট জমা দেওয়া যায়। ফর্মে যে তথ্য চাওয়া হবে তা সঠিকভাবে দিন এবং Request ID সংরক্ষণ করুন।"},
-{keys:["পেমেন্ট সমস্যা","টাকা পাঠিয়েছি","টাকা যায়নি","payment issue"],answer:"একই পেমেন্ট বারবার পাঠাবেন না। Transaction ID, পরিমাণ, সময় এবং আপনার Request ID সংরক্ষণ করুন। এগুলো দিয়ে WhatsApp বা Telegram-এ সাপোর্ট টিমকে মেসেজ করুন।"},
-{keys:["রেট","exchange rate","ডলার রেট"],answer:"এক্সচেঞ্জ রেট পরিবর্তিত হতে পারে। হোমপেজের Exchange Rates অংশে প্রকাশিত রেট দেখুন। রিকোয়েস্ট জমা দেওয়ার আগে বর্তমান রেট সাপোর্ট টিমের কাছে নিশ্চিত করুন।"},
-{keys:["রেফার","referral"],answer:"রেফারেল সুবিধা চালু হলে ওয়েবসাইটে নিয়ম ও শর্ত প্রকাশ করা হবে। বর্তমানে সুবিধাটি চালু আছে কি না সাপোর্ট টিমের কাছে নিশ্চিত করুন।"},
-{keys:["নিরাপদ","security","নিরাপত্তা"],answer:"শুধু ওয়েবসাইটে দেওয়া অফিসিয়াল নির্দেশনা অনুসরণ করুন। কাউকে OTP, পাসওয়ার্ড বা PIN দেবেন না। সন্দেহজনক লেনদেন হলে সঙ্গে সঙ্গে সাপোর্টে যোগাযোগ করুন."}
+/* MoneyExchangeTaka FAQ Auto Reply — rule-based, no paid API required.
+   Multiple phrase patterns + varied safe replies cover many ways users ask. */
+const replyGroups = [
+ {keys:["hello","hi","hey","হ্যালো","হাই","আসসালামু","সালাম","নমস্কার"], replies:[
+  "ওয়ালাইকুম আসসালাম! MoneyExchangeTaka Help Center-এ স্বাগতম। কীভাবে সাহায্য করতে পারি?",
+  "হ্যালো! আপনার এক্সচেঞ্জ, রিকোয়েস্ট বা পেমেন্ট বিষয়ে প্রশ্ন লিখুন।",
+  "স্বাগতম! আপনার প্রশ্নটি লিখুন—আমি সাধারণ তথ্য দিয়ে সাহায্য করার চেষ্টা করব।"
+ ]},
+ {keys:["exchange","এক্সচেঞ্জ","বিনিময়","কীভাবে শুরু","কিভাবে শুরু","কীভাবে করব","কিভাবে করব"], replies:[
+  "এক্সচেঞ্জ করতে হোমপেজের Exchange ফর্মে যান। Buy বা Sell নির্বাচন করে প্রয়োজনীয় তথ্য পূরণ করুন, শর্তে সম্মতি দিয়ে Request Submit করুন। Request ID সংরক্ষণ করুন।",
+  "প্রথমে হোমপেজ থেকে আপনার Exchange Type নির্বাচন করুন। পরিমাণ, পেমেন্ট মাধ্যম ও যোগাযোগের তথ্য দিয়ে অনুরোধ জমা দিন। অ্যাডমিন যাচাইয়ের পর পরবর্তী নির্দেশনা দেওয়া হবে।",
+  "Exchange ফর্মটি পূরণ করে অনুরোধ জমা দিন। কোনো তথ্য দেওয়ার আগে পেমেন্ট মাধ্যম ও বর্তমান রেট সাপোর্ট টিমের কাছে নিশ্চিত করে নিন।"
+ ]},
+ {keys:["buy","কিনব","কিনতে","ডলার কিন","usd buy","ক্রয়"], replies:[
+  "ডলার কিনতে Exchange অংশে Buy নির্বাচন করুন, প্রয়োজনীয় পরিমাণ ও পেমেন্ট তথ্য দিন এবং Request Submit করুন। জমা দেওয়ার পর Request ID সংরক্ষণ করবেন।",
+  "Buy Request জমা দেওয়ার আগে বর্তমান রেট, সীমা ও পেমেন্ট নির্দেশনা সাপোর্ট টিমের কাছে নিশ্চিত করুন।"
+ ]},
+ {keys:["sell","বিক্রি","বেচ","ডলার বিক","usd sell"], replies:[
+  "ডলার বিক্রি করতে Exchange অংশে Sell নির্বাচন করুন। ফর্মে চাওয়া তথ্য সঠিকভাবে দিয়ে Request Submit করুন। Request ID সংরক্ষণ করুন।",
+  "Sell Request দেওয়ার আগে পরিমাণ, রেট ও গ্রহণযোগ্য পেমেন্ট মাধ্যম সাপোর্ট টিমের কাছে নিশ্চিত করুন।"
+ ]},
+ {keys:["track","tracking","ট্র্যাক","ট্রেক","অবস্থা","স্ট্যাটাস","status","request id","রিকোয়েস্ট আইডি"], replies:[
+  "রিকোয়েস্টের অবস্থা জানতে Navigation থেকে Track Request পেজ খুলুন। আপনার MET Tracking Code এবং নিবন্ধিত ফোন নম্বরের শেষ ৪টি সংখ্যা দিয়ে যাচাই করুন।",
+  "আপনার Request ID নিয়ে Track Request পেজে যান। সেখানে চাওয়া যাচাইয়ের তথ্য দিয়ে Search করুন। কোড না পেলে জমা দেওয়ার সময় পাওয়া মেসেজ দেখুন।"
+ ]},
+ {keys:["pending","পেন্ডিং","অপেক্ষা","এখনো হয়নি","হয়নি","কতক্ষণ","কত সময়","সময় লাগে","কখন হবে","কখন পাব","delay","দেরি"], replies:[
+  "Pending মানে আপনার অনুরোধটি এখনো যাচাই বা প্রক্রিয়াধীন। নির্দিষ্ট সময় নিশ্চিত নয়। Request ID দিয়ে সাপোর্ট টিমের সঙ্গে যোগাযোগ করুন।",
+  "প্রসেসিংয়ের সময় পেমেন্ট মাধ্যম ও যাচাইয়ের ওপর নির্ভর করে। একই অনুরোধ বারবার জমা দেবেন না; Request ID দিয়ে আপডেট জানতে চান।",
+  "আপনার অনুরোধের অবস্থা Track Request পেজে দেখুন। বেশি সময় হলে Request ID সহ সাপোর্ট টিমকে মেসেজ করুন।"
+ ]},
+ {keys:["approved","অনুমোদন","অ্যাপ্রুভ","approve","অনুমোদিত"], replies:[
+  "Approved দেখালে অনুরোধটি অ্যাডমিন অনুমোদন করেছেন। পরবর্তী নির্দেশনা বা লেনদেনের তথ্য পেতে আপনার Request Details এবং সাপোর্ট মেসেজ দেখুন।",
+  "আপনার অনুরোধ Approved হলে সেটি অনুমোদিত হয়েছে বোঝায়। তবে এটি নিজে থেকে ব্যাংক বা মোবাইল ওয়ালেটে টাকা জমার নিশ্চয়তা নয়।"
+ ]},
+ {keys:["reject","rejected","বাতিল","রিজেক্ট","প্রত্যাখ্যান"], replies:[
+  "Rejected দেখালে অনুরোধটি গ্রহণ করা হয়নি। কারণ জানতে আপনার Request ID দিয়ে সাপোর্ট টিমের সঙ্গে যোগাযোগ করুন।",
+  "আপনার অনুরোধ বাতিল হওয়ার কারণ জানতে Request ID ও প্রয়োজনীয় প্রমাণসহ সাপোর্টে যোগাযোগ করুন। নতুন অনুরোধ দেওয়ার আগে কারণটি নিশ্চিত করুন।"
+ ]},
+ {keys:["payment","পেমেন্ট","টাকা পাঠ","টাকা যায়","টাকা কাটি","লেনদেন","transaction","ট্রানজেকশন"], replies:[
+  "পেমেন্ট সমস্যা হলে Transaction ID, পরিমাণ, সময় এবং Request ID সংরক্ষণ করুন। একই পেমেন্ট আবার পাঠাবেন না। এগুলো দিয়ে সাপোর্ট টিমকে মেসেজ করুন।",
+  "পেমেন্ট যাচাইয়ের জন্য Transaction ID প্রয়োজন হতে পারে। OTP, PIN বা পাসওয়ার্ড কাউকে দেবেন না। সহায়তার জন্য WhatsApp-এ যোগাযোগ করুন।"
+ ]},
+ {keys:["bkash","বিকাশ","bKash"], replies:[
+  "bKash বর্তমানে আপনার নির্দিষ্ট অনুরোধে চালু আছে কি না এবং কোন নম্বরে পেমেন্ট করতে হবে তা ফর্মের নির্দেশনা বা সাপোর্ট টিমের কাছে নিশ্চিত করুন।",
+  "bKash পেমেন্টের আগে নম্বর, পরিমাণ ও নির্দেশনা ভালোভাবে মিলিয়ে নিন। ভুল নম্বরে টাকা পাঠালে দ্রুত bKash ও সাপোর্ট টিমে যোগাযোগ করুন।"
+ ]},
+ {keys:["nagad","নগদ"], replies:[
+  "Nagad ব্যবহার করার আগে ওয়েবসাইটে প্রদর্শিত বর্তমান নির্দেশনা ও গ্রহণযোগ্যতা নিশ্চিত করুন। ব্যক্তিগত PIN বা OTP শেয়ার করবেন না।",
+  "Nagad লেনদেনের Transaction ID সংরক্ষণ করুন। পেমেন্ট সমস্যা হলে Request ID-সহ সাপোর্ট টিমকে জানান।"
+ ]},
+ {keys:["rocket","রকেট"], replies:[
+  "Rocket পেমেন্টের ক্ষেত্রে ফর্মে দেওয়া অফিসিয়াল নির্দেশনা অনুসরণ করুন। টাকা পাঠানোর আগে নম্বর ও পরিমাণ যাচাই করুন।",
+  "Rocket লেনদেনের TrxID সংরক্ষণ করুন। কোনো সমস্যা হলে TrxID ও Request ID দিয়ে সাপোর্টে যোগাযোগ করুন।"
+ ]},
+ {keys:["upay","উপায়"], replies:[
+  "Upay বর্তমানে চালু আছে কি না তা Exchange ফর্মে দেখে নিন বা সাপোর্ট টিমকে জিজ্ঞাসা করুন। পেমেন্টের আগে নম্বর যাচাই করুন।",
+  "Upay লেনদেনের রেফারেন্স নম্বর সংরক্ষণ করুন। PIN বা OTP কাউকে দেবেন না।"
+ ]},
+ {keys:["epay","ই-পে","ইপে","tune","টিউনপে","bank","ব্যাংক"], replies:[
+  "এই পেমেন্ট মাধ্যমটি আপনার অনুরোধে গ্রহণযোগ্য কি না তা ফর্মের তালিকা বা সাপোর্ট টিমের কাছ থেকে নিশ্চিত করুন।",
+  "পেমেন্ট মাধ্যমভেদে নিয়ম আলাদা হতে পারে। টাকা পাঠানোর আগে অফিসিয়াল নির্দেশনা নিশ্চিত করুন।"
+ ]},
+ {keys:["rate","রেট","দর","কত টাকা","ডলার দাম","exchange rate"], replies:[
+  "এক্সচেঞ্জ রেট পরিবর্তিত হতে পারে। হোমপেজে প্রকাশিত বর্তমান রেট দেখুন এবং Request Submit করার আগে সাপোর্ট টিমের কাছে নিশ্চিত করুন।",
+  "আমি লাইভ রেট দেখতে পারি না। অনুগ্রহ করে ওয়েবসাইটের Rates অংশ দেখুন অথবা সাপোর্ট টিমকে জিজ্ঞাসা করুন।"
+ ]},
+ {keys:["limit","সীমা","সর্বনিম্ন","সর্বোচ্চ","minimum","maximum","কত থেকে","কত পর্যন্ত"], replies:[
+  "প্রতিটি পেমেন্ট মাধ্যমের সর্বনিম্ন ও সর্বোচ্চ সীমা আলাদা হতে পারে। Exchange ফর্মে দেখানো সীমা অনুসরণ করুন।",
+  "বর্তমান লেনদেন সীমা জানতে হোমপেজের ফর্মে প্রদর্শিত তথ্য দেখুন। নিশ্চিত না হয়ে অনুরোধ জমা দেবেন না।"
+ ]},
+ {keys:["account","অ্যাকাউন্ট","লগইন","login","sign in","সাইন ইন"], replies:[
+  "অ্যাকাউন্ট থাকলে Login অপশন ব্যবহার করুন। ইমেইল ও পাসওয়ার্ড সঠিকভাবে দিন। পাসওয়ার্ড কারও সঙ্গে শেয়ার করবেন না।",
+  "লগইন সমস্যা হলে ইমেইল ঠিক আছে কি না দেখুন এবং পাসওয়ার্ড রিসেট অপশন থাকলে সেটি ব্যবহার করুন।"
+ ]},
+ {keys:["signup","sign up","register","রেজিস্টার","সাইন আপ","নিবন্ধন","নতুন অ্যাকাউন্ট"], replies:[
+  "নতুন অ্যাকাউন্ট খুলতে Sign Up নির্বাচন করে প্রয়োজনীয় তথ্য দিন। নিজের নিয়ন্ত্রণে থাকা ইমেইল ব্যবহার করুন এবং নিরাপদ পাসওয়ার্ড দিন।",
+  "Registration ফর্মের তথ্য সঠিকভাবে পূরণ করুন। OTP বা পাসওয়ার্ড অন্য কারও সঙ্গে শেয়ার করবেন না।"
+ ]},
+ {keys:["guest","অ্যাকাউন্ট ছাড়া","লগইন ছাড়া","গেস্ট"], replies:[
+  "Guest Request অপশন থাকলে নির্দিষ্ট ধরনের অনুরোধ অ্যাকাউন্ট ছাড়াই জমা দেওয়া যায়। ফর্মে চাওয়া তথ্য দিন এবং Tracking Code সংরক্ষণ করুন।",
+  "অ্যাকাউন্ট ছাড়া সব ধরনের অনুরোধ করা যাবে—এমন নিশ্চয়তা নেই। ফর্মে Guest অপশন থাকলে সেটির নির্দেশনা অনুসরণ করুন।"
+ ]},
+ {keys:["referral","রেফার","রেফারেল","invite","আমন্ত্রণ"], replies:[
+  "রেফারেল সুবিধা চালু হলে ওয়েবসাইটে নিয়ম ও শর্ত প্রকাশ করা হবে। বর্তমানে সুবিধাটি সক্রিয় কি না সাপোর্ট টিমের কাছে নিশ্চিত করুন।",
+  "Referral Code থাকলে ফর্মে নির্দিষ্ট স্থানে লিখুন। কমিশন বা বোনাসের নিশ্চয়তা ধরে নেওয়ার আগে প্রকাশিত নিয়ম পড়ুন।"
+ ]},
+ {keys:["security","নিরাপদ","নিরাপত্তা","otp","pin","password","পাসওয়ার্ড","প্রতারণা","স্ক্যাম"], replies:[
+  "আপনার OTP, PIN, পাসওয়ার্ড বা গোপন কোড কাউকে দেবেন না। শুধু ওয়েবসাইটে প্রদর্শিত অফিসিয়াল নির্দেশনা অনুসরণ করুন।",
+  "নিরাপত্তার জন্য অচেনা নম্বরে টাকা পাঠাবেন না এবং ব্যক্তিগত তথ্য শেয়ার করবেন না। সন্দেহ হলে আগে সাপোর্ট টিমে যাচাই করুন।"
+ ]},
+ {keys:["contact","যোগাযোগ","সাপোর্ট","support","কথা বলতে","মানুষের সাথে","human","agent","কাস্টমার কেয়ার"], replies:[
+  "সরাসরি সহায়তার জন্য নিচের WhatsApp বা Telegram বাটন ব্যবহার করুন। মেসেজে আপনার Request ID লিখলে বিষয়টি বুঝতে সুবিধা হবে।",
+  "সাপোর্ট টিমকে যোগাযোগের সময় আপনার প্রশ্ন ও Request ID দিন। OTP, PIN বা পাসওয়ার্ড পাঠাবেন না।"
+ ]},
+ {keys:["whatsapp","হোয়াটসঅ্যাপ","হোয়াটসঅ্যাপ"], replies:[
+  "WhatsApp সাপোর্টে যেতে নিচের সবুজ WhatsApp বাটনে চাপ দিন। আপনার Request ID থাকলে মেসেজে উল্লেখ করুন।"
+ ]},
+ {keys:["telegram","টেলিগ্রাম"], replies:[
+  "Telegram যোগাযোগের জন্য নিচের Telegram বাটন ব্যবহার করুন। লিংক কাজ না করলে WhatsApp সাপোর্ট ব্যবহার করুন।"
+ ]},
+ {keys:["about","পরিচয়","পরিচিতি","কে আপনারা","আপনাদের সম্পর্কে"], replies:[
+  "MoneyExchangeTaka একটি ডিজিটাল এক্সচেঞ্জ অনুরোধ প্ল্যাটফর্ম। ব্যবহারকারী অনুরোধ জমা দিতে পারেন এবং অনুরোধের অবস্থা ট্র্যাক করতে পারেন।"
+ ]},
+ {keys:["fee","চার্জ","ফি","কমিশন","কাটবে","খরচ"], replies:[
+  "চার্জ বা ফি লেনদেনের ধরন ও পেমেন্ট মাধ্যম অনুযায়ী ভিন্ন হতে পারে। অনুরোধ দেওয়ার আগে বর্তমান চার্জ সাপোর্ট টিমের কাছে নিশ্চিত করুন।",
+  "আমি নির্দিষ্ট ফি নিশ্চিত করতে পারি না। Exchange করার আগে প্রদর্শিত শর্ত ও চার্জ ভালোভাবে দেখে নিন।"
+ ]},
+ {keys:["cancel","ক্যানসেল","বাতিল করতে","অনুরোধ বন্ধ","রিকোয়েস্ট বন্ধ"], replies:[
+  "অনুরোধ বাতিল করতে Request ID দিয়ে দ্রুত সাপোর্ট টিমের সঙ্গে যোগাযোগ করুন। ইতিমধ্যে প্রক্রিয়া শুরু হলে বাতিল করা নাও যেতে পারে।"
+ ]},
+ {keys:["wrong","ভুল নম্বর","ভুল তথ্য","ভুল দিয়েছি","ভুল হয়েছে"], replies:[
+  "ভুল তথ্য জমা হলে দ্রুত Request ID উল্লেখ করে সাপোর্ট টিমকে জানান। নিজে থেকে একই অনুরোধ বারবার জমা দেবেন না।"
+ ]},
+ {keys:["website","ওয়েবসাইট","খুলছে না","লোড","loading","সমস্যা হচ্ছে","কাজ করছে না"], replies:[
+  "ওয়েবসাইট না খুললে ইন্টারনেট সংযোগ পরীক্ষা করুন, পেজ Refresh করুন এবং অন্য ব্রাউজার দিয়ে চেষ্টা করুন। সমস্যা থাকলে সাপোর্টে জানান।"
+ ]},
+ {keys:["ধন্যবাদ","thanks","thank you","ধন্যবাদ আপনাকে"], replies:[
+  "আপনাকে স্বাগতম! MoneyExchangeTaka ব্যবহার করার জন্য ধন্যবাদ। আর কোনো প্রশ্ন থাকলে লিখুন।",
+  "সহায়তা করতে পেরে ভালো লাগল। নিরাপদে লেনদেন করুন!"
+ ]}
 ];
-const log=document.getElementById("chatLog"),input=document.getElementById("chatInput"),note=document.getElementById("contactNote");
-function addBubble(text,kind){const el=document.createElement("div");el.className="bubble "+kind;el.textContent=text;log.appendChild(el);log.scrollTop=log.scrollHeight}
-function ask(question){const q=question.trim();if(!q)return;addBubble(q,"user");const normalized=q.toLowerCase();const found=answers.find(item=>item.keys.some(key=>normalized.includes(key.toLowerCase())));if(found){addBubble(found.answer,"bot");note.hidden=true}else{addBubble("দুঃখিত, এই প্রশ্নটির নির্ভরযোগ্য উত্তর আমার জানা নেই। নিচের WhatsApp বা Telegram বাটনে সাপোর্ট টিমকে মেসেজ করুন।","bot");note.hidden=false}input.value=""}
-document.getElementById("chatForm").addEventListener("submit",e=>{e.preventDefault();ask(input.value)});
-document.querySelectorAll(".quick-question").forEach(btn=>btn.addEventListener("click",()=>ask(btn.dataset.q)));
+
+const log = document.getElementById("chatLog");
+const input = document.getElementById("chatInput");
+const note = document.getElementById("contactNote");
+const form = document.getElementById("chatForm");
+
+function addBubble(text, kind) {
+ const el = document.createElement("div");
+ el.className = "bubble " + kind;
+ el.textContent = text;
+ log.appendChild(el);
+ log.scrollTop = log.scrollHeight;
+}
+function normalizeQuestion(value) {
+ return value.toLowerCase()
+  .replace(/[?؟!.,;:(){}\[\]"]/g, " ")
+  .replace(/\s+/g, " ").trim();
+}
+function chooseRandom(list) {
+ return list[Math.floor(Math.random() * list.length)];
+}
+function findReply(question) {
+ const q = normalizeQuestion(question);
+ if (!q) return null;
+ // Choose the most specific matching category instead of a random unrelated answer.
+ const matches = replyGroups
+  .map(group => ({group, score: group.keys.reduce((n, key) => n + (q.includes(normalizeQuestion(key)) ? normalizeQuestion(key).length : 0), 0)}))
+  .filter(item => item.score > 0)
+  .sort((a,b) => b.score - a.score);
+ if (!matches.length) return null;
+ const bestScore = matches[0].score;
+ const best = matches.filter(item => item.score === bestScore);
+ return chooseRandom(chooseRandom(best).group.replies);
+}
+function ask(question) {
+ const q = question.trim();
+ if (!q) return;
+ if (q.length > 500) {
+  addBubble("অনুগ্রহ করে ৫০০ অক্ষরের মধ্যে প্রশ্ন লিখুন।", "bot");
+  return;
+ }
+ addBubble(q, "user");
+ const answer = findReply(q);
+ if (answer) {
+  addBubble(answer, "bot");
+  note.hidden = true;
+ } else {
+  addBubble("দুঃখিত, এই প্রশ্নটির নির্ভরযোগ্য উত্তর আমার FAQ-তে নেই। সঠিক তথ্যের জন্য সরাসরি সাপোর্ট টিমকে মেসেজ করুন।", "bot");
+  note.hidden = false;
+ }
+ input.value = "";
+}
+form.addEventListener("submit", event => {
+ event.preventDefault();
+ ask(input.value);
+});
+document.querySelectorAll(".quick-question").forEach(button => {
+ button.addEventListener("click", () => ask(button.dataset.q || ""));
+});
 </script>
 </body></html>
