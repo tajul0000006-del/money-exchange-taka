@@ -1901,3 +1901,8 @@ header a, .site-header a, .main-header a{
 .main-header .met-logo-image{display:block!important;visibility:visible!important;opacity:1!important;width:100%!important;height:auto!important;max-width:430px!important;max-height:82px!important;object-fit:contain!important;object-position:left center!important}
 @media(max-width:900px){.main-header .met-brand-image{width:min(320px,68vw)!important;flex-basis:320px!important}.main-header .met-logo-image{max-height:72px!important}}
 @media(max-width:480px){.main-header .met-brand-image{width:min(240px,65vw)!important;flex-basis:240px!important}.main-header .met-logo-image{max-height:58px!important}}
+
+/* STATIC HEADER LOGO: no animation, hover movement, rotation, pulse or transition. */
+.main-header .brand-logo,.main-header .brand-logo:hover,.main-header .logo-mark,.main-header .logo-orbit,.main-header .exchange-icon,.main-header .met-brand,.main-header .met-brand:hover,.main-header .met-brand-image,.main-header .met-brand-image:hover,.main-header .met-mark,.main-header .met-logo-image,.main-header .logo-coin,.main-header .brand-name,.main-header .met-wordmark,.main-header .met-letters,.main-header .met-mark-line{animation:none!important;transition:none!important;transform:none!important;filter:none!important}
+.main-header .brand-logo:hover .logo-mark,.main-header .met-brand:hover,.main-header .met-brand-image:hover{transform:none!important;border-radius:inherit;box-shadow:none!important}
+.main-header .logo-orbit,.main-header .exchange-icon{animation:none!important}
