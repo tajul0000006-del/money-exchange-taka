@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#082f49"><meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Your private MoneyExchangeTaka account dashboard.">
+<title>My Dashboard | MoneyExchangeTaka</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./header.css"><link rel="stylesheet" href="./theme.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#f4f7fb;color:#172b4d;font-family:'Hind Siliguri',Arial,sans-serif}
+.dash-wrap{width:min(1120px,calc(100% - 30px));margin:34px auto 60px}
+.dash-top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.dash-top h1{margin:0;font-size:clamp(25px,4vw,34px);color:#102b4d}.dash-top p{margin:4px 0 0;color:#64748b}
+.user-chip{display:flex;align-items:center;gap:10px;padding:9px 13px;background:#fff;border:1px solid #e2e8f0;border-radius:14px;color:#334155;font-size:13px;overflow-wrap:anywhere}
+.user-chip i{color:#2563eb;font-size:18px}
+.welcome{padding:24px;border-radius:20px;background:linear-gradient(120deg,#0b3158,#0f766e);color:#fff;box-shadow:0 12px 30px #0b315822}
+.welcome h2{margin:0 0 5px;font-size:23px}.welcome p{margin:0;color:#d8f3f1;font-size:14px}
+.dash-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin:20px 0}
+.dash-card{padding:19px;background:#fff;border:1px solid #e5ebf2;border-radius:17px;box-shadow:0 5px 18px #18324d08}
+.dash-card .card-icon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:#eff6ff;color:#2563eb;font-size:18px;margin-bottom:12px}
+.dash-card h3{margin:0 0 5px;font-size:16px}.dash-card p{margin:0;color:#64748b;font-size:13px;line-height:1.6}
+.dash-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.dash-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;border-radius:10px;background:#1d4ed8;color:#fff;text-decoration:none;font-weight:700;font-size:13px;border:0;cursor:pointer}
+.dash-btn.secondary{background:#eff6ff;color:#1d4ed8}
+.dash-note{margin-top:18px;padding:15px 17px;border-left:4px solid #0d9488;background:#ecfdf5;color:#285b53;border-radius:10px;font-size:13px;line-height:1.65}
+#loading{padding:70px 20px;text-align:center;color:#64748b}
+@media(max-width:760px){.dash-grid{grid-template-columns:1fr}.dash-wrap{margin-top:22px}.welcome{padding:20px}}
+</style>
+</head>
+<body>
+<div id="loading"><i class="fa-solid fa-spinner fa-spin"></i> Checking your account...</div>
+<main class="dash-wrap" id="dashboard" hidden>
+  <div class="dash-top">
+    <div><h1>My Dashboard</h1><p>Manage your MoneyExchangeTaka account.</p></div>
+    <div class="user-chip"><i class="fa-solid fa-circle-user"></i><span id="userEmail">Verified user</span></div>
+  </div>
+  <section class="welcome">
+    <h2>Welcome to your dashboard</h2>
+    <p>Your account is signed in and your email is verified. You can access your account services here.</p>
+    <div class="dash-actions"><a class="dash-btn" href="/index.html"><i class="fa-solid fa-arrow-right-left"></i> Start Exchange</a><a class="dash-btn secondary" href="/history.html"><i class="fa-solid fa-clock-rotate-left"></i> Track Request</a></div>
+  </section>
+  <section class="dash-grid" aria-label="Account services">
+    <article class="dash-card"><div class="card-icon"><i class="fa-solid fa-right-left"></i></div><h3>New Exchange</h3><p>Create a new digital currency or payment exchange request.</p><div class="dash-actions"><a class="dash-btn" href="/index.html#exchange">Exchange Now</a></div></article>
+    <article class="dash-card"><div class="card-icon"><i class="fa-solid fa-list-check"></i></div><h3>My Requests</h3><p>Check the progress of your exchange request using its tracking details.</p><div class="dash-actions"><a class="dash-btn secondary" href="/history.html">View Tracking</a></div></article>
+    <article class="dash-card"><div class="card-icon"><i class="fa-solid fa-headset"></i></div><h3>Customer Support</h3><p>Get help with your account or an exchange request.</p><div class="dash-actions"><a class="dash-btn secondary" href="/chat.html">Open Support</a></div></article>
+  </section>
+  <div class="dash-note"><strong>Account notice:</strong> Wallet balance, personal transaction history and profile editing will appear here after their secure database features are connected. Do not send money based only on a displayed balance.</div>
+  <div class="dash-actions"><button class="dash-btn secondary" id="logoutBtn" type="button"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button></div>
+</main>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { firebaseConfig } from "./firebase-config.js";
+const auth=getAuth(initializeApp(firebaseConfig));
+const loading=document.getElementById("loading"),dashboard=document.getElementById("dashboard");
+onAuthStateChanged(auth,async user=>{
+  if(!user){location.replace("/login.html?next=%2Fdashboard.html");return;}
+  if(!user.emailVerified){await signOut(auth);location.replace("/login.html");return;}
+  document.getElementById("userEmail").textContent=user.email||"Verified user";
+  loading.hidden=true;dashboard.hidden=false;
+});
+document.getElementById("logoutBtn").addEventListener("click",async()=>{
+  const button=document.getElementById("logoutBtn");button.disabled=true;button.textContent="Logging out...";
+  try{await signOut(auth);location.replace("/login.html");}
+  catch(error){button.disabled=false;button.textContent="Log Out";alert("Could not log out. Please try again.");}
+});
+</script>
+</body></html>
