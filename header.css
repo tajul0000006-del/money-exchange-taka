@@ -2230,3 +2230,90 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
     flex-wrap:wrap!important;
   }
 }
+
+
+/* EXACT DESKTOP BEHAVIOUR: when Support opens, its three choices join
+   the existing navigation row inline (Home ... FAQ ... Support options ... Login). */
+@media (min-width:761px){
+  .desktop-nav{
+    display:flex!important;
+    flex-wrap:nowrap!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:clamp(2px,.35vw,7px)!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+  .desktop-nav>.nav-link{
+    flex:0 1 auto!important;
+    min-width:0!important;
+    white-space:nowrap!important;
+    padding:8px clamp(3px,.55vw,9px)!important;
+    font-size:clamp(9px,.78vw,12px)!important;
+  }
+  .desktop-nav>.nav-support{
+    display:inline-flex!important;
+    flex:0 0 auto!important;
+    align-items:center!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+  }
+  .desktop-nav>.nav-support[open]{
+    flex:0 1 auto!important;
+    width:auto!important;
+    max-width:none!important;
+    flex-wrap:nowrap!important;
+    gap:4px!important;
+    padding:0!important;
+    margin:0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+  }
+  .desktop-nav>.nav-support[open]>.support-panel{
+    position:static!important;
+    display:contents!important;
+    width:auto!important;
+    max-width:none!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    animation:none!important;
+  }
+  .desktop-nav>.nav-support[open] .support-panel-title{display:none!important}
+  .desktop-nav>.nav-support[open] .support-option{
+    display:inline-flex!important;
+    flex:0 1 auto!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+    margin:0!important;
+    padding:6px clamp(4px,.5vw,8px)!important;
+    gap:5px!important;
+    border-radius:8px!important;
+    white-space:nowrap!important;
+    font-size:clamp(9px,.72vw,11px)!important;
+  }
+  .desktop-nav>.nav-support[open] .support-option>span{min-width:0!important}
+  .desktop-nav>.nav-support[open] .support-option small{display:none!important}
+  .desktop-nav>.nav-auth-group{
+    flex:0 0 auto!important;
+    margin-left:2px!important;
+    gap:4px!important;
+  }
+  .desktop-nav>.nav-auth-group .nav-link{
+    white-space:nowrap!important;
+    padding:7px clamp(4px,.5vw,8px)!important;
+    font-size:clamp(9px,.72vw,11px)!important;
+  }
+}
+@media (min-width:761px) and (max-width:1050px){
+  .desktop-nav{gap:1px!important}
+  .desktop-nav>.nav-link{padding-left:3px!important;padding-right:3px!important}
+  .desktop-nav>.nav-support[open] .support-option{padding-left:3px!important;padding-right:3px!important}
+}
