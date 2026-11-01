@@ -65,17 +65,16 @@
     <!-- MOBILE NAVIGATION END -->
   </header>
 <main class="auth-wrap"><section class="auth-card"><div class="auth-icon"><i class="fa-solid fa-right-to-bracket"></i></div>
-<h1>Welcome Back</h1><p>Login to your MoneyExchangeTaka account.</p><form id="authForm"><label class="auth-field">Email Address<input name="email" type="email" autocomplete="email" placeholder="you@example.com" required></label><label class="auth-field">Password<input name="password" type="password" autocomplete="current-password" minlength="6" placeholder="Enter your password" required></label><a class="forgot-link" href="#" id="forgotPassword">Forgot Password?</a><button class="auth-submit" type="submit">Login</button></form>
+<h1>Welcome Back</h1><p>Login to your MoneyExchangeTaka account.</p><form id="authForm"><label class="auth-field">Email Address<input name="email" type="email" autocomplete="email" placeholder="you@example.com" required></label><label class="auth-field">Password<input name="password" type="password" autocomplete="current-password" minlength="6" placeholder="Enter your password" required></label><a class="forgot-link" href="/forgot-password.html">Forgot Password?</a><button class="auth-submit" type="submit">Login</button></form>
 <p class="auth-message" id="authMessage" role="status" aria-live="polite"></p>
 <p class="auth-switch">New here? <a href="/signup.html">Create an account</a></p>
 <a class="back-home" href="/index.html"><i class="fa-solid fa-arrow-left"></i> Back to Home</a></section></main>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { firebaseConfig } from "./firebase-config.js";
 const auth=getAuth(initializeApp(firebaseConfig));
-const form=document.getElementById("authForm"), message=document.getElementById("authMessage"), submit=form.querySelector("button"), forgot=document.getElementById("forgotPassword");
-forgot.addEventListener("click",async e=>{e.preventDefault();message.style.color="#fca5a5";const email=form.email.value.trim();if(!email){message.textContent="Enter your email address first, then tap Forgot Password again.";form.email.focus();return;}forgot.style.pointerEvents="none";forgot.textContent="Sending reset link...";try{await sendPasswordResetEmail(auth,email);message.style.color="#39f5a5";message.textContent="Password reset email sent. Check your Inbox and Spam folder."; }catch(err){const errors={"auth/user-not-found":"No account was found with this email address.","auth/invalid-email":"Enter a valid email address.","auth/too-many-requests":"Too many attempts. Please try again later."};message.style.color="#fca5a5";message.textContent=errors[err.code]||"Could not send the reset email. Please try again.";}finally{forgot.style.pointerEvents="auto";forgot.textContent="Forgot Password?";}});
+const form=document.getElementById("authForm"), message=document.getElementById("authMessage"), submit=form.querySelector("button");
 form.addEventListener("submit",async e=>{e.preventDefault();message.textContent="";submit.disabled=true;submit.textContent="Please wait...";
 try{const email=form.email.value.trim(),password=form.password.value;
 const credential=await signInWithEmailAndPassword(auth,email,password);if(!credential.user.emailVerified){await signOut(auth);message.style.color='#fca5a5';message.textContent='Please verify your email from Gmail before logging in. Check your Inbox or Spam folder.';return;}message.style.color='#39f5a5';message.textContent='Login successful. Redirecting...';
