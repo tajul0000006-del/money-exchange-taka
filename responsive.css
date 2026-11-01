@@ -687,3 +687,13 @@ table{max-width:100%}
     top:64px!important; /* 62px header + 2px gap */
   }
 }
+
+
+/* Remove the mobile header/menu gap: drawer touches header edge. */
+@media(max-width:760px){
+  .main-header .mobile-nav{
+    top:62px!important;
+    margin-top:0!important;
+    border-top:0!important;
+  }
+}
