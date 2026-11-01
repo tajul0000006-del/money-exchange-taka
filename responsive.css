@@ -835,16 +835,16 @@ table{max-width:100%}
   left:0!important;
   right:0!important;
   width:100%!important;
-  height:46px!important;
-  min-height:46px!important;
+  height:41px!important;
+  min-height:41px!important;
   margin:0!important;
   z-index:6001!important;
   background:#fff!important;
 }
-body:has(.exchange-ticker){padding-top:118px!important}
+body:has(.exchange-ticker){padding-top:113px!important}
 @media(max-width:760px){
   .exchange-ticker{top:62px!important}
-  body:has(.exchange-ticker){padding-top:108px!important}
+  body:has(.exchange-ticker){padding-top:103px!important}
 }
 
 /* Mobile fixed ticker: directly under the 62px fixed header. */
@@ -852,9 +852,9 @@ body:has(.exchange-ticker){padding-top:118px!important}
   .exchange-ticker{
     top:62px!important;
     position:fixed!important;
-    height:46px!important;
-    min-height:46px!important;
+    height:41px!important;
+    min-height:41px!important;
     z-index:6001!important;
   }
-  body:has(.exchange-ticker){padding-top:108px!important}
+  body:has(.exchange-ticker){padding-top:103px!important}
 }
