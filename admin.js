@@ -110,12 +110,39 @@ import { firebaseConfig } from "./firebase-config.js";
           body.innerHTML = data.requests.map(r => {
             const safe = v => String(v ?? "—").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
             const detailIndex = data.requests.indexOf(r);
-            return `<tr><td>${safe(r.requestId)}</td><td>${safe(r.customer)}</td><td>${safe(r.type)}</td><td>${safe(r.amount)}</td><td>${safe(r.status)}</td><td><button type="button" class="request-detail-button" data-request-index="${detailIndex}">Details / বিস্তারিত</button></td></tr>`;
+            return `<tr><td>${safe(r.requestId)}</td><td>${safe(r.customer)}</td><td>${safe(r.type)}</td><td>${safe(r.amount)}</td><td class="request-status-cell">${safe(r.status)}</td><td><button type="button" class="request-detail-button" data-request-index="${detailIndex}">Details / বিস্তারিত</button> <button type="button" class="request-status-button" data-document-id="${safe(r.documentId)}" data-status="approved" ${String(r.status).toLowerCase()==="approved"?"disabled":""}>Approve</button> <button type="button" class="request-status-button danger" data-document-id="${safe(r.documentId)}" data-status="rejected" ${String(r.status).toLowerCase()==="rejected"?"disabled":""}>Reject</button></td></tr>`;
           }).join("");
           body.querySelectorAll(".request-detail-button").forEach(detailButton => {
             detailButton.addEventListener("click", () => {
               const selected = data.requests[Number(detailButton.dataset.requestIndex)];
               if (selected) showRequestDetails(selected);
+            });
+          });
+          body.querySelectorAll(".request-status-button").forEach(statusButton => {
+            statusButton.addEventListener("click", async () => {
+              const nextStatus = statusButton.dataset.status;
+              const action = nextStatus === "approved" ? "Approve" : "Reject";
+              if (!confirm(`${action} this request? This changes only request status, not wallet balance.`)) return;
+              const currentUser = auth.currentUser;
+              if (!currentUser) { msg.textContent = "সেশন পাওয়া যায়নি। আবার লগইন করুন।"; return; }
+              statusButton.disabled = true;
+              msg.textContent = "Request status update হচ্ছে...";
+              try {
+                const token = await currentUser.getIdToken(true);
+                const updateResponse = await fetch(`${API_BASE}/api/admin/requests/status`, {
+                  method: "POST",
+                  headers: { Authorization: `Bearer ${token}`, "content-type": "application/json" },
+                  body: JSON.stringify({ documentId: statusButton.dataset.documentId, status: nextStatus })
+                });
+                const updateData = await updateResponse.json().catch(() => ({}));
+                if (!updateResponse.ok || updateData.ok !== true) throw new Error(updateData.error || `Update failed (${updateResponse.status})`);
+                msg.textContent = `সফল! Request status ${nextStatus.toUpperCase()} করা হয়েছে। তালিকা আবার লোড করুন।`;
+                statusButton.closest("tr")?.querySelector(".request-status-cell")?.replaceChildren(document.createTextNode(nextStatus));
+                statusButton.closest("tr")?.querySelectorAll(".request-status-button").forEach(button => button.disabled = button.dataset.status === nextStatus);
+              } catch (error) {
+                msg.textContent = `Status update হয়নি: ${error.message || "অজানা সমস্যা"}`;
+                statusButton.disabled = false;
+              }
             });
           });
         }
