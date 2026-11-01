@@ -846,3 +846,13 @@ body:has(.exchange-ticker){padding-top:120px!important}
   .exchange-ticker{top:62px!important}
   body:has(.exchange-ticker){padding-top:110px!important}
 }
+
+/* Mobile fixed ticker: directly under the 62px fixed header. */
+@media(max-width:760px){
+  .exchange-ticker{
+    top:62px!important;
+    position:fixed!important;
+    z-index:6001!important;
+  }
+  body:has(.exchange-ticker){padding-top:110px!important}
+}
