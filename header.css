@@ -2046,3 +2046,53 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
  .table-wrap th,.table-wrap td{white-space:nowrap}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+/* Desktop navigation containment: keep every menu item inside the header. */
+@media (min-width:901px){
+  .main-header{width:100%;max-width:100%;overflow:visible}
+  .header-container{
+    width:min(100% - 40px,1440px);
+    max-width:1440px;
+    min-height:0;
+    height:auto;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    align-items:center;
+    gap:8px 18px;
+    padding:12px 0 10px;
+  }
+  .brand-logo{flex:0 1 auto;max-width:100%;margin:0 auto}
+  .met-brand-image{width:min(340px,100%);flex-basis:340px}
+  .met-logo-image{display:block;width:100%;max-width:100%;height:auto;object-fit:contain}
+  .header-tagline{display:none!important}
+  .desktop-nav{
+    display:flex;
+    flex:1 1 100%;
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    flex-wrap:wrap;
+    justify-content:center;
+    align-items:center;
+    gap:4px;
+    overflow:visible;
+  }
+  .desktop-nav .nav-link{
+    flex:0 1 auto;
+    min-width:0;
+    white-space:normal;
+    text-align:center;
+    padding:9px clamp(7px,1vw,13px);
+    font-size:clamp(11px,.9vw,14px);
+    line-height:1.25;
+  }
+  .nav-auth-group{display:flex;flex:0 0 auto;gap:5px;align-items:center}
+  .nav-support{flex:0 0 auto}
+  .desktop-nav .header-support summary{white-space:nowrap}
+}
+@media (min-width:901px) and (max-width:1100px){
+  .header-container{width:calc(100% - 28px);gap:8px;padding:10px 0}
+  .desktop-nav{gap:3px}
+  .desktop-nav .nav-link{padding:8px 7px;font-size:11px}
+}
