@@ -826,10 +826,9 @@ table{max-width:100%}
   }
 }
 
-/* FIXED ANNOUNCEMENT TICKER: stays directly below the fixed header while scrolling. */
-body:has(.exchange-ticker){
-  padding-top:120px!important; /* 72px header + 48px ticker */
-}
+
+
+/* DEFINITIVE FIX: pin the announcement strip below the fixed site header. */
 .exchange-ticker{
   position:fixed!important;
   top:72px!important;
@@ -837,14 +836,13 @@ body:has(.exchange-ticker){
   right:0!important;
   width:100%!important;
   height:48px!important;
-  z-index:5900!important;
+  min-height:48px!important;
+  margin:0!important;
+  z-index:6001!important;
+  background:#fff!important;
 }
+body:has(.exchange-ticker){padding-top:120px!important}
 @media(max-width:760px){
-  body:has(.exchange-ticker){
-    padding-top:110px!important; /* 62px header + 48px ticker */
-  }
-  .exchange-ticker{
-    top:62px!important;
-    height:48px!important;
-  }
+  .exchange-ticker{top:62px!important}
+  body:has(.exchange-ticker){padding-top:110px!important}
 }
