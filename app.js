@@ -215,6 +215,83 @@
   });
   $("copyTrackingCode").addEventListener("click",async()=>{try{await navigator.clipboard.writeText($("successTrackingCode").textContent);$("copyTrackingCode").textContent="কপি হয়েছে";}catch(_){}});
   $("successDone").addEventListener("click",()=>{closeModal("successModal");$("history").scrollIntoView({behavior:"smooth",block:"start"});});
+
+  // Public request tracking through the Cloudflare Worker.
+  $("trackRequestForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    const button = $("trackRequestButton");
+    const statusBox = $("trackRequestStatus");
+    const resultBox = $("trackRequestResult");
+    const trackingCode = $("trackCode").value.trim().toUpperCase();
+    const phoneLast4 = $("trackPhoneLast4").value.replace(/\\D/g, "");
+
+    resultBox.innerHTML = "";
+    statusBox.classList.remove("error");
+    statusBox.textContent = "";
+
+    if (!/^MET-[A-Z0-9]{4,20}$/.test(trackingCode) || !/^\\d{4}$/.test(phoneLast4)) {
+      statusBox.textContent = "সঠিক Tracking Code এবং ফোন নম্বরের শেষ ৪ ডিজিট লিখুন।";
+      statusBox.classList.add("error");
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = "খোঁজা হচ্ছে...";
+
+    try {
+      const response = await fetch("https://bold-surf-9356.taijulsheikh60.workers.dev/api/track", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ trackingCode, phoneLast4 })
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok || !data.ok) {
+        throw new Error(data.error || "রিকোয়েস্ট খুঁজে পাওয়া যায়নি। তথ্য যাচাই করে আবার চেষ্টা করুন।");
+      }
+
+      const statusInfo = {
+        pending: { label: "Pending · যাচাই চলছে", bg: "#fef3c7", color: "#92400e" },
+        approved: { label: "Approved · অনুমোদিত", bg: "#dcfce7", color: "#166534" },
+        rejected: { label: "Rejected · বাতিল", bg: "#fee2e2", color: "#991b1b" }
+      }[data.status] || { label: "Pending", bg: "#fef3c7", color: "#92400e" };
+
+      const card = document.createElement("div");
+      card.className = "history-item";
+      card.style.marginTop = "16px";
+
+      const details = document.createElement("div");
+      const heading = document.createElement("h3");
+      heading.textContent = data.trackingCode;
+      const badge = document.createElement("span");
+      badge.className = "status-pill";
+      badge.textContent = statusInfo.label;
+      badge.style.background = statusInfo.bg;
+      badge.style.color = statusInfo.color;
+      details.append(heading, badge);
+
+      const meta = document.createElement("p");
+      meta.className = "history-meta";
+      const directionLabel = data.direction === "sell" ? "Sell" : data.direction === "buy" ? "Buy" : "Exchange";
+      meta.textContent = directionLabel + " · " + (data.paymentMethod || "Payment method");
+      details.append(meta);
+
+      const amount = document.createElement("div");
+      amount.className = "history-amount";
+      amount.textContent = data.amount == null ? "—" : Number(data.amount).toLocaleString("en-US") + " " + (data.currency || "");
+      card.append(details, amount);
+      resultBox.append(card);
+      statusBox.textContent = "আপনার রিকোয়েস্ট পাওয়া গেছে।";
+    } catch (error) {
+      statusBox.textContent = error.message || "এই মুহূর্তে স্ট্যাটাস দেখা যাচ্ছে না। পরে আবার চেষ্টা করুন।";
+      statusBox.classList.add("error");
+    } finally {
+      button.disabled = false;
+      button.textContent = "স্ট্যাটাস দেখুন";
+    }
+  });
+
   function showError(message){$("formStatus").textContent=message;$("formStatus").classList.add("error");}
   function clearError(){$("formStatus").textContent="";$("formStatus").classList.remove("error");}
   function validate(){
