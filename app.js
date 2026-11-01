@@ -223,13 +223,13 @@
     const statusBox = $("trackRequestStatus");
     const resultBox = $("trackRequestResult");
     const trackingCode = $("trackCode").value.trim().toUpperCase();
-    const phoneLast4 = $("trackPhoneLast4").value.replace(/\\D/g, "");
+    const phoneLast4 = $("trackPhoneLast4").value.replace(/[^0-9]/g, "");
 
     resultBox.innerHTML = "";
     statusBox.classList.remove("error");
     statusBox.textContent = "";
 
-    if (!/^MET-[A-Z0-9]{4,20}$/.test(trackingCode) || !/^\\d{4}$/.test(phoneLast4)) {
+    if (!/^MET-[A-Z0-9]{4,20}$/.test(trackingCode) || ! /^[0-9]{4}$/.test(phoneLast4)) {
       statusBox.textContent = "সঠিক Tracking Code এবং ফোন নম্বরের শেষ ৪ ডিজিট লিখুন।";
       statusBox.classList.add("error");
       return;
