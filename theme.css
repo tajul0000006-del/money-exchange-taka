@@ -11,3 +11,27 @@ th{background:#112e50;color:#d6ecfa}th,td,.admin-rate-row{border-bottom-color:va
 .modal-close{background:#183b5d;color:#e9fbff}.modal-step,.admin-shortcut{background:#103b50;color:#39f5a5;border-color:var(--line)}.modal-copy{color:var(--muted)}
 .currency-logo{background:#eaf7ff;color:#075985;border-color:#7cb6d0}.success-icon,.success-mark{background:#103f37;color:#39f5a5}
 footer{background:#041126;border-top:1px solid var(--line)}
+
+/* Desktop layout: use available screen width without changing mobile styles. */
+@media (min-width:801px){
+  main.container,.container{width:min(1440px,calc(100% - 64px));max-width:1440px;margin-left:auto;margin-right:auto}
+  .section{margin-top:46px;margin-bottom:64px}
+  .section-heading{margin-bottom:22px}
+  .table-wrap{width:100%;overflow-x:auto}
+  .table-wrap table{width:100%;min-width:760px}
+  .table-wrap th,.table-wrap td{padding:17px 22px}
+  .exchange-layout{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
+  .form-card{padding:30px;min-width:0}
+  .form-card h3{font-size:23px;margin-bottom:22px}
+  .field{margin-bottom:20px}
+  .field input,.field select,.field textarea{min-height:50px}
+  .wallet-preview{padding:20px}
+  .rate-limit-note{padding:15px 18px}
+}
+@media (min-width:1200px){
+  main.container,.container{width:min(1480px,calc(100% - 96px))}
+  .exchange-layout{gap:34px}
+  .form-card{padding:34px}
+  .table-wrap th,.table-wrap td{padding:18px 26px}
+}
+@media (max-width:800px){main.container,.container{width:94%}}
