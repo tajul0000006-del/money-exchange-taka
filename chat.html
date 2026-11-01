@@ -17,25 +17,63 @@
 </head>
 <body>
 <header class="main-header" id="mainHeader">
-<div class="header-container">
-<a href="./index.html#home" class="brand-logo met-brand-image" aria-label="Money Exchange Taka Home"><img src="./assets/met-logo-header.png" alt="MET Money Exchange Taka" class="met-logo-image"></a>
-<nav class="desktop-nav" aria-label="Main navigation">
-<a href="./index.html#home" class="nav-link"><i class="fa-solid fa-house"></i> Home</a>
-<a href="./index.html#rates" class="nav-link"><i class="fa-solid fa-chart-line"></i> Rates</a>
-<a href="./history.html" class="nav-link"><i class="fa-solid fa-magnifying-glass"></i> Track Request</a>
-<a href="./about.html" class="nav-link"><i class="fa-solid fa-circle-info"></i> About</a>
-<a href="./chat.html" class="nav-link active"><i class="fa-solid fa-comments"></i> 24/7 Chat</a>
-</nav>
-<button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span><span></span></button>
-<nav class="mobile-nav" id="mobileMenu" aria-label="Mobile navigation" aria-hidden="true">
-<div class="mobile-menu-heading"><span>Menu</span><small>Choose a service</small></div>
-<a href="./index.html#home" class="mobile-nav-link"><i class="fa-solid fa-house"></i><span>Home</span></a>
-<a href="./history.html" class="mobile-nav-link"><i class="fa-solid fa-magnifying-glass"></i><span>Track Request</span></a>
-<a href="./about.html" class="mobile-nav-link"><i class="fa-solid fa-circle-info"></i><span>About Us</span></a>
-<a href="./chat.html" class="mobile-nav-link active"><i class="fa-solid fa-comments"></i><span>24/7 Chat</span></a>
-</nav>
-</div>
-</header>
+
+    <div class="header-container">
+
+      <!-- NEW MET MONEY EXCHANGE TAKA IMAGE LOGO -->
+      <a href="/index.html" class="brand-logo met-brand-image" aria-label="Money Exchange Taka Home">
+        <img src="./assets/met-logo-header.png?v=2" alt="MET Money Exchange Taka" class="met-logo-image">
+      </a>
+      <!-- DESKTOP NAVIGATION -->
+      <nav class="desktop-nav" aria-label="প্রধান নেভিগেশন">
+        <a href="/index.html#home" class="nav-link active"><i class="fa-solid fa-house"></i> হোম</a>
+        <a href="/index.html#rates" class="nav-link"><i class="fa-solid fa-chart-line"></i> এক্সচেঞ্জ রেট</a>
+        <a href="/index.html#exchange" class="nav-link"><i class="fa-solid fa-right-left"></i> এক্সচেঞ্জ</a>
+        <a href="./about.html" class="nav-link"><i class="fa-solid fa-circle-info"></i> আমাদের সম্পর্কে</a>
+        <a href="/history.html" class="nav-link"><i class="fa-solid fa-magnifying-glass"></i> রিকোয়েস্ট ট্র্যাক</a>
+        <a href="/index.html#faq" class="nav-link"><i class="fa-regular fa-circle-question"></i> FAQ</a>
+        <details class="header-support nav-support">
+          <summary><i class="fa-solid fa-headset"></i><span>সাপোর্ট</span><i class="fa-solid fa-chevron-down support-chevron"></i></summary>
+          <div class="support-panel">
+            <div class="support-panel-title"><strong>২৪/৭ সাপোর্ট</strong><small>আপনার পছন্দের মাধ্যমে যোগাযোগ করুন</small></div>
+            <a class="support-option whatsapp-option" href="https://wa.me/8801806338018" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp"></i><span><b>WhatsApp</b><small>01806338018</small></span><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            <a class="support-option telegram-option" href="https://t.me/+8801806338018" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-telegram"></i><span><b>Telegram</b><small>01806338018</small></span><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            <a class="support-option livechat-option" href="/chat.html"><i class="fa-solid fa-comments"></i><span><b>24/7 Chat</b><small>সাহায্য কেন্দ্র ও সাধারণ প্রশ্ন</small></span><i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </details>
+        <div class="nav-auth-group">
+          <button type="button" class="nav-link nav-auth-login" data-auth-action="Login">লগইন</button>
+          <button type="button" class="nav-link nav-auth-signup" data-auth-action="Sign Up">রেজিস্টার</button>
+        </div>
+      </nav>
+      <!-- MOBILE MENU BUTTON -->
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="মেনু খুলুন" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span><span></span>
+      </button>
+      <!-- MOBILE NAVIGATION -->
+      <nav class="mobile-nav" id="mobileMenu" aria-label="মোবাইল নেভিগেশন" aria-hidden="true">
+      <div class="mobile-menu-heading"><span>মেনু</span><small>আপনার প্রয়োজনীয় সেবা বেছে নিন</small></div>
+      <a href="/index.html#home" class="mobile-nav-link active"><i class="fa-solid fa-house"></i><span>হোম</span><i class="fa-solid fa-chevron-right nav-arrow"></i></a>
+      <a href="/index.html#rates" class="mobile-nav-link"><i class="fa-solid fa-chart-line"></i><span>এক্সচেঞ্জ রেট</span><i class="fa-solid fa-chevron-right nav-arrow"></i></a>
+      <a href="/index.html#exchange" class="mobile-nav-link"><i class="fa-solid fa-right-left"></i><span>এক্সচেঞ্জ শুরু করুন</span><i class="fa-solid fa-chevron-right nav-arrow"></i></a>
+      <a href="./about.html" class="mobile-nav-link"><i class="fa-solid fa-circle-info"></i><span>আমাদের সম্পর্কে</span><i class="fa-solid fa-chevron-right nav-arrow"></i></a>
+      <a href="/history.html" class="mobile-nav-link"><i class="fa-solid fa-magnifying-glass"></i><span>রিকোয়েস্ট ট্র্যাক</span><i class="fa-solid fa-chevron-right nav-arrow"></i></a>
+      <a href="/index.html#faq" class="mobile-nav-link"><i class="fa-regular fa-circle-question"></i><span>সাধারণ প্রশ্ন (FAQ)</span><i class="fa-solid fa-chevron-right nav-arrow"></i></a>
+      <details class="header-support mobile-support">
+        <summary><i class="fa-solid fa-headset"></i><span>সাপোর্ট</span><i class="fa-solid fa-chevron-down support-chevron"></i></summary>
+        <div class="support-panel">
+          <a class="support-option whatsapp-option" href="https://wa.me/8801806338018" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp"></i><span><b>WhatsApp</b><small>01806338018</small></span><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+          <a class="support-option telegram-option" href="https://t.me/+8801806338018" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-telegram"></i><span><b>Telegram</b><small>01806338018</small></span><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+          <a class="support-option livechat-option" href="/chat.html"><i class="fa-solid fa-comments"></i><span><b>24/7 Chat</b><small>সাহায্য কেন্দ্র ও সাধারণ প্রশ্ন</small></span><i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </details>
+      <div class="mobile-auth-group">
+        <button type="button" class="mobile-nav-link mobile-auth-login" data-auth-action="Login"><i class="fa-solid fa-right-to-bracket"></i><span>লগইন</span></button>
+        <button type="button" class="mobile-nav-link mobile-auth-signup" data-auth-action="Sign Up"><i class="fa-solid fa-user-plus"></i><span>নতুন অ্যাকাউন্ট</span></button>
+      </div>
+    </nav>
+    <!-- MOBILE NAVIGATION END -->
+  </header>
 <main class="chat-wrap">
 <section class="chat-hero"><div class="chat-icon"><i class="fa-solid fa-headset"></i></div><h1>24/7 Chat & Help Center</h1><p>আপনার প্রশ্ন লিখুন অথবা নিচের সাধারণ প্রশ্ন থেকে বেছে নিন।</p></section>
 <div class="chat-layout">
