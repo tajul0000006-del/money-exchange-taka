@@ -1980,3 +1980,17 @@ header .met-brand-image:hover,
   transform:none !important;
   outline-offset:2px;
 }
+
+
+/* Fine adjustment: move the header logo a little farther left. */
+.main-header .met-brand-image{
+  margin-left:-14px !important;
+}
+.main-header .met-logo-image{
+  margin-left:0 !important;
+}
+@media (max-width:600px){
+  .main-header .met-brand-image{
+    margin-left:-10px !important;
+  }
+}
