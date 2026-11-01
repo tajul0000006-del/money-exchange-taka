@@ -2157,3 +2157,76 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
     white-space:normal;
   }
 }
+
+
+/* FINAL SUPPORT MENU FIX — inline horizontal choices on desktop/tablet.
+   Targets both header-support and nav-support variants used by page headers. */
+@media (min-width:761px){
+  .desktop-nav .header-support,
+  .desktop-nav .nav-support{
+    position:relative!important;
+  }
+  .desktop-nav .header-support[open],
+  .desktop-nav .nav-support[open]{
+    display:flex!important;
+    flex:1 0 100%!important;
+    flex-wrap:wrap!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:8px 12px!important;
+    width:100%!important;
+    max-width:100%!important;
+    padding:8px 12px!important;
+    margin:6px 0 0!important;
+    border:1px solid #dbeafe!important;
+    border-radius:12px!important;
+    background:#f8fbff!important;
+    box-sizing:border-box!important;
+  }
+  .desktop-nav .header-support[open]>.support-panel,
+  .desktop-nav .nav-support[open]>.support-panel{
+    position:static!important;
+    top:auto!important;right:auto!important;bottom:auto!important;left:auto!important;
+    display:flex!important;
+    flex:1 1 auto!important;
+    flex-direction:row!important;
+    flex-wrap:nowrap!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:10px!important;
+    width:auto!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    transform:none!important;
+    animation:none!important;
+  }
+  .desktop-nav .header-support[open] .support-panel-title,
+  .desktop-nav .nav-support[open] .support-panel-title{
+    display:none!important;
+  }
+  .desktop-nav .header-support[open] .support-option,
+  .desktop-nav .nav-support[open] .support-option{
+    display:flex!important;
+    flex:0 1 210px!important;
+    align-items:center!important;
+    width:auto!important;
+    min-width:150px!important;
+    max-width:230px!important;
+    margin:0!important;
+    padding:10px 13px!important;
+    white-space:normal!important;
+    box-sizing:border-box!important;
+  }
+}
+@media (min-width:761px) and (max-width:1000px){
+  .desktop-nav .header-support[open]>.support-panel,
+  .desktop-nav .nav-support[open]>.support-panel{
+    flex-wrap:wrap!important;
+  }
+}
