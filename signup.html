@@ -71,14 +71,13 @@
 <a class="back-home" href="/index.html"><i class="fa-solid fa-arrow-left"></i> Back to Home</a></section></main>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, signOut } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { firebaseConfig } from "./firebase-config.js";
 const auth=getAuth(initializeApp(firebaseConfig));
 const form=document.getElementById("authForm"), message=document.getElementById("authMessage"), submit=form.querySelector("button");
 form.addEventListener("submit",async e=>{e.preventDefault();message.textContent="";submit.disabled=true;submit.textContent="Please wait...";
 try{const email=form.email.value.trim(),password=form.password.value;
-if(password!==form.confirmPassword.value)throw new Error('Passwords do not match.');await createUserWithEmailAndPassword(auth,email,password);message.style.color='#39f5a5';message.textContent='Account created successfully. Redirecting...';
-setTimeout(()=>location.href="/index.html",700);
+if(password!==form.confirmPassword.value)throw new Error('Passwords do not match.');const credential=await createUserWithEmailAndPassword(auth,email,password);await sendEmailVerification(credential.user);await signOut(auth);message.style.color='#39f5a5';message.textContent='Verification email sent. Please open your Gmail and click the verification link before logging in.';form.reset();
 }catch(err){const errors={"auth/invalid-credential":"Incorrect email or password.","auth/email-already-in-use":"This email is already registered.","auth/weak-password":"Use a password with at least 6 characters.","auth/invalid-email":"Enter a valid email address.","auth/network-request-failed":"Network error. Please try again."};message.style.color='#fca5a5';message.textContent=errors[err.code]||err.message||"Something went wrong.";}
 finally{submit.disabled=false;submit.textContent="Create Account";}});
 </script></body></html>
