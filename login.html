@@ -71,13 +71,13 @@
 <a class="back-home" href="/index.html"><i class="fa-solid fa-arrow-left"></i> Back to Home</a></section></main>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { firebaseConfig } from "./firebase-config.js";
 const auth=getAuth(initializeApp(firebaseConfig));
 const form=document.getElementById("authForm"), message=document.getElementById("authMessage"), submit=form.querySelector("button");
 form.addEventListener("submit",async e=>{e.preventDefault();message.textContent="";submit.disabled=true;submit.textContent="Please wait...";
 try{const email=form.email.value.trim(),password=form.password.value;
-await signInWithEmailAndPassword(auth,email,password);message.style.color='#39f5a5';message.textContent='Login successful. Redirecting...';
+const credential=await signInWithEmailAndPassword(auth,email,password);if(!credential.user.emailVerified){await signOut(auth);message.style.color='#fca5a5';message.textContent='Please verify your email from Gmail before logging in. Check your Inbox or Spam folder.';return;}message.style.color='#39f5a5';message.textContent='Login successful. Redirecting...';
 setTimeout(()=>location.href="/index.html",700);
 }catch(err){const errors={"auth/invalid-credential":"Incorrect email or password.","auth/email-already-in-use":"This email is already registered.","auth/weak-password":"Use a password with at least 6 characters.","auth/invalid-email":"Enter a valid email address.","auth/network-request-failed":"Network error. Please try again."};message.style.color='#fca5a5';message.textContent=errors[err.code]||err.message||"Something went wrong.";}
 finally{submit.disabled=false;submit.textContent="Login";}});
