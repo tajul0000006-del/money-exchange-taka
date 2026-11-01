@@ -734,8 +734,8 @@ table{max-width:100%}
 }
 
 
-/* FINAL HEADER / MOBILE MENU ALIGNMENT
-   Header stays compact; only the mobile navigation drawer is full width. */
+/* FINAL MOBILE DRAWER: viewport-edge to viewport-edge.
+   Fixed positioning prevents parent padding/offset from leaving a left strip. */
 @media (max-width:760px){
   #mainHeader{
     position:fixed!important;
@@ -759,10 +759,10 @@ table{max-width:100%}
     margin:0 auto!important;
   }
   #mainHeader #mobileMenu{
-    position:absolute!important;
-    top:100%!important;
+    position:fixed!important;
+    top:62px!important;
     left:0!important;
-    right:auto!important;
+    right:0!important;
     bottom:auto!important;
     width:100vw!important;
     min-width:100vw!important;
