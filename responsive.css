@@ -860,11 +860,19 @@ body:has(.exchange-ticker){padding-top:108px!important}
 }
 
 
-/* Reduce the scrolling text window; min-height:0 lets the flex item actually shrink. */
+/* Keep the scrolling text fully visible after increasing its font size. */
 .exchange-ticker .ticker-window{
-  height:calc(100% - 27px)!important;
+  height:100%!important;
   min-height:0!important;
   box-sizing:border-box!important;
-  align-self:center!important;
+  align-self:stretch!important;
   overflow:hidden!important;
+}
+.exchange-ticker .ticker-track,
+.exchange-ticker .ticker-content{
+  min-height:100%!important;
+  align-items:center!important;
+}
+.exchange-ticker .ticker-item{
+  line-height:1.25!important;
 }
