@@ -10,7 +10,7 @@
 <body>
 <header class="top"><a class="brand" href="./index.html">Money<span>Exchange</span>Taka</a><span class="admin-tag">OWNER CONTROL</span><a class="back" href="./index.html">ওয়েবসাইটে ফিরুন ↗</a></header>
 <main class="wrap">
-<section class="notice"><b>নিরাপত্তা ও বর্তমান অবস্থা</b><p>এই Admin Panel-এ Firebase Login এবং Cloudflare API দিয়ে Owner/Admin পরিচয় যাচাই হয়। নিচের ম্যানেজমেন্ট মডিউলগুলোর ডিজাইন সাজানো হচ্ছে; লাইভ User, Wallet, Rate বা Request পরিবর্তনের Backend API এখনো যুক্ত হয়নি। তাই সংবেদনশীল পরিবর্তনের বাটনগুলো আপাতত বন্ধ রাখা হয়েছে।</p></section>
+<section class="notice"><b>নিরাপত্তা ও বর্তমান অবস্থা</b><p>এই Admin Panel-এ Firebase Login এবং Cloudflare API দিয়ে Owner/Admin পরিচয় যাচাই হয়। Website Text Control দিয়ে নির্দিষ্ট ওয়েবসাইটের লেখা পরিবর্তন ও Strike-through/Restore করা যাবে—এটির জন্য Worker Content API Cloudflare-এ Publish থাকতে হবে। User, Wallet, Rate ও Request-এর অন্যান্য সংবেদনশীল পরিবর্তন আলাদা নিরাপদ Backend API ছাড়া চালু হবে না।</p></section>
 <section class="login card" id="loginCard"><div class="eyebrow">SECURE OWNER ACCESS</div><h1>অ্যাডমিন লগইন</h1><p>অনুমোদিত ও ইমেইল-ভেরিফাইড অ্যাকাউন্ট দিয়ে প্রবেশ করুন।</p>
 <form id="loginForm"><label>ইমেইল<input type="email" id="adminEmail" placeholder="আপনার Admin ইমেইল" autocomplete="username" required></label><label>পাসওয়ার্ড<input type="password" id="adminPassword" placeholder="পাসওয়ার্ড" autocomplete="current-password" required></label><button type="submit">লগইন যাচাই</button><button class="outline" id="resendVerification" type="button">Verification Email আবার পাঠান</button></form><p class="status" id="loginStatus" role="status" aria-live="polite">Firebase Login প্রস্তুত।</p></section>
 <section class="dashboard" id="dashboard" hidden>
