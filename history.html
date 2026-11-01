@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#06152d">
+  <meta name="description" content="MoneyExchangeTaka Request Tracking — আপনার এক্সচেঞ্জ রিকোয়েস্টের বর্তমান অবস্থা যাচাই করুন।">
+  <title>Request Tracking | MoneyExchangeTaka</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./theme.css">
+  <style>
+    body{min-height:100vh;padding:24px 16px;font-family:"Hind Siliguri",sans-serif}
+    .track-page{width:min(620px,100%);margin:30px auto}
+    .track-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:26px}
+    .track-brand{font-weight:700;font-size:20px;color:#eafaff}
+    .track-back{display:inline-block;padding:9px 15px;border:1px solid #35e6f2;border-radius:10px;color:#35e6f2;font-weight:600}
+    .track-card{padding:28px;border:1px solid rgba(116,207,235,.25);border-radius:20px;background:linear-gradient(145deg,#102b4d,#0a203d);box-shadow:0 18px 45px #0004}
+    .track-card h1{margin:0 0 8px;font-size:27px}
+    .track-card>p{color:#b8cde0;margin:0 0 24px}
+    .track-field{margin:16px 0}
+    .track-field label{display:block;margin-bottom:7px;font-weight:600}
+    .track-field input{width:100%;padding:13px 14px;border:1px solid rgba(116,207,235,.35);border-radius:10px;background:#071b34;color:#fff;font:inherit}
+    .track-field input:focus{outline:2px solid #35e6f2}
+    #trackButton{width:100%;margin-top:8px}
+    #trackStatus{min-height:26px;margin:14px 0 0;color:#b8e8f0}
+    #trackStatus.error{color:#fca5a5}
+    .track-result{margin-top:16px;padding:16px;border:1px solid rgba(116,207,235,.25);border-radius:12px}
+    .track-result h2{font-size:20px;margin:0 0 8px}
+    .track-footer{text-align:center;color:#9cb4ce;margin-top:22px;font-size:13px}
+    @media(max-width:480px){.track-card{padding:21px}.track-card h1{font-size:23px}.track-top{align-items:flex-start}}
+  </style>
+</head>
+<body>
+  <main class="track-page">
+    <div class="track-top">
+      <a class="track-brand" href="./index.html">MoneyExchangeTaka</a>
+      <a class="track-back" href="./index.html">← হোমে ফিরে যান</a>
+    </div>
+    <section class="track-card">
+      <p class="eyebrow">REQUEST TRACKING</p>
+      <h1>আপনার রিকোয়েস্ট ট্র্যাক করুন</h1>
+      <p>রিকোয়েস্ট জমা দেওয়ার সময় পাওয়া Tracking Code এবং ফোন নম্বরের শেষ ৪ ডিজিট লিখুন।</p>
+      <form id="requestTrackForm" novalidate>
+        <div class="track-field">
+          <label for="trackingCode">Tracking Code</label>
+          <input id="trackingCode" type="text" maxlength="24" placeholder="MET-ABC123" autocomplete="off" required>
+        </div>
+        <div class="track-field">
+          <label for="phoneLast4">ফোন নম্বরের শেষ ৪ ডিজিট</label>
+          <input id="phoneLast4" type="text" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="1234" autocomplete="off" required>
+        </div>
+        <button class="submit-btn" id="trackButton" type="submit">স্ট্যাটাস দেখুন</button>
+        <p id="trackStatus" role="status" aria-live="polite"></p>
+        <div id="trackResult" aria-live="polite"></div>
+      </form>
+    </section>
+    <p class="track-footer">© MoneyExchangeTaka · Secure Request Tracking</p>
+  </main>
+  <script src="./request-track.js" defer></script>
+</body>
+</html>
