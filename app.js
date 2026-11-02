@@ -423,7 +423,7 @@
       date:new Date().toLocaleString("bn-BD"),
       customer:$("customerName").value.trim(),fromName:from.name,toName:to.name,
       pay:money(amount,from.currency),receive:money(receive,to.currency),
-      amount,fromId:from.id,toId:to.id,rate:r.rate,fee,reference:$("reference").value.trim(),note:$("note").value.trim()
+      amount,fromId:from.id,toId:to.id,rate:r.rate,fee,affiliateCode:$("affiliateCode")?.value.trim()||"",note:$("note").value.trim()
     };
     pendingRequest=item;
     $("copyExchangeAddress").textContent="ঠিকানা কপি";
