@@ -8,6 +8,7 @@
     {id:"nagad",name:"Nagad",subtitle:"মোবাইল ফাইন্যান্সিয়াল সার্ভিস",currency:"BDT",type:"bdt",logo:"assets/logos/nagad.png",buy:0,sell:0,short:"NG"},
     {id:"rocket",name:"Rocket",subtitle:"DBBL Mobile Banking",currency:"BDT",type:"bdt",logo:"assets/logos/rocket.png",buy:0,sell:0,short:"RK"},
     {id:"upay",name:"Upay",subtitle:"মোবাইল ফাইন্যান্সিয়াল সার্ভিস",currency:"BDT",type:"bdt",logo:"assets/logos/upay.png",buy:0,sell:0,short:"UP"},
+    {id:"personal-bdt",name:"Personal BDT Balance",subtitle:"আপনার নিজস্ব BDT ব্যালেন্স",currency:"BDT",type:"bdt",logo:"",buy:0,sell:0,short:"৳"},
     {id:"paypal",name:"PayPal USD",subtitle:"USD Wallet",currency:"USD",type:"usd",logo:"assets/logos/paypal.png",buy:122,sell:118,short:"PP"},
     {id:"perfectmoney",name:"Perfect Money",subtitle:"USD Wallet",currency:"USD",type:"usd",logo:"assets/logos/perfectmoney.png",buy:125,sell:121,short:"PM"},
     {id:"webmoney",name:"WebMoney",subtitle:"USD Wallet",currency:"USD",type:"usd",logo:"assets/logos/webmoney.png",buy:124,sell:120,short:"WM"},
