@@ -273,3 +273,27 @@
 .exchange-pro-box .exchange-step-panel[data-step-panel="2"] .preview-row{
   background:#fff!important;
 }
+
+
+/* Step 2: improve contrast and readability of every label and value on white boxes */
+.exchange-pro-box .exchange-step-panel[data-step-panel="2"] .exchange-panel-title h3{
+  color:#10334a!important;
+}
+.exchange-pro-box .exchange-step-panel[data-step-panel="2"] .exchange-panel-title p,
+.exchange-pro-box .exchange-step-panel[data-step-panel="2"] .exchange-review-route small,
+.exchange-pro-box .exchange-step-panel[data-step-panel="2"] .preview-row span,
+.exchange-pro-box .exchange-step-panel[data-step-panel="2"] #calcMessage{
+  color:#435b6b!important;
+  opacity:1!important;
+}
+.exchange-pro-box .exchange-step-panel[data-step-panel="2"] .exchange-review-route strong,
+.exchange-pro-box .exchange-step-panel[data-step-panel="2"] .preview-row strong{
+  color:#102f43!important;
+  opacity:1!important;
+}
+.exchange-pro-box .exchange-step-panel[data-step-panel="2"] .preview-row{
+  border-bottom-color:#d8e1e7!important;
+}
+.exchange-pro-box .exchange-step-panel[data-step-panel="2"] .exchange-review-route>i{
+  color:#087481!important;
+}
