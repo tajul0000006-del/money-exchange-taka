@@ -195,3 +195,8 @@
 .exchange-pro-box .amount-label-row{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;margin-bottom:7px}
 .exchange-pro-box .amount-label-row .amount-limit{font-size:11px;font-weight:700;color:#087481;white-space:nowrap}
 @media(max-width:650px){.exchange-pro-box .amount-label-row .amount-limit{font-size:10px}}
+
+
+/* Inline amount range validation inside the amount field box */
+.exchange-pro-box #amountHelp.amount-limit-error{display:block;color:#c62828;font-weight:700;background:#fff1f0;border:1px solid #ffc9c5;border-radius:7px;padding:6px 9px;margin-top:7px}
+.exchange-pro-box #amount.invalid{border-color:#dc3545!important;box-shadow:0 0 0 2px #dc354520}
