@@ -214,6 +214,12 @@
     }
     return firestoreReadyPromise;
   }
+  function waitForFirebaseResult(promise, timeoutMs, label){
+    return Promise.race([
+      promise,
+      new Promise((_,reject)=>setTimeout(()=>reject(new Error(label+" নির্ধারিত সময়ের মধ্যে শেষ হয়নি। ইন্টারনেট/Firebase সংযোগ পরীক্ষা করুন।")),timeoutMs))
+    ]);
+  }
   async function saveRequestToFirestore(item){
     const fb=await getFirebaseServices();
     const from=walletById(item.fromId),to=walletById(item.toId);
@@ -224,7 +230,7 @@
     const paymentMethod=(isUsdSell?to?.name:from?.name)||"Other";
     const allowedMethods=["bKash","Nagad","Rocket","Upay","ePay","TunePay","Bank","Other"];
     const method=allowedMethods.includes(paymentMethod)?paymentMethod:"Other";
-    await fb.addDoc(fb.collection(fb.db,"exchangeRequests"),{
+    return waitForFirebaseResult(fb.addDoc(fb.collection(fb.db,"exchangeRequests"),{
       trackingCode:item.code,direction,currency:from?.currency==="USDT"||to?.currency==="USDT"?"USDT":from?.currency==="USD"||to?.currency==="USD"?"USD":"BDT",
       amount:Number(item.amount),paymentMethod:method,
       contactMethod:String($("contactMethod")?.value||"whatsapp"),
@@ -237,7 +243,7 @@
       proofScreenshotUrl:String(item.proofScreenshotUrl||""),
       proofFileName:String(item.proofFileName||"").slice(0,200),
       uid:null,requestType:"guest",status:"pending",createdAt:fb.serverTimestamp(),proofSubmittedAt:fb.serverTimestamp()
-    });
+    }),60000,"Firestore-এ Request Save");
   }
   $("proofScreenshot").addEventListener("change",()=>{
     const file=$("proofScreenshot").files[0];
@@ -288,14 +294,16 @@
           finished=true;clearTimeout(timer);resolve(uploadTask.snapshot);
         });
       });
-      pendingRequest.proofScreenshotUrl=await fb.getDownloadURL(uploaded.ref);
+      $("formStatus").textContent="Screenshot আপলোড সম্পন্ন। Download Link তৈরি হচ্ছে...";
+      pendingRequest.proofScreenshotUrl=await waitForFirebaseResult(fb.getDownloadURL(uploaded.ref),20000,"Screenshot Download Link তৈরি");
       pendingRequest.proofFileName=proofFile.name;
-      $("formStatus").textContent="Screenshot আপলোড হয়েছে। এখন রিকোয়েস্ট সংরক্ষণ হচ্ছে...";
+      $("formStatus").textContent="ধাপ ৩/৩: আপনার Exchange Request Firebase-এ সংরক্ষণ হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন...";
+      if(submitButton)submitButton.textContent="৩/৩ — Request Save হচ্ছে...";
       await saveRequestToFirestore(pendingRequest);
       let items=[];try{items=JSON.parse(localStorage.getItem(HISTORY_KEY)||"[]");}catch(_){}
       items.push(pendingRequest);localStorage.setItem(HISTORY_KEY,JSON.stringify(items));renderHistory();
       $("successTrackingCode").textContent=pendingRequest.code;openModal("successModal");
-      $("formStatus").textContent="আপনার অনুরোধ Firestore-এ জমা হয়েছে।";$("formStatus").classList.remove("error");
+      $("formStatus").textContent="সফল! আপনার অনুরোধ Firestore-এ জমা হয়েছে।";$("formStatus").classList.remove("error");
       pendingRequest=null;$("proofReference").value="";$("proofEmail").value="";$("proofScreenshot").value="";$("proofPreviewWrap").hidden=true;$("proofPreviewImage").removeAttribute("src");$("proofPreviewName").textContent="";$("exchangeForm").reset();updateWalletOptions();
     }catch(error){
       console.error("Firestore request submission failed:",error);
