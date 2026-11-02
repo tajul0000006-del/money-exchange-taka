@@ -202,14 +202,13 @@
   async function getFirebaseServices(){
     if(!firestoreReadyPromise){
       firestoreReadyPromise=(async()=>{
-        const [{initializeApp,getApps},{getFirestore,collection,addDoc,serverTimestamp},{getStorage,ref,uploadBytesResumable,getDownloadURL}] = await Promise.all([
+        const [{initializeApp,getApps},{getFirestore,collection,addDoc,serverTimestamp}] = await Promise.all([
           import("https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js"),
-          import("https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js"),
-          import("https://www.gstatic.com/firebasejs/11.6.0/firebase-storage.js")
+          import("https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js")
         ]);
         const {firebaseConfig}=await import("./firebase-config.js");
         const app=getApps().length?getApps()[0]:initializeApp(firebaseConfig);
-        return {db:getFirestore(app),collection,addDoc,serverTimestamp,storage:getStorage(app),ref,uploadBytesResumable,getDownloadURL};
+        return {db:getFirestore(app),collection,addDoc,serverTimestamp};
       })();
     }
     return firestoreReadyPromise;
@@ -272,36 +271,21 @@
       if(!proofFile) throw new Error("পেমেন্টের Screenshot নির্বাচন করুন।");
       if(!["image/jpeg","image/png","image/webp"].includes(proofFile.type)) throw new Error("শুধু JPG, PNG অথবা WEBP Screenshot দিন।");
       if(proofFile.size>5*1024*1024) throw new Error("Screenshot ৫ MB-এর কম হতে হবে।");
-      const fb=await waitForFirebaseResult(getFirebaseServices(),20000,"Firebase Services সংযোগ");
-      submissionStage="Screenshot upload";
-      const safeFileName=proofFile.name.replace(/[^a-zA-Z0-9._-]/g,"_").slice(-100)||"payment-proof";
-      const proofPath="payment-proofs/"+pendingRequest.code+"/"+Date.now()+"-"+safeFileName;
-      const proofRef=fb.ref(fb.storage,proofPath);
+      submissionStage="Cloudinary Screenshot upload";
       $("formStatus").classList.remove("error");
-      $("formStatus").textContent="Firebase সংযোগ করা হচ্ছে...";
-      const uploadTask=fb.uploadBytesResumable(proofRef,proofFile,{contentType:proofFile.type});
-      const uploaded=await new Promise((resolve,reject)=>{
-        let finished=false;
-        const timer=setTimeout(()=>{
-          if(finished)return;
-          finished=true;
-          uploadTask.cancel();
-          reject(new Error("Screenshot upload ৯০ সেকেন্ডেও শেষ হয়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।"));
-        },90000);
-        uploadTask.on("state_changed",snapshot=>{
-          const percent=Math.round((snapshot.bytesTransferred/Math.max(snapshot.totalBytes,1))*100);
-          $("formStatus").textContent="Payment Screenshot আপলোড হচ্ছে... "+percent+"%";
-        },error=>{
-          if(finished)return;
-          finished=true;clearTimeout(timer);reject(error);
-        },()=>{
-          if(finished)return;
-          finished=true;clearTimeout(timer);resolve(uploadTask.snapshot);
-        });
+      $("formStatus").textContent="Payment Screenshot Cloudinary-তে আপলোড হচ্ছে...";
+      const uploadForm=new FormData();
+      uploadForm.append("file",proofFile);
+      uploadForm.append("trackingCode",pendingRequest.code);
+      const uploadResponse=await fetch("https://bold-surf-9356.taijulsheikh60.workers.dev/api/upload-proof",{
+        method:"POST",
+        body:uploadForm
       });
-      submissionStage="Screenshot Download Link";
-      $("formStatus").textContent="Screenshot আপলোড সম্পন্ন। Download Link তৈরি হচ্ছে...";
-      pendingRequest.proofScreenshotUrl=await waitForFirebaseResult(fb.getDownloadURL(uploaded.ref),20000,"Screenshot Download Link তৈরি");
+      const uploadResult=await uploadResponse.json().catch(()=>({ok:false,error:"সার্ভার থেকে সঠিক JSON পাওয়া যায়নি।"}));
+      if(!uploadResponse.ok||!uploadResult.ok||!uploadResult.secure_url){
+        throw new Error(uploadResult.error||"Cloudinary Screenshot upload ব্যর্থ হয়েছে। HTTP "+uploadResponse.status);
+      }
+      pendingRequest.proofScreenshotUrl=uploadResult.secure_url;
       pendingRequest.proofFileName=proofFile.name.slice(0,200);
       submissionStage="Firestore Request Save";
       $("formStatus").textContent="ধাপ ৩/৩: আপনার Exchange Request Firebase-এ সংরক্ষণ হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন...";
