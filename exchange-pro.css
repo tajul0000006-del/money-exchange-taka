@@ -297,3 +297,53 @@
 .exchange-pro-box .exchange-step-panel[data-step-panel="2"] .exchange-review-route>i{
   color:#087481!important;
 }
+
+
+/* Step 3: crisp, high-contrast labels, entered text, placeholders and helper text */
+.exchange-pro-box .exchange-step-panel[data-step-panel="3"] .field label,
+.exchange-pro-box .exchange-step-panel[data-step-panel="3"] .field label small{
+  color:#17384d!important;
+  opacity:1!important;
+  -webkit-text-fill-color:#17384d!important;
+  text-shadow:none!important;
+  filter:none!important;
+}
+.exchange-pro-box .exchange-step-panel[data-step-panel="3"] .field input,
+.exchange-pro-box .exchange-step-panel[data-step-panel="3"] .field input:focus,
+.exchange-pro-box .exchange-step-panel[data-step-panel="3"] .field input.invalid,
+.exchange-pro-box .exchange-step-panel[data-step-panel="3"] .field textarea,
+.exchange-pro-box .exchange-step-panel[data-step-panel="3"] .field textarea:focus,
+.exchange-pro-box .exchange-step-panel[data-step-panel="3"] .field select{
+  background-color:#fff!important;
+  color:#102f43!important;
+  -webkit-text-fill-color:#102f43!important;
+  caret-color:#102f43!important;
+  opacity:1!important;
+  filter:none!important;
+  text-shadow:none!important;
+}
+.exchange-pro-box .exchange-step-panel[data-step-panel="3"] .field input::placeholder,
+.exchange-pro-box .exchange-step-panel[data-step-panel="3"] .field textarea::placeholder{
+  color:#718391!important;
+  -webkit-text-fill-color:#718391!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
+.exchange-pro-box .exchange-step-panel[data-step-panel="3"] .field small,
+.exchange-pro-box .exchange-step-panel[data-step-panel="3"] .contact-help,
+.exchange-pro-box .exchange-step-panel[data-step-panel="3"] #accountHelp{
+  color:#405969!important;
+  opacity:1!important;
+  -webkit-text-fill-color:#405969!important;
+  text-shadow:none!important;
+  filter:none!important;
+}
+.exchange-pro-box .exchange-step-panel[data-step-panel="3"] .contact-error{
+  color:#c62828!important;
+  -webkit-text-fill-color:#c62828!important;
+  opacity:1!important;
+}
+.exchange-pro-box .exchange-step-panel[data-step-panel="3"] .exchange-balance-choice b,
+.exchange-pro-box .exchange-step-panel[data-step-panel="3"] .exchange-balance-choice small{
+  opacity:1!important;
+}
