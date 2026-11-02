@@ -215,10 +215,11 @@
     return firestoreReadyPromise;
   }
   function waitForFirebaseResult(promise, timeoutMs, label){
+    let timer;
     return Promise.race([
-      promise,
-      new Promise((_,reject)=>setTimeout(()=>reject(new Error(label+" নির্ধারিত সময়ের মধ্যে শেষ হয়নি। ইন্টারনেট/Firebase সংযোগ পরীক্ষা করুন।")),timeoutMs))
-    ]);
+      Promise.resolve(promise),
+      new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error(label+" নির্ধারিত সময়ের মধ্যে শেষ হয়নি। ইন্টারনেট/Firebase সংযোগ পরীক্ষা করুন।")),timeoutMs);})
+    ]).finally(()=>clearTimeout(timer));
   }
   async function saveRequestToFirestore(item){
     const fb=await getFirebaseServices();
@@ -261,7 +262,9 @@
     if(! $("proofReference").value.trim()){showError("Transaction ID / Reference লিখুন।");$("proofReference").focus();return;}
     if(!$("proofScreenshot").files[0]){showError("পেমেন্ট Screenshot নির্বাচন করুন।");$("proofScreenshot").focus();return;}
     if(submitButton){submitButton.disabled=true;submitButton.dataset.originalText=submitButton.textContent;submitButton.textContent="জমা হচ্ছে...";}
+    let submissionStage="প্রস্তুতি";
     try{
+      submissionStage="Firebase সংযোগ";
       pendingRequest.proofReference=$("proofReference").value.trim();
       pendingRequest.proofEmail=$("proofEmail").value.trim();
       const proofFile=$("proofScreenshot").files[0];
@@ -269,8 +272,10 @@
       if(!proofFile) throw new Error("পেমেন্টের Screenshot নির্বাচন করুন।");
       if(!["image/jpeg","image/png","image/webp"].includes(proofFile.type)) throw new Error("শুধু JPG, PNG অথবা WEBP Screenshot দিন।");
       if(proofFile.size>5*1024*1024) throw new Error("Screenshot ৫ MB-এর কম হতে হবে।");
-      const fb=await getFirebaseServices();
-      const proofPath="payment-proofs/"+pendingRequest.code+"/"+Date.now()+"-"+proofFile.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+      const fb=await waitForFirebaseResult(getFirebaseServices(),20000,"Firebase Services সংযোগ");
+      submissionStage="Screenshot upload";
+      const safeFileName=proofFile.name.replace(/[^a-zA-Z0-9._-]/g,"_").slice(-100)||"payment-proof";
+      const proofPath="payment-proofs/"+pendingRequest.code+"/"+Date.now()+"-"+safeFileName;
       const proofRef=fb.ref(fb.storage,proofPath);
       $("formStatus").classList.remove("error");
       $("formStatus").textContent="Firebase সংযোগ করা হচ্ছে...";
@@ -294,9 +299,11 @@
           finished=true;clearTimeout(timer);resolve(uploadTask.snapshot);
         });
       });
+      submissionStage="Screenshot Download Link";
       $("formStatus").textContent="Screenshot আপলোড সম্পন্ন। Download Link তৈরি হচ্ছে...";
       pendingRequest.proofScreenshotUrl=await waitForFirebaseResult(fb.getDownloadURL(uploaded.ref),20000,"Screenshot Download Link তৈরি");
-      pendingRequest.proofFileName=proofFile.name;
+      pendingRequest.proofFileName=proofFile.name.slice(0,200);
+      submissionStage="Firestore Request Save";
       $("formStatus").textContent="ধাপ ৩/৩: আপনার Exchange Request Firebase-এ সংরক্ষণ হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন...";
       if(submitButton)submitButton.textContent="৩/৩ — Request Save হচ্ছে...";
       await saveRequestToFirestore(pendingRequest);
@@ -308,8 +315,8 @@
     }catch(error){
       console.error("Firestore request submission failed:",error);
       const code=String(error?.code||"");
-      const message=code.includes("storage/unauthorized")?"Payment Screenshot আপলোডের অনুমতি নেই (storage/unauthorized)। Storage Rules ও bucket যাচাই করুন।":code.includes("storage/bucket-not-found")?"Firebase Storage bucket পাওয়া যায়নি। Firebase Console-এ Storage চালু আছে কি না যাচাই করুন।":code.includes("permission-denied")||code.includes("firestore/permission-denied")?"রিকোয়েস্ট সংরক্ষণের অনুমতি নেই (permission-denied)। Firestore Rules-এর সঙ্গে পাঠানো তথ্য মিলছে না।":(error?.message||"রিকোয়েস্ট জমা হয়নি।")+" ["+(code||"unknown error")+"]";
-      showError(message);
+      const detail=code.includes("storage/unauthorized")?"Payment Screenshot আপলোডের অনুমতি নেই (storage/unauthorized)। Storage Rules ও bucket যাচাই করুন।":code.includes("storage/bucket-not-found")?"Firebase Storage bucket পাওয়া যায়নি। Firebase Console-এ Storage চালু আছে কি না যাচাই করুন।":code.includes("permission-denied")||code.includes("firestore/permission-denied")?"রিকোয়েস্ট সংরক্ষণের অনুমতি নেই (permission-denied)। Firestore Rules-এর সঙ্গে পাঠানো তথ্য মিলছে না।":(error?.message||"রিকোয়েস্ট জমা হয়নি।")+" ["+(code||"unknown error")+"]";
+      showError("ব্যর্থ ধাপ: "+submissionStage+"। "+detail);
     }finally{
       if(submitButton){submitButton.disabled=false;submitButton.textContent=submitButton.dataset.originalText||"জমা দিন";}
     }
@@ -452,7 +459,7 @@
     const gross=amount*r.rate;
     const fee=gross*FEE_PERCENT/100,receive=gross-fee;
     const item={
-      code:"MET-"+Math.random().toString(36).slice(2,8).toUpperCase(),
+      code:"MET-"+Array.from(crypto.getRandomValues(new Uint8Array(6)),b=>"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"[b%36]).join(""),
       date:new Date().toLocaleString("bn-BD"),
       customer:$("customerName").value.trim(),fromName:from.name,toName:to.name,
       pay:money(amount,from.currency),receive:money(receive,to.currency),
