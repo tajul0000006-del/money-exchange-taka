@@ -2511,3 +2511,27 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
 .exchange-ticker{padding-top:0!important;padding-bottom:0!important;overflow:hidden!important;}
 .exchange-ticker .ticker-track,
 .exchange-ticker .ticker-content{align-items:center!important;}
+
+
+/* Normalize every ticker child to the same 16px box height. */
+.exchange-ticker,
+.exchange-ticker .ticker-label,
+.exchange-ticker .ticker-window,
+.exchange-ticker .ticker-track,
+.exchange-ticker .ticker-content,
+.exchange-ticker .ticker-item,
+.exchange-ticker .ticker-separator{
+  box-sizing:border-box!important;
+  height:16px!important;
+  min-height:16px!important;
+  max-height:16px!important;
+}
+.exchange-ticker .ticker-item,
+.exchange-ticker .ticker-separator{
+  display:inline-flex!important;
+  align-items:center!important;
+  line-height:16px!important;
+  vertical-align:top!important;
+}
+.exchange-ticker .ticker-item>span{line-height:16px!important;}
+.exchange-ticker .ticker-item i{line-height:16px!important;}
