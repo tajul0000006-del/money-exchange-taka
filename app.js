@@ -400,6 +400,7 @@
       if(alternative) $("toWallet").value = alternative.id;
     }
     updateAmountCurrency(); updateCalculation();
+    if($("amountHelp").classList.contains("amount-limit-error")) updateAmountLimitFeedback();
   });
   $("toWallet").addEventListener("change",()=>{
     if($("toWallet").value === $("fromWallet").value){
