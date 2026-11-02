@@ -2554,3 +2554,16 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
   .exchange-ticker .ticker-item i{font-size:14px!important;}
   .exchange-ticker .ticker-item>span{line-height:24px!important;}
 }
+
+
+/* Increase scrolling announcement text by another 5px as requested. */
+.exchange-ticker .ticker-item{
+  font-size:27px!important;
+  line-height:28px!important;
+}
+@media(max-width:600px){
+  .exchange-ticker .ticker-item{
+    font-size:23px!important;
+    line-height:24px!important;
+  }
+}
