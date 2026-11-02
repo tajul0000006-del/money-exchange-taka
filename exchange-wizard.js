@@ -97,14 +97,14 @@
     }
     function accountRule(walletId) {
       const rules = {
-        bkash: {hint:"bKash Personal-এর ১১ ডিজিটের সঠিক মোবাইল নম্বর দিন।", valid:v=>/^01[3-9]\\d{8}$/.test(v), error:"bKash-এর সঠিক ১১ ডিজিটের নম্বর দিন (01 দিয়ে শুরু)।"},
-        nagad: {hint:"Nagad Personal-এর ১১ ডিজিটের সঠিক মোবাইল নম্বর দিন।", valid:v=>/^01[3-9]\\d{8}$/.test(v), error:"Nagad-এর সঠিক ১১ ডিজিটের নম্বর দিন (01 দিয়ে শুরু)।"},
-        rocket: {hint:"Rocket Personal-এর ১১ ডিজিটের সঠিক মোবাইল নম্বর দিন।", valid:v=>/^01[3-9]\\d{8}$/.test(v), error:"Rocket-এর সঠিক ১১ ডিজিটের নম্বর দিন (01 দিয়ে শুরু)।"},
-        upay: {hint:"Upay Personal-এর ১১ ডিজিটের সঠিক মোবাইল নম্বর দিন।", valid:v=>/^01[3-9]\\d{8}$/.test(v), error:"Upay-এর সঠিক ১১ ডিজিটের নম্বর দিন (01 দিয়ে শুরু)।"},
-        paypal: {hint:"আপনার PayPal account-এর সঠিক email address দিন।", valid:v=>/^[A-Z0-9.!#$%&'*+/=?^_{|}~-]+@[A-Z0-9-]+(?:\\.[A-Z0-9-]+)+$/i.test(v), error:"সঠিক PayPal account email address দিন।"},
-        perfectmoney: {hint:"আপনার Perfect Money USD account ID দিন (যেমন: U12345678)।", valid:v=>/^U\\d{7,8}$/i.test(v), error:"Perfect Money ID অবশ্যই U দিয়ে শুরু হওয়া ৮–৯ অক্ষরের হতে হবে (যেমন U12345678)।"},
-        webmoney: {hint:"আপনার WebMoney WMZ wallet/purse দিন (যেমন: Z123456789012)।", valid:v=>/^Z\\d{12}$/i.test(v), error:"সঠিক WebMoney WMZ purse দিন: Z-এর পরে ১২টি সংখ্যা।"},
-        volet: {hint:"আপনার Volet account-এর email অথবা registered phone number দিন।", valid:v=>/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(v)||/^\\+?\\d{10,15}$/.test(v), error:"সঠিক Volet account email অথবা ১০–১৫ ডিজিটের registered phone number দিন।"},
+        bkash: {hint:"bKash Personal-এর ১১ ডিজিটের সঠিক মোবাইল নম্বর দিন।", valid:v=>/^01[3-9]\d{8}$/.test(v), error:"bKash-এর সঠিক ১১ ডিজিটের নম্বর দিন (01 দিয়ে শুরু)।"},
+        nagad: {hint:"Nagad Personal-এর ১১ ডিজিটের সঠিক মোবাইল নম্বর দিন।", valid:v=>/^01[3-9]\d{8}$/.test(v), error:"Nagad-এর সঠিক ১১ ডিজিটের নম্বর দিন (01 দিয়ে শুরু)।"},
+        rocket: {hint:"Rocket Personal-এর ১১ ডিজিটের সঠিক মোবাইল নম্বর দিন।", valid:v=>/^01[3-9]\d{8}$/.test(v), error:"Rocket-এর সঠিক ১১ ডিজিটের নম্বর দিন (01 দিয়ে শুরু)।"},
+        upay: {hint:"Upay Personal-এর ১১ ডিজিটের সঠিক মোবাইল নম্বর দিন।", valid:v=>/^01[3-9]\d{8}$/.test(v), error:"Upay-এর সঠিক ১১ ডিজিটের নম্বর দিন (01 দিয়ে শুরু)।"},
+        paypal: {hint:"আপনার PayPal account-এর সঠিক email address দিন।", valid:v=>/^[A-Z0-9.!#$%&'*+/=?^_{|}~-]+@[A-Z0-9-]+(?:\.[A-Z0-9-]+)+$/i.test(v), error:"সঠিক PayPal account email address দিন।"},
+        perfectmoney: {hint:"আপনার Perfect Money USD account ID দিন (যেমন: U12345678)।", valid:v=>/^U\d{7,8}$/i.test(v), error:"Perfect Money ID অবশ্যই U দিয়ে শুরু হওয়া ৮–৯ অক্ষরের হতে হবে (যেমন U12345678)।"},
+        webmoney: {hint:"আপনার WebMoney WMZ wallet/purse দিন (যেমন: Z123456789012)।", valid:v=>/^Z\d{12}$/i.test(v), error:"সঠিক WebMoney WMZ purse দিন: Z-এর পরে ১২টি সংখ্যা।"},
+        volet: {hint:"আপনার Volet account-এর email অথবা registered phone number দিন।", valid:v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)||/^\+?\d{10,15}$/.test(v), error:"সঠিক Volet account email অথবা ১০–১৫ ডিজিটের registered phone number দিন।"},
         binance: {hint:"Binance USDT TRC20 deposit address দিন (TRON network)।", valid:v=>/^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(v), error:"সঠিক Binance TRC20 address দিন (T দিয়ে শুরু, মোট ৩৪ অক্ষর)।"},
         kucoin: {hint:"KuCoin USDT TRC20 deposit address দিন (TRON network)।", valid:v=>/^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(v), error:"সঠিক KuCoin TRC20 address দিন (T দিয়ে শুরু, মোট ৩৪ অক্ষর)।"},
         bybit: {hint:"Bybit USDT TRC20 deposit address দিন (TRON network)।", valid:v=>/^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(v), error:"সঠিক Bybit TRC20 address দিন (T দিয়ে শুরু, মোট ৩৪ অক্ষর)।"},
