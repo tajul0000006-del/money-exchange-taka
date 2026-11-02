@@ -189,3 +189,9 @@
  .exchange-pro-box .exchange-payment-address strong{font-size:13px}
  .exchange-pro-box .exchange-warning{font-size:10px}
 }
+
+
+/* Show the transaction limit beside the amount label */
+.exchange-pro-box .amount-label-row{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;margin-bottom:7px}
+.exchange-pro-box .amount-label-row .amount-limit{font-size:11px;font-weight:700;color:#087481;white-space:nowrap}
+@media(max-width:650px){.exchange-pro-box .amount-label-row .amount-limit{font-size:10px}}
