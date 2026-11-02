@@ -830,15 +830,17 @@ table{max-width:100%}
 
 
 
-/* FIXED ANNOUNCEMENT BAR — attached directly beneath the sticky header.
-   Spacer keeps the page content from moving underneath the fixed bar. */
+/* FIXED ANNOUNCEMENT BAR — aligned to the actual fixed header height.
+   Header is 72px on desktop and 62px on mobile; spacer preserves document flow. */
 .exchange-ticker{
   position:fixed!important;
-  top:64px!important;
+  top:72px!important;
   left:0!important;
   right:0!important;
   width:100%!important;
-  z-index:2999!important;
+  z-index:99998!important;
+  visibility:visible!important;
+  opacity:1!important;
 }
 .exchange-ticker-spacer{
   display:block!important;
@@ -848,9 +850,6 @@ table{max-width:100%}
   pointer-events:none!important;
 }
 @media(max-width:900px){
-  .exchange-ticker{top:50px!important}
+  .exchange-ticker{top:62px!important}
   .exchange-ticker-spacer{height:18px!important;min-height:18px!important}
-}
-@media(max-width:480px){
-  .exchange-ticker{top:44px!important}
 }
