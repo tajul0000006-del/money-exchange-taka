@@ -2522,3 +2522,16 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
     max-height:24px!important;
   }
 }
+
+
+/* Restore a clearly larger announcement message text. */
+.exchange-ticker .ticker-item{
+  font-size:18px!important;
+  line-height:1.25!important;
+  font-weight:700!important;
+}
+.exchange-ticker .ticker-item i{font-size:15px!important;}
+@media(max-width:600px){
+  .exchange-ticker .ticker-item{font-size:16px!important;line-height:1.2!important;}
+  .exchange-ticker .ticker-item i{font-size:13px!important;}
+}
