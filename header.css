@@ -2601,3 +2601,19 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
   }
   .exchange-ticker .ticker-item>span{line-height:19px!important;}
 }
+
+
+/* IMPORTANT: make the actual moving-text area red (not only its outer wrapper). */
+.exchange-ticker,
+.exchange-ticker .ticker-window,
+.exchange-ticker .ticker-track,
+.exchange-ticker .ticker-content{
+  background:#e53935!important;
+}
+.exchange-ticker .ticker-item,
+.exchange-ticker .ticker-item>span,
+.exchange-ticker .ticker-separator{
+  color:#ffffff!important;
+}
+.exchange-ticker .ticker-item i{color:#ffffff!important;}
+.exchange-ticker .ticker-separator{opacity:1!important;}
