@@ -115,6 +115,36 @@
     else text = `1 ${from.currency} ≈ ${rate.toFixed(6)} ${to.currency}`;
     return {rate, text};
   }
+  function getAmountBdtEquivalent(){
+    const from=walletById($("fromWallet").value);
+    const amount=Number($("amount").value);
+    if(!from || !Number.isFinite(amount) || amount<=0) return null;
+    return from.type==="bdt" ? amount : amount*Number(from.sell);
+  }
+  function updateAmountLimitFeedback(){
+    const amountEl=$("amount"), help=$("amountHelp");
+    if(!amountEl || !help) return true;
+    const value=amountEl.value.trim();
+    amountEl.classList.remove("invalid");
+    help.classList.remove("amount-limit-error");
+    if(!value){help.textContent="পরিমাণ "+($("amountCurrency").textContent||"")+
+      "-এ লিখুন। প্রতি রিকোয়েস্ট ৳৫০০–৳১,৫০,০০০ (সমমূল্য)।";return false;}
+    const equivalent=getAmountBdtEquivalent();
+    if(equivalent===null) return false;
+    if(equivalent<500 || equivalent>150000){
+      const message=equivalent<500
+        ? "সর্বনিম্ন ৳৫০০ সমমূল্যের Amount লিখুন।"
+        : "সর্বোচ্চ ৳১,৫০,০০০ সমমূল্যের Amount লিখুন।";
+      help.textContent=message+" (BDT সমমূল্য)";
+      help.classList.add("amount-limit-error");
+      amountEl.classList.add("invalid");
+      return false;
+    }
+    help.textContent="পরিমাণ "+$("amountCurrency").textContent+
+      "-এ লিখুন। Limit: ৳৫০০–৳১,৫০,০০০ (সমমূল্যের USD/USDT)।";
+    return true;
+  }
+  window.metValidateExchangeAmount=updateAmountLimitFeedback;
   function updateCalculation(){
     const from=walletById($("fromWallet").value), to=walletById($("toWallet").value);
     const amount=Number($("amount").value);
@@ -362,16 +392,16 @@
       const alternative = wallets.find(w => w.id !== $("fromWallet").value);
       if(alternative) $("toWallet").value = alternative.id;
     }
-    updateAmountCurrency(); updateCalculation();
+    updateAmountCurrency(); updateCalculation(); updateAmountLimitFeedback();
   });
   $("toWallet").addEventListener("change",()=>{
     if($("toWallet").value === $("fromWallet").value){
       const alternative = wallets.find(w => w.id !== $("toWallet").value);
       if(alternative) $("fromWallet").value = alternative.id;
     }
-    updateAmountCurrency(); updateCalculation();
+    updateAmountCurrency(); updateCalculation(); updateAmountLimitFeedback();
   });
-  $("amount").addEventListener("input",updateCalculation);
+  $("amount").addEventListener("input",()=>{updateCalculation();updateAmountLimitFeedback();});
   function preparePendingExchangeRequest(){
     if(!validate()) return false;
     const from=walletById($("fromWallet").value),to=walletById($("toWallet").value),amount=Number($("amount").value),r=rateFor(from,to);
