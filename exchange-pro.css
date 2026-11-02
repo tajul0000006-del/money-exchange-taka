@@ -265,3 +265,11 @@
 .exchange-pro-box .exchange-select-wrap select{
   background-color:#fff!important;
 }
+
+
+/* Step 2: make every exchange detail/preview box pure white */
+.exchange-pro-box .exchange-step-panel[data-step-panel="2"] .exchange-review-route,
+.exchange-pro-box .exchange-step-panel[data-step-panel="2"] .wallet-preview,
+.exchange-pro-box .exchange-step-panel[data-step-panel="2"] .preview-row{
+  background:#fff!important;
+}
