@@ -68,6 +68,32 @@
       if ($("exchangeModeHint")) { $("exchangeModeHint").textContent = hints[mode] || hints.buy; $("exchangeModeHint").hidden = mode === "exchange"; }
       showStep(1);
     }
+    function isValidContact() {
+      const method = $("contactMethod")?.value || "whatsapp";
+      const value = $("contact")?.value.trim() || "";
+      if (method === "whatsapp") return /^\d{11}$/.test(value);
+      return /^\d{11}$/.test(value) || /^@?[A-Za-z0-9_]{5,32}$/.test(value) || /^(https?:\/\/)?(www\.)?(t\.me|telegram\.me)\/[A-Za-z0-9_]{5,32}\/?$/.test(value);
+    }
+    function updateContactMode() {
+      const method = $("contactMethod")?.value || "whatsapp";
+      const input = $("contact"), label = $("contactLabel"), help = $("contactHelp"), error = $("contactError");
+      if (!input) return;
+      const whatsapp = method === "whatsapp";
+      label.textContent = whatsapp ? "WhatsApp Number" : "Telegram Number / Profile Link";
+      input.inputMode = whatsapp ? "numeric" : "text";
+      input.placeholder = whatsapp ? "১১ ডিজিটের WhatsApp নম্বর লিখুন" : "Telegram নম্বর, @username অথবা t.me profile link দিন";
+      help.textContent = whatsapp ? "উদাহরণ: 12345678901 (শুধু ১১টি সংখ্যা)" : "Telegram নম্বর (১১ ডিজিট), @username অথবা https://t.me/username দিন।";
+      error.textContent = "";
+      input.classList.remove("invalid");
+    }
+    function validateContact(showMessage) {
+      const input = $("contact"), error = $("contactError");
+      const value = input?.value.trim() || "";
+      const valid = isValidContact();
+      if (input) input.classList.toggle("invalid", !valid);
+      if (error) error.textContent = valid || !showMessage ? "" : ($("contactMethod").value === "whatsapp" ? "সঠিক ১১ ডিজিটের WhatsApp নম্বর লিখুন।" : "সঠিক Telegram নম্বর, @username অথবা t.me profile link লিখুন।");
+      return valid;
+    }
     function nextStep(step) {
       const target = Number(step);
       if (currentStep === 1) {
@@ -91,11 +117,13 @@
         for (const id of ["customerName", "contact", "account"]) {
           const field = $(id);
           if (field && !field.value.trim()) {
-            alert("আপনার নাম, যোগাযোগ এবং Receive Account পূরণ করুন।");
+            if (id === "contact") validateContact(true);
+            else alert("আপনার নাম, যোগাযোগ এবং Receive Account পূরণ করুন।");
             field.focus();
             return false;
           }
         }
+        if (!validateContact(true)) { $("contact").focus(); return false; }
       }
       if (currentStep === 4 && $("terms") && !$("terms").checked) {
         alert("পরবর্তী ধাপে যাওয়ার আগে শর্তাবলিতে সম্মতি দিন।");
@@ -129,6 +157,9 @@
         showStep(button.dataset.prevStep);
       });
     });
+    $("contactMethod")?.addEventListener("change", updateContactMode);
+    $("contact")?.addEventListener("input", () => validateContact(false));
+    updateContactMode();
     ["fromWallet", "toWallet", "amount", "account"].forEach(id => {
       $(id)?.addEventListener("change", updateReview);
       $(id)?.addEventListener("input", updateReview);
