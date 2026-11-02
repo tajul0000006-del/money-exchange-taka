@@ -2433,3 +2433,47 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
     height:34px!important;
   }
 }
+
+
+/* Balanced announcement ticker: slightly larger text, shorter outer box. */
+.exchange-ticker{
+  height:36px!important;
+  min-height:36px!important;
+  max-height:36px!important;
+  padding:0!important;
+  box-sizing:border-box!important;
+}
+.exchange-ticker .ticker-label,
+.exchange-ticker .ticker-window{
+  height:36px!important;
+  min-height:36px!important;
+  max-height:36px!important;
+  box-sizing:border-box!important;
+}
+.exchange-ticker .ticker-label{
+  padding:0 13px!important;
+  font-size:12px!important;
+  gap:6px!important;
+}
+.exchange-ticker .ticker-label>i{font-size:12px!important;}
+.exchange-ticker .ticker-item{
+  font-size:17px!important;
+  line-height:1.2!important;
+  gap:8px!important;
+}
+.exchange-ticker .ticker-item i{font-size:14px!important;}
+.exchange-ticker .ticker-content{gap:20px!important;padding-left:20px!important;}
+@media(max-width:600px){
+  .exchange-ticker,
+  .exchange-ticker .ticker-label,
+  .exchange-ticker .ticker-window{
+    height:32px!important;
+    min-height:32px!important;
+    max-height:32px!important;
+  }
+  .exchange-ticker .ticker-label{padding:0 9px!important;font-size:10px!important;gap:4px!important;}
+  .exchange-ticker .ticker-label>i{font-size:10px!important;}
+  .exchange-ticker .ticker-item{font-size:15px!important;gap:6px!important;}
+  .exchange-ticker .ticker-item i{font-size:12px!important;}
+  .exchange-ticker .ticker-content{gap:14px!important;padding-left:14px!important;}
+}
