@@ -2369,3 +2369,67 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
     max-height: calc(100dvh - 50px) !important;
   }
 }
+
+
+/* REAL HEADER HEIGHT FIX: remove inner logo padding that kept the header tall. */
+.main-header .header-container{
+  box-sizing:border-box!important;
+}
+.main-header .met-brand-image{
+  box-sizing:border-box!important;
+  padding:0!important;
+  min-height:0!important;
+  height:auto!important;
+}
+.main-header .met-logo-image{
+  display:block!important;
+  height:auto!important;
+  object-fit:contain!important;
+}
+@media (min-width:901px){
+  .main-header .header-container{
+    padding-top:0!important;
+    padding-bottom:0!important;
+    min-height:64px!important;
+  }
+  .main-header .met-brand-image{
+    max-height:54px!important;
+  }
+  .main-header .met-logo-image{
+    max-height:54px!important;
+  }
+}
+@media (max-width:900px){
+  .main-header .header-container{
+    min-height:50px!important;
+    height:50px!important;
+    padding-top:0!important;
+    padding-bottom:0!important;
+  }
+  .main-header .met-brand-image{
+    max-height:44px!important;
+  }
+  .main-header .met-logo-image{
+    max-height:44px!important;
+  }
+  .main-header .menu-toggle{
+    width:36px!important;
+    height:36px!important;
+  }
+}
+@media (max-width:480px){
+  .main-header .header-container{
+    min-height:44px!important;
+    height:44px!important;
+  }
+  .main-header .met-brand-image{
+    max-height:40px!important;
+  }
+  .main-header .met-logo-image{
+    max-height:40px!important;
+  }
+  .main-header .menu-toggle{
+    width:34px!important;
+    height:34px!important;
+  }
+}
