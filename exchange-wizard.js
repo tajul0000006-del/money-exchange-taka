@@ -77,7 +77,12 @@
           return false;
         }
         if (!amount || !amount.value || !Number.isFinite(Number(amount.value)) || Number(amount.value) <= 0) {
-          alert("আগে সঠিক Amount লিখুন।");
+          if (window.metValidateExchangeAmount) window.metValidateExchangeAmount();
+          else alert("আগে সঠিক Amount লিখুন।");
+          if (amount) amount.focus();
+          return false;
+        }
+        if (typeof window.metValidateExchangeAmount === "function" && !window.metValidateExchangeAmount()) {
           if (amount) amount.focus();
           return false;
         }
