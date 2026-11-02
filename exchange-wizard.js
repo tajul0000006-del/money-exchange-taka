@@ -43,13 +43,29 @@
     return true;
   }
   modes.forEach(b=>b.addEventListener("click",()=>setMode(b.dataset.mode)));
-  form.querySelectorAll("[data-next-step]").forEach(b=>b.addEventListener("click",()=>{
+  // Delegated navigation handler: reliable on mobile browsers and dynamically rendered controls.
+  form.addEventListener("click",(event)=>{
+    const b=event.target.closest("[data-next-step]");
+    if(!b || !form.contains(b)) return;
+    event.preventDefault();
     const next=Number(b.dataset.nextStep);
-    if(currentStep===1&&!validateFields(["fromWallet","toWallet","amount"]))return;
+    if(currentStep===1){
+      const from=$("fromWallet"),to=$("toWallet"),amount=$("amount");
+      if(!from.value || !to.value || from.value===to.value){
+        alert("Send এবং Receive—দুটি আলাদা Currency নির্বাচন করুন।");
+        return;
+      }
+      if(!amount.value || !Number.isFinite(Number(amount.value)) || Number(amount.value)<=0){
+        amount.focus();
+        alert("আগে সঠিক Amount লিখুন।");
+        return;
+      }
+    }
     if(currentStep===3&&!validateFields(["customerName","contact","account"]))return;
     if(currentStep===4&&!$("terms").checked){$("terms").reportValidity();return;}
-    updateReview();showStep(next);
-  }));
+    updateReview();
+    showStep(next);
+  });
   form.querySelectorAll("[data-prev-step]").forEach(b=>b.addEventListener("click",()=>showStep(Number(b.dataset.prevStep))));
   ["fromWallet","toWallet","amount","account"].forEach(id=>$(id)?.addEventListener("change",updateReview));
   $("amount")?.addEventListener("input",updateReview);
