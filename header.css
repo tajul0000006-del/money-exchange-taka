@@ -2535,3 +2535,22 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
   .exchange-ticker .ticker-item{font-size:16px!important;line-height:1.2!important;}
   .exchange-ticker .ticker-item i{font-size:13px!important;}
 }
+
+
+/* Make scrolling text fill the white ticker container vertically. */
+.exchange-ticker .ticker-item{
+  font-size:22px!important;
+  line-height:28px!important;
+  font-weight:700!important;
+  align-items:center!important;
+}
+.exchange-ticker .ticker-item i{font-size:17px!important;}
+.exchange-ticker .ticker-item>span{line-height:28px!important;}
+@media(max-width:600px){
+  .exchange-ticker .ticker-item{
+    font-size:18px!important;
+    line-height:24px!important;
+  }
+  .exchange-ticker .ticker-item i{font-size:14px!important;}
+  .exchange-ticker .ticker-item>span{line-height:24px!important;}
+}
