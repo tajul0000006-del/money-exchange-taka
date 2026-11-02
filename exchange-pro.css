@@ -254,3 +254,14 @@
   -webkit-text-fill-color:#8a9aa5!important;
   opacity:1!important;
 }
+
+
+/* White input backgrounds consistently across all five exchange steps */
+.exchange-pro-box input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+.exchange-pro-box select,
+.exchange-pro-box textarea{
+  background-color:#fff!important;
+}
+.exchange-pro-box .exchange-select-wrap select{
+  background-color:#fff!important;
+}
