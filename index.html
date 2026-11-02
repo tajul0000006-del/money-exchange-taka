@@ -20,6 +20,24 @@
 <link rel="stylesheet" href="./footer.css">
   <link rel="stylesheet" href="./responsive.css?v=20261102-fixedticker5">
   <link rel="stylesheet" href="./exchange-pro.css?v=3">
+  <style id="met-ticker-visibility-fix">
+    /* Highest-priority visibility fix for the announcement bar */
+    #mainHeader{z-index:99999!important}
+    body>.exchange-ticker{
+      display:flex!important;position:fixed!important;
+      top:72px!important;left:0!important;right:0!important;
+      width:100%!important;height:20px!important;min-height:20px!important;
+      margin:0!important;visibility:visible!important;opacity:1!important;
+      background:#e53935!important;z-index:100000!important;
+    }
+    body>.exchange-ticker .ticker-window{display:flex!important;visibility:visible!important;opacity:1!important}
+    body>.exchange-ticker .ticker-track{display:flex!important;visibility:visible!important;opacity:1!important}
+    .exchange-ticker-spacer{display:block!important;height:20px!important;min-height:20px!important}
+    @media(max-width:900px){
+      body>.exchange-ticker{top:62px!important;height:18px!important;min-height:18px!important}
+      .exchange-ticker-spacer{height:18px!important;min-height:18px!important}
+    }
+  </style>
 </head>
 <body>
     <header class="main-header" id="mainHeader">
