@@ -72,7 +72,7 @@
     const from=walletById($("fromWallet").value);
     const to=walletById($("toWallet").value);
     $("amountCurrency").textContent=from ? from.currency : "—";
-    $("amountHelp").textContent=from ? `পরিমাণ ${from.currency}-এ লিখুন।` : "প্রতি লেনদেনের সীমা: ৳৫০০–৳১০,০০০ (সমমূল্যের USD/USDT)।";
+    $("amountHelp").textContent=from ? `পরিমাণ ${from.currency}-এ লিখুন।` : "প্রতি লেনদেনের সীমা: ৳৫০০–৳১,৫০,০০০ (সমমূল্যের USD/USDT)।";
     const account=$("account");
     const help=$("accountHelp");
     if(to){
@@ -347,7 +347,7 @@
     if(Number.isFinite(Number($("amount").value)) && Number($("amount").value)>0){
       const amountValue=Number($("amount").value);
       const bdtEquivalent=from.type==="bdt" ? amountValue : amountValue*Number(from.sell);
-      if(!Number.isFinite(bdtEquivalent)||bdtEquivalent<500||bdtEquivalent>10000){
+      if(!Number.isFinite(bdtEquivalent)||bdtEquivalent<500||bdtEquivalent>150000){
         showError("প্রতি রিকোয়েস্টের সীমা ৳৫০০ থেকে ৳১০,০০০ (সমমূল্যের USD/USDT)। পরিমাণ পরিবর্তন করুন।");
         $("amount").classList.add("invalid");$("amount").focus();return false;
       }
