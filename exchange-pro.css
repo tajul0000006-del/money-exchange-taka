@@ -200,3 +200,12 @@
 /* Inline amount range validation inside the amount field box */
 .exchange-pro-box #amountHelp.amount-limit-error{display:block;color:#c62828;font-weight:700;background:#fff1f0;border:1px solid #ffc9c5;border-radius:7px;padding:6px 9px;margin-top:7px}
 .exchange-pro-box #amount.invalid{border-color:#dc3545!important;box-shadow:0 0 0 2px #dc354520}
+
+
+/* Amount range error appears inside the amount input box only after Continue */
+.exchange-pro-box .amount-input{display:flex;flex-wrap:wrap;align-items:stretch}
+.exchange-pro-box .amount-input #amount{flex:1 1 65%;min-width:0}
+.exchange-pro-box .amount-input #amountCurrency{flex:0 0 auto}
+.exchange-pro-box .amount-input #amountHelp{display:none;flex:1 0 100%;width:100%;box-sizing:border-box;margin:0;padding:7px 10px;background:#fff1f0;border-top:1px solid #ffc9c5;color:#c62828;font-size:11px;font-weight:700;line-height:1.4;white-space:normal}
+.exchange-pro-box .amount-input #amountHelp.amount-limit-error{display:block}
+.exchange-pro-box .amount-input:has(#amount.invalid){border-color:#dc3545}
