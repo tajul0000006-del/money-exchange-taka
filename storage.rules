@@ -1,0 +1,18 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /payment-proofs/{trackingCode}/{fileName} {
+      // Guest customers may upload only a small payment-proof image.
+      allow create: if trackingCode.matches('MET-[A-Z0-9]{6}')
+        && fileName.matches('[A-Za-z0-9._-]+')
+        && request.resource.size > 0
+        && request.resource.size <= 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/(jpeg|png|webp)');
+
+      // Download URLs are token-protected links generated for the submitted proof.
+      // Anyone who obtains the exact download URL can view that image.
+      allow read: if true;
+      allow update, delete: if false;
+    }
+  }
+}
