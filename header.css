@@ -2567,3 +2567,37 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
     line-height:24px!important;
   }
 }
+
+
+/* Ticker container: red background and 5px shorter. */
+.exchange-ticker{
+  background:#e53935!important;
+  height:23px!important;
+  min-height:23px!important;
+  max-height:23px!important;
+}
+.exchange-ticker .ticker-window,
+.exchange-ticker .ticker-label{
+  height:23px!important;
+  min-height:23px!important;
+  max-height:23px!important;
+}
+.exchange-ticker .ticker-item{
+  font-size:22px!important;
+  line-height:23px!important;
+}
+.exchange-ticker .ticker-item>span{line-height:23px!important;}
+@media(max-width:600px){
+  .exchange-ticker,
+  .exchange-ticker .ticker-window,
+  .exchange-ticker .ticker-label{
+    height:19px!important;
+    min-height:19px!important;
+    max-height:19px!important;
+  }
+  .exchange-ticker .ticker-item{
+    font-size:18px!important;
+    line-height:19px!important;
+  }
+  .exchange-ticker .ticker-item>span{line-height:19px!important;}
+}
