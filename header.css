@@ -2617,3 +2617,21 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
 }
 .exchange-ticker .ticker-item i{color:#ffffff!important;}
 .exchange-ticker .ticker-separator{opacity:1!important;}
+
+
+/* Restore the scrolling message font size; keep the red background unchanged. */
+.exchange-ticker .ticker-item{
+  font-size:27px!important;
+  line-height:28px!important;
+  font-weight:700!important;
+}
+.exchange-ticker .ticker-item>span{line-height:28px!important;}
+.exchange-ticker .ticker-item i{font-size:17px!important;}
+@media(max-width:600px){
+  .exchange-ticker .ticker-item{
+    font-size:23px!important;
+    line-height:24px!important;
+  }
+  .exchange-ticker .ticker-item>span{line-height:24px!important;}
+  .exchange-ticker .ticker-item i{font-size:14px!important;}
+}
