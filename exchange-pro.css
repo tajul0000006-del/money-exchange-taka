@@ -139,15 +139,3 @@
 
 /* Step 1: keep the exchange form viewport fixed without vertical scrolling */
 .exchange-pro-box.step-one-no-scroll .exchange-step-viewport{overflow-y:hidden!important;overflow-x:hidden!important}
-
-
-/* Slightly enlarge readable text throughout all five exchange steps (+2px) */
-.exchange-pro-box .exchange-step-panel :is(p, label, small, span, strong, b, button, input, select, textarea, li){
-  font-size:calc(1em + 2px);
-}
-.exchange-pro-box .exchange-stepper .exchange-step{font-size:13px}
-.exchange-pro-box .exchange-stepper .exchange-step b{font-size:12px}
-@media(max-width:650px){
- .exchange-pro-box .exchange-stepper .exchange-step{font-size:10px}
- .exchange-pro-box .exchange-stepper .exchange-step b{font-size:10px}
-}
