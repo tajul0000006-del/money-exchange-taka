@@ -163,7 +163,7 @@
   $("copyPaymentAddress").addEventListener("click",async()=>{try{await navigator.clipboard.writeText($("paymentAddress").textContent);$("copyPaymentAddress").textContent="কপি হয়েছে";}catch(_){$("paymentAddress").focus?.();}});
   $("goProof").addEventListener("click",()=>{closeModal("paymentModal");openModal("proofModal");});
   let firestoreReadyPromise=null;
-  async function saveRequestToFirestore(item){
+  async function getFirebaseServices(){
     if(!firestoreReadyPromise){
       firestoreReadyPromise=(async()=>{
         const [{initializeApp,getApps},{getFirestore,collection,addDoc,serverTimestamp},{getStorage,ref,uploadBytes,getDownloadURL}] = await Promise.all([
@@ -176,7 +176,10 @@
         return {db:getFirestore(app),collection,addDoc,serverTimestamp,storage:getStorage(app),ref,uploadBytes,getDownloadURL};
       })();
     }
-    const fb=await firestoreReadyPromise;
+    return firestoreReadyPromise;
+  }
+  async function saveRequestToFirestore(item){
+    const fb=await getFirebaseServices();
     const from=walletById(item.fromId),to=walletById(item.toId);
     const isUsdSell=from?.type==="usd" && to?.type==="bdt";
     const isUsdBuy=from?.type==="bdt" && to?.type==="usd";
@@ -220,7 +223,7 @@
       if(!proofFile) throw new Error("পেমেন্টের Screenshot নির্বাচন করুন।");
       if(!["image/jpeg","image/png","image/webp"].includes(proofFile.type)) throw new Error("শুধু JPG, PNG অথবা WEBP Screenshot দিন।");
       if(proofFile.size>5*1024*1024) throw new Error("Screenshot ৫ MB-এর কম হতে হবে।");
-      const fb=await firestoreReadyPromise;
+      const fb=await getFirebaseServices();
       const proofPath="payment-proofs/"+pendingRequest.code+"/"+Date.now()+"-"+proofFile.name.replace(/[^a-zA-Z0-9._-]/g,"_");
       const proofRef=fb.ref(fb.storage,proofPath);
       const uploaded=await fb.uploadBytes(proofRef,proofFile,{contentType:proofFile.type});
