@@ -2495,3 +2495,19 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
   .ticker-label{padding:0 5px!important;font-size:7px!important;}
   .ticker-item{font-size:8px!important;}
 }
+
+
+/* Keep the ticker's outer container and inner moving track exactly the same height. */
+.exchange-ticker,
+.exchange-ticker .ticker-window,
+.exchange-ticker .ticker-track,
+.exchange-ticker .ticker-content,
+.exchange-ticker .ticker-label{
+  box-sizing:border-box!important;
+  height:16px!important;
+  min-height:16px!important;
+  max-height:16px!important;
+}
+.exchange-ticker{padding-top:0!important;padding-bottom:0!important;overflow:hidden!important;}
+.exchange-ticker .ticker-track,
+.exchange-ticker .ticker-content{align-items:center!important;}
