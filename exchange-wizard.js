@@ -96,6 +96,9 @@
         $("terms").focus();
         return false;
       }
+      if (target === 5 && typeof window.metPrepareExchangeRequest === "function") {
+        if (!window.metPrepareExchangeRequest()) return false;
+      }
       updateReview();
       showStep(target);
       return true;
