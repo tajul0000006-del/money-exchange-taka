@@ -72,7 +72,7 @@
     const from=walletById($("fromWallet").value);
     const to=walletById($("toWallet").value);
     $("amountCurrency").textContent=from ? from.currency : "—";
-    $("amountHelp").textContent=from ? `পরিমাণ ${from.currency}-এ লিখুন।` : "প্রতি লেনদেনের সীমা: ৳৫০০–৳১,৫০,০০০ (সমমূল্যের USD/USDT)।";
+    $("amountHelp").textContent="";
     const account=$("account");
     const help=$("accountHelp");
     if(to){
@@ -119,29 +119,36 @@
     const from=walletById($("fromWallet").value);
     const amount=Number($("amount").value);
     if(!from || !Number.isFinite(amount) || amount<=0) return null;
-    return from.type==="bdt" ? amount : amount*Number(from.sell);
+    const rate=from.type==="bdt" ? 1 : Number(from.sell);
+    if(!Number.isFinite(rate)||rate<=0) return null;
+    return {bdt:amount*rate, rate, from};
   }
   function updateAmountLimitFeedback(){
     const amountEl=$("amount"), help=$("amountHelp");
-    if(!amountEl || !help) return true;
+    if(!amountEl || !help) return false;
     const value=amountEl.value.trim();
+    const result=getAmountBdtEquivalent();
     amountEl.classList.remove("invalid");
     help.classList.remove("amount-limit-error");
-    if(!value){help.textContent="পরিমাণ "+($("amountCurrency").textContent||"")+
-      "-এ লিখুন। প্রতি রিকোয়েস্ট ৳৫০০–৳১,৫০,০০০ (সমমূল্য)।";return false;}
-    const equivalent=getAmountBdtEquivalent();
-    if(equivalent===null) return false;
-    if(equivalent<500 || equivalent>150000){
-      const message=equivalent<500
-        ? "সর্বনিম্ন ৳৫০০ সমমূল্যের Amount লিখুন।"
-        : "সর্বোচ্চ ৳১,৫০,০০০ সমমূল্যের Amount লিখুন।";
-      help.textContent=message+" (BDT সমমূল্য)";
+    let message="";
+    if(!value || !result){
+      message="Limit: ৳500–৳30,000 BDT";
+    } else if(result.bdt<500 || result.bdt>30000){
+      if(result.from.type==="bdt"){
+        message="Limit: ৳500–৳30,000 BDT";
+      } else {
+        const minAmount=500/result.rate;
+        const maxAmount=30000/result.rate;
+        const fmt=n=>Number(n).toLocaleString("en-US",{maximumFractionDigits:2});
+        message="Limit: "+fmt(minAmount)+"–"+fmt(maxAmount)+" "+result.from.currency+" (৳500–৳30,000 BDT)";
+      }
+    }
+    if(message){
+      help.textContent=message;
       help.classList.add("amount-limit-error");
       amountEl.classList.add("invalid");
       return false;
     }
-    help.textContent="পরিমাণ "+$("amountCurrency").textContent+
-      "-এ লিখুন। Limit: ৳৫০০–৳১,৫০,০০০ (সমমূল্যের USD/USDT)।";
     return true;
   }
   window.metValidateExchangeAmount=updateAmountLimitFeedback;
@@ -377,8 +384,8 @@
     if(Number.isFinite(Number($("amount").value)) && Number($("amount").value)>0){
       const amountValue=Number($("amount").value);
       const bdtEquivalent=from.type==="bdt" ? amountValue : amountValue*Number(from.sell);
-      if(!Number.isFinite(bdtEquivalent)||bdtEquivalent<500||bdtEquivalent>150000){
-        showError("প্রতি রিকোয়েস্টের সীমা ৳৫০০ থেকে ৳১,৫০,০০০ (সমমূল্যের USD/USDT)। পরিমাণ পরিবর্তন করুন।");
+      if(!Number.isFinite(bdtEquivalent)||bdtEquivalent<500||bdtEquivalent>30000){
+        showError("প্রতি রিকোয়েস্টের সীমা ৳৫০০ থেকে ৳৩০,০০০ (সমমূল্যের USD/USDT)। পরিমাণ পরিবর্তন করুন।");
         $("amount").classList.add("invalid");$("amount").focus();return false;
       }
     }
@@ -392,7 +399,7 @@
       const alternative = wallets.find(w => w.id !== $("fromWallet").value);
       if(alternative) $("toWallet").value = alternative.id;
     }
-    updateAmountCurrency(); updateCalculation(); updateAmountLimitFeedback();
+    updateAmountCurrency(); updateCalculation();
   });
   $("toWallet").addEventListener("change",()=>{
     if($("toWallet").value === $("fromWallet").value){
@@ -401,7 +408,7 @@
     }
     updateAmountCurrency(); updateCalculation(); updateAmountLimitFeedback();
   });
-  $("amount").addEventListener("input",()=>{updateCalculation();updateAmountLimitFeedback();});
+  $("amount").addEventListener("input",updateCalculation);
   function preparePendingExchangeRequest(){
     if(!validate()) return false;
     const from=walletById($("fromWallet").value),to=walletById($("toWallet").value),amount=Number($("amount").value),r=rateFor(from,to);
