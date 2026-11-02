@@ -2200,7 +2200,7 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
 .exchange-ticker .ticker-window{height:100%;flex:1;min-width:0;overflow:hidden;display:flex;align-items:center;background:#e53935}
 .exchange-ticker .ticker-track{display:flex;width:max-content;flex:0 0 auto;animation:tickerScroll 38s linear infinite}
 .exchange-ticker .ticker-content{display:flex;align-items:center;gap:22px;padding-left:22px;flex:0 0 auto;white-space:nowrap}
-.exchange-ticker .ticker-item{display:inline-flex;align-items:center;gap:8px;color:#fff;font-size:10px;line-height:1.2;font-weight:700;white-space:nowrap}
+.exchange-ticker .ticker-item{display:inline-flex;align-items:center;gap:8px;color:#fff;font-size:13px;line-height:1.2;font-weight:700;white-space:nowrap}
 .exchange-ticker .ticker-item i,.exchange-ticker .ticker-separator{color:#fff}
 .exchange-ticker .ticker-separator{font-size:10px}
 .exchange-ticker:hover .ticker-track{animation-play-state:paused}
@@ -2208,6 +2208,6 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
 @media(max-width:760px){
   .exchange-ticker{height:18px!important;min-height:18px!important}
   .exchange-ticker .ticker-label{padding:0 8px;font-size:10px}
-  .exchange-ticker .ticker-item{font-size:10px;line-height:1.2}
+  .exchange-ticker .ticker-item{font-size:13px;line-height:1.2}
   .exchange-ticker .ticker-content{gap:15px;padding-left:15px}
 }
