@@ -372,8 +372,8 @@
       if(id==="contact") {
         const value=el.value.trim();
         const method=$("contactMethod")?.value||"whatsapp";
-        const isPhone=/^\\d{11}$/.test(value);
-        const isTelegramProfile=/^@?[A-Za-z0-9_]{5,32}$/.test(value)||/^(https?:\\/\\/)?(www\\.)?(t\\.me|telegram\\.me)\\/[A-Za-z0-9_]{5,32}\\/?$/.test(value);
+        const isPhone=/^\d{11}$/.test(value);
+        const isTelegramProfile=/^@?[A-Za-z0-9_]{5,32}$/.test(value)||/^(https?:\/\/)?(www\.)?(t\.me|telegram\.me)\/[A-Za-z0-9_]{5,32}\/?$/.test(value);
         invalid=method==="whatsapp"?!isPhone:!(isPhone||isTelegramProfile);
         const contactError=$("contactError");
         if(contactError) contactError.textContent=invalid?(method==="whatsapp"?"সঠিক ১১ ডিজিটের WhatsApp নম্বর লিখুন।":"সঠিক Telegram নম্বর, @username অথবা t.me profile link লিখুন."):"";
