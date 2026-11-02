@@ -13,12 +13,14 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <script type="module" src="./app.js"></script>
   <script src="./header.js" defer></script>
+  <script src="./exchange-wizard.js?v=1" defer></script>
   <link rel="stylesheet" href="./theme.css">
   <link rel="stylesheet" href="./about.css">
 <link rel="stylesheet" href="./stats.css">
 <link rel="stylesheet" href="./faq.css">
 <link rel="stylesheet" href="./footer.css">
   <link rel="stylesheet" href="./responsive.css?v=20261101-fixedticker3">
+  <link rel="stylesheet" href="./exchange-pro.css?v=1">
 </head>
 <body>
     <header class="main-header" id="mainHeader">
@@ -186,62 +188,64 @@
       <p class="note rate-limit-note"><strong>প্রতি লেনদেনের সীমা:</strong> সর্বনিম্ন ৳৫০০ এবং সর্বোচ্চ ৳১০,০০০ (সমমূল্যের USD/USDT)।</p>
     </section>
 
-    <section id="exchange" class="section">
-      <div class="section-heading">
-        <div><p class="eyebrow">START EXCHANGE</p><h2>Exchange রিকোয়েস্ট</h2></div>
-      </div>
-      <form id="exchangeForm" class="exchange-layout" novalidate>
-        <div class="form-card">
-          <div class="field">
-            <label for="direction">আপনি কী করতে চান?</label>
-            <select id="direction" required>
-              <option value="sell">আমি USD/USDT বিক্রি করে BDT নেব</option>
-              <option value="buy">আমি BDT দিয়ে USD/USDT কিনব</option>
-              <option value="exchange">এক ওয়ালেট থেকে অন্য ওয়ালেটে Exchange</option>
-            </select>
-          </div>
-          <div class="wallet-grid">
-            <div class="field">
-              <label for="fromWallet">যে ওয়ালেট থেকে দেবেন</label>
-              <select id="fromWallet" required></select>
-            </div>
-            <div class="field">
-              <label for="toWallet">যে ওয়ালেটে পাবেন</label>
-              <select id="toWallet" required></select>
-            </div>
-          </div>
-          <div class="field">
-            <label for="amount">পরিমাণ</label>
-            <div class="amount-input"><input id="amount" type="number" min="0.01" max="100000000" step="any" placeholder="যেমন 10.00" required><span id="amountCurrency">USD</span></div>
-            <small id="amountHelp">আপনি যে পরিমাণ দেবেন তা লিখুন। সর্বনিম্ন ৳৫০০ এবং সর্বোচ্চ ৳১০,০০০ সমমূল্য।</small>
-          </div>
-          <div class="wallet-preview">
-            <div class="preview-row"><span>আপনি দেবেন</span><strong id="payPreview">—</strong></div>
-            <div class="preview-row"><span>আনুমানিক পাবেন</span><strong id="receivePreview">—</strong></div>
-            <div class="preview-row"><span>প্রযোজ্য রেট</span><strong id="ratePreview">—</strong></div>
-            <div class="preview-row"><span>সার্ভিস ফি (১%)</span><strong id="feePreview">—</strong></div>
-            <p class="note" id="calcMessage">চূড়ান্ত রেট ও ফি অর্ডার যাচাইয়ের সময় নিশ্চিত হবে.</p>
-          </div>
+    <section id="exchange" class="section exchange-pro-section">
+  <div class="section-heading exchange-pro-heading">
+    <div><p class="eyebrow">MET SMART EXCHANGE</p><h2>এক জায়গায় সব Exchange</h2><p class="exchange-heading-copy">নিরাপদ, সহজ এবং ধাপে ধাপে আপনার পছন্দের Currency Exchange করুন।</p></div>
+    <div class="exchange-balance-card"><span class="balance-icon"><i class="fa-solid fa-wallet"></i></span><span><small>ACCOUNT BALANCE</small><strong>Login required</strong><em>লগইন করলে ব্যালেন্স দেখা যাবে</em></span></div>
+  </div>
+  <form id="exchangeForm" class="exchange-pro-box" novalidate>
+    <select id="direction" class="exchange-direction-hidden" aria-hidden="true" tabindex="-1">
+      <option value="buy">Buy</option><option value="sell">Sell</option><option value="exchange">Global Exchange</option>
+    </select>
+    <div class="exchange-mode-tabs" role="tablist" aria-label="Exchange mode">
+      <button type="button" class="exchange-mode-tab active" data-mode="buy"><i class="fa-solid fa-cart-arrow-down"></i><span>Buy USD / USDT</span></button>
+      <button type="button" class="exchange-mode-tab" data-mode="sell"><i class="fa-solid fa-arrow-up-from-bracket"></i><span>Sell USD / USDT</span></button>
+      <button type="button" class="exchange-mode-tab" data-mode="exchange"><i class="fa-solid fa-globe"></i><span>Global Exchange</span></button>
+    </div>
+    <div class="exchange-stepper" aria-label="Exchange steps">
+      <div class="exchange-step active" data-step-indicator="1"><b>01</b><span>Currency</span></div>
+      <i></i><div class="exchange-step" data-step-indicator="2"><b>02</b><span>Review</span></div>
+      <i></i><div class="exchange-step" data-step-indicator="3"><b>03</b><span>Details</span></div>
+      <i></i><div class="exchange-step" data-step-indicator="4"><b>04</b><span>Confirm</span></div>
+    </div>
+    <div class="exchange-step-viewport">
+      <section class="exchange-step-panel active" data-step-panel="1">
+        <div class="exchange-panel-title"><div><small>STEP 1 OF 4</small><h3>আপনার Exchange নির্বাচন করুন</h3><p id="exchangeModeHint">BDT দিয়ে USD অথবা USDT কিনুন।</p></div><span class="secure-mini"><i class="fa-solid fa-shield-halved"></i> Secure flow</span></div>
+        <div class="exchange-wallet-grid">
+          <div class="exchange-wallet-field"><label for="fromWallet"><span>YOU SEND</span>আপনি পাঠাবেন</label><div class="exchange-select-wrap"><i class="fa-solid fa-arrow-up-from-bracket"></i><select id="fromWallet" required></select></div></div>
+          <div class="exchange-swap-mark"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
+          <div class="exchange-wallet-field"><label for="toWallet"><span>YOU RECEIVE</span>আপনি পাবেন</label><div class="exchange-select-wrap"><i class="fa-solid fa-arrow-down-to-bracket"></i><select id="toWallet" required></select></div></div>
         </div>
-
-        <div class="form-card">
-          <h3>আপনার তথ্য</h3>
-          <div class="field"><label for="customerName">নাম</label><input id="customerName" type="text" minlength="2" maxlength="80" placeholder="আপনার নাম" required></div>
-          <div class="field"><label for="contact" id="contactLabel">WhatsApp / Telegram / Email</label><input id="contact" type="text" minlength="5" maxlength="160" placeholder="WhatsApp নম্বর, Telegram username বা ইমেইল" required autocomplete="email"></div>
-          <div class="field">
-            <label for="account">যে অ্যাকাউন্ট / ঠিকানায় পেমেন্ট পাবেন</label>
-            <input id="account" type="text" minlength="3" maxlength="160" placeholder="প্রথমে যে ওয়ালেটে পাবেন সেটি নির্বাচন করুন" required autocomplete="off">
-            <small id="accountHelp">আপনার নির্বাচিত গ্রহণকারী ওয়ালেট অনুযায়ী নম্বর বা ঠিকানা লিখুন।</small>
-            <p class="address-warning"><strong>সতর্কতা:</strong> ভুল নম্বর, ওয়ালেট অ্যাড্রেস বা নেটওয়ার্ক নির্বাচন করলে আপনার অ্যাসেট হারাতে পারেন। এ ধরনের ভুলের জন্য কর্তৃপক্ষ দায়ী থাকবে না। সাবমিট করার আগে ঠিকানা ও নেটওয়ার্ক ভালোভাবে যাচাই করুন।</p>
-          </div>
-          <div class="field"><label for="reference">রেফারেন্স কোড (ঐচ্ছিক)</label><input id="reference" type="text" maxlength="40" placeholder="রেফারেল কোড"></div>
-          <div class="field"><label for="note">নোট (ঐচ্ছিক)</label><textarea id="note" rows="3" maxlength="500" placeholder="অতিরিক্ত তথ্য"></textarea></div>
-          <label class="check-row"><input id="terms" type="checkbox" required> আমি পেমেন্টের তথ্য ও নির্বাচিত ওয়ালেট যাচাই করেছি।</label>
-          <button class="submit-btn" type="submit">রিকোয়েস্ট তৈরি করুন</button>
-          <p id="formStatus" class="form-status" role="status" aria-live="polite"></p>
+        <div class="exchange-amount-row"><div class="field"><label for="amount">আপনার Amount</label><div class="amount-input"><input id="amount" type="number" min="0.01" max="100000000" step="any" placeholder="Amount লিখুন" required><span id="amountCurrency">BDT</span></div><small id="amountHelp">আপনি যে পরিমাণ দেবেন তা লিখুন।</small></div><div class="exchange-quick-note"><i class="fa-solid fa-circle-info"></i><span>রেট ও সার্ভিস ফি পরের ধাপে দেখতে পারবেন।</span></div></div>
+        <div class="exchange-panel-actions"><span><i class="fa-solid fa-lock"></i> আপনার তথ্য সুরক্ষিত থাকবে</span><button type="button" class="exchange-next-btn" data-next-step="2">Continue <i class="fa-solid fa-arrow-right"></i></button></div>
+      </section>
+      <section class="exchange-step-panel" data-step-panel="2" hidden>
+        <div class="exchange-panel-title"><div><small>STEP 2 OF 4</small><h3>Exchange Details যাচাই করুন</h3><p>পরিমাণ, রেট এবং সম্ভাব্য ফি দেখে নিন।</p></div><span class="secure-mini"><i class="fa-solid fa-calculator"></i> Rate preview</span></div>
+        <div class="exchange-review-card"><div class="exchange-review-route"><div><small>YOU SEND</small><strong id="stepReviewSend">—</strong></div><i class="fa-solid fa-arrow-right"></i><div><small>YOU RECEIVE</small><strong id="stepReviewReceive">—</strong></div></div><div class="wallet-preview"><div class="preview-row"><span>আপনি দেবেন</span><strong id="payPreview">—</strong></div><div class="preview-row"><span>আনুমানিক পাবেন</span><strong id="receivePreview">—</strong></div><div class="preview-row"><span>প্রযোজ্য রেট</span><strong id="ratePreview">—</strong></div><div class="preview-row"><span>সার্ভিস ফি (১%)</span><strong id="feePreview">—</strong></div><p class="note" id="calcMessage">চূড়ান্ত রেট ও ফি অর্ডার যাচাইয়ের সময় নিশ্চিত হবে.</p></div></div>
+        <div class="exchange-panel-actions"><button type="button" class="exchange-back-btn" data-prev-step="1"><i class="fa-solid fa-arrow-left"></i> Back</button><button type="button" class="exchange-next-btn" data-next-step="3">Continue <i class="fa-solid fa-arrow-right"></i></button></div>
+      </section>
+      <section class="exchange-step-panel" data-step-panel="3" hidden>
+        <div class="exchange-panel-title"><div><small>STEP 3 OF 4</small><h3>আপনার তথ্য দিন</h3><p>সঠিক যোগাযোগ ও গ্রহণকারী অ্যাকাউন্টের তথ্য লিখুন।</p></div><span class="secure-mini"><i class="fa-solid fa-user-check"></i> Your details</span></div>
+        <div class="exchange-details-grid">
+          <div class="field"><label for="customerName">আপনার নাম</label><input id="customerName" type="text" minlength="2" maxlength="80" placeholder="আপনার নাম" required></div>
+          <div class="field"><label for="contact" id="contactLabel">WhatsApp / Telegram / Email</label><input id="contact" type="text" minlength="5" maxlength="160" placeholder="যোগাযোগের তথ্য" required autocomplete="email"></div>
+          <div class="field exchange-account-field"><label for="account">Receive Account / Wallet Address</label><input id="account" type="text" minlength="3" maxlength="160" placeholder="যে অ্যাকাউন্টে টাকা পাবেন" required autocomplete="off"><small id="accountHelp">আপনার গ্রহণকারী অ্যাকাউন্টের সঠিক তথ্য দিন।</small></div>
+          <div class="field"><label for="reference">Referral Code <small>(ঐচ্ছিক)</small></label><input id="reference" type="text" maxlength="40" placeholder="রেফারেল কোড"></div>
+          <div class="field"><label for="note">অতিরিক্ত নোট <small>(ঐচ্ছিক)</small></label><textarea id="note" rows="2" maxlength="500" placeholder="কিছু জানাতে চাইলে লিখুন"></textarea></div>
         </div>
-      </form>
-    </section>
+        <div class="exchange-balance-choice"><span class="balance-choice-icon"><i class="fa-solid fa-wallet"></i></span><span><b>Use Account Balance</b><small>লগইন ও Balance API সংযুক্ত হলে এই অপশন চালু হবে।</small></span><span class="coming-soon">Coming soon</span></div>
+        <div class="exchange-panel-actions"><button type="button" class="exchange-back-btn" data-prev-step="2"><i class="fa-solid fa-arrow-left"></i> Back</button><button type="button" class="exchange-next-btn" data-next-step="4">Continue <i class="fa-solid fa-arrow-right"></i></button></div>
+      </section>
+      <section class="exchange-step-panel" data-step-panel="4" hidden>
+        <div class="exchange-panel-title"><div><small>STEP 4 OF 4</small><h3>Final Review & Confirmation</h3><p>সব তথ্য ঠিক থাকলে Exchange Request তৈরি করুন।</p></div><span class="secure-mini"><i class="fa-solid fa-circle-check"></i> Final check</span></div>
+        <div class="exchange-final-summary"><div><span>Exchange Route</span><strong id="finalRoute">—</strong></div><div><span>Send Amount</span><strong id="finalSend">—</strong></div><div><span>Receive Amount</span><strong id="finalReceive">—</strong></div><div><span>Account</span><strong id="finalAccount">—</strong></div></div>
+        <label class="check-row"><input id="terms" type="checkbox" required> আমি Exchange-এর সব তথ্য যাচাই করেছি এবং শর্তাবলিতে সম্মত।</label>
+        <div class="exchange-panel-actions"><button type="button" class="exchange-back-btn" data-prev-step="3"><i class="fa-solid fa-arrow-left"></i> Back</button><button class="submit-btn exchange-submit-btn" type="submit">Submit Exchange Request <i class="fa-solid fa-arrow-right"></i></button></div>
+        <p id="formStatus" class="form-status" role="status" aria-live="polite"></p>
+      </section>
+    </div>
+  </form>
+</section>
 
 
 <section class="about-premium section" id="about" aria-labelledby="aboutTitle">
