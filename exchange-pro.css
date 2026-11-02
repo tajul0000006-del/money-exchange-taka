@@ -209,3 +209,17 @@
 .exchange-pro-box .amount-input #amountHelp{display:none;flex:1 0 100%;width:100%;box-sizing:border-box;margin:0;padding:7px 10px;background:#fff1f0;border-top:1px solid #ffc9c5;color:#c62828;font-size:11px;font-weight:700;line-height:1.4;white-space:normal}
 .exchange-pro-box .amount-input #amountHelp.amount-limit-error{display:block}
 .exchange-pro-box .amount-input:has(#amount.invalid){border-color:#dc3545}
+
+/* Keep the entered amount readable when the limit warning is shown */
+.exchange-pro-box .amount-input #amount,
+.exchange-pro-box .amount-input #amount.invalid{
+  color:#15384e!important;
+  -webkit-text-fill-color:#15384e!important;
+  opacity:1!important;
+  background:#fff!important;
+}
+.exchange-pro-box .amount-input #amount::placeholder{
+  color:#8a9aa5!important;
+  -webkit-text-fill-color:#8a9aa5!important;
+  opacity:1!important;
+}
