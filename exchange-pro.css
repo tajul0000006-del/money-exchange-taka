@@ -437,3 +437,39 @@
  .exchange-pro-box .exchange-step-panel[data-step-panel="3"] .field input::placeholder,
  .exchange-pro-box .exchange-step-panel[data-step-panel="3"] .field textarea::placeholder{font-size:12px!important}
 }
+
+
+/* Step 5: stronger contrast so payment proof labels and instructions are easy to read */
+.exchange-pro-box .exchange-step-panel[data-step-panel="5"] .field label,
+.exchange-pro-box .exchange-step-panel[data-step-panel="5"] .field label span{
+  color:#102f43!important;
+  -webkit-text-fill-color:#102f43!important;
+  font-weight:800!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
+.exchange-pro-box .exchange-step-panel[data-step-panel="5"] .field-help{
+  display:block!important;
+  color:#263f50!important;
+  -webkit-text-fill-color:#263f50!important;
+  font-size:12px!important;
+  font-weight:600!important;
+  line-height:1.65!important;
+  opacity:1!important;
+}
+.exchange-pro-box .exchange-step-panel[data-step-panel="5"] .field input:not([type="file"]){
+  color:#102f43!important;
+  -webkit-text-fill-color:#102f43!important;
+  background:#fff!important;
+  opacity:1!important;
+}
+.exchange-pro-box .exchange-step-panel[data-step-panel="5"] .field input::placeholder{
+  color:#647887!important;
+  -webkit-text-fill-color:#647887!important;
+  opacity:1!important;
+}
+.exchange-pro-box .exchange-step-panel[data-step-panel="5"] .field input[type="file"]{
+  color:#263f50!important;
+  -webkit-text-fill-color:#263f50!important;
+  opacity:1!important;
+}
