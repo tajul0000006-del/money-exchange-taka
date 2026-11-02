@@ -2496,3 +2496,29 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
     max-height:28px!important;
   }
 }
+
+
+/* Shrink the WHITE outer background container around the ticker itself. */
+.exchange-ticker{
+  height:28px!important;
+  min-height:28px!important;
+  max-height:28px!important;
+  padding:0!important;
+  margin:0!important;
+  overflow:hidden!important;
+}
+.exchange-ticker .ticker-label,
+.exchange-ticker .ticker-window{
+  height:28px!important;
+  min-height:28px!important;
+  max-height:28px!important;
+}
+@media(max-width:600px){
+  .exchange-ticker,
+  .exchange-ticker .ticker-label,
+  .exchange-ticker .ticker-window{
+    height:24px!important;
+    min-height:24px!important;
+    max-height:24px!important;
+  }
+}
