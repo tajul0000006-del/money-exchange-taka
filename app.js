@@ -161,7 +161,6 @@
   document.querySelectorAll("[data-close-modal]").forEach(b=>b.addEventListener("click",()=>closeModal(b.dataset.closeModal)));
   document.querySelectorAll(".modal-backdrop").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)closeModal(m.id)}));
   $("copyPaymentAddress").addEventListener("click",async()=>{try{await navigator.clipboard.writeText($("paymentAddress").textContent);$("copyPaymentAddress").textContent="কপি হয়েছে";}catch(_){$("paymentAddress").focus?.();}});
-  $("goProof").addEventListener("click",()=>{closeModal("paymentModal");openModal("proofModal");});
   let firestoreReadyPromise=null;
   async function getFirebaseServices(){
     if(!firestoreReadyPromise){
@@ -211,9 +210,11 @@
     }
     img.src=URL.createObjectURL(file);name.textContent=file.name;wrap.hidden=false;
   });
-  $("proofForm").addEventListener("submit",async e=>{
+  $("submitPaymentProof").addEventListener("click",async e=>{
     e.preventDefault();if(!pendingRequest)return;
-    const submitButton=$("proofForm").querySelector('button[type="submit"]');
+    const submitButton=$("submitPaymentProof");
+    if(! $("proofReference").value.trim()){showError("Transaction ID / Reference লিখুন।");$("proofReference").focus();return;}
+    if(!$("proofScreenshot").files[0]){showError("পেমেন্ট Screenshot নির্বাচন করুন।");$("proofScreenshot").focus();return;}
     if(submitButton){submitButton.disabled=true;submitButton.dataset.originalText=submitButton.textContent;submitButton.textContent="জমা হচ্ছে...";}
     try{
       pendingRequest.proofReference=$("proofReference").value.trim();
@@ -232,9 +233,9 @@
       await saveRequestToFirestore(pendingRequest);
       let items=[];try{items=JSON.parse(localStorage.getItem(HISTORY_KEY)||"[]");}catch(_){}
       items.push(pendingRequest);localStorage.setItem(HISTORY_KEY,JSON.stringify(items));renderHistory();
-      closeModal("proofModal");$("successTrackingCode").textContent=pendingRequest.code;openModal("successModal");
+      $("successTrackingCode").textContent=pendingRequest.code;openModal("successModal");
       $("formStatus").textContent="আপনার অনুরোধ Firestore-এ জমা হয়েছে।";$("formStatus").classList.remove("error");
-      pendingRequest=null;$("proofForm").reset();$("exchangeForm").reset();updateWalletOptions();
+      pendingRequest=null;$("proofReference").value="";$("proofEmail").value="";$("proofScreenshot").value="";$("proofPreviewWrap").hidden=true;$("proofPreviewImage").removeAttribute("src");$("proofPreviewName").textContent="";$("exchangeForm").reset();updateWalletOptions();
     }catch(error){
       console.error("Firestore request submission failed:",error);
       showError(error?.message||"রিকোয়েস্ট জমা হয়নি। ইন্টারনেট ও Firestore Rules যাচাই করে আবার চেষ্টা করুন।");
@@ -371,9 +372,8 @@
     updateAmountCurrency(); updateCalculation();
   });
   $("amount").addEventListener("input",updateCalculation);
-  $("exchangeForm").addEventListener("submit",event=>{
-    event.preventDefault();
-    if(!validate()) return;
+  function preparePendingExchangeRequest(){
+    if(!validate()) return false;
     const from=walletById($("fromWallet").value),to=walletById($("toWallet").value),amount=Number($("amount").value),r=rateFor(from,to);
     const gross=amount*r.rate;
     const fee=gross*FEE_PERCENT/100,receive=gross-fee;
@@ -385,14 +385,11 @@
       amount,fromId:from.id,toId:to.id,rate:r.rate,fee,reference:$("reference").value.trim(),note:$("note").value.trim()
     };
     pendingRequest=item;
-    $("paymentIntro").textContent=`${from.name} (${from.currency}) দিয়ে ${money(amount,from.currency)} পাঠানোর নির্দেশনা। পেমেন্ট ঠিকানা ও পরিমাণ যাচাই করুন।`;
-    $("paymentSummary").innerHTML=`<div class="preview-row"><span>আপনি পাঠাবেন</span><strong>${escapeHtml(money(amount,from.currency))}</strong></div><div class="preview-row"><span>আপনি পাবেন</span><strong>${escapeHtml(money(receive,to.currency))}</strong></div><div class="preview-row"><span>রিকোয়েস্ট রেফারেন্স</span><strong>${escapeHtml(item.code)}</strong></div>`;
-    $("paymentAddress").textContent=paymentAddresses[from.id]||"পেমেন্ট নির্দেশনা প্রস্তুত করা হচ্ছে। অনুগ্রহ করে পরবর্তী ধাপে এগিয়ে তথ্য জমা দিন।";
-    $("goProof").disabled=false;
-    $("copyPaymentAddress").textContent="ঠিকানা কপি";
-    window.metShowExchangeStep?.(5);
-    openModal("proofModal");
-  });
+    $("copyExchangeAddress").textContent="ঠিকানা কপি";
+    return true;
+  }
+  window.metPrepareExchangeRequest=preparePendingExchangeRequest;
+  $("exchangeForm").addEventListener("submit",event=>{event.preventDefault();if(preparePendingExchangeRequest()) window.metShowExchangeStep?.(5);});
   $("clearHistory").addEventListener("click",()=>{
     if(confirm("এই ডিভাইসে সংরক্ষিত সব রিকোয়েস্ট মুছে ফেলবেন?")){localStorage.removeItem(HISTORY_KEY);renderHistory();}
   });
