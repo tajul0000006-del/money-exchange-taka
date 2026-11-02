@@ -217,14 +217,15 @@
   async function saveRequestToFirestore(item){
     const fb=await getFirebaseServices();
     const from=walletById(item.fromId),to=walletById(item.toId);
-    const isUsdSell=from?.type==="usd" && to?.type==="bdt";
-    const isUsdBuy=from?.type==="bdt" && to?.type==="usd";
-    if(!isUsdSell&&!isUsdBuy) throw new Error("এই ধাপে শুধু USD থেকে BDT অথবা BDT থেকে USD রিকোয়েস্ট জমা দেওয়া যাবে।");
+    const isDigitalWallet=wallet=>wallet?.type==="usd"||wallet?.type==="crypto";
+    const isUsdSell=isDigitalWallet(from) && to?.type==="bdt";
+    const isUsdBuy=from?.type==="bdt" && isDigitalWallet(to);
+    if(!isUsdSell&&!isUsdBuy) throw new Error("এই ধাপে USD/USDT থেকে BDT অথবা BDT থেকে USD/USDT রিকোয়েস্ট জমা দেওয়া যাবে।");
     const paymentMethod=(isUsdSell?to?.name:from?.name)||"Other";
     const allowedMethods=["bKash","Nagad","Rocket","Upay","ePay","TunePay","Bank","Other"];
     const method=allowedMethods.includes(paymentMethod)?paymentMethod:"Other";
     await fb.addDoc(fb.collection(fb.db,"exchangeRequests"),{
-      trackingCode:item.code,direction:isUsdSell?"sell":"buy",currency:"USD",
+      trackingCode:item.code,direction:isUsdSell?"sell":"buy",currency:from?.type==="crypto"||to?.type==="crypto"?"USDT":"USD",
       amount:Number(item.amount),paymentMethod:method,
       contactMethod:String($("contactMethod")?.value||"whatsapp"),
       contact:String($("contact").value.trim()).slice(0,160),
@@ -276,7 +277,9 @@
       pendingRequest=null;$("proofReference").value="";$("proofEmail").value="";$("proofScreenshot").value="";$("proofPreviewWrap").hidden=true;$("proofPreviewImage").removeAttribute("src");$("proofPreviewName").textContent="";$("exchangeForm").reset();updateWalletOptions();
     }catch(error){
       console.error("Firestore request submission failed:",error);
-      showError(error?.message||"রিকোয়েস্ট জমা হয়নি। ইন্টারনেট ও Firestore Rules যাচাই করে আবার চেষ্টা করুন।");
+      const code=String(error?.code||"");
+      const message=code.includes("storage/unauthorized")?"Payment Screenshot আপলোডের অনুমতি নেই। Firebase Storage Rules প্রকাশ করুন।":code.includes("permission-denied")||code.includes("firestore/permission-denied")?"রিকোয়েস্ট সংরক্ষণের অনুমতি নেই। Firebase Firestore Rules আপডেট করে Publish করুন।":error?.message||"রিকোয়েস্ট জমা হয়নি। ইন্টারনেট ও Firebase Rules যাচাই করে আবার চেষ্টা করুন।";
+      showError(message);
     }finally{
       if(submitButton){submitButton.disabled=false;submitButton.textContent=submitButton.dataset.originalText||"জমা দিন";}
     }
