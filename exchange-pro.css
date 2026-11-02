@@ -138,10 +138,10 @@
 .field-help{display:block;margin-top:6px;color:#667085;font-size:12px;line-height:1.5}
 
 
-/* Exchange form: static information strip above Step 1 */
+/* Exchange form: scrolling information strip above Step 1 */
 .exchange-step-ticker{
   min-height:38px;display:flex;align-items:center;gap:12px;
-  margin:0 18px;padding:6px 12px;overflow:hidden;
+  margin:0 18px;padding:0 12px;overflow:hidden;
   border:1px solid #dcecf0;border-radius:10px;
   background:linear-gradient(100deg,#effbfc 0%,#f5f8ff 55%,#effbf5 100%);
   color:#126875;
@@ -149,20 +149,20 @@
 .exchange-step-ticker-label{
   flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;
   padding-right:11px;border-right:1px solid #c8e1e5;
-  color:#087481;font-size:15px;font-weight:800;letter-spacing:.2px;
+  color:#087481;font-size:13px;font-weight:800;letter-spacing:.2px;
 }
-.exchange-step-ticker-window{min-width:0;overflow:hidden;flex:1}
+.exchange-step-ticker-window{min-width:0;overflow:hidden;white-space:nowrap;flex:1}
 .exchange-step-ticker-track{
-  width:100%;display:flex;align-items:center;justify-content:center;
-  flex-wrap:wrap;gap:5px 14px;white-space:normal;
-  animation:none!important;transform:none!important;
-  font-size:15px;font-weight:700;letter-spacing:.1px;color:#294b58;
+  width:max-content;display:flex;align-items:center;gap:24px;
+  animation:exchangeStepTickerMove 26s linear infinite;
+  font-size:13px;font-weight:700;letter-spacing:.1px;color:#294b58;
 }
-.exchange-step-ticker-track b{color:#0c9b8c;font-size:17px}
+.exchange-step-ticker-track b{color:#0c9b8c;font-size:15px}
+.exchange-step-ticker:hover .exchange-step-ticker-track{animation-play-state:paused}
+@keyframes exchangeStepTickerMove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media(max-width:600px){
- .exchange-step-ticker{min-height:36px;margin:0 10px;gap:9px;padding:6px 9px}
- .exchange-step-ticker-label{font-size:14px;padding-right:8px}
- .exchange-step-ticker-track{font-size:14px;gap:4px 10px}
- .exchange-step-ticker-track b{font-size:16px}
+ .exchange-step-ticker{min-height:36px;margin:0 10px;gap:9px;padding:0 9px}
+ .exchange-step-ticker-label{font-size:12px;padding-right:8px}
+ .exchange-step-ticker-track{font-size:12px;gap:18px}
 }
-@media(prefers-reduced-motion:reduce){.exchange-step-ticker-track{animation:none!important}}
+@media(prefers-reduced-motion:reduce){.exchange-step-ticker-track{animation:none}}
