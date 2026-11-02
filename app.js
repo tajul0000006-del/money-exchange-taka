@@ -226,7 +226,8 @@
     await fb.addDoc(fb.collection(fb.db,"exchangeRequests"),{
       trackingCode:item.code,direction:isUsdSell?"sell":"buy",currency:"USD",
       amount:Number(item.amount),paymentMethod:method,
-      contact:String($("contact").value.trim()).slice(0,25),
+      contactMethod:String($("contactMethod")?.value||"whatsapp"),
+      contact:String($("contact").value.trim()).slice(0,160),
       paymentAccount:String($("account").value.trim()).slice(0,80),
       note:String(item.note||"").slice(0,500),
       referralCode:String(item.reference||"").slice(0,40),
@@ -370,10 +371,12 @@
       if(id==="customerName") invalid=el.value.trim().length<2||el.value.trim().length>80;
       if(id==="contact") {
         const value=el.value.trim();
-        const isPhone=/^[0-9+\-()\s]{7,20}$/.test(value);
-        const isEmail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-        const isTelegram=/^@?[A-Za-z0-9_]{5,32}$/.test(value);
-        invalid=!(isPhone||isEmail||isTelegram);
+        const method=$("contactMethod")?.value||"whatsapp";
+        const isPhone=/^\\d{11}$/.test(value);
+        const isTelegramProfile=/^@?[A-Za-z0-9_]{5,32}$/.test(value)||/^(https?:\\/\\/)?(www\\.)?(t\\.me|telegram\\.me)\\/[A-Za-z0-9_]{5,32}\\/?$/.test(value);
+        invalid=method==="whatsapp"?!isPhone:!(isPhone||isTelegramProfile);
+        const contactError=$("contactError");
+        if(contactError) contactError.textContent=invalid?(method==="whatsapp"?"সঠিক ১১ ডিজিটের WhatsApp নম্বর লিখুন।":"সঠিক Telegram নম্বর, @username অথবা t.me profile link লিখুন."):"";
       }
       if(id==="account") invalid=el.value.trim().length<3||el.value.trim().length>120;
       if(invalid){el.classList.add("invalid");if(!first)first=el;}
