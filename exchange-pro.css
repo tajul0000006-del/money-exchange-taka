@@ -231,3 +231,8 @@
 .exchange-pro-box .contact-field .contact-error{display:block;margin-top:4px;color:#c62828;font-size:11px;font-weight:700;line-height:1.4}
 .exchange-pro-box .contact-field .contact-error:empty{display:none}
 .exchange-pro-box .contact-field input.invalid,.exchange-pro-box .contact-field select.invalid{border-color:#dc3545!important;box-shadow:0 0 0 2px #dc354520}
+
+/* Receive wallet address validation in Step 3 */
+.exchange-pro-box .exchange-account-field .contact-error{display:block;margin-top:4px;color:#c62828;font-size:11px;font-weight:700;line-height:1.4}
+.exchange-pro-box .exchange-account-field .contact-error:empty{display:none}
+.exchange-pro-box .exchange-account-field input.invalid{border-color:#dc3545!important;box-shadow:0 0 0 2px #dc354520}
