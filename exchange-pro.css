@@ -107,3 +107,24 @@
  .exchange-final-summary strong{font-size:11px}
  .exchange-submit-btn{font-size:10px;padding:0 10px}
 }
+
+/* Five-step payment instructions */
+.exchange-payment-address{display:grid;gap:8px;margin:10px 0;padding:12px 14px;background:#f0f8f9;border:1px solid #cfe7e9;border-radius:12px}
+.exchange-payment-address span{font-size:10px;color:#6b818d;font-weight:700}
+.exchange-payment-address strong{font-size:14px;color:#10384b;overflow-wrap:anywhere}
+.exchange-payment-address .secondary-btn{justify-self:start;min-height:32px;padding:0 12px}
+.exchange-warning{margin:9px 0;padding:9px 11px;background:#fff8e8;border:1px solid #f1dfb6;border-radius:10px;color:#795b20;font-size:10px;line-height:1.55}
+.exchange-warning strong{color:#8b4e12}
+.exchange-pro-box .exchange-final-summary{margin:3px 0 9px}
+.exchange-pro-box .exchange-panel-title{margin-bottom:10px}
+.exchange-pro-box .exchange-step-panel[data-step-panel="5"] .exchange-review-card{padding:4px 0}
+.exchange-pro-box .exchange-step-panel[data-step-panel="5"] .note{font-size:11px;line-height:1.6}
+@media(max-width:650px){
+ .exchange-stepper{gap:3px;padding-left:5px;padding-right:5px}
+ .exchange-step{font-size:8px;gap:3px}
+ .exchange-step b{width:20px;height:20px;font-size:8px}
+ .exchange-stepper>i{width:8px}
+ .exchange-payment-address{padding:9px 10px}
+ .exchange-payment-address strong{font-size:12px}
+ .exchange-warning{font-size:9px}
+}
