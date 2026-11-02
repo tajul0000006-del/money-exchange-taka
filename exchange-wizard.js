@@ -61,7 +61,7 @@
       }
       modes.forEach(button => button.classList.toggle("active", button.dataset.mode === mode));
       const hints = {
-        buy: "bKash Personal, Nagad Personal, Rocket Personal অথবা Upay Personal দিয়ে USD / USDT কিনুন.",
+        buy: "bKash, Nagad, Rocket অথবা Upay BDT দিয়ে USD / USDT কিনুন.",
         sell: "USD / USDT পাঠিয়ে bKash Personal, Nagad Personal, Rocket Personal অথবা Upay Personal-এ BDT নিন.",
         exchange: "Global Exchange-এ Send এবং Receive—দুই পাশের Currency নিজে নির্বাচন করুন."
       };
