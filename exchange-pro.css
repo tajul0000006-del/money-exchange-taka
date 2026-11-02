@@ -139,3 +139,53 @@
 
 /* Step 1: keep the exchange form viewport fixed without vertical scrolling */
 .exchange-pro-box.step-one-no-scroll .exchange-step-viewport{overflow-y:hidden!important;overflow-x:hidden!important}
+
+/* Slightly larger text (+1px) across all five exchange steps; preserve 500px box */
+.exchange-pro-box .exchange-panel-title h3{font-size:19px}
+.exchange-pro-box .exchange-panel-title p{font-size:13px}
+.exchange-pro-box .exchange-wallet-field label{font-size:13px}
+.exchange-pro-box .exchange-select-wrap select{font-size:14px}
+.exchange-pro-box .exchange-amount-row .field label{font-size:13px}
+.exchange-pro-box .exchange-panel-actions>span{font-size:11px}
+.exchange-pro-box .exchange-next-btn,.exchange-pro-box .exchange-back-btn{font-size:13px}
+.exchange-pro-box .exchange-review-route small{font-size:10px}
+.exchange-pro-box .exchange-review-route strong{font-size:16px}
+.exchange-pro-box .exchange-review-card .preview-row{font-size:13px}
+.exchange-pro-box .exchange-review-card .note{font-size:11px}
+.exchange-pro-box .exchange-details-grid .field label{font-size:12px}
+.exchange-pro-box .exchange-details-grid .field input,.exchange-pro-box .exchange-details-grid .field textarea{font-size:14px}
+.exchange-pro-box .exchange-details-grid .field small{font-size:11px}
+.exchange-pro-box .exchange-balance-choice b{font-size:12px}
+.exchange-pro-box .exchange-balance-choice small{font-size:10px}
+.exchange-pro-box .exchange-final-summary span{font-size:11px}
+.exchange-pro-box .exchange-final-summary strong{font-size:13px}
+.exchange-pro-box .exchange-submit-btn{font-size:12px}
+.exchange-pro-box .check-row,.exchange-pro-box .form-status{font-size:12px}
+.exchange-pro-box .exchange-payment-address span{font-size:11px}
+.exchange-pro-box .exchange-payment-address strong{font-size:15px}
+.exchange-pro-box .exchange-warning{font-size:11px}
+@media(max-width:650px){
+ .exchange-pro-box .exchange-panel-title h3{font-size:16px}
+ .exchange-pro-box .exchange-panel-title p{font-size:11px}
+ .exchange-pro-box .exchange-wallet-field label{font-size:11px}
+ .exchange-pro-box .exchange-select-wrap select{font-size:12px}
+ .exchange-pro-box .exchange-amount-row .field label{font-size:11px}
+ .exchange-pro-box .exchange-panel-actions>span{font-size:10px}
+ .exchange-pro-box .exchange-next-btn,.exchange-pro-box .exchange-back-btn{font-size:12px}
+ .exchange-pro-box .exchange-review-route small{font-size:10px}
+ .exchange-pro-box .exchange-review-route strong{font-size:13px}
+ .exchange-pro-box .exchange-review-card .preview-row{font-size:13px}
+ .exchange-pro-box .exchange-review-card .note{font-size:12px}
+ .exchange-pro-box .exchange-details-grid .field label{font-size:12px}
+ .exchange-pro-box .exchange-details-grid .field input,.exchange-pro-box .exchange-details-grid .field textarea{font-size:14px}
+ .exchange-pro-box .exchange-details-grid .field small{font-size:11px}
+ .exchange-pro-box .exchange-balance-choice b{font-size:12px}
+ .exchange-pro-box .exchange-balance-choice small{font-size:10px}
+ .exchange-pro-box .exchange-final-summary span{font-size:11px}
+ .exchange-pro-box .exchange-final-summary strong{font-size:12px}
+ .exchange-pro-box .exchange-submit-btn{font-size:11px}
+ .exchange-pro-box .check-row,.exchange-pro-box .form-status{font-size:12px}
+ .exchange-pro-box .exchange-payment-address span{font-size:11px}
+ .exchange-pro-box .exchange-payment-address strong{font-size:13px}
+ .exchange-pro-box .exchange-warning{font-size:10px}
+}
