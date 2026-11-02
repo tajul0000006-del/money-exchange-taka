@@ -202,14 +202,14 @@
   async function getFirebaseServices(){
     if(!firestoreReadyPromise){
       firestoreReadyPromise=(async()=>{
-        const [{initializeApp,getApps},{getFirestore,collection,addDoc,serverTimestamp},{getStorage,ref,uploadBytes,getDownloadURL}] = await Promise.all([
+        const [{initializeApp,getApps},{getFirestore,collection,addDoc,serverTimestamp},{getStorage,ref,uploadBytesResumable,getDownloadURL}] = await Promise.all([
           import("https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js"),
           import("https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js"),
           import("https://www.gstatic.com/firebasejs/11.6.0/firebase-storage.js")
         ]);
         const {firebaseConfig}=await import("./firebase-config.js");
         const app=getApps().length?getApps()[0]:initializeApp(firebaseConfig);
-        return {db:getFirestore(app),collection,addDoc,serverTimestamp,storage:getStorage(app),ref,uploadBytes,getDownloadURL};
+        return {db:getFirestore(app),collection,addDoc,serverTimestamp,storage:getStorage(app),ref,uploadBytesResumable,getDownloadURL};
       })();
     }
     return firestoreReadyPromise;
@@ -220,12 +220,12 @@
     const isDigitalWallet=wallet=>wallet?.type==="usd"||wallet?.type==="crypto";
     const isUsdSell=isDigitalWallet(from) && to?.type==="bdt";
     const isUsdBuy=from?.type==="bdt" && isDigitalWallet(to);
-    if(!isUsdSell&&!isUsdBuy) throw new Error("এই ধাপে USD/USDT থেকে BDT অথবা BDT থেকে USD/USDT রিকোয়েস্ট জমা দেওয়া যাবে।");
+    const direction=isUsdSell?"sell":isUsdBuy?"buy":"exchange";
     const paymentMethod=(isUsdSell?to?.name:from?.name)||"Other";
     const allowedMethods=["bKash","Nagad","Rocket","Upay","ePay","TunePay","Bank","Other"];
     const method=allowedMethods.includes(paymentMethod)?paymentMethod:"Other";
     await fb.addDoc(fb.collection(fb.db,"exchangeRequests"),{
-      trackingCode:item.code,direction:isUsdSell?"sell":"buy",currency:from?.type==="crypto"||to?.type==="crypto"?"USDT":"USD",
+      trackingCode:item.code,direction,currency:from?.currency==="USDT"||to?.currency==="USDT"?"USDT":from?.currency==="USD"||to?.currency==="USD"?"USD":"BDT",
       amount:Number(item.amount),paymentMethod:method,
       contactMethod:String($("contactMethod")?.value||"whatsapp"),
       contact:String($("contact").value.trim()).slice(0,160),
@@ -266,9 +266,31 @@
       const fb=await getFirebaseServices();
       const proofPath="payment-proofs/"+pendingRequest.code+"/"+Date.now()+"-"+proofFile.name.replace(/[^a-zA-Z0-9._-]/g,"_");
       const proofRef=fb.ref(fb.storage,proofPath);
-      const uploaded=await fb.uploadBytes(proofRef,proofFile,{contentType:proofFile.type});
+      $("formStatus").classList.remove("error");
+      $("formStatus").textContent="Firebase সংযোগ করা হচ্ছে...";
+      const uploadTask=fb.uploadBytesResumable(proofRef,proofFile,{contentType:proofFile.type});
+      const uploaded=await new Promise((resolve,reject)=>{
+        let finished=false;
+        const timer=setTimeout(()=>{
+          if(finished)return;
+          finished=true;
+          uploadTask.cancel();
+          reject(new Error("Screenshot upload ৯০ সেকেন্ডেও শেষ হয়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।"));
+        },90000);
+        uploadTask.on("state_changed",snapshot=>{
+          const percent=Math.round((snapshot.bytesTransferred/Math.max(snapshot.totalBytes,1))*100);
+          $("formStatus").textContent="Payment Screenshot আপলোড হচ্ছে... "+percent+"%";
+        },error=>{
+          if(finished)return;
+          finished=true;clearTimeout(timer);reject(error);
+        },()=>{
+          if(finished)return;
+          finished=true;clearTimeout(timer);resolve(uploadTask.snapshot);
+        });
+      });
       pendingRequest.proofScreenshotUrl=await fb.getDownloadURL(uploaded.ref);
       pendingRequest.proofFileName=proofFile.name;
+      $("formStatus").textContent="Screenshot আপলোড হয়েছে। এখন রিকোয়েস্ট সংরক্ষণ হচ্ছে...";
       await saveRequestToFirestore(pendingRequest);
       let items=[];try{items=JSON.parse(localStorage.getItem(HISTORY_KEY)||"[]");}catch(_){}
       items.push(pendingRequest);localStorage.setItem(HISTORY_KEY,JSON.stringify(items));renderHistory();
@@ -278,7 +300,7 @@
     }catch(error){
       console.error("Firestore request submission failed:",error);
       const code=String(error?.code||"");
-      const message=code.includes("storage/unauthorized")?"Payment Screenshot আপলোডের অনুমতি নেই। Firebase Storage Rules প্রকাশ করুন।":code.includes("permission-denied")||code.includes("firestore/permission-denied")?"রিকোয়েস্ট সংরক্ষণের অনুমতি নেই। Firebase Firestore Rules আপডেট করে Publish করুন।":error?.message||"রিকোয়েস্ট জমা হয়নি। ইন্টারনেট ও Firebase Rules যাচাই করে আবার চেষ্টা করুন।";
+      const message=code.includes("storage/unauthorized")?"Payment Screenshot আপলোডের অনুমতি নেই (storage/unauthorized)। Storage Rules ও bucket যাচাই করুন।":code.includes("storage/bucket-not-found")?"Firebase Storage bucket পাওয়া যায়নি। Firebase Console-এ Storage চালু আছে কি না যাচাই করুন।":code.includes("permission-denied")||code.includes("firestore/permission-denied")?"রিকোয়েস্ট সংরক্ষণের অনুমতি নেই (permission-denied)। Firestore Rules-এর সঙ্গে পাঠানো তথ্য মিলছে না।":(error?.message||"রিকোয়েস্ট জমা হয়নি।")+" ["+(code||"unknown error")+"]";
       showError(message);
     }finally{
       if(submitButton){submitButton.disabled=false;submitButton.textContent=submitButton.dataset.originalText||"জমা দিন";}
