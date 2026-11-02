@@ -82,7 +82,7 @@
       label.textContent = whatsapp ? "WhatsApp Number" : "Telegram Number / Profile Link";
       input.inputMode = whatsapp ? "numeric" : "text";
       input.placeholder = whatsapp ? "১১ ডিজিটের WhatsApp নম্বর লিখুন" : "Telegram নম্বর, @username অথবা t.me profile link দিন";
-      help.textContent = whatsapp ? "উদাহরণ: 12345678901 (শুধু ১১টি সংখ্যা)" : "Telegram নম্বর (১১ ডিজিট), @username অথবা https://t.me/username দিন।";
+      help.textContent = whatsapp ? "উদাহরণ: 12345678901 (শুধু ১১টি সংখ্যা)" : "";
       error.textContent = "";
       input.classList.remove("invalid");
     }
