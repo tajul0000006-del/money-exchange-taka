@@ -2433,3 +2433,47 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
     height:34px!important;
   }
 }
+
+
+/* COMPACT TICKER: reduce the scrolling announcement bar to half height. */
+.exchange-ticker{
+  height:24px!important;
+  min-height:24px!important;
+  max-height:24px!important;
+}
+.ticker-label{
+  height:24px!important;
+  min-height:24px!important;
+  padding:0 9px!important;
+  gap:4px!important;
+  font-size:10px!important;
+  line-height:1!important;
+}
+.ticker-label::after{
+  right:-6px!important;
+  width:12px!important;
+}
+.ticker-label>i{font-size:10px!important}
+.ticker-live-dot{
+  width:5px!important;
+  height:5px!important;
+}
+.ticker-window{height:24px!important;min-height:24px!important}
+.ticker-item{
+  font-size:11px!important;
+  gap:5px!important;
+  line-height:1.1!important;
+}
+.ticker-item i{font-size:10px!important}
+.ticker-content{
+  gap:14px!important;
+  padding-left:14px!important;
+}
+.ticker-separator{font-size:9px!important}
+@media(max-width:600px){
+  .exchange-ticker,
+  .ticker-label,
+  .ticker-window{height:24px!important;min-height:24px!important;max-height:24px!important}
+  .ticker-label{padding:0 7px!important;font-size:9px!important}
+  .ticker-item{font-size:10px!important}
+}
