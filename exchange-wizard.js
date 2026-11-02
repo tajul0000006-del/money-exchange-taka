@@ -90,7 +90,8 @@
       const input = $("contact"), error = $("contactError");
       const value = input?.value.trim() || "";
       const valid = isValidContact();
-      if (input) input.classList.toggle("invalid", !valid);
+      if (showMessage && input) input.classList.toggle("invalid", !valid);
+      if (valid && input) input.classList.remove("invalid");
       if (error) error.textContent = valid || !showMessage ? "" : ($("contactMethod").value === "whatsapp" ? "সঠিক ১১ ডিজিটের WhatsApp নম্বর লিখুন।" : "সঠিক Telegram নম্বর, @username অথবা t.me profile link লিখুন।");
       return valid;
     }
