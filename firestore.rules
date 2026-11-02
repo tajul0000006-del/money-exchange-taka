@@ -16,12 +16,12 @@ service cloud.firestore {
         'uid', 'requestType', 'status', 'createdAt', 'proofSubmittedAt'
       ])
       && d.trackingCode is string && d.trackingCode.matches('MET-[A-Z0-9]{6}')
-      && d.direction in ['buy', 'sell']
-      && d.currency in ['USD', 'USDT']
+      && d.direction in ['buy', 'sell', 'exchange']
+      && d.currency in ['USD', 'USDT', 'BDT']
       && d.amount is number && d.amount > 0 && d.amount <= 1000000
       && d.paymentMethod in ['bKash', 'Nagad', 'Rocket', 'Upay', 'ePay', 'TunePay', 'Bank', 'Other']
       && d.contactMethod in ['whatsapp', 'telegram']
-      && d.contact is string && d.contact.size() >= 6 && d.contact.size() <= 160
+      && d.contact is string && d.contact.size() >= 5 && d.contact.size() <= 160
       && d.paymentAccount is string && d.paymentAccount.size() >= 3 && d.paymentAccount.size() <= 120
       && d.note is string && d.note.size() <= 500
       && d.affiliateCode is string && d.affiliateCode.size() <= 40
