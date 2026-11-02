@@ -48,6 +48,7 @@
         item.classList.toggle("active", n === currentStep);
         item.classList.toggle("done", n < currentStep);
       });
+      form.classList.toggle("step-one-no-scroll", currentStep === 1);
       if (currentStep >= 2) updateReview();
       const viewport = form.querySelector(".exchange-step-viewport");
       if (viewport) viewport.scrollTop = 0;
