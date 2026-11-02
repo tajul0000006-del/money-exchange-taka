@@ -63,9 +63,9 @@
       const hints = {
         buy: "bKash, Nagad, Rocket অথবা Upay BDT দিয়ে USD / USDT কিনুন.",
         sell: "USD / USDT পাঠিয়ে bKash Personal, Nagad Personal, Rocket Personal অথবা Upay Personal-এ BDT নিন.",
-        exchange: "Global Exchange-এ Send এবং Receive—দুই পাশের Currency নিজে নির্বাচন করুন."
+        exchange: ""
       };
-      if ($("exchangeModeHint")) $("exchangeModeHint").textContent = hints[mode] || hints.buy;
+      if ($("exchangeModeHint")) { $("exchangeModeHint").textContent = hints[mode] || hints.buy; $("exchangeModeHint").hidden = mode === "exchange"; }
       showStep(1);
     }
     function nextStep(step) {
