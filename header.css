@@ -2341,3 +2341,31 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
     max-height: calc(100dvh - 60px) !important;
   }
 }
+
+
+/* SECOND HEADER HEIGHT ADJUSTMENT: another 10px smaller, including logo sizing. */
+@media (min-width: 901px) {
+  .main-header .met-logo-image { max-height: 72px !important; }
+}
+@media (max-width: 900px) {
+  :root { --header-height: 56px; }
+  .main-header .met-logo-image { max-height: 62px !important; }
+}
+@media (max-width: 480px) {
+  :root { --header-height: 50px; }
+  .main-header .met-logo-image { max-height: 48px !important; }
+}
+@media (max-width: 760px) {
+  #mobileMenu {
+    top: 56px !important;
+    height: calc(100dvh - 56px) !important;
+    max-height: calc(100dvh - 56px) !important;
+  }
+}
+@media (max-width: 480px) {
+  #mobileMenu {
+    top: 50px !important;
+    height: calc(100dvh - 50px) !important;
+    max-height: calc(100dvh - 50px) !important;
+  }
+}
