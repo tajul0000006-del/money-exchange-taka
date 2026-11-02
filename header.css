@@ -2477,3 +2477,22 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
   .exchange-ticker .ticker-item i{font-size:12px!important;}
   .exchange-ticker .ticker-content{gap:14px!important;padding-left:14px!important;}
 }
+
+
+/* Final small ticker height adjustment: 4px shorter, text sizing unchanged. */
+.exchange-ticker,
+.exchange-ticker .ticker-label,
+.exchange-ticker .ticker-window{
+  height:32px!important;
+  min-height:32px!important;
+  max-height:32px!important;
+}
+@media(max-width:600px){
+  .exchange-ticker,
+  .exchange-ticker .ticker-label,
+  .exchange-ticker .ticker-window{
+    height:28px!important;
+    min-height:28px!important;
+    max-height:28px!important;
+  }
+}
