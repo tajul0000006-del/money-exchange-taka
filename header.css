@@ -2477,3 +2477,21 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
   .ticker-label{padding:0 7px!important;font-size:9px!important}
   .ticker-item{font-size:10px!important}
 }
+
+
+/* TICKER BOX HEIGHT: compact right-to-left announcement strip. */
+.exchange-ticker{height:16px!important;min-height:16px!important;max-height:16px!important;}
+.ticker-label,.ticker-window{height:16px!important;min-height:16px!important;max-height:16px!important;}
+.ticker-label{padding:0 6px!important;gap:3px!important;font-size:8px!important;line-height:1!important;}
+.ticker-label::after{right:-5px!important;width:10px!important;}
+.ticker-label>i{font-size:8px!important;}
+.ticker-live-dot{width:4px!important;height:4px!important;}
+.ticker-item{font-size:9px!important;gap:4px!important;line-height:1!important;}
+.ticker-item i{font-size:8px!important;}
+.ticker-content{gap:10px!important;padding-left:10px!important;}
+.ticker-separator{font-size:8px!important;}
+@media(max-width:600px){
+  .exchange-ticker,.ticker-label,.ticker-window{height:16px!important;min-height:16px!important;max-height:16px!important;}
+  .ticker-label{padding:0 5px!important;font-size:7px!important;}
+  .ticker-item{font-size:8px!important;}
+}
