@@ -230,7 +230,7 @@
       contact:String($("contact").value.trim()).slice(0,160),
       paymentAccount:String($("account").value.trim()).slice(0,80),
       note:String(item.note||"").slice(0,500),
-      referralCode:String(item.reference||"").slice(0,40),
+      affiliateCode:String(item.affiliateCode||item.reference||"").slice(0,40),
       transactionReference:String(item.proofReference||"").slice(0,160),
       proofEmail:String(item.proofEmail||"").slice(0,160),
       proofScreenshotUrl:String(item.proofScreenshotUrl||""),
