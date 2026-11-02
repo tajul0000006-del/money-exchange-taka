@@ -95,6 +95,43 @@
       if (error) error.textContent = valid || !showMessage ? "" : ($("contactMethod").value === "whatsapp" ? "সঠিক ১১ ডিজিটের WhatsApp নম্বর লিখুন।" : "সঠিক Telegram নম্বর, @username অথবা t.me profile link লিখুন।");
       return valid;
     }
+    function accountRule(walletId) {
+      const rules = {
+        bkash: {hint:"bKash Personal-এর ১১ ডিজিটের সঠিক মোবাইল নম্বর দিন।", valid:v=>/^01[3-9]\\d{8}$/.test(v), error:"bKash-এর সঠিক ১১ ডিজিটের নম্বর দিন (01 দিয়ে শুরু)।"},
+        nagad: {hint:"Nagad Personal-এর ১১ ডিজিটের সঠিক মোবাইল নম্বর দিন।", valid:v=>/^01[3-9]\\d{8}$/.test(v), error:"Nagad-এর সঠিক ১১ ডিজিটের নম্বর দিন (01 দিয়ে শুরু)।"},
+        rocket: {hint:"Rocket Personal-এর ১১ ডিজিটের সঠিক মোবাইল নম্বর দিন।", valid:v=>/^01[3-9]\\d{8}$/.test(v), error:"Rocket-এর সঠিক ১১ ডিজিটের নম্বর দিন (01 দিয়ে শুরু)।"},
+        upay: {hint:"Upay Personal-এর ১১ ডিজিটের সঠিক মোবাইল নম্বর দিন।", valid:v=>/^01[3-9]\\d{8}$/.test(v), error:"Upay-এর সঠিক ১১ ডিজিটের নম্বর দিন (01 দিয়ে শুরু)।"},
+        paypal: {hint:"আপনার PayPal account-এর সঠিক email address দিন।", valid:v=>/^[A-Z0-9.!#$%&'*+/=?^_{|}~-]+@[A-Z0-9-]+(?:\\.[A-Z0-9-]+)+$/i.test(v), error:"সঠিক PayPal account email address দিন।"},
+        perfectmoney: {hint:"আপনার Perfect Money USD account ID দিন (যেমন: U12345678)।", valid:v=>/^U\\d{7,8}$/i.test(v), error:"Perfect Money ID অবশ্যই U দিয়ে শুরু হওয়া ৮–৯ অক্ষরের হতে হবে (যেমন U12345678)।"},
+        webmoney: {hint:"আপনার WebMoney WMZ wallet/purse দিন (যেমন: Z123456789012)।", valid:v=>/^Z\\d{12}$/i.test(v), error:"সঠিক WebMoney WMZ purse দিন: Z-এর পরে ১২টি সংখ্যা।"},
+        volet: {hint:"আপনার Volet account-এর email অথবা registered phone number দিন।", valid:v=>/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(v)||/^\\+?\\d{10,15}$/.test(v), error:"সঠিক Volet account email অথবা ১০–১৫ ডিজিটের registered phone number দিন।"},
+        binance: {hint:"Binance USDT TRC20 deposit address দিন (TRON network)।", valid:v=>/^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(v), error:"সঠিক Binance TRC20 address দিন (T দিয়ে শুরু, মোট ৩৪ অক্ষর)।"},
+        kucoin: {hint:"KuCoin USDT TRC20 deposit address দিন (TRON network)।", valid:v=>/^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(v), error:"সঠিক KuCoin TRC20 address দিন (T দিয়ে শুরু, মোট ৩৪ অক্ষর)।"},
+        bybit: {hint:"Bybit USDT TRC20 deposit address দিন (TRON network)।", valid:v=>/^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(v), error:"সঠিক Bybit TRC20 address দিন (T দিয়ে শুরু, মোট ৩৪ অক্ষর)।"},
+        epay: {hint:"আপনার ePay account-এর registered ID / email দিন।", valid:v=>/^[A-Za-z0-9][A-Za-z0-9._@+-]{3,63}$/.test(v), error:"সঠিক ePay account ID অথবা email দিন (কমপক্ষে ৪ অক্ষর)।"},
+        tunepay: {hint:"আপনার TunePay account-এর registered ID / email দিন।", valid:v=>/^[A-Za-z0-9][A-Za-z0-9._@+-]{3,63}$/.test(v), error:"সঠিক TunePay account ID অথবা email দিন (কমপক্ষে ৪ অক্ষর)।"}
+      };
+      return rules[walletId] || {hint:"নির্বাচিত Wallet-এর সঠিক account ID / address দিন।",valid:v=>/^[A-Za-z0-9][A-Za-z0-9._@:+/-]{2,159}$/.test(v),error:"নির্বাচিত Wallet-এর সঠিক account ID / address দিন।"};
+    }
+    function updateAccountMode() {
+      const input=$("account"), help=$("accountHelp"), error=$("accountError");
+      if(!input) return;
+      const rule=accountRule($("toWallet")?.value);
+      input.placeholder=rule.hint;
+      if(help) help.textContent=rule.hint;
+      if(error) error.textContent="";
+      input.classList.remove("invalid");
+    }
+    function validateAccount(showMessage) {
+      const input=$("account"), error=$("accountError");
+      const value=input?.value.trim()||"";
+      const rule=accountRule($("toWallet")?.value);
+      const valid=!!value && rule.valid(value);
+      if(showMessage && input) input.classList.toggle("invalid",!valid);
+      if(valid && input) input.classList.remove("invalid");
+      if(error) error.textContent=valid||!showMessage?"":rule.error;
+      return valid;
+    }
     function nextStep(step) {
       const target = Number(step);
       if (currentStep === 1) {
@@ -115,16 +152,13 @@
         }
       }
       if (currentStep === 3) {
-        for (const id of ["customerName", "contact", "account"]) {
-          const field = $(id);
-          if (field && !field.value.trim()) {
-            if (id === "contact") validateContact(true);
-            else alert("আপনার নাম, যোগাযোগ এবং Receive Account পূরণ করুন।");
-            field.focus();
-            return false;
-          }
+        if (!$("customerName")?.value.trim()) {
+          alert("আপনার নাম লিখুন।");
+          $("customerName")?.focus();
+          return false;
         }
         if (!validateContact(true)) { $("contact").focus(); return false; }
+        if (!validateAccount(true)) { $("account").focus(); return false; }
       }
       if (currentStep === 4 && $("terms") && !$("terms").checked) {
         alert("পরবর্তী ধাপে যাওয়ার আগে শর্তাবলিতে সম্মতি দিন।");
@@ -161,11 +195,15 @@
     $("contactMethod")?.addEventListener("change", updateContactMode);
     $("contact")?.addEventListener("input", () => {
       const error = $("contactError");
-      // Do not show errors while the user is typing. If Next already showed an
-      // error, keep it visible until the contact becomes valid.
       if (error?.textContent && isValidContact()) validateContact(false);
     });
+    $("toWallet")?.addEventListener("change", updateAccountMode);
+    $("account")?.addEventListener("input", () => {
+      const error = $("accountError");
+      if (error?.textContent && validateAccount(false)) error.textContent = "";
+    });
     updateContactMode();
+    updateAccountMode();
     ["fromWallet", "toWallet", "amount", "account"].forEach(id => {
       $(id)?.addEventListener("change", updateReview);
       $(id)?.addEventListener("input", updateReview);
