@@ -166,13 +166,14 @@
   async function saveRequestToFirestore(item){
     if(!firestoreReadyPromise){
       firestoreReadyPromise=(async()=>{
-        const [{initializeApp,getApps},{getFirestore,collection,addDoc,serverTimestamp}] = await Promise.all([
+        const [{initializeApp,getApps},{getFirestore,collection,addDoc,serverTimestamp},{getStorage,ref,uploadBytes,getDownloadURL}] = await Promise.all([
           import("https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js"),
-          import("https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js")
+          import("https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js"),
+          import("https://www.gstatic.com/firebasejs/11.6.0/firebase-storage.js")
         ]);
         const {firebaseConfig}=await import("./firebase-config.js");
         const app=getApps().length?getApps()[0]:initializeApp(firebaseConfig);
-        return {db:getFirestore(app),collection,addDoc,serverTimestamp};
+        return {db:getFirestore(app),collection,addDoc,serverTimestamp,storage:getStorage(app),ref,uploadBytes,getDownloadURL};
       })();
     }
     const fb=await firestoreReadyPromise;
@@ -190,9 +191,23 @@
       paymentAccount:String($("account").value.trim()).slice(0,80),
       note:String(item.note||"").slice(0,500),
       referralCode:String(item.reference||"").slice(0,40),
-      uid:null,requestType:"guest",status:"pending",createdAt:fb.serverTimestamp()
+      transactionReference:String(item.proofReference||"").slice(0,160),
+      proofEmail:String(item.proofEmail||"").slice(0,160),
+      proofScreenshotUrl:String(item.proofScreenshotUrl||""),
+      proofFileName:String(item.proofFileName||"").slice(0,200),
+      uid:null,requestType:"guest",status:"pending",createdAt:fb.serverTimestamp(),proofSubmittedAt:fb.serverTimestamp()
     });
   }
+  $("proofScreenshot").addEventListener("change",()=>{
+    const file=$("proofScreenshot").files[0];
+    const wrap=$("proofPreviewWrap"),img=$("proofPreviewImage"),name=$("proofPreviewName");
+    if(!file){wrap.hidden=true;img.removeAttribute("src");name.textContent="";return;}
+    if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>5*1024*1024){
+      $("proofScreenshot").value="";wrap.hidden=true;img.removeAttribute("src");
+      showError("শুধু JPG, PNG অথবা WEBP ছবি দিন এবং ফাইল ৫ MB-এর কম রাখুন।");return;
+    }
+    img.src=URL.createObjectURL(file);name.textContent=file.name;wrap.hidden=false;
+  });
   $("proofForm").addEventListener("submit",async e=>{
     e.preventDefault();if(!pendingRequest)return;
     const submitButton=$("proofForm").querySelector('button[type="submit"]');
@@ -200,7 +215,17 @@
     try{
       pendingRequest.proofReference=$("proofReference").value.trim();
       pendingRequest.proofEmail=$("proofEmail").value.trim();
-      pendingRequest.proofFileName=$("proofScreenshot").files[0]?.name||"";
+      const proofFile=$("proofScreenshot").files[0];
+      if(!pendingRequest.proofReference) throw new Error("Transaction ID / Reference লিখুন।");
+      if(!proofFile) throw new Error("পেমেন্টের Screenshot নির্বাচন করুন।");
+      if(!["image/jpeg","image/png","image/webp"].includes(proofFile.type)) throw new Error("শুধু JPG, PNG অথবা WEBP Screenshot দিন।");
+      if(proofFile.size>5*1024*1024) throw new Error("Screenshot ৫ MB-এর কম হতে হবে।");
+      const fb=await firestoreReadyPromise;
+      const proofPath="payment-proofs/"+pendingRequest.code+"/"+Date.now()+"-"+proofFile.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+      const proofRef=fb.ref(fb.storage,proofPath);
+      const uploaded=await fb.uploadBytes(proofRef,proofFile,{contentType:proofFile.type});
+      pendingRequest.proofScreenshotUrl=await fb.getDownloadURL(uploaded.ref);
+      pendingRequest.proofFileName=proofFile.name;
       await saveRequestToFirestore(pendingRequest);
       let items=[];try{items=JSON.parse(localStorage.getItem(HISTORY_KEY)||"[]");}catch(_){}
       items.push(pendingRequest);localStorage.setItem(HISTORY_KEY,JSON.stringify(items));renderHistory();
