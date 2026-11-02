@@ -348,7 +348,7 @@
       const amountValue=Number($("amount").value);
       const bdtEquivalent=from.type==="bdt" ? amountValue : amountValue*Number(from.sell);
       if(!Number.isFinite(bdtEquivalent)||bdtEquivalent<500||bdtEquivalent>150000){
-        showError("প্রতি রিকোয়েস্টের সীমা ৳৫০০ থেকে ৳১০,০০০ (সমমূল্যের USD/USDT)। পরিমাণ পরিবর্তন করুন।");
+        showError("প্রতি রিকোয়েস্টের সীমা ৳৫০০ থেকে ৳১,৫০,০০০ (সমমূল্যের USD/USDT)। পরিমাণ পরিবর্তন করুন।");
         $("amount").classList.add("invalid");$("amount").focus();return false;
       }
     }
