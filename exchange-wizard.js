@@ -159,7 +159,12 @@
       });
     });
     $("contactMethod")?.addEventListener("change", updateContactMode);
-    $("contact")?.addEventListener("input", () => validateContact(false));
+    $("contact")?.addEventListener("input", () => {
+      const error = $("contactError");
+      // Do not show errors while the user is typing. If Next already showed an
+      // error, keep it visible until the contact becomes valid.
+      if (error?.textContent && isValidContact()) validateContact(false);
+    });
     updateContactMode();
     ["fromWallet", "toWallet", "amount", "account"].forEach(id => {
       $(id)?.addEventListener("change", updateReview);
