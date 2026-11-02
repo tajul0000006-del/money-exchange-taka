@@ -245,8 +245,13 @@
       </section>
       <section class="exchange-step-panel" data-step-panel="5" hidden>
         <div class="exchange-panel-title"><div><small>STEP 5 OF 5</small><h3>Payment Proof জমা দিন</h3><p>পেমেন্টের Transaction ID এবং প্রমাণ দিন।</p></div><span class="secure-mini"><i class="fa-solid fa-receipt"></i> Proof</span></div>
-        <div class="exchange-review-card"><div class="exchange-review-route"><div><small>PAYMENT METHOD</small><strong id="proofMethodDisplay">—</strong></div><i class="fa-solid fa-arrow-right"></i><div><small>AMOUNT</small><strong id="proofAmountDisplay">—</strong></div></div><p class="note">পেমেন্ট সম্পন্ন করার পর নিচের বাটনে চাপ দিয়ে Transaction ID / Reference এবং Payment Screenshot জমা দিন। তথ্য যাচাইয়ের পর আপনার Exchange Request গ্রহণ করা হবে।</p></div>
-        <div class="exchange-panel-actions"><button type="button" class="exchange-back-btn" data-prev-step="4"><i class="fa-solid fa-arrow-left"></i> Back</button><button type="submit" class="submit-btn exchange-submit-btn" id="openProofStep">Payment Proof জমা দিন <i class="fa-solid fa-arrow-right"></i></button></div>
+        <div class="exchange-review-card"><div class="exchange-review-route"><div><small>PAYMENT METHOD</small><strong id="proofMethodDisplay">—</strong></div><i class="fa-solid fa-arrow-right"></i><div><small>AMOUNT</small><strong id="proofAmountDisplay">—</strong></div></div></div>
+        <div class="exchange-details-grid proof-fields">
+          <div class="field"><label for="proofReference">Transaction ID / Reference <span aria-hidden="true">*</span></label><input id="proofReference" required maxlength="160" placeholder="পেমেন্টের Transaction ID লিখুন"></div>
+          <div class="field"><label for="proofEmail">ইমেইল (ঐচ্ছিক)</label><input id="proofEmail" type="email" maxlength="160" placeholder="name@example.com"></div>
+          <div class="field"><label for="proofScreenshot">Payment Screenshot <span aria-hidden="true">*</span></label><input id="proofScreenshot" type="file" accept="image/png,image/jpeg,image/webp" capture="environment" required><small class="field-help">JPG, PNG অথবা WEBP · সর্বোচ্চ ৫ MB</small><div id="proofPreviewWrap" class="proof-preview-wrap" hidden><img id="proofPreviewImage" alt="Payment screenshot preview"><span id="proofPreviewName"></span></div></div>
+        </div>
+        <div class="exchange-panel-actions"><button type="button" class="exchange-back-btn" data-prev-step="4"><i class="fa-solid fa-arrow-left"></i> Back</button><button type="button" class="submit-btn exchange-submit-btn" id="submitPaymentProof">প্রমাণসহ রিকোয়েস্ট জমা দিন <i class="fa-solid fa-arrow-right"></i></button></div>
         <p id="formStatus" class="form-status" role="status" aria-live="polite"></p>
       </section>
     </div>
