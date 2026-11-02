@@ -2312,3 +2312,32 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
   .desktop-nav>.nav-link{padding-left:3px!important;padding-right:3px!important}
   .desktop-nav>.nav-support[open] .support-option{padding-left:3px!important;padding-right:3px!important}
 }
+
+
+/* FINAL HEADER HEIGHT ADJUSTMENT: reduce the header by exactly 10px. */
+@media (min-width: 901px) {
+  .main-header .header-container {
+    padding-top: 7px !important;
+    padding-bottom: 5px !important;
+  }
+}
+@media (max-width: 900px) {
+  :root { --header-height: 66px; }
+}
+@media (max-width: 480px) {
+  :root { --header-height: 60px; }
+}
+@media (max-width: 760px) {
+  #mobileMenu {
+    top: 66px !important;
+    height: calc(100dvh - 66px) !important;
+    max-height: calc(100dvh - 66px) !important;
+  }
+}
+@media (max-width: 480px) {
+  #mobileMenu {
+    top: 60px !important;
+    height: calc(100dvh - 60px) !important;
+    max-height: calc(100dvh - 60px) !important;
+  }
+}
