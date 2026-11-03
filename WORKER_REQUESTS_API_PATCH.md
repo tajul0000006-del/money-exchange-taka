@@ -135,7 +135,8 @@ async function updateAdminExchangeRequestStatus(env, documentId, nextStatus, adm
   }
 
   const updateUrl = documentUrl +
-    "?updateMask.fieldPaths=status" +
+    "?currentDocument.updateTime=" + encodeURIComponent(currentDoc.updateTime) +
+    "&updateMask.fieldPaths=status" +
     "&updateMask.fieldPaths=statusUpdatedAt" +
     "&updateMask.fieldPaths=statusUpdatedBy";
 
