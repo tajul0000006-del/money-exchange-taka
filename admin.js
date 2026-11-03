@@ -9,6 +9,7 @@ import { firebaseConfig } from "./firebase-config.js";
 (() => {
   "use strict";
   const API_BASE = "https://bold-surf-9356.taijulsheikh60.workers.dev";
+  const REQUEST_API_BASE = "https://moneyexchange-admin.taijulsheikh60.workers.dev";
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const $ = id => document.getElementById(id);
@@ -99,7 +100,7 @@ import { firebaseConfig } from "./firebase-config.js";
       msg.textContent = "Firestore থেকে নিরাপদে Request পড়া হচ্ছে...";
       try {
         const token = await user.getIdToken(true);
-        const response = await fetch(`${API_BASE}/api/admin/requests?limit=50`, {
+        const response = await fetch(`${REQUEST_API_BASE}/api/admin/requests?limit=50`, {
           headers: { Authorization: `Bearer ${token}` }, cache: "no-store"
         });
         const data = await response.json();
@@ -130,7 +131,7 @@ import { firebaseConfig } from "./firebase-config.js";
               msg.textContent = "Request status update হচ্ছে...";
               try {
                 const token = await currentUser.getIdToken(true);
-                const updateResponse = await fetch(`${API_BASE}/api/admin/requests/status`, {
+                const updateResponse = await fetch(`${REQUEST_API_BASE}/api/admin/requests/status`, {
                   method: "POST",
                   headers: { Authorization: `Bearer ${token}`, "content-type": "application/json" },
                   body: JSON.stringify({ documentId: statusButton.dataset.documentId, status: nextStatus })
