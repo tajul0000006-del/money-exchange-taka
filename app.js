@@ -68,7 +68,7 @@
   function fillWalletSelect(selectId, side, preserve=true){
     const select = $(selectId), direction = $("direction").value, old = preserve ? select.value : "";
     const list = allowedWallets(side, direction);
-    select.innerHTML = list.length ? list.map(w=>`<option value="${w.id}">${escapeHtml(w.name)} · ${w.currency}${w.type === "bdt" ? " · পার্সোনাল BDT" : ""}</option>`).join("") : '<option value="">এই অপশনে কোনো Currency চালু নেই</option>';
+    select.innerHTML = list.length ? list.map(w=>`<option value="${w.id}">${escapeHtml(w.name)} · ${w.currency}${w.type === "bdt" ? " · Personal BDT" : ""}</option>`).join("") : '<option value="">No currencies are currently available for this option</option>';
     if(list.some(w=>w.id===old)) select.value=old;
   }
   function updateWalletOptions(){
@@ -89,27 +89,27 @@
     const help=$("accountHelp");
     if(to){
       const hints={
-        bkash:"যেমন: 01XXXXXXXXX (bKash নম্বর)",
-        nagad:"যেমন: 01XXXXXXXXX (Nagad নম্বর)",
-        rocket:"যেমন: 01XXXXXXXXX বা Rocket অ্যাকাউন্ট নম্বর",
-        upay:"যেমন: 01XXXXXXXXX (Upay নম্বর)",
-        paypal:"যেমন: আপনার PayPal ইমেইল ঠিকানা",
-        perfectmoney:"যেমন: U12345678 (Perfect Money অ্যাকাউন্ট)",
+        bkash:"e.g. 01XXXXXXXXX (bKash number)",
+        nagad:"e.g. 01XXXXXXXXX (Nagad number)",
+        rocket:"e.g. 01XXXXXXXXX or Rocket account number",
+        upay:"e.g. 01XXXXXXXXX (Upay number)",
+        paypal:"e.g. Your PayPal account email",
+        perfectmoney:"e.g. U12345678 (Perfect Money account)",
         webmoney:"যেমন: WMZ purse / wallet ID",
-        volet:"যেমন: আপনার Volet অ্যাকাউন্ট ইমেইল বা ID",
-        binance:"যেমন: USDT TRC20 ডিপোজিট অ্যাড্রেস (T নেটওয়ার্ক ঠিকানা)",
-        kucoin:"যেমন: KuCoin USDT TRC20 ডিপোজিট অ্যাড্রেস",
-        bybit:"যেমন: Bybit USDT TRC20 ডিপোজিট অ্যাড্রেস",
-        epay:"যেমন: আপনার ePay অ্যাকাউন্ট ID",
-        tunepay:"যেমন: আপনার TunePay অ্যাকাউন্ট ID"
+        volet:"e.g. Your Volet account email or ID",
+        binance:"e.g. USDT TRC20 deposit address (TRON network)",
+        kucoin:"e.g. KuCoin USDT TRC20 deposit address",
+        bybit:"e.g. Bybit USDT TRC20 deposit address",
+        epay:"e.g. Your ePay account ID",
+        tunepay:"e.g. Your TunePay account ID"
       };
       account.placeholder=hints[to.id] || `আপনার ${to.name} ${to.currency} অ্যাকাউন্ট নম্বর / ঠিকানা`;
       help.textContent = to.type === "bdt" ? `${to.name} Enter the Personal BDT payment account. Make sure the receiving number/account is correct.` : `${to.name} (${to.currency}) Enter the correct email, account ID, or deposit address for this wallet. For crypto, use the correct network address.`;
-    const contactLabel=$("contactLabel"); if(contactLabel) contactLabel.textContent="WhatsApp / Telegram / Email (যোগাযোগের ঠিকানা)";
-    $("contact").placeholder="WhatsApp নম্বর, Telegram username বা ইমেইল দিন";
+    const contactLabel=$("contactLabel"); if(contactLabel) contactLabel.textContent="WhatsApp / Telegram / Email (Contact Details)";
+    $("contact").placeholder="Enter WhatsApp number, Telegram username, or email address";
     } else {
-      account.placeholder="প্রথমে যে ওয়ালেটে পাবেন সেটি নির্বাচন করুন";
-      help.textContent="আপনার নির্বাচিত গ্রহণকারী ওয়ালেট অনুযায়ী নম্বর বা ঠিকানা লিখুন।";
+      account.placeholder="Select the receiving wallet first";
+      help.textContent="Enter the number or address for your selected receiving wallet.";
     }
   }
   function rateFor(from,to){
@@ -175,7 +175,7 @@ function effectiveFeePercent(from,to){
     const r=rateFor(from,to);
     if(!from||!to||!r||!Number.isFinite(amount)||amount<=0){
       $("payPreview").textContent="—"; $("receivePreview").textContent="—"; $("ratePreview").textContent=r?r.text:"—"; $("feePreview").textContent="—";
-      $("calcMessage").textContent=(!from||!to) ? "দেওয়ার ও পাওয়ার ওয়ালেট নির্বাচন করুন।" : (from.id===to.id ? "দুটি আলাদা ওয়ালেট নির্বাচন করুন।" : "পরিমাণ ০-এর বেশি লিখুন।"); return;
+      $("calcMessage").textContent=(!from||!to) ? "Select the sending and receiving wallets." : (from.id===to.id ? "Select two different wallets." : "Enter an amount greater than 0."); return;
     }
     const gross = amount * r.rate;
     const feePercent = effectiveFeePercent(from,to);
@@ -186,24 +186,24 @@ function effectiveFeePercent(from,to){
     $("receivePreview").textContent=money(receive,to.currency);
     $("ratePreview").textContent=r.text;
     $("feePreview").textContent=money(fee,to.currency);
-    $("calcMessage").textContent="হিসাবটি প্রদর্শিত রেট ও ফি অনুযায়ী করা হয়েছে। পেমেন্টের আগে রেট ও নেটওয়ার্ক যাচাই করুন।";
+    $("calcMessage").textContent="Calculation is based on the displayed rate and fee. Verify the rate and network before payment.";
   }
   function renderHistory(){
     let items=[]; try{items=JSON.parse(localStorage.getItem(HISTORY_KEY)||"[]");}catch(_){}
     const root=$("historyList");
-    if(!items.length){root.innerHTML='<div class="empty-state">এখনো কোনো অনুরোধ জমা হয়নি।</div>';return;}
+    if(!items.length){root.innerHTML='<div class="empty-state">No requests have been submitted yet.</div>';return;}
     root.innerHTML=items.slice().reverse().map(item=>`<article class="history-item">
       <div><h3>${escapeHtml(item.code)} · ${escapeHtml(item.fromName)} → ${escapeHtml(item.toName)}</h3>
       <div class="history-meta">${escapeHtml(item.date)} · ${escapeHtml(item.customer)}</div>
-      <span class="status-pill">অনুরোধ জমা হয়েছে</span></div>
+      <span class="status-pill">Request Submitted</span></div>
       <div class="history-amount"><div>${escapeHtml(item.pay)}</div><div>↓ ${escapeHtml(item.receive)}</div></div>
     </article>`).join("");
   }
   function renderAdminEditor(){
     $("adminRateEditor").innerHTML=wallets.filter(w=>w.type!=="bdt").map(w=>`<div class="admin-rate-row">
       <div class="admin-currency"><b>${escapeHtml(w.name)}</b><div class="currency-sub">${w.currency}</div></div>
-      <div><label for="buy-${w.id}">আমরা কিনি (৳)</label><input id="buy-${w.id}" type="number" min="0.01" step="0.01" value="${w.buy}"></div>
-      <div><label for="sell-${w.id}">আমরা বিক্রি করি (৳)</label><input id="sell-${w.id}" type="number" min="0.01" step="0.01" value="${w.sell}"></div>
+      <div><label for="buy-${w.id}">We Buy (৳)</label><input id="buy-${w.id}" type="number" min="0.01" step="0.01" value="${w.buy}"></div>
+      <div><label for="sell-${w.id}">We Sell (৳)</label><input id="sell-${w.id}" type="number" min="0.01" step="0.01" value="${w.sell}"></div>
     </div>`).join("");
   }
   const ADDRESS_KEY="met_payment_addresses_v1";
@@ -280,8 +280,8 @@ function effectiveFeePercent(from,to){
     e.preventDefault();if(!pendingRequest)return;
     const submitButton=$("submitPaymentProof");
     if(! $("proofReference").value.trim()){showError("Transaction ID / Reference লিখুন।");$("proofReference").focus();return;}
-    if(!$("proofScreenshot").files[0]){showError("পেমেন্ট Screenshot নির্বাচন করুন।");$("proofScreenshot").focus();return;}
-    if(submitButton){submitButton.disabled=true;submitButton.dataset.originalText=submitButton.textContent;submitButton.textContent="জমা হচ্ছে...";}
+    if(!$("proofScreenshot").files[0]){showError("Select a payment screenshot.");$("proofScreenshot").focus();return;}
+    if(submitButton){submitButton.disabled=true;submitButton.dataset.originalText=submitButton.textContent;submitButton.textContent="Submitting...";}
     let submissionStage="প্রস্তুতি";
     try{
       submissionStage="Firebase সংযোগ";
@@ -290,11 +290,11 @@ function effectiveFeePercent(from,to){
       const proofFile=$("proofScreenshot").files[0];
       if(!pendingRequest.proofReference) throw new Error("Transaction ID / Reference লিখুন।");
       if(!proofFile) throw new Error("পেমেন্টের Screenshot নির্বাচন করুন।");
-      if(!["image/jpeg","image/png","image/webp"].includes(proofFile.type)) throw new Error("শুধু JPG, PNG অথবা WEBP Screenshot দিন।");
-      if(proofFile.size>5*1024*1024) throw new Error("Screenshot ৫ MB-এর কম হতে হবে।");
+      if(!["image/jpeg","image/png","image/webp"].includes(proofFile.type)) throw new Error("Upload only JPG, PNG, or WEBP screenshots.");
+      if(proofFile.size>5*1024*1024) throw new Error("Screenshot must be smaller than 5 MB.");
       submissionStage="Cloudinary Screenshot upload";
       $("formStatus").classList.remove("error");
-      $("formStatus").textContent="Payment Screenshot Cloudinary-তে আপলোড হচ্ছে...";
+      $("formStatus").textContent="Uploading payment screenshot to Cloudinary...";
       const uploadForm=new FormData();
       uploadForm.append("file",proofFile);
       uploadForm.append("trackingCode",pendingRequest.code);
@@ -310,12 +310,12 @@ function effectiveFeePercent(from,to){
       pendingRequest.proofFileName=proofFile.name.slice(0,200);
       submissionStage="Firestore Request Save";
       $("formStatus").textContent="Step 3 of 3: Your exchange request is being saved. Please wait...";
-      if(submitButton)submitButton.textContent="৩/৩ — Request Save হচ্ছে...";
+      if(submitButton)submitButton.textContent="3/3 — Saving request...";
       await saveRequestToFirestore(pendingRequest);
       let items=[];try{items=JSON.parse(localStorage.getItem(HISTORY_KEY)||"[]");}catch(_){}
       items.push(pendingRequest);localStorage.setItem(HISTORY_KEY,JSON.stringify(items));renderHistory();
       $("successTrackingCode").textContent=pendingRequest.code;openModal("successModal");
-      $("formStatus").textContent="সফল! আপনার অনুরোধ Firestore-এ জমা হয়েছে।";$("formStatus").classList.remove("error");
+      $("formStatus").textContent="Success! Your request has been submitted.";$("formStatus").classList.remove("error");
       pendingRequest=null;$("proofReference").value="";$("proofEmail").value="";$("proofScreenshot").value="";$("proofPreviewWrap").hidden=true;$("proofPreviewImage").removeAttribute("src");$("proofPreviewName").textContent="";$("exchangeForm").reset();updateWalletOptions();
     }catch(error){
       console.error("Firestore request submission failed:",error);
@@ -343,13 +343,13 @@ function effectiveFeePercent(from,to){
     statusBox.textContent = "";
 
     if (!/^MET-[A-Z0-9]{4,20}$/.test(trackingCode) || ! /^[0-9]{4}$/.test(phoneLast4)) {
-      statusBox.textContent = "সঠিক Tracking Code এবং ফোন নম্বরের শেষ ৪ ডিজিট লিখুন।";
+      statusBox.textContent = "Enter the correct Tracking Code and last 4 digits of your phone number.";
       statusBox.classList.add("error");
       return;
     }
 
     button.disabled = true;
-    button.textContent = "খোঁজা হচ্ছে...";
+    button.textContent = "Searching...";
 
     try {
       const response = await fetch("https://bold-surf-9356.taijulsheikh60.workers.dev/api/track", {
@@ -361,7 +361,7 @@ function effectiveFeePercent(from,to){
       const data = await response.json().catch(() => ({}));
 
       if (!response.ok || !data.ok) {
-        throw new Error(data.error || "রিকোয়েস্ট খুঁজে পাওয়া যায়নি। তথ্য যাচাই করে আবার চেষ্টা করুন।");
+        throw new Error(data.error || "Request not found. Check the details and try again.");
       }
 
       const statusInfo = {
@@ -395,13 +395,13 @@ function effectiveFeePercent(from,to){
       amount.textContent = data.amount == null ? "—" : Number(data.amount).toLocaleString("en-US") + " " + (data.currency || "");
       card.append(details, amount);
       resultBox.append(card);
-      statusBox.textContent = "আপনার রিকোয়েস্ট পাওয়া গেছে।";
+      statusBox.textContent = "Your request was found.";
     } catch (error) {
-      statusBox.textContent = error.message || "এই মুহূর্তে স্ট্যাটাস দেখা যাচ্ছে না। পরে আবার চেষ্টা করুন।";
+      statusBox.textContent = error.message || "Unable to check the status right now. Please try again later.";
       statusBox.classList.add("error");
     } finally {
       button.disabled = false;
-      button.textContent = "স্ট্যাটাস দেখুন";
+      button.textContent = "Check Status";
     }
   });
 
@@ -426,9 +426,9 @@ function effectiveFeePercent(from,to){
       if(id==="account") invalid=el.value.trim().length<3||el.value.trim().length>120;
       if(invalid){el.classList.add("invalid");if(!first)first=el;}
     }
-    if(!$("terms").checked){showError("শর্তাবলিতে সম্মতি দিন।");return false;}
+    if(!$("terms").checked){showError("Please agree to the terms.");return false;}
     const from=walletById($("fromWallet").value),to=walletById($("toWallet").value);
-    if(!from||!to||from.id===to.id||!rateFor(from,to)){showError("ভিন্ন ও বৈধ দুটি ওয়ালেট নির্বাচন করুন।");$("fromWallet").classList.add("invalid");$("toWallet").classList.add("invalid");return false;}
+    if(!from||!to||from.id===to.id||!rateFor(from,to)){showError("Select two different valid wallets.");$("fromWallet").classList.add("invalid");$("toWallet").classList.add("invalid");return false;}
     if(Number.isFinite(Number($("amount").value)) && Number($("amount").value)>0){
       const amountValue=Number($("amount").value);
       const bdtEquivalent=from.type==="bdt" ? amountValue : amountValue*Number(from.sell);
@@ -437,7 +437,7 @@ function effectiveFeePercent(from,to){
         $("amount").classList.add("invalid");$("amount").focus();return false;
       }
     }
-    if(first){showError("লাল চিহ্নিত ঘরগুলো সঠিকভাবে পূরণ করুন।");first.focus();return false;}
+    if(first){showError("Please complete all fields marked in red.");first.focus();return false;}
     clearError();return true;
   }
   $("direction").addEventListener("change",updateWalletOptions);
@@ -472,13 +472,13 @@ function effectiveFeePercent(from,to){
       amount,fromId:from.id,toId:to.id,rate:r.rate,fee,affiliateCode:$("affiliateCode")?.value.trim()||"",note:$("note").value.trim()
     };
     pendingRequest=item;
-    $("copyExchangeAddress").textContent="ঠিকানা কপি";
+    $("copyExchangeAddress").textContent="Copy Address";
     return true;
   }
   window.metPrepareExchangeRequest=preparePendingExchangeRequest;
   $("exchangeForm").addEventListener("submit",event=>{event.preventDefault();if(preparePendingExchangeRequest()) window.metShowExchangeStep?.(5);});
   $("clearHistory").addEventListener("click",()=>{
-    if(confirm("এই ডিভাইসে সংরক্ষিত সব রিকোয়েস্ট মুছে ফেলবেন?")){localStorage.removeItem(HISTORY_KEY);renderHistory();}
+    if(confirm("Delete all requests saved on this device?")){localStorage.removeItem(HISTORY_KEY);renderHistory();}
   });
   $("saveRates").addEventListener("click",()=>{
     let valid=true;
@@ -488,12 +488,12 @@ function effectiveFeePercent(from,to){
       if(!Number.isFinite(buy)||!Number.isFinite(sell)||buy<=0||sell<=0){valid=false;return w;}
       return {...w,buy,sell};
     });
-    if(!valid){$("adminStatus").textContent="সব রেট শূন্যের বেশি দিতে হবে।";$("adminStatus").classList.add("error");return;}
+    if(!valid){$("adminStatus").textContent="All rates must be greater than zero.";$("adminStatus").classList.add("error");return;}
     saveRates();
     wallets.forEach(w=>{const el=$("address-"+w.id);if(el)paymentAddresses[w.id]=el.value.trim();});
     localStorage.setItem(ADDRESS_KEY,JSON.stringify(paymentAddresses));
     renderRateTable();renderAdminEditor();renderPaymentEditor();updateWalletOptions();
-    $("adminStatus").classList.remove("error");$("adminStatus").textContent="রেট ও Payment Address সংরক্ষণ করা হয়েছে।";
+    $("adminStatus").classList.remove("error");$("adminStatus").textContent="Rates and payment addresses have been saved.";
   });
   renderRateTable();renderAdminEditor();renderPaymentEditor();updateWalletOptions();renderHistory();
   async function loadPublicExchangeSettings(){
