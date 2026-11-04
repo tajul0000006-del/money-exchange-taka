@@ -1,0 +1,101 @@
+/* MoneyExchangeTaka public homepage polish — presentation only.
+   This layer intentionally does not alter exchange logic or API behavior. */
+:root{--met-ink:#102a43;--met-muted:#64748b;--met-teal:#087b8c;--met-line:#e2eaf0;--met-soft:#f5fafc}
+html,body{background:#fff!important;color:var(--met-ink)!important}
+body{font-family:"Hind Siliguri",system-ui,sans-serif;line-height:1.6}
+#mainHeader{height:72px!important;min-height:72px!important;background:#fff!important;border-bottom:1px solid var(--met-line)!important;box-shadow:0 5px 22px rgba(8,47,73,.07)!important}
+#mainHeader .header-container{height:72px!important;min-height:72px!important;width:min(100% - 44px,1380px)!important;gap:20px!important}
+#mainHeader .met-brand-image{flex:0 0 auto}
+#mainHeader .met-logo-image{max-height:54px!important;width:auto!important;object-fit:contain!important}
+#mainHeader .header-tagline{display:flex!important;flex:1 1 auto;min-width:160px;gap:8px;white-space:nowrap;justify-content:center}
+#mainHeader .tagline-line{width:clamp(8px,1.5vw,24px);background:linear-gradient(90deg,transparent,#b8dce2)}
+#mainHeader .tagline-text{font-size:clamp(11px,.95vw,14px)!important;gap:4px!important;animation:none!important}
+#mainHeader .tagline-text span{color:#426174!important}
+#mainHeader .tagline-text strong{color:var(--met-teal)!important;text-shadow:none!important}
+#mainHeader .tagline-bolt{color:#d49a22!important;animation:none!important}
+#mainHeader .desktop-nav{gap:3px!important}
+#mainHeader .desktop-nav>.nav-link{color:#29465a!important;padding:10px 10px!important;font-size:13px!important;border-radius:9px!important}
+#mainHeader .desktop-nav>.nav-link i{color:var(--met-teal)!important}
+#mainHeader .desktop-nav>.nav-link:hover,#mainHeader .desktop-nav>.nav-link.active{background:#edf7f8!important;color:#075b68!important;border-color:#d6ebed!important}
+#mainHeader .header-support>summary{color:#29465a!important;border-color:#dce7ed!important;background:#fff!important}
+#mainHeader .header-support>summary i{color:var(--met-teal)!important}
+#mainHeader .support-panel{background:#fff!important;border:1px solid var(--met-line)!important;box-shadow:0 16px 38px rgba(8,47,73,.14)!important}
+#mainHeader .support-panel-title strong,#mainHeader .support-option b{color:var(--met-ink)!important}
+#mainHeader .support-panel-title small,#mainHeader .support-option small{color:var(--met-muted)!important}
+#mainHeader .menu-toggle{border-color:#dce7ed!important;background:#f7fafc!important}
+#mainHeader .menu-toggle span{background:var(--met-teal)!important}
+#mainHeader #mobileMenu{background:#fff!important;color:var(--met-ink)!important;border-color:var(--met-line)!important}
+#mainHeader .mobile-menu-heading span{color:var(--met-ink)!important}
+#mainHeader .mobile-menu-heading small{color:var(--met-muted)!important}
+#mainHeader .mobile-nav-link{background:#f8fbfd!important;color:#29465a!important;border-color:#e7eef2!important}
+#mainHeader .mobile-nav-link i:first-child{color:var(--met-teal)!important}
+#mainHeader .mobile-nav-link.active{background:#edf7f8!important;color:#075b68!important}
+#mainHeader .mobile-support>summary{background:#f8fbfd!important;color:var(--met-ink)!important;border-color:#e7eef2!important}
+#mainHeader .mobile-support .support-panel{background:#fff!important}
+#mainHeader .mobile-auth-group{display:none!important}
+body{padding-top:72px!important}
+body>.exchange-ticker{position:fixed!important;top:72px!important;left:0!important;right:0!important;height:22px!important;min-height:22px!important;background:#fff!important;border-bottom:1px solid #edf2f5!important;box-shadow:0 3px 9px rgba(8,47,73,.025)!important;z-index:99998!important}
+body>.exchange-ticker .ticker-label{background:#fff!important;color:var(--met-teal)!important;padding:0 12px!important;font-size:11px!important;border-right:1px solid #edf2f5}
+body>.exchange-ticker .ticker-live-dot{background:#12a078!important;box-shadow:0 0 0 3px #e4f6ef}
+body>.exchange-ticker .ticker-window{background:#fff!important}
+body>.exchange-ticker .ticker-item{color:#36576a!important;font-size:16px!important;font-weight:600!important}
+body>.exchange-ticker .ticker-item i,body>.exchange-ticker .ticker-separator{color:var(--met-teal)!important}
+.exchange-ticker-spacer{height:22px!important;min-height:22px!important}
+main.container{width:min(1180px,calc(100% - 44px))!important;max-width:1180px!important}
+main.container>.hero{display:grid!important;grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr)!important;align-items:center;gap:clamp(24px,5vw,64px)!important;margin:0!important;padding:54px 0 42px!important;min-height:330px}
+.hero .eyebrow{color:var(--met-teal)!important;font-size:12px!important;letter-spacing:1.4px!important;font-weight:800!important}
+.hero h1{font-size:clamp(34px,5vw,58px)!important;line-height:1.12!important;letter-spacing:-1.1px!important;color:#102a43!important;max-width:700px}
+.hero h1 span{color:var(--met-teal)!important}
+.hero-copy{font-size:clamp(15px,1.35vw,18px)!important;line-height:1.8!important;color:#607789!important;max-width:610px!important;margin:18px 0 25px!important}
+.hero .primary-link{background:var(--met-teal)!important;color:#fff!important;border-radius:11px!important;min-height:48px;padding:12px 21px!important;box-shadow:0 8px 18px rgba(8,123,140,.16);transition:background .2s,box-shadow .2s!important}
+.hero .primary-link:hover{background:#075b68!important;box-shadow:0 10px 22px rgba(8,123,140,.2)}
+.hero .hero-card{padding:26px!important;border:1px solid #dce9ee!important;border-radius:20px!important;background:linear-gradient(145deg,#f8fcfd,#edf7f8)!important;box-shadow:0 16px 38px rgba(8,47,73,.07)!important}
+.hero .hero-card-top{color:var(--met-teal)!important;font-size:12px!important;letter-spacing:.7px}
+.hero .hero-rate{margin:16px 0!important}
+.hero .hero-rate small{color:#607789!important}
+.hero .hero-rate strong{font-size:30px!important;color:#102a43!important}
+.hero .hero-card p{color:#607789!important;line-height:1.7}
+#exchange.exchange-pro-section{margin-top:14px!important}
+#exchange .section-heading{margin-bottom:18px!important}
+#exchange .section-heading h2,#rates .section-heading h2{color:#102a43!important;font-size:clamp(24px,3vw,32px)!important}
+#exchange .exchange-heading-copy{color:#647b8b!important}
+.exchange-pro-box{border:1px solid #dce7ed!important;border-radius:20px!important;box-shadow:0 14px 42px rgba(8,47,73,.07)!important}
+.exchange-mode-tabs{background:#f7fafc!important}
+#rates .table-wrap{border:1px solid var(--met-line)!important;border-radius:16px!important;box-shadow:0 10px 28px rgba(8,47,73,.045)!important}
+#rates th{background:#f4f8fa!important;color:#496477!important}
+#rates td{color:#29465a!important}
+.about-premium.section{background:#fff!important;border:1px solid var(--met-line)!important;border-radius:20px!important;box-shadow:0 10px 30px rgba(8,47,73,.045)!important;color:var(--met-ink)!important}
+.about-premium .about-feature,.about-premium .about-bottom{background:#f7fafc!important;border-color:#e2ebf0!important}
+.about-premium .about-intro p,.about-premium .about-feature p,.about-premium .about-bottom p,.about-premium .about-fee small{color:#647b8b!important}
+.about-premium .about-feature h3,.about-premium .about-bottom h3{color:#18394e!important}
+.about-premium .currency-tags span{background:#edf6f8!important;color:#31566a!important;border-color:#dce9ee!important}
+.met-footer{background:#fff!important;background-image:none!important;color:#334155!important;border-top:1px solid var(--met-line)!important}
+@media(max-width:1000px){
+ #mainHeader .header-container{width:calc(100% - 28px)!important;gap:12px!important}
+ #mainHeader .header-tagline{min-width:120px}
+ #mainHeader .desktop-nav>.nav-link{padding:9px 7px!important;font-size:12px!important}
+}
+@media(max-width:760px){
+ #mainHeader,#mainHeader .header-container{height:62px!important;min-height:62px!important}
+ #mainHeader .header-container{width:calc(100% - 22px)!important}
+ #mainHeader .met-logo-image{max-height:46px!important}
+ #mainHeader .header-tagline{display:none!important}
+ #mainHeader #mobileMenu{top:62px!important;height:calc(100dvh - 62px)!important;max-height:calc(100dvh - 62px)!important}
+ body{padding-top:62px!important}
+ body>.exchange-ticker{top:62px!important;height:20px!important;min-height:20px!important}
+ .exchange-ticker-spacer{height:20px!important;min-height:20px!important}
+ main.container{width:calc(100% - 28px)!important}
+ main.container>.hero{grid-template-columns:minmax(0,1fr)!important;gap:22px!important;padding:34px 0 28px!important;min-height:0}
+ .hero h1{font-size:clamp(32px,8vw,44px)!important}
+ .hero .hero-card{padding:20px!important}
+ #exchange.exchange-pro-section{margin-top:8px!important}
+}
+@media(max-width:420px){
+ body>.exchange-ticker .ticker-label{padding:0 8px!important;font-size:10px!important}
+ body>.exchange-ticker .ticker-item{font-size:15px!important}
+ main.container{width:calc(100% - 22px)!important}
+ main.container>.hero{padding-top:28px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ #mainHeader *,body>.exchange-ticker *,.hero *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
