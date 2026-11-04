@@ -130,7 +130,7 @@
   function getAmountBdtEquivalent(){
     const from=walletById($("fromWallet").value);
     const amount=Number($("amount").value);
-    if(!from || !Number.isFinite(amount) || amount<=0) return null;
+    if(!from || !Number.isFinite(amount) || amount<0) return null;
     const rate=from.type==="bdt" ? 1 : Number(from.sell);
     if(!Number.isFinite(rate)||rate<=0) return null;
     return {bdt:amount*rate, rate, from};
@@ -142,26 +142,18 @@
     const result=getAmountBdtEquivalent();
     amountEl.classList.remove("invalid");
     help.classList.remove("amount-limit-error");
-    let message="";
-    if(!value || !result){
-      message="Limit: ৳"+exchangeLimits.minBdt.toLocaleString("en-US")+"–৳"+exchangeLimits.maxBdt.toLocaleString("en-US")+" BDT";
-    } else if(result.bdt<exchangeLimits.minBdt || result.bdt>exchangeLimits.maxBdt){
-      if(result.from.type==="bdt"){
-        message="Limit: ৳"+exchangeLimits.minBdt.toLocaleString("en-US")+"–৳"+exchangeLimits.maxBdt.toLocaleString("en-US")+" BDT";
-      } else {
-        const minAmount=exchangeLimits.minBdt/result.rate;
-        const maxAmount=exchangeLimits.maxBdt/result.rate;
-        const fmt=n=>Number(n).toLocaleString("en-US",{maximumFractionDigits:2});
-        message="Limit: "+fmt(minAmount)+"–"+fmt(maxAmount)+" "+result.from.currency+" (৳"+exchangeLimits.minBdt.toLocaleString("en-US")+"–৳"+exchangeLimits.maxBdt.toLocaleString("en-US")+" BDT)";
-      }
-    }
-    if(message){
-      help.textContent=message;
-      help.classList.add("amount-limit-error");
-      amountEl.classList.add("invalid");
-      return false;
-    }
-    return true;
+    help.textContent="";
+    // Keep the form clean until the customer actually enters an amount.
+    if(!value || !result) return true;
+    if(result.bdt>=exchangeLimits.minBdt && result.bdt<=exchangeLimits.maxBdt) return true;
+    const fmt=n=>Number(n).toLocaleString("en-US",{maximumFractionDigits:2});
+    const minAmount=result.from.type==="bdt" ? exchangeLimits.minBdt : exchangeLimits.minBdt/result.rate;
+    const maxAmount=result.from.type==="bdt" ? exchangeLimits.maxBdt : exchangeLimits.maxBdt/result.rate;
+    const currency=result.from.currency || "BDT";
+    help.textContent="সতর্কতা: অনুমোদিত পরিমাণ "+fmt(minAmount)+"–"+fmt(maxAmount)+" "+currency+"।";
+    help.classList.add("amount-limit-error");
+    amountEl.classList.add("invalid");
+    return false;
   }
   window.metValidateExchangeAmount=updateAmountLimitFeedback;
 function effectiveFeePercent(from,to){
@@ -435,13 +427,9 @@ function effectiveFeePercent(from,to){
     if(!$("terms").checked){showError("Please agree to the terms.");return false;}
     const from=walletById($("fromWallet").value),to=walletById($("toWallet").value);
     if(!from||!to||from.id===to.id||!rateFor(from,to)){showError("Select two different valid wallets.");$("fromWallet").classList.add("invalid");$("toWallet").classList.add("invalid");return false;}
-    if(Number.isFinite(Number($("amount").value)) && Number($("amount").value)>0){
-      const amountValue=Number($("amount").value);
-      const bdtEquivalent=from.type==="bdt" ? amountValue : amountValue*Number(from.sell);
-      if(!Number.isFinite(bdtEquivalent)||bdtEquivalent<exchangeLimits.minBdt||bdtEquivalent>exchangeLimits.maxBdt){
-        showError("Request limit: ৳"+exchangeLimits.minBdt.toLocaleString("en-US")+" to ৳"+exchangeLimits.maxBdt.toLocaleString("en-US")+" (equivalent USD/USDT). Please adjust the amount.");
-        $("amount").classList.add("invalid");$("amount").focus();return false;
-      }
+    if(!updateAmountLimitFeedback()){
+      $("amount").focus();
+      return false;
     }
     if(first){showError("Please complete all fields marked in red.");first.focus();return false;}
     clearError();return true;
