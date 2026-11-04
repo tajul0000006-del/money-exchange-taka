@@ -146,7 +146,7 @@ import { firebaseConfig } from "./firebase-config.js";
           link.textContent = "ছবি আলাদা করে খুলুন";
           link.style.cssText = "display:inline-block;margin-top:8px;color:#1769aa;text-decoration:underline;font-weight:600";
           value.appendChild(link);
-        } else {{
+        } else {
           value.textContent = display == null || display === "" ? "—" : String(display);
         }
         row.append(label, value);
