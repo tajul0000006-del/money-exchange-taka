@@ -853,3 +853,55 @@ table{max-width:100%}
   .exchange-ticker{top:62px!important}
   .exchange-ticker-spacer{height:18px!important;min-height:18px!important}
 }
+
+
+/* Cross-browser header stability: avoid animated transforms and layout shifts. */
+#mainHeader{
+  position:fixed!important;
+  inset:0 0 auto 0!important;
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+  margin:0!important;
+  transform:none!important;
+  -webkit-transform:none!important;
+  transition:none!important;
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+  will-change:auto!important;
+}
+#mainHeader .header-container{
+  box-sizing:border-box!important;
+  transform:none!important;
+  -webkit-transform:none!important;
+  transition:none!important;
+}
+#mainHeader .logo-orbit,
+#mainHeader .exchange-icon,
+#mainHeader .tagline-bolt,
+#mainHeader .tagline-text,
+#mainHeader .mobile-menu-footer i{
+  animation:none!important;
+  -webkit-animation:none!important;
+  transform:none!important;
+  -webkit-transform:none!important;
+}
+#mainHeader .brand-logo:hover .logo-mark,
+#mainHeader .nav-link:hover,
+#mainHeader .mobile-nav-link:hover{
+  transform:none!important;
+  -webkit-transform:none!important;
+}
+#mainHeader.scrolled{
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+  transition:none!important;
+}
+@media(max-width:760px){
+  #mainHeader{height:62px!important;min-height:62px!important}
+  #mainHeader .header-container{height:62px!important;min-height:62px!important}
+}
+@media(min-width:761px){
+  #mainHeader{height:72px!important;min-height:72px!important}
+  #mainHeader .header-container{height:72px!important;min-height:72px!important}
+}
