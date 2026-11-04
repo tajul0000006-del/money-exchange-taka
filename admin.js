@@ -79,79 +79,128 @@ import { firebaseConfig } from "./firebase-config.js";
     const showRequestDetails = request => {
       const content = $("requestDetailContent");
       const labels = {
-        transactionReference: "Reference Number",
-        paymentAccount: "Payment Account",
-        proofScreenshotUrl: "Payment Proof Screenshot",
-        proofFileName: "Proof File Name",
-        trackingCode: "Tracking Code",
-        requestId: "Request ID",
-        documentId: "Document ID",
-        contactMethod: "Contact Method",
-        paymentMethod: "Payment Method",
-        direction: "Exchange Type",
-        amount: "Amount",
-        currency: "Currency",
-        status: "Request Status",
-        createdAt: "Submitted At",
-        statusUpdatedAt: "Last Status Update",
-        statusUpdatedBy: "Updated By",
-        affiliateCode: "Affiliate Code",
-        proofEmail: "Proof Email",
-        contact: "Contact",
-        note: "Note",
-        uid: "User Account ID",
-        requestType: "Request Type"
+        transactionReference: "Reference Number", paymentAccount: "Payment Account",
+        proofScreenshotUrl: "Payment Proof Screenshot", proofFileName: "Proof File Name",
+        trackingCode: "Tracking Code", requestId: "Request ID", documentId: "Document ID",
+        contactMethod: "Contact Method", paymentMethod: "Payment Method", direction: "Exchange Type",
+        amount: "Amount", currency: "Currency", status: "Request Status", createdAt: "Submitted At",
+        statusUpdatedAt: "Last Status Update", statusUpdatedBy: "Updated By",
+        affiliateCode: "Affiliate Code", proofEmail: "Proof Email", contact: "Contact",
+        note: "Note", uid: "User Account ID", requestType: "Request Type",
+        customer: "Customer", type: "Request Type", proofSubmittedAt: "Proof Submitted At"
       };
+      const safeText = value => String(value ?? "—").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+      const prettyDate = value => {
+        if (value && typeof value === "object" && value._seconds) value = value._seconds * 1000;
+        const date = typeof value === "number" ? new Date(value) : new Date(value);
+        return Number.isNaN(date.getTime()) ? String(value ?? "—") : date.toLocaleString("bn-BD");
+      };
+      const status = String(request.status || "unknown").toLowerCase();
+      const statusColor = status === "approved" ? "#087443" : status === "rejected" ? "#b42318" : "#9a6700";
       content.replaceChildren();
-      Object.entries(request).forEach(([key, rawValue]) => {
+
+      const summary = document.createElement("div");
+      summary.style.cssText = "display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:9px;margin-bottom:16px";
+      const summaryCard = (title, value, color) => {
+        const card = document.createElement("div");
+        card.style.cssText = "padding:12px;border:1px solid #e2e8f0;border-radius:11px;background:#f8fafc;min-width:0";
+        const small = document.createElement("div"); small.textContent = title;
+        small.style.cssText = "font-size:12px;color:#64748b;margin-bottom:5px";
+        const strong = document.createElement("strong"); strong.textContent = value;
+        strong.style.cssText = "font-size:15px;color:" + (color || "#172033") + ";overflow-wrap:anywhere";
+        card.append(small, strong); summary.append(card);
+      };
+      summaryCard("Tracking Code", request.trackingCode || request.requestId || "—");
+      summaryCard("Request Status", status.toUpperCase(), statusColor);
+      summaryCard("Request Type", request.requestType || (request.uid ? "Registered" : "Guest"));
+      content.appendChild(summary);
+
+      const addSection = title => {
+        const heading = document.createElement("h3");
+        heading.textContent = title;
+        heading.style.cssText = "font-size:15px;margin:18px 0 4px;color:#1769aa";
+        content.appendChild(heading);
+      };
+      const addRow = (key, rawValue) => {
         const row = document.createElement("div");
-        row.style.cssText = "display:flex;flex-direction:column;gap:5px;padding:12px 0;border-bottom:1px solid #e7eaf0;min-width:0";
+        row.style.cssText = "display:flex;flex-direction:column;gap:5px;padding:11px 0;border-bottom:1px solid #e7eaf0;min-width:0";
         const label = document.createElement("strong");
         label.textContent = labels[key] || key;
-        label.style.cssText = "font-size:14px;color:#344054;overflow-wrap:anywhere";
+        label.style.cssText = "font-size:13px;color:#64748b;overflow-wrap:anywhere";
         const value = document.createElement("div");
-        value.style.cssText = "font-size:15px;color:#172033;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;min-width:0";
+        value.style.cssText = "font-size:14px;color:#172033;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;min-width:0";
         let display = rawValue;
         if (rawValue && typeof rawValue === "object") {
-          if (rawValue._seconds) display = new Date(rawValue._seconds * 1000).toLocaleString("bn-BD");
+          if (rawValue._seconds) display = prettyDate(rawValue);
           else display = JSON.stringify(rawValue, null, 2);
-        }
+        } else if (/(At|Date|createdAt|UpdatedAt)$/i.test(key) && rawValue) display = prettyDate(rawValue);
         if (key === "proofScreenshotUrl" && typeof rawValue === "string" && /^https:\/\//i.test(rawValue)) {
           const previewLink = document.createElement("a");
-          previewLink.href = rawValue;
-          previewLink.target = "_blank";
-          previewLink.rel = "noopener noreferrer";
+          previewLink.href = rawValue; previewLink.target = "_blank"; previewLink.rel = "noopener noreferrer";
           previewLink.style.cssText = "display:block;max-width:100%";
           const preview = document.createElement("img");
-          preview.src = rawValue;
-          preview.alt = "Payment proof screenshot";
-          preview.loading = "lazy";
+          preview.src = rawValue; preview.alt = "Payment proof screenshot"; preview.loading = "lazy";
           preview.style.cssText = "display:block;width:100%;max-width:320px;max-height:420px;object-fit:contain;border:1px solid #dbe3ec;border-radius:10px;background:#f8fafc";
-          preview.onerror = () => {
-            previewLink.remove();
-            const fallback = document.createElement("a");
-            fallback.href = rawValue;
-            fallback.target = "_self";
-            fallback.rel = "noopener";
-            fallback.textContent = "ছবি লোড হয়নি — এখানে চাপ দিয়ে খুলুন";
-            fallback.style.cssText = "color:#1769aa;text-decoration:underline;font-weight:600";
-            value.appendChild(fallback);
-          };
-          previewLink.appendChild(preview);
-          value.appendChild(previewLink);
-          const link = document.createElement("a");
-          link.href = rawValue;
-          link.target = "_self";
-          link.rel = "noopener";
-          link.textContent = "ছবি আলাদা করে খুলুন";
-          link.style.cssText = "display:inline-block;margin-top:8px;color:#1769aa;text-decoration:underline;font-weight:600";
+          preview.onerror = () => { previewLink.remove(); value.textContent = "ছবি লোড হয়নি — নিচের লিংক দিয়ে খুলুন।"; };
+          previewLink.appendChild(preview); value.appendChild(previewLink);
+          const link = document.createElement("a"); link.href = rawValue; link.target = "_blank"; link.rel = "noopener noreferrer";
+          link.textContent = "ছবি আলাদা করে খুলুন"; link.style.cssText = "display:inline-block;margin-top:8px;color:#1769aa;text-decoration:underline;font-weight:600";
           value.appendChild(link);
         } else {
           value.textContent = display == null || display === "" ? "—" : String(display);
         }
-        row.append(label, value);
+        if (["trackingCode", "requestId", "documentId"].includes(key) && rawValue) {
+          const copy = document.createElement("button"); copy.type = "button"; copy.textContent = "Copy";
+          copy.className = "outline"; copy.style.cssText = "align-self:flex-start;margin-top:5px;padding:5px 10px";
+          copy.addEventListener("click", async () => {
+            try { await navigator.clipboard.writeText(String(rawValue)); copy.textContent = "Copied ✓"; }
+            catch (_) { copy.textContent = "Copy unavailable"; }
+          });
+          row.append(label, value, copy);
+        } else row.append(label, value);
         content.appendChild(row);
+      };
+
+      addSection("Customer & Request");
+      const primaryKeys = ["customer", "contact", "contactMethod", "uid", "requestType", "type", "direction", "amount", "currency", "createdAt", "proofSubmittedAt"];
+      primaryKeys.forEach(key => { if (request[key] !== undefined) addRow(key, request[key]); });
+      addSection("Payment Information");
+      ["paymentMethod", "paymentAccount", "transactionReference", "proofEmail", "proofFileName", "proofScreenshotUrl", "note", "affiliateCode"].forEach(key => {
+        if (request[key] !== undefined) addRow(key, request[key]);
       });
+      addSection("Tracking & Admin");
+      ["trackingCode", "requestId", "documentId", "status", "statusUpdatedAt", "statusUpdatedBy"].forEach(key => {
+        if (request[key] !== undefined) addRow(key, request[key]);
+      });
+      const known = new Set([...primaryKeys, "paymentMethod", "paymentAccount", "transactionReference", "proofEmail", "proofFileName", "proofScreenshotUrl", "note", "affiliateCode", "trackingCode", "requestId", "documentId", "status", "statusUpdatedAt", "statusUpdatedBy", "statusHistory"]);
+      const extra = Object.entries(request).filter(([key]) => !known.has(key));
+      if (extra.length) {
+        addSection("Other Information");
+        extra.forEach(([key, value]) => addRow(key, value));
+      }
+
+      if (Array.isArray(request.statusHistory) && request.statusHistory.length) {
+        addSection("Status History");
+        const timeline = document.createElement("div");
+        timeline.style.cssText = "border-left:2px solid #cbd5e1;margin:8px 0 4px 8px;padding-left:14px;display:grid;gap:12px";
+        request.statusHistory.forEach(item => {
+          const event = document.createElement("div");
+          event.style.cssText = "position:relative;padding:10px 12px;border:1px solid #e2e8f0;border-radius:10px;background:#fff";
+          const dot = document.createElement("span");
+          dot.style.cssText = "position:absolute;width:10px;height:10px;border-radius:50%;background:#1769aa;left:-20px;top:15px";
+          const transition = document.createElement("strong");
+          transition.textContent = (item.from || "new").toUpperCase() + " → " + (item.to || "unknown").toUpperCase();
+          transition.style.cssText = "font-size:13px;color:#172033";
+          const when = document.createElement("div"); when.textContent = item.at ? prettyDate(item.at) : "সময় পাওয়া যায়নি";
+          when.style.cssText = "font-size:12px;color:#64748b;margin-top:4px";
+          const by = document.createElement("div"); by.textContent = "Admin UID: " + (item.by || "—");
+          by.style.cssText = "font-size:12px;color:#64748b;overflow-wrap:anywhere";
+          event.append(dot, transition, when, by);
+          if (item.message) { const note = document.createElement("p"); note.textContent = item.message; note.style.cssText = "font-size:13px;margin:6px 0 0;white-space:pre-wrap"; event.appendChild(note); }
+          timeline.appendChild(event);
+        });
+        content.appendChild(timeline);
+      }
       detailModal.hidden = false;
       detailModal.style.display = "flex";
     };
