@@ -215,13 +215,14 @@ function effectiveFeePercent(from,to){
   async function getFirebaseServices(){
     if(!firestoreReadyPromise){
       firestoreReadyPromise=(async()=>{
-        const [{initializeApp,getApps},{getFirestore,collection,addDoc,serverTimestamp}] = await Promise.all([
+        const [{initializeApp,getApps},{getFirestore,collection,addDoc,serverTimestamp},{getAuth}] = await Promise.all([
           import("https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js"),
-          import("https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js")
+          import("https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js"),
+          import("https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js")
         ]);
         const {firebaseConfig}=await import("./firebase-config.js");
         const app=getApps().length?getApps()[0]:initializeApp(firebaseConfig);
-        return {db:getFirestore(app),collection,addDoc,serverTimestamp};
+        return {db:getFirestore(app),auth:getAuth(app),collection,addDoc,serverTimestamp};
       })();
     }
     return firestoreReadyPromise;
@@ -235,6 +236,8 @@ function effectiveFeePercent(from,to){
   }
   async function saveRequestToFirestore(item){
     const fb=await getFirebaseServices();
+    const signedInUser=fb.auth.currentUser;
+    if(!signedInUser || !signedInUser.emailVerified) throw new Error("Please sign in with a verified account before submitting an exchange request.");
     const from=walletById(item.fromId),to=walletById(item.toId);
     const isDigitalWallet=wallet=>wallet?.type==="usd"||wallet?.type==="crypto";
     const isUsdSell=isDigitalWallet(from) && to?.type==="bdt";
@@ -255,7 +258,7 @@ function effectiveFeePercent(from,to){
       proofEmail:String(item.proofEmail||"").slice(0,160),
       proofScreenshotUrl:String(item.proofScreenshotUrl||""),
       proofFileName:String(item.proofFileName||"").slice(0,200),
-      uid:null,requestType:"guest",status:"pending",createdAt:fb.serverTimestamp(),proofSubmittedAt:fb.serverTimestamp()
+      uid:signedInUser.uid,requestType:"user",userEmail:String(signedInUser.email||"").slice(0,160),status:"pending",createdAt:fb.serverTimestamp(),proofSubmittedAt:fb.serverTimestamp()
     }),60000,"Save request to Firestore");
   }
   $("proofScreenshot").addEventListener("change",()=>{
