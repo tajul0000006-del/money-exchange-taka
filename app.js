@@ -282,9 +282,8 @@ function effectiveFeePercent(from,to){
     if(! $("proofReference").value.trim()){showError("Enter the Transaction ID or Reference Number.");$("proofReference").focus();return;}
     if(!$("proofScreenshot").files[0]){showError("Select a payment screenshot.");$("proofScreenshot").focus();return;}
     if(submitButton){submitButton.disabled=true;submitButton.dataset.originalText=submitButton.textContent;submitButton.textContent="Submitting...";}
-    let submissionStage="Preparing request";
+    
     try{
-      submissionStage="Connecting to Firebase";
       pendingRequest.proofReference=$("proofReference").value.trim();
       pendingRequest.proofEmail=$("proofEmail").value.trim();
       const proofFile=$("proofScreenshot").files[0];
@@ -292,9 +291,9 @@ function effectiveFeePercent(from,to){
       if(!proofFile) throw new Error("Select your payment screenshot.");
       if(!["image/jpeg","image/png","image/webp"].includes(proofFile.type)) throw new Error("Upload only JPG, PNG, or WEBP screenshots.");
       if(proofFile.size>5*1024*1024) throw new Error("Screenshot must be smaller than 5 MB.");
-      submissionStage="Cloudinary Screenshot upload";
+      $("formStatus").textContent="";
       $("formStatus").classList.remove("error");
-      $("formStatus").textContent="Uploading payment screenshot to Cloudinary...";
+      $("formStatus").hidden=true;
       const uploadForm=new FormData();
       uploadForm.append("file",proofFile);
       uploadForm.append("trackingCode",pendingRequest.code);
@@ -308,20 +307,26 @@ function effectiveFeePercent(from,to){
       }
       pendingRequest.proofScreenshotUrl=uploadResult.secure_url;
       pendingRequest.proofFileName=proofFile.name.slice(0,200);
-      submissionStage="Firestore Request Save";
-      $("formStatus").textContent="Step 3 of 3: Your exchange request is being saved. Please wait...";
-      if(submitButton)submitButton.textContent="3/3 — Saving request...";
+      if(submitButton)submitButton.textContent="Submitting Request...";
       await saveRequestToFirestore(pendingRequest);
       let items=[];try{items=JSON.parse(localStorage.getItem(HISTORY_KEY)||"[]");}catch(_){}
       items.push(pendingRequest);localStorage.setItem(HISTORY_KEY,JSON.stringify(items));renderHistory();
-      $("successTrackingCode").textContent=pendingRequest.code;openModal("successModal");
-      $("formStatus").textContent="Success! Your request has been submitted.";$("formStatus").classList.remove("error");
+      $("successTitle").textContent="Your Request Has Been Received";
+      document.querySelector("#successModal .success-mark").textContent="✓";
+      document.querySelector("#successModal .tracking-box").hidden=false;
+      document.querySelectorAll("#successModal .modal-copy")[0].textContent="Your exchange request has been received and is now waiting for admin verification. Once verified, we will process it as soon as possible.";
+      document.querySelectorAll("#successModal .modal-copy")[1].textContent="Save this Tracking Code. You can use it to check your request status at any time.";
+      $("successTrackingCode").textContent=pendingRequest.code;
+      openModal("successModal");
       pendingRequest=null;$("proofReference").value="";$("proofEmail").value="";$("proofScreenshot").value="";$("proofPreviewWrap").hidden=true;$("proofPreviewImage").removeAttribute("src");$("proofPreviewName").textContent="";$("exchangeForm").reset();updateWalletOptions();
     }catch(error){
-      console.error("Firestore request submission failed:",error);
-      const code=String(error?.code||"");
-      const detail=code.includes("storage/unauthorized")?"Permission denied while uploading the payment screenshot (storage/unauthorized). Check Storage Rules and bucket settings.":code.includes("storage/bucket-not-found")?"Firebase Storage bucket was not found. Check whether Storage is enabled in Firebase Console.":code.includes("permission-denied")||code.includes("firestore/permission-denied")?"Permission denied while saving the request (permission-denied). Check whether the submitted data matches your Firestore Rules.":(error?.message||"The request could not be submitted.")+" ["+(code||"unknown error")+"]";
-      showError("Failed at step: "+submissionStage+". "+detail);
+      console.error("Exchange request submission failed:",error);
+      $("successTitle").textContent="We Couldn't Submit Your Request";
+      document.querySelector("#successModal .success-mark").textContent="!";
+      document.querySelector("#successModal .tracking-box").hidden=true;
+      document.querySelectorAll("#successModal .modal-copy")[0].textContent="We couldn't submit your request. Please check your internet connection and try again. If the problem continues, contact Support.";
+      document.querySelectorAll("#successModal .modal-copy")[1].textContent="";
+      openModal("successModal");
     }finally{
       if(submitButton){submitButton.disabled=false;submitButton.textContent=submitButton.dataset.originalText||"Submit Request with Proof";}
     }
