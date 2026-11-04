@@ -104,7 +104,7 @@
         tunepay:"যেমন: আপনার TunePay অ্যাকাউন্ট ID"
       };
       account.placeholder=hints[to.id] || `আপনার ${to.name} ${to.currency} অ্যাকাউন্ট নম্বর / ঠিকানা`;
-      help.textContent = to.type === "bdt" ? `${to.name} পার্সোনাল BDT পেমেন্ট ঠিকানা দিন। যে নম্বর/অ্যাকাউন্টে টাকা গ্রহণ করবেন, সেটি সঠিকভাবে লিখুন।` : `${to.name} (${to.currency}) ওয়ালেটের সঠিক ইমেইল, অ্যাকাউন্ট ID বা ডিপোজিট অ্যাড্রেস দিন। ক্রিপ্টো হলে সঠিক নেটওয়ার্কের ঠিকানা ব্যবহার করুন।`;
+      help.textContent = to.type === "bdt" ? `${to.name} Enter the Personal BDT payment account. Make sure the receiving number/account is correct.` : `${to.name} (${to.currency}) Enter the correct email, account ID, or deposit address for this wallet. For crypto, use the correct network address.`;
     const contactLabel=$("contactLabel"); if(contactLabel) contactLabel.textContent="WhatsApp / Telegram / Email (যোগাযোগের ঠিকানা)";
     $("contact").placeholder="WhatsApp নম্বর, Telegram username বা ইমেইল দিন";
     } else {
@@ -180,7 +180,7 @@ function effectiveFeePercent(from,to){
     const gross = amount * r.rate;
     const feePercent = effectiveFeePercent(from,to);
     const feeLabel=$("serviceFeeLabel");
-    if(feeLabel) feeLabel.textContent="সার্ভিস ফি ("+feePercent.toLocaleString("bn-BD",{maximumFractionDigits:2})+"%)";
+    if(feeLabel) feeLabel.textContent="Service Fee ("+feePercent.toLocaleString("bn-BD",{maximumFractionDigits:2})+"%)";
     const fee=gross*feePercent/100, receive=Math.max(0,gross-fee);
     $("payPreview").textContent=money(amount,from.currency);
     $("receivePreview").textContent=money(receive,to.currency);
@@ -207,18 +207,18 @@ function effectiveFeePercent(from,to){
     </div>`).join("");
   }
   const ADDRESS_KEY="met_payment_addresses_v1";
-  const DEFAULT_ADDRESSES={bkash:"পেমেন্ট ঠিকানা এখনো যুক্ত করা হয়নি",nagad:"পেমেন্ট ঠিকানা এখনো যুক্ত করা হয়নি",rocket:"পেমেন্ট ঠিকানা এখনো যুক্ত করা হয়নি",upay:"পেমেন্ট ঠিকানা এখনো যুক্ত করা হয়নি",paypal:"অ্যাকাউন্ট ইমেইল এখনো যুক্ত করা হয়নি",perfectmoney:"অ্যাকাউন্ট ID এখনো যুক্ত করা হয়নি",webmoney:"ওয়ালেট ID এখনো যুক্ত করা হয়নি",volet:"অ্যাকাউন্ট ID এখনো যুক্ত করা হয়নি",binance:"USDT নেটওয়ার্ক ঠিকানা এখনো যুক্ত করা হয়নি",kucoin:"USDT নেটওয়ার্ক ঠিকানা এখনো যুক্ত করা হয়নি",bybit:"USDT নেটওয়ার্ক ঠিকানা এখনো যুক্ত করা হয়নি",epay:"অ্যাকাউন্ট ID এখনো যুক্ত করা হয়নি",tunepay:"অ্যাকাউন্ট ID এখনো যুক্ত করা হয়নি"};
+  const DEFAULT_ADDRESSES={bkash:"Payment address has not been added yet",nagad:"Payment address has not been added yet",rocket:"Payment address has not been added yet",upay:"Payment address has not been added yet",paypal:"Account email has not been added yet",perfectmoney:"Account ID has not been added yet",webmoney:"Wallet ID has not been added yet",volet:"Account ID has not been added yet",binance:"USDT network address has not been added yet",kucoin:"USDT network address has not been added yet",bybit:"USDT network address has not been added yet",epay:"Account ID has not been added yet",tunepay:"Account ID has not been added yet"};
   let paymentAddresses={...DEFAULT_ADDRESSES};
   try{paymentAddresses={...paymentAddresses,...JSON.parse(localStorage.getItem(ADDRESS_KEY)||"{}")};}catch(_){}
-  window.metGetPaymentInfo=(walletId)=>{const wallet=walletById(walletId);return wallet?{name:wallet.name,address:wallet.paymentAddress||paymentAddresses[walletId]||"পেমেন্ট ঠিকানা এখনো যুক্ত করা হয়নি",instruction:wallet.paymentInstruction||"",placeholder:wallet.paymentPlaceholder||""}:null;};
+  window.metGetPaymentInfo=(walletId)=>{const wallet=walletById(walletId);return wallet?{name:wallet.name,address:wallet.paymentAddress||paymentAddresses[walletId]||"Payment address has not been added yet",instruction:wallet.paymentInstruction||"",placeholder:wallet.paymentPlaceholder||""}:null;};
   window.metGetWalletSettings=(walletId)=>walletById(walletId)||null;
   let pendingRequest=null;
-  function renderPaymentEditor(){const root=$("adminPaymentEditor");if(!root)return;root.innerHTML=wallets.map(w=>`<div class="admin-payment-row"><label for="address-${w.id}">${escapeHtml(w.name)}<small>${escapeHtml(w.currency)} · পেমেন্ট ঠিকানা</small></label><input id="address-${w.id}" value="${escapeHtml(paymentAddresses[w.id]||"")}" maxlength="220" placeholder="পেমেন্ট নম্বর / ID / ঠিকানা"></div>`).join("");}
+  function renderPaymentEditor(){const root=$("adminPaymentEditor");if(!root)return;root.innerHTML=wallets.map(w=>`<div class="admin-payment-row"><label for="address-${w.id}">${escapeHtml(w.name)}<small>${escapeHtml(w.currency)} · Payment Address</small></label><input id="address-${w.id}" value="${escapeHtml(paymentAddresses[w.id]||"")}" maxlength="220" placeholder="Payment number / ID / address"></div>`).join("");}
   function openModal(id){$(id).classList.add("open");$(id).setAttribute("aria-hidden","false");document.body.style.overflow="hidden";}
   function closeModal(id){$(id).classList.remove("open");$(id).setAttribute("aria-hidden","true");if(!document.querySelector(".modal-backdrop.open"))document.body.style.overflow="";}
   document.querySelectorAll("[data-close-modal]").forEach(b=>b.addEventListener("click",()=>closeModal(b.dataset.closeModal)));
   document.querySelectorAll(".modal-backdrop").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)closeModal(m.id)}));
-  $("copyPaymentAddress").addEventListener("click",async()=>{try{await navigator.clipboard.writeText($("paymentAddress").textContent);$("copyPaymentAddress").textContent="কপি হয়েছে";}catch(_){$("paymentAddress").focus?.();}});
+  $("copyPaymentAddress").addEventListener("click",async()=>{try{await navigator.clipboard.writeText($("paymentAddress").textContent);$("copyPaymentAddress").textContent="Copied";}catch(_){$("paymentAddress").focus?.();}});
   let firestoreReadyPromise=null;
   async function getFirebaseServices(){
     if(!firestoreReadyPromise){
@@ -309,7 +309,7 @@ function effectiveFeePercent(from,to){
       pendingRequest.proofScreenshotUrl=uploadResult.secure_url;
       pendingRequest.proofFileName=proofFile.name.slice(0,200);
       submissionStage="Firestore Request Save";
-      $("formStatus").textContent="ধাপ ৩/৩: আপনার Exchange Request Firebase-এ সংরক্ষণ হচ্ছে। অনুগ্রহ করে অপেক্ষা করুন...";
+      $("formStatus").textContent="Step 3 of 3: Your exchange request is being saved. Please wait...";
       if(submitButton)submitButton.textContent="৩/৩ — Request Save হচ্ছে...";
       await saveRequestToFirestore(pendingRequest);
       let items=[];try{items=JSON.parse(localStorage.getItem(HISTORY_KEY)||"[]");}catch(_){}
@@ -326,7 +326,7 @@ function effectiveFeePercent(from,to){
       if(submitButton){submitButton.disabled=false;submitButton.textContent=submitButton.dataset.originalText||"জমা দিন";}
     }
   });
-  $("copyTrackingCode").addEventListener("click",async()=>{try{await navigator.clipboard.writeText($("successTrackingCode").textContent);$("copyTrackingCode").textContent="কপি হয়েছে";}catch(_){}});
+  $("copyTrackingCode").addEventListener("click",async()=>{try{await navigator.clipboard.writeText($("successTrackingCode").textContent);$("copyTrackingCode").textContent="Copied";}catch(_){}});
   $("successDone").addEventListener("click",()=>{closeModal("successModal");$("history").scrollIntoView({behavior:"smooth",block:"start"});});
 
   // Public request tracking through the Cloudflare Worker.
@@ -421,7 +421,7 @@ function effectiveFeePercent(from,to){
         const isTelegramProfile=/^@?[A-Za-z0-9_]{5,32}$/.test(value)||/^(https?:\/\/)?(www\.)?(t\.me|telegram\.me)\/[A-Za-z0-9_]{5,32}\/?$/.test(value);
         invalid=method==="whatsapp"?!isPhone:!(isPhone||isTelegramProfile);
         const contactError=$("contactError");
-        if(contactError) contactError.textContent=invalid?(method==="whatsapp"?"সঠিক ১১ ডিজিটের WhatsApp নম্বর লিখুন।":"সঠিক Telegram নম্বর, @username অথবা t.me profile link লিখুন."):"";
+        if(contactError) contactError.textContent=invalid?(method==="whatsapp"?"Enter a valid 11-digit WhatsApp number.":"সঠিক Telegram নম্বর, @username অথবা t.me profile link লিখুন."):"";
       }
       if(id==="account") invalid=el.value.trim().length<3||el.value.trim().length>120;
       if(invalid){el.classList.add("invalid");if(!first)first=el;}
@@ -493,7 +493,7 @@ function effectiveFeePercent(from,to){
     wallets.forEach(w=>{const el=$("address-"+w.id);if(el)paymentAddresses[w.id]=el.value.trim();});
     localStorage.setItem(ADDRESS_KEY,JSON.stringify(paymentAddresses));
     renderRateTable();renderAdminEditor();renderPaymentEditor();updateWalletOptions();
-    $("adminStatus").classList.remove("error");$("adminStatus").textContent="রেট ও পেমেন্ট ঠিকানা সংরক্ষণ করা হয়েছে।";
+    $("adminStatus").classList.remove("error");$("adminStatus").textContent="রেট ও Payment Address সংরক্ষণ করা হয়েছে।";
   });
   renderRateTable();renderAdminEditor();renderPaymentEditor();updateWalletOptions();renderHistory();
   async function loadPublicExchangeSettings(){
