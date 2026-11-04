@@ -33,6 +33,9 @@
       set("payMethodDisplay", info?.name || from);
       set("payAmountDisplay", $("payPreview")?.textContent || "—");
       set("payAddressDisplay", info?.address || "Payment address has not been added yet.");
+      set("payAddressTitle", info?.addressLabel || "Our Payment Number / Wallet Address");
+      set("payAddressInstruction", info?.instruction || "Please follow the payment instructions for this method.");
+      set("paymentAddressTitle", info?.addressLabel || "Payment Address");
       const paymentIntro = $("paymentIntro");
       if (paymentIntro) paymentIntro.textContent = info?.instruction || "Please verify the payment address below.";
       set("proofMethodDisplay", info?.name || from);
