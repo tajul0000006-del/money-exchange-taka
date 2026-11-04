@@ -94,7 +94,7 @@
       const valid = isValidContact();
       if (showMessage && input) input.classList.toggle("invalid", !valid);
       if (valid && input) input.classList.remove("invalid");
-      if (error) error.textContent = valid || !showMessage ? "" : ($("contactMethod").value === "whatsapp" ? "সঠিক Enter your 11-digit WhatsApp number।" : "Enter a valid Telegram number, @username, or t.me profile link.");
+      if (error) error.textContent = valid || !showMessage ? "" : ($("contactMethod").value === "whatsapp" ? "Enter a valid 11-digit WhatsApp number." : "Enter a valid Telegram number, @username, or t.me profile link.");
       return valid;
     }
     function accountRule(walletId) {
@@ -214,9 +214,9 @@
     $("copyExchangeAddress")?.addEventListener("click", async () => {
       try {
         await navigator.clipboard.writeText($("payAddressDisplay").textContent);
-        $("copyExchangeAddress").textContent = "কপি হয়েছে";
+        $("copyExchangeAddress").textContent = "Copied";
       } catch (_) {
-        $("copyExchangeAddress").textContent = "কপি করা যায়নি";
+        $("copyExchangeAddress").textContent = "Unable to copy";
       }
     });
     setMode("buy");
