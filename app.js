@@ -528,7 +528,7 @@
       if (!publicCurrencies.length) throw new Error("No active currencies in Admin settings");
 
       wallets = publicCurrencies;
-      globalFeePercent = Number.isFinite(Number(settings.feePercent)) ? Number(settings.feePercent) : 1;
+      globalFeePercent = settings.feePercent !== null && settings.feePercent !== undefined && Number.isFinite(Number(settings.feePercent)) ? Number(settings.feePercent) : 1;
       const minBdt = Number(settings.limits?.minBdt);
       const maxBdt = Number(settings.limits?.maxBdt);
       exchangeLimits = {
@@ -542,6 +542,7 @@
       renderAdminEditor();
       renderPaymentEditor();
       updateWalletOptions();
+      $("toWallet").dispatchEvent(new Event("change", {bubbles:true}));
       updateAmountLimitFeedback();
       updateCalculation();
       window.dispatchEvent(new CustomEvent("met:exchange-settings-loaded", {
