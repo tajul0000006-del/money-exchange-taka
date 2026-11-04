@@ -117,14 +117,36 @@ import { firebaseConfig } from "./firebase-config.js";
           else display = JSON.stringify(rawValue, null, 2);
         }
         if (key === "proofScreenshotUrl" && typeof rawValue === "string" && /^https:\/\//i.test(rawValue)) {
+          const previewLink = document.createElement("a");
+          previewLink.href = rawValue;
+          previewLink.target = "_blank";
+          previewLink.rel = "noopener noreferrer";
+          previewLink.style.cssText = "display:block;max-width:100%";
+          const preview = document.createElement("img");
+          preview.src = rawValue;
+          preview.alt = "Payment proof screenshot";
+          preview.loading = "lazy";
+          preview.style.cssText = "display:block;width:100%;max-width:320px;max-height:420px;object-fit:contain;border:1px solid #dbe3ec;border-radius:10px;background:#f8fafc";
+          preview.onerror = () => {
+            previewLink.remove();
+            const fallback = document.createElement("a");
+            fallback.href = rawValue;
+            fallback.target = "_self";
+            fallback.rel = "noopener";
+            fallback.textContent = "ছবি লোড হয়নি — এখানে চাপ দিয়ে খুলুন";
+            fallback.style.cssText = "color:#1769aa;text-decoration:underline;font-weight:600";
+            value.appendChild(fallback);
+          };
+          previewLink.appendChild(preview);
+          value.appendChild(previewLink);
           const link = document.createElement("a");
           link.href = rawValue;
-          link.target = "_blank";
-          link.rel = "noopener noreferrer";
-          link.textContent = "প্রুফ ছবি দেখুন";
-          link.style.cssText = "color:#1769aa;text-decoration:underline;font-weight:600";
+          link.target = "_self";
+          link.rel = "noopener";
+          link.textContent = "ছবি আলাদা করে খুলুন";
+          link.style.cssText = "display:inline-block;margin-top:8px;color:#1769aa;text-decoration:underline;font-weight:600";
           value.appendChild(link);
-        } else {
+        } else {{
           value.textContent = display == null || display === "" ? "—" : String(display);
         }
         row.append(label, value);
