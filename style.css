@@ -1,5 +1,5 @@
 /* MoneyExchangeTaka — responsive styles */
-:root{--navy:#082f49;--blue:#0369a1;--cyan:#0e7490;--mint:#ccfbf1;--ink:#102a43;--muted:#64748b;--line:#dbe5ec;--paper:#f4f8fb;--white:#fff;--green:#047857;--red:#b91c1c}
+:root{--navy:#082f49;--blue:#0369a1;--cyan:#0e7490;--mint:#ccfbf1;--ink:#102a43;--muted:#64748b;--line:#dbe5ec;--paper:#ffffff;--white:#fff;--green:#047857;--red:#b91c1c}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:90px}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:"Hind Siliguri",system-ui,sans-serif;font-size:16px;line-height:1.55}
