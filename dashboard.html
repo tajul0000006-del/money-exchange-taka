@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#082f49"><meta name="robots" content="noindex,nofollow">
-<meta name="description" content="Your private MoneyExchangeTaka account dashboard.">
-<title>My Dashboard | MoneyExchangeTaka</title>
+<meta name="description" content="Your private FastMoney account dashboard.">
+<title>My Dashboard | FastMoney</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./header.css"><link rel="stylesheet" href="./theme.css">
@@ -30,12 +30,13 @@
 @media(max-width:760px){.dash-grid{grid-template-columns:1fr}.dash-wrap{margin-top:22px}.welcome{padding:20px}}
 </style>
   <link rel="stylesheet" href="./responsive.css">
+<style id="fastmoney-brand-style">.fastmoney-brand{display:flex!important;align-items:center;gap:9px;flex:0 0 auto;text-decoration:none!important;color:#102a43!important;white-space:nowrap}.fastmoney-mark{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:linear-gradient(145deg,#087b8c,#075b68);color:#fff;font-size:25px;font-weight:900}.fastmoney-word{display:flex;flex-direction:column;font-size:21px;line-height:1.05;font-weight:850;letter-spacing:-.7px}.fastmoney-word b{color:#087b8c}.fastmoney-word small{margin-top:4px;font-size:8px;letter-spacing:1.35px;color:#718096;font-weight:800}.fastmoney-legal-links{display:flex;justify-content:center;gap:12px 22px;flex-wrap:wrap;padding:16px 18px;border-top:1px solid #e5edf2;background:#fff;font:600 13px/1.5 system-ui,sans-serif}.fastmoney-legal-links a{color:#426174;text-decoration:none}</style>
 </head>
 <body>
 <div id="loading"><i class="fa-solid fa-spinner fa-spin"></i> Checking your account...</div>
 <main class="dash-wrap" id="dashboard" hidden>
   <div class="dash-top">
-    <div><h1>My Dashboard</h1><p>Manage your MoneyExchangeTaka account.</p></div>
+    <div><h1>My Dashboard</h1><p>Manage your FastMoney account.</p></div>
     <div class="user-chip"><i class="fa-solid fa-circle-user"></i><span id="userEmail">Verified user</span></div>
   </div>
   <section class="welcome">
@@ -69,4 +70,4 @@ document.getElementById("logoutBtn").addEventListener("click",async()=>{
   catch(error){button.disabled=false;button.textContent="Log Out";alert("Could not log out. Please try again.");}
 });
 </script>
-</body></html>
+<nav class="fastmoney-legal-links" aria-label="Legal and company information"><a href="/about.html">About FastMoney</a><a href="/terms-and-conditions.html">Terms &amp; Conditions</a><a href="/privacy-policy.html">Privacy Policy</a><a href="/index.html">Home</a></nav></body></html>
