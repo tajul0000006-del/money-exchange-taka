@@ -95,7 +95,7 @@
         upay:"e.g. 01XXXXXXXXX (Upay number)",
         paypal:"e.g. Your PayPal account email",
         perfectmoney:"e.g. U12345678 (Perfect Money account)",
-        webmoney:"যেমন: WMZ purse / wallet ID",
+        webmoney:"e.g. WMZ purse / wallet ID",
         volet:"e.g. Your Volet account email or ID",
         binance:"e.g. USDT TRC20 deposit address (TRON network)",
         kucoin:"e.g. KuCoin USDT TRC20 deposit address",
@@ -103,8 +103,8 @@
         epay:"e.g. Your ePay account ID",
         tunepay:"e.g. Your TunePay account ID"
       };
-      account.placeholder=hints[to.id] || `আপনার ${to.name} ${to.currency} অ্যাকাউন্ট নম্বর / ঠিকানা`;
-      help.textContent = to.type === "bdt" ? `${to.name} Enter the Personal BDT payment account. Make sure the receiving number/account is correct.` : `${to.name} (${to.currency}) Enter the correct email, account ID, or deposit address for this wallet. For crypto, use the correct network address.`;
+      account.placeholder=hints[to.id] || `Enter your ${to.name} ${to.currency} account number or wallet address`;
+      help.textContent = to.type === "bdt" ? `Enter your ${to.name} Personal BDT payment account. Make sure the receiving number/account is correct.` : `Enter the correct email, account ID, or deposit address for ${to.name} (${to.currency}). For crypto, use the correct network address.`;
     const contactLabel=$("contactLabel"); if(contactLabel) contactLabel.textContent="WhatsApp / Telegram / Email (Contact Details)";
     $("contact").placeholder="Enter WhatsApp number, Telegram username, or email address";
     } else {
@@ -238,7 +238,7 @@ function effectiveFeePercent(from,to){
     let timer;
     return Promise.race([
       Promise.resolve(promise),
-      new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error(label+" নির্ধারিত সময়ের মধ্যে শেষ হয়নি। ইন্টারনেট/Firebase সংযোগ পরীক্ষা করুন।")),timeoutMs);})
+      new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error(label+" নির্ধারিত সময়ের মধ্যে শেষ হয়নি। ইন্টারনেট/Connecting to Firebase পরীক্ষা করুন।")),timeoutMs);})
     ]).finally(()=>clearTimeout(timer));
   }
   async function saveRequestToFirestore(item){
@@ -272,24 +272,24 @@ function effectiveFeePercent(from,to){
     if(!file){wrap.hidden=true;img.removeAttribute("src");name.textContent="";return;}
     if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>5*1024*1024){
       $("proofScreenshot").value="";wrap.hidden=true;img.removeAttribute("src");
-      showError("শুধু JPG, PNG অথবা WEBP ছবি দিন এবং ফাইল ৫ MB-এর কম রাখুন।");return;
+      showError("Upload a JPG, PNG, or WEBP image smaller than 5 MB.");return;
     }
     img.src=URL.createObjectURL(file);name.textContent=file.name;wrap.hidden=false;
   });
   $("submitPaymentProof").addEventListener("click",async e=>{
     e.preventDefault();if(!pendingRequest)return;
     const submitButton=$("submitPaymentProof");
-    if(! $("proofReference").value.trim()){showError("Transaction ID / Reference লিখুন।");$("proofReference").focus();return;}
+    if(! $("proofReference").value.trim()){showError("Enter the Transaction ID or Reference Number.");$("proofReference").focus();return;}
     if(!$("proofScreenshot").files[0]){showError("Select a payment screenshot.");$("proofScreenshot").focus();return;}
     if(submitButton){submitButton.disabled=true;submitButton.dataset.originalText=submitButton.textContent;submitButton.textContent="Submitting...";}
-    let submissionStage="প্রস্তুতি";
+    let submissionStage="Preparing request";
     try{
-      submissionStage="Firebase সংযোগ";
+      submissionStage="Connecting to Firebase";
       pendingRequest.proofReference=$("proofReference").value.trim();
       pendingRequest.proofEmail=$("proofEmail").value.trim();
       const proofFile=$("proofScreenshot").files[0];
-      if(!pendingRequest.proofReference) throw new Error("Transaction ID / Reference লিখুন।");
-      if(!proofFile) throw new Error("পেমেন্টের Screenshot নির্বাচন করুন।");
+      if(!pendingRequest.proofReference) throw new Error("Enter the Transaction ID or Reference Number.");
+      if(!proofFile) throw new Error("Select your payment screenshot.");
       if(!["image/jpeg","image/png","image/webp"].includes(proofFile.type)) throw new Error("Upload only JPG, PNG, or WEBP screenshots.");
       if(proofFile.size>5*1024*1024) throw new Error("Screenshot must be smaller than 5 MB.");
       submissionStage="Cloudinary Screenshot upload";
@@ -302,9 +302,9 @@ function effectiveFeePercent(from,to){
         method:"POST",
         body:uploadForm
       });
-      const uploadResult=await uploadResponse.json().catch(()=>({ok:false,error:"সার্ভার থেকে সঠিক JSON পাওয়া যায়নি।"}));
+      const uploadResult=await uploadResponse.json().catch(()=>({ok:false,error:"The server returned an invalid response."}));
       if(!uploadResponse.ok||!uploadResult.ok||!uploadResult.secure_url){
-        throw new Error(uploadResult.error||"Cloudinary Screenshot upload ব্যর্থ হয়েছে। HTTP "+uploadResponse.status);
+        throw new Error(uploadResult.error||"Cloudinary screenshot upload failed. HTTP "+uploadResponse.status);
       }
       pendingRequest.proofScreenshotUrl=uploadResult.secure_url;
       pendingRequest.proofFileName=proofFile.name.slice(0,200);
@@ -320,10 +320,10 @@ function effectiveFeePercent(from,to){
     }catch(error){
       console.error("Firestore request submission failed:",error);
       const code=String(error?.code||"");
-      const detail=code.includes("storage/unauthorized")?"Payment Screenshot আপলোডের অনুমতি নেই (storage/unauthorized)। Storage Rules ও bucket যাচাই করুন।":code.includes("storage/bucket-not-found")?"Firebase Storage bucket পাওয়া যায়নি। Firebase Console-এ Storage চালু আছে কি না যাচাই করুন।":code.includes("permission-denied")||code.includes("firestore/permission-denied")?"রিকোয়েস্ট সংরক্ষণের অনুমতি নেই (permission-denied)। Firestore Rules-এর সঙ্গে পাঠানো তথ্য মিলছে না।":(error?.message||"রিকোয়েস্ট জমা হয়নি।")+" ["+(code||"unknown error")+"]";
-      showError("ব্যর্থ ধাপ: "+submissionStage+"। "+detail);
+      const detail=code.includes("storage/unauthorized")?"Permission denied while uploading the payment screenshot (storage/unauthorized). Check Storage Rules and bucket settings.":code.includes("storage/bucket-not-found")?"Firebase Storage bucket was not found. Check whether Storage is enabled in Firebase Console.":code.includes("permission-denied")||code.includes("firestore/permission-denied")?"Permission denied while saving the request (permission-denied). Check whether the submitted data matches your Firestore Rules.":(error?.message||"The request could not be submitted.")+" ["+(code||"unknown error")+"]";
+      showError("Failed at step: "+submissionStage+". "+detail);
     }finally{
-      if(submitButton){submitButton.disabled=false;submitButton.textContent=submitButton.dataset.originalText||"জমা দিন";}
+      if(submitButton){submitButton.disabled=false;submitButton.textContent=submitButton.dataset.originalText||"Submit Request with Proof";}
     }
   });
   $("copyTrackingCode").addEventListener("click",async()=>{try{await navigator.clipboard.writeText($("successTrackingCode").textContent);$("copyTrackingCode").textContent="Copied";}catch(_){}});
