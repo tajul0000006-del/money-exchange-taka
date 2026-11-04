@@ -210,7 +210,7 @@ function effectiveFeePercent(from,to){
   const DEFAULT_ADDRESSES={bkash:"Payment address has not been added yet",nagad:"Payment address has not been added yet",rocket:"Payment address has not been added yet",upay:"Payment address has not been added yet",paypal:"Account email has not been added yet",perfectmoney:"Account ID has not been added yet",webmoney:"Wallet ID has not been added yet",volet:"Account ID has not been added yet",binance:"USDT network address has not been added yet",kucoin:"USDT network address has not been added yet",bybit:"USDT network address has not been added yet",epay:"Account ID has not been added yet",tunepay:"Account ID has not been added yet"};
   let paymentAddresses={...DEFAULT_ADDRESSES};
   try{paymentAddresses={...paymentAddresses,...JSON.parse(localStorage.getItem(ADDRESS_KEY)||"{}")};}catch(_){}
-  window.metGetPaymentInfo=(walletId)=>{const wallet=walletById(walletId);return wallet?{name:wallet.name,address:wallet.paymentAddress||paymentAddresses[walletId]||"Payment address has not been added yet",instruction:wallet.paymentInstruction||"",placeholder:wallet.paymentPlaceholder||""}:null;};
+  window.metGetPaymentInfo=(walletId)=>{const wallet=walletById(walletId);if(!wallet)return null;const rule=wallet.paymentRule||"custom";const preset={send_money_only:"Only Send Money is accepted. Cash Out is not accepted.",cash_out_only:"Only Cash Out is accepted. Send Money is not accepted.",both:"Both Send Money and Cash Out are accepted."};const custom=String(wallet.paymentInstruction||"").trim();const instruction=rule==="custom"?custom:[preset[rule]||"",custom].filter(Boolean).join(" ");return {name:wallet.name,address:wallet.paymentAddress||paymentAddresses[walletId]||"Payment address has not been added yet",addressLabel:wallet.paymentAddressLabel||`${wallet.name} Number / Wallet Address`,instruction,placeholder:wallet.paymentPlaceholder||""};};
   window.metGetWalletSettings=(walletId)=>walletById(walletId)||null;
   let pendingRequest=null;
   function renderPaymentEditor(){const root=$("adminPaymentEditor");if(!root)return;root.innerHTML=wallets.map(w=>`<div class="admin-payment-row"><label for="address-${w.id}">${escapeHtml(w.name)}<small>${escapeHtml(w.currency)} · Payment Address</small></label><input id="address-${w.id}" value="${escapeHtml(paymentAddresses[w.id]||"")}" maxlength="220" placeholder="Payment number / ID / address"></div>`).join("");}
@@ -523,6 +523,8 @@ function effectiveFeePercent(from,to){
             paymentAddress:String(c.paymentAddress || ""),
             paymentPlaceholder:String(c.paymentPlaceholder || ""),
             paymentInstruction:String(c.paymentInstruction || ""),
+            paymentAddressLabel:String(c.paymentAddressLabel || ""),
+            paymentRule:String(c.paymentRule || "custom"),
             enabled:c.enabled !== false,
             hidden:c.hidden === true,
             sendEnabled:c.sendEnabled !== false,
