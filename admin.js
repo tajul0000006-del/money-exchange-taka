@@ -78,15 +78,58 @@ import { firebaseConfig } from "./firebase-config.js";
     const safeText = value => String(value ?? "—").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
     const showRequestDetails = request => {
       const content = $("requestDetailContent");
-      const rows = Object.entries(request).map(([key, value]) => {
-        let display = value;
-        if (value && typeof value === "object") {
-          if (value._seconds) display = new Date(value._seconds * 1000).toLocaleString("bn-BD");
-          else display = JSON.stringify(value, null, 2);
+      const labels = {
+        transactionReference: "Reference Number",
+        paymentAccount: "Payment Account",
+        proofScreenshotUrl: "Payment Proof Screenshot",
+        proofFileName: "Proof File Name",
+        trackingCode: "Tracking Code",
+        requestId: "Request ID",
+        documentId: "Document ID",
+        contactMethod: "Contact Method",
+        paymentMethod: "Payment Method",
+        direction: "Exchange Type",
+        amount: "Amount",
+        currency: "Currency",
+        status: "Request Status",
+        createdAt: "Submitted At",
+        statusUpdatedAt: "Last Status Update",
+        statusUpdatedBy: "Updated By",
+        affiliateCode: "Affiliate Code",
+        proofEmail: "Proof Email",
+        contact: "Contact",
+        note: "Note",
+        uid: "User Account ID",
+        requestType: "Request Type"
+      };
+      content.replaceChildren();
+      Object.entries(request).forEach(([key, rawValue]) => {
+        const row = document.createElement("div");
+        row.style.cssText = "display:flex;flex-direction:column;gap:5px;padding:12px 0;border-bottom:1px solid #e7eaf0;min-width:0";
+        const label = document.createElement("strong");
+        label.textContent = labels[key] || key;
+        label.style.cssText = "font-size:14px;color:#344054;overflow-wrap:anywhere";
+        const value = document.createElement("div");
+        value.style.cssText = "font-size:15px;color:#172033;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;min-width:0";
+        let display = rawValue;
+        if (rawValue && typeof rawValue === "object") {
+          if (rawValue._seconds) display = new Date(rawValue._seconds * 1000).toLocaleString("bn-BD");
+          else display = JSON.stringify(rawValue, null, 2);
         }
-        return '<div style="display:grid;grid-template-columns:minmax(115px, .8fr) 1.2fr;gap:12px;padding:10px 0;border-bottom:1px solid #e7eaf0"><strong>' + safeText(key) + '</strong><span style="white-space:pre-wrap;overflow-wrap:anywhere">' + safeText(display) + '</span></div>';
-      }).join("");
-      content.innerHTML = rows || "<p>কোনো বিস্তারিত তথ্য নেই।</p>";
+        if (key === "proofScreenshotUrl" && typeof rawValue === "string" && /^https:\/\//i.test(rawValue)) {
+          const link = document.createElement("a");
+          link.href = rawValue;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.textContent = "প্রুফ ছবি দেখুন";
+          link.style.cssText = "color:#1769aa;text-decoration:underline;font-weight:600";
+          value.appendChild(link);
+        } else {
+          value.textContent = display == null || display === "" ? "—" : String(display);
+        }
+        row.append(label, value);
+        content.appendChild(row);
+      });
       detailModal.hidden = false;
       detailModal.style.display = "flex";
     };
