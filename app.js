@@ -451,7 +451,7 @@ function effectiveFeePercent(from,to){
     }
     updateAmountCurrency(); updateCalculation(); updateAmountLimitFeedback();
   });
-  $("amount").addEventListener("input",updateCalculation);
+  $("amount").addEventListener("input",()=>{updateCalculation();updateAmountLimitFeedback();});
   function preparePendingExchangeRequest(){
     if(!validate()) return false;
     const from=walletById($("fromWallet").value),to=walletById($("toWallet").value),amount=Number($("amount").value),r=rateFor(from,to);
