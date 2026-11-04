@@ -31,6 +31,7 @@ import { firebaseConfig } from "./firebase-config.js";
     setupFirestoreTest();
     setupRequestList();
     setupWebsiteContentEditor();
+    setupExchangeSettingsEditor();
     let identity = $("adminIdentity");
     if (!identity) {
       identity = document.createElement("p");
@@ -472,6 +473,171 @@ import { firebaseConfig } from "./firebase-config.js";
     $("contentSave").addEventListener("click", () => save(struckInput.checked));
     $("contentRestore").addEventListener("click", () => { struckInput.checked = false; save(false); });
     $("contentLoad").addEventListener("click", load);
+    load();
+  }
+
+
+  // Owner-controlled currency, rate and payment configuration via the separate Admin Worker.
+  function setupExchangeSettingsEditor() {
+    const currencyPanel = $("panel-currencies");
+    const paymentPanel = $("panel-payments");
+    if (!currencyPanel || $("exchangeSettingsEditor")) return;
+    const root = document.createElement("div");
+    root.id = "exchangeSettingsEditor";
+    root.className = "info-strip";
+    root.style.cssText = "margin-top:18px;background:#f7fbff;border:1px solid #cfe0ef;padding:15px;border-radius:12px;color:#263b50";
+    root.innerHTML = `
+      <h3 style="margin:0 0 6px">Live Currency & Payment Control</h3>
+      <p style="margin:0 0 12px">এখানে পরিবর্তন করলে Firestore-এর exchangeSettings/global ডকুমেন্টে সংরক্ষিত হবে। Save না করা পর্যন্ত কোনো পরিবর্তন কার্যকর হবে না।</p>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+        <label>Global Fee (%)<input id="exGlobalFee" type="number" min="0" max="100" step="0.01"></label>
+        <label>Minimum BDT<input id="exMinBdt" type="number" min="0" step="0.01"></label>
+        <label>Maximum BDT<input id="exMaxBdt" type="number" min="0" step="0.01"></label>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 12px">
+        <button type="button" id="exReload" class="outline">Reload Settings</button>
+        <button type="button" id="exSaveAll">Save All Settings</button>
+      </div>
+      <div id="exCurrencyCards" style="display:grid;gap:12px"></div>
+      <h3 style="margin:18px 0 8px">Add New Currency</h3>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+        <label>Unique ID<input id="exNewId" placeholder="e.g. newwallet"></label>
+        <label>Currency Name<input id="exNewName" placeholder="e.g. New Wallet USD"></label>
+        <label>Currency Code<input id="exNewCode" placeholder="USD / BDT / USDT"></label>
+        <label>Type<select id="exNewType"><option value="usd">USD</option><option value="bdt">BDT</option><option value="crypto">Crypto</option><option value="other">Other</option></select></label>
+      </div>
+      <button type="button" class="outline" id="exAddCurrency">Add Currency to Editor</button>
+      <p id="exSettingsStatus" role="status" aria-live="polite" style="margin:10px 0 0"></p>`;
+    currencyPanel.appendChild(root);
+    if (paymentPanel) {
+      const note = document.createElement("div");
+      note.className = "info-strip";
+      note.innerHTML = "<b>Payment account settings</b><p>প্রতিটি কারেন্সির Payment Address, Placeholder এবং Instruction একই Currency Control তালিকার কার্ডে সম্পাদনা করুন। Save All Settings চাপলে সব একসঙ্গে সংরক্ষিত হবে।";
+      paymentPanel.appendChild(note);
+    }
+    const status = $("exSettingsStatus");
+    const cards = $("exCurrencyCards");
+    let settings = null;
+    const esc = value => String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+    const api = async (method, path, body) => {
+      const user = auth.currentUser;
+      if (!user) throw new Error("Admin session পাওয়া যায়নি। আবার লগইন করুন।");
+      const token = await user.getIdToken(true);
+      const response = await fetch(REQUEST_API_BASE + path, {
+        method,
+        headers: { Authorization: "Bearer " + token, ...(body ? {"content-type":"application/json"} : {}) },
+        ...(body ? {body: JSON.stringify(body)} : {}),
+        cache: "no-store"
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || data.ok !== true) throw new Error(data.error || "Settings API error (" + response.status + ")");
+      return data;
+    };
+    const field = (index, key, label, value, type = "text", step = "") => {
+      const safe = esc(value);
+      return '<label style="display:block;margin:5px 0;font-size:13px">' + label +
+        '<input data-currency-index="' + index + '" data-currency-field="' + key + '" type="' + type + '" value="' + safe + '"' +
+        (step ? ' step="' + step + '"' : "") + ' style="width:100%;padding:8px;border:1px solid #d5e0e8;border-radius:7px;background:#fff;color:#172033"></label>';
+    };
+    const toggle = (index, key, label, checked) =>
+      '<label style="display:flex;align-items:center;gap:6px;margin:4px 10px 4px 0;font-size:12px"><input data-currency-index="' + index + '" data-currency-field="' + key + '" type="checkbox" ' + (checked ? "checked" : "") + ' style="width:auto;margin:0">' + label + '</label>';
+    function render() {
+      cards.replaceChildren();
+      if (!settings || !Array.isArray(settings.currencies)) return;
+      $("exGlobalFee").value = settings.feePercent ?? 1;
+      $("exMinBdt").value = settings.limits?.minBdt ?? 500;
+      $("exMaxBdt").value = settings.limits?.maxBdt ?? 10000;
+      settings.currencies.forEach((c, i) => {
+        const card = document.createElement("article");
+        card.style.cssText = "background:#fff;border:1px solid #dbe5ec;border-radius:10px;padding:12px;min-width:0";
+        card.innerHTML = `
+          <div style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap">
+            <strong>${esc(c.name || c.id)}</strong>
+            <button type="button" class="danger exRemoveCurrency" data-index="${i}" style="padding:5px 9px">Remove</button>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:8px">
+            ${field(i,"id","Currency ID",c.id)}
+            ${field(i,"name","Display Name",c.name)}
+            ${field(i,"subtitle","Subtitle",c.subtitle)}
+            ${field(i,"currency","Currency Code",c.currency)}
+            <label style="font-size:13px;margin:5px 0">Currency Type<select data-currency-index="${i}" data-currency-field="type" style="width:100%;padding:8px;border:1px solid #d5e0e8;border-radius:7px"><option value="bdt" ${c.type==="bdt"?"selected":""}>BDT</option><option value="usd" ${c.type==="usd"?"selected":""}>USD</option><option value="crypto" ${c.type==="crypto"?"selected":""}>Crypto</option><option value="other" ${c.type==="other"?"selected":""}>Other</option></select></label>
+            ${field(i,"buy","Buy Rate",c.buy,"number","0.000001")}
+            ${field(i,"sell","Sell Rate",c.sell,"number","0.000001")}
+            ${field(i,"feePercent","Individual Fee %",c.feePercent ?? "","number","0.01")}
+            ${field(i,"logo","Logo URL",c.logo)}
+            ${field(i,"paymentAddress","Payment Address / ID",c.paymentAddress)}
+            ${field(i,"paymentPlaceholder","Address Placeholder",c.paymentPlaceholder)}
+            <label style="grid-column:1/-1;font-size:13px;margin:5px 0">Payment Instruction<textarea data-currency-index="${i}" data-currency-field="paymentInstruction" rows="2" style="width:100%;padding:8px;border:1px solid #d5e0e8;border-radius:7px">${esc(c.paymentInstruction)}</textarea></label>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:3px 8px;border-top:1px solid #edf1f4;margin-top:8px;padding-top:8px">
+            ${toggle(i,"enabled","Enabled",c.enabled !== false)}
+            ${toggle(i,"hidden","Hide from public list",c.hidden === true)}
+            ${toggle(i,"sendEnabled","Send Payment",c.sendEnabled !== false)}
+            ${toggle(i,"receiveEnabled","Receive Payment",c.receiveEnabled !== false)}
+            ${toggle(i,"buyEnabled","Buy",c.buyEnabled !== false)}
+            ${toggle(i,"sellEnabled","Sell",c.sellEnabled !== false)}
+          </div>`;
+        cards.appendChild(card);
+      });
+    }
+    function collect() {
+      cards.querySelectorAll("[data-currency-index][data-currency-field]").forEach(el => {
+        const item = settings.currencies[Number(el.dataset.currencyIndex)];
+        if (!item) return;
+        const key = el.dataset.currencyField;
+        if (el.type === "checkbox") item[key] = el.checked;
+        else if (el.type === "number") item[key] = el.value.trim() === "" && key === "feePercent" ? null : Number(el.value);
+        else item[key] = el.value;
+      });
+      settings.feePercent = Number($("exGlobalFee").value);
+      settings.limits = {minBdt:Number($("exMinBdt").value),maxBdt:Number($("exMaxBdt").value)};
+    }
+    async function load() {
+      status.textContent = "Exchange settings Firestore থেকে লোড হচ্ছে...";
+      try {
+        const data = await api("GET","/api/admin/exchange-settings");
+        settings = data.settings;
+        render();
+        status.textContent = "সফল! " + settings.currencies.length + "টি currency settings লোড হয়েছে।";
+      } catch (error) { status.textContent = "Settings লোড হয়নি: " + error.message; }
+    }
+    async function save() {
+      collect();
+      status.textContent = "সব Currency ও Payment Settings সংরক্ষণ হচ্ছে...";
+      try {
+        const data = await api("PUT","/api/admin/exchange-settings",{settings});
+        settings = data.settings;
+        render();
+        status.textContent = "সফল! " + settings.currencies.length + "টি currency/payment settings Firestore-এ সংরক্ষিত হয়েছে।";
+      } catch (error) { status.textContent = "সংরক্ষণ হয়নি: " + error.message; }
+    }
+    $("exReload").addEventListener("click",load);
+    $("exSaveAll").addEventListener("click",save);
+    $("exAddCurrency").addEventListener("click",() => {
+      if (!settings) return;
+      const id = $("exNewId").value.trim().toLowerCase();
+      const name = $("exNewName").value.trim();
+      const currency = $("exNewCode").value.trim().toUpperCase();
+      const type = $("exNewType").value;
+      if (!/^[a-z0-9_-]{2,40}$/.test(id) || !name || !/^[A-Z0-9]{2,12}$/.test(currency)) {
+        status.textContent = "সঠিক ID, Name ও Currency Code লিখুন।"; return;
+      }
+      if (settings.currencies.some(c => c.id === id)) { status.textContent = "এই Currency ID আগে থেকেই আছে।"; return; }
+      collect();
+      settings.currencies.push({id,name,subtitle:"",currency,type,logo:"",buy:1,sell:1,enabled:true,hidden:false,sendEnabled:true,receiveEnabled:true,buyEnabled:true,sellEnabled:true,feePercent:null,paymentAddress:"",paymentPlaceholder:"",paymentInstruction:"",short:name.slice(0,3)});
+      $("exNewId").value = $("exNewName").value = $("exNewCode").value = "";
+      render(); status.textContent = "নতুন Currency যোগ হয়েছে। স্থায়ী করতে Save All Settings চাপুন।";
+    });
+    cards.addEventListener("click",event => {
+      const button = event.target.closest(".exRemoveCurrency");
+      if (!button || !settings) return;
+      const index = Number(button.dataset.index);
+      const item = settings.currencies[index];
+      if (!item || !confirm((item.name || item.id) + " মুছে ফেলবেন? Save All Settings চাপলে পরিবর্তন স্থায়ী হবে।")) return;
+      collect();
+      settings.currencies.splice(index,1); render();
+      status.textContent = "Currency সরানো হয়েছে। স্থায়ী করতে Save All Settings চাপুন।";
+    });
     load();
   }
 
