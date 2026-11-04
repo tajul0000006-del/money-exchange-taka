@@ -120,7 +120,8 @@
       if(!input) return;
       const wallet = window.metGetWalletSettings ? window.metGetWalletSettings($("toWallet")?.value) : null;
       const rule=accountRule($("toWallet")?.value);
-      input.placeholder=wallet?.paymentPlaceholder || rule.hint;
+      const configuredPlaceholder=wallet?.paymentPlaceholder || "";
+      input.placeholder=/[\u0980-\u09FF]/.test(configuredPlaceholder) ? rule.hint : (configuredPlaceholder || rule.hint);
       if(help) help.textContent=wallet?.paymentInstruction || rule.hint;
       if(error) error.textContent="";
       input.classList.remove("invalid");
