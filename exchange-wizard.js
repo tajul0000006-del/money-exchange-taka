@@ -76,8 +76,8 @@
     function isValidContact() {
       const method = $("contactMethod")?.value || "whatsapp";
       const value = $("contact")?.value.trim() || "";
-      if (method === "whatsapp") return /^\d{11}$/.test(value);
-      if (method === "telegram") return /^\d{11}$/.test(value) || /^@?[A-Za-z0-9_]{5,32}$/.test(value) || /^(https?:\/\/)?(www\.)?(t\.me|telegram\.me)\/[A-Za-z0-9_]{5,32}\/?$/.test(value);
+      if (method === "whatsapp") return /^01[3-9]\d{8}$/.test(value);
+      if (method === "telegram") return /^01[3-9]\d{8}$/.test(value) || /^@?[A-Za-z][A-Za-z0-9_]{4,31}$/.test(value) || /^(https?:\/\/)?(www\.)?(t\.me|telegram\.me)\/[A-Za-z][A-Za-z0-9_]{4,31}\/?$/.test(value);
       return /^[A-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@gmail\.com$/i.test(value);
     }
     function updateContactMode() {
@@ -99,7 +99,7 @@
       const valid = isValidContact();
       if (showMessage && input) input.classList.toggle("invalid", !valid);
       if (valid && input) input.classList.remove("invalid");
-      if (error) { const method=$("contactMethod")?.value; error.textContent = valid || !showMessage ? "" : method === "whatsapp" ? "Enter a valid 11-digit WhatsApp number." : method === "telegram" ? "Enter a valid Telegram number, @username, or t.me profile link." : "Enter a valid Gmail address."; }
+      if (error) { const method=$("contactMethod")?.value; error.textContent = valid || !showMessage ? "" : method === "whatsapp" ? "Enter a valid Bangladesh mobile number starting with 013–019 (11 digits)." : method === "telegram" ? "Enter a valid Bangladesh mobile number or Telegram @username / t.me profile link." : "Enter a valid Gmail address."; }
       return valid;
     }
     function accountRule(walletId) {
