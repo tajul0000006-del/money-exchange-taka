@@ -2,7 +2,9 @@
 (() => {
   "use strict";
   const $ = (id) => document.getElementById(id);
-  const FEE_PERCENT = 1;
+  const SETTINGS_API_BASE = "https://moneyexchange-admin.taijulsheikh60.workers.dev";
+  let globalFeePercent = 1;
+  let exchangeLimits = {minBdt:500,maxBdt:10000};
   const DEFAULT_WALLETS = [
     {id:"bkash",name:"bKash Personal",subtitle:"Personal BDT · Mobile Financial Service",currency:"BDT",type:"bdt",logo:"assets/logos/bkash.png",buy:0,sell:0,short:"bK"},
     {id:"nagad",name:"Nagad Personal",subtitle:"Personal BDT · Mobile Financial Service",currency:"BDT",type:"bdt",logo:"assets/logos/nagad.png",buy:0,sell:0,short:"NG"},
@@ -49,14 +51,24 @@
       </tr>`).join("");
   }
   function allowedWallets(side, direction){
-    if (direction === "buy") return side === "from" ? wallets.filter(w=>w.type==="bdt") : wallets.filter(w=>w.type!=="bdt");
-    if (direction === "sell") return side === "from" ? wallets.filter(w=>w.type!=="bdt") : wallets.filter(w=>w.type==="bdt");
-    return wallets;
+    const available = wallets.filter(w => w.enabled !== false && w.hidden !== true &&
+      (side === "from" ? w.sendEnabled !== false : w.receiveEnabled !== false));
+    if (direction === "buy") {
+      return side === "from"
+        ? available.filter(w=>w.type==="bdt")
+        : available.filter(w=>w.type!=="bdt" && w.buyEnabled !== false);
+    }
+    if (direction === "sell") {
+      return side === "from"
+        ? available.filter(w=>w.type!=="bdt" && w.sellEnabled !== false)
+        : available.filter(w=>w.type==="bdt");
+    }
+    return available;
   }
   function fillWalletSelect(selectId, side, preserve=true){
     const select = $(selectId), direction = $("direction").value, old = preserve ? select.value : "";
     const list = allowedWallets(side, direction);
-    select.innerHTML = list.map(w=>`<option value="${w.id}">${escapeHtml(w.name)} · ${w.currency}${w.type === "bdt" ? " · পার্সোনাল BDT" : ""}</option>`).join("");
+    select.innerHTML = list.length ? list.map(w=>`<option value="${w.id}">${escapeHtml(w.name)} · ${w.currency}${w.type === "bdt" ? " · পার্সোনাল BDT" : ""}</option>`).join("") : '<option value="">এই অপশনে কোনো Currency চালু নেই</option>';
     if(list.some(w=>w.id===old)) select.value=old;
   }
   function updateWalletOptions(){
@@ -132,15 +144,15 @@
     help.classList.remove("amount-limit-error");
     let message="";
     if(!value || !result){
-      message="Limit: ৳500–৳30,000 BDT";
-    } else if(result.bdt<500 || result.bdt>30000){
+      message="Limit: ৳"+exchangeLimits.minBdt.toLocaleString("en-US")+"–৳"+exchangeLimits.maxBdt.toLocaleString("en-US")+" BDT";
+    } else if(result.bdt<exchangeLimits.minBdt || result.bdt>exchangeLimits.maxBdt){
       if(result.from.type==="bdt"){
-        message="Limit: ৳500–৳30,000 BDT";
+        message="Limit: ৳"+exchangeLimits.minBdt.toLocaleString("en-US")+"–৳"+exchangeLimits.maxBdt.toLocaleString("en-US")+" BDT";
       } else {
-        const minAmount=500/result.rate;
-        const maxAmount=30000/result.rate;
+        const minAmount=exchangeLimits.minBdt/result.rate;
+        const maxAmount=exchangeLimits.maxBdt/result.rate;
         const fmt=n=>Number(n).toLocaleString("en-US",{maximumFractionDigits:2});
-        message="Limit: "+fmt(minAmount)+"–"+fmt(maxAmount)+" "+result.from.currency+" (৳500–৳30,000 BDT)";
+        message="Limit: "+fmt(minAmount)+"–"+fmt(maxAmount)+" "+result.from.currency+" (৳"+exchangeLimits.minBdt.toLocaleString("en-US")+"–৳"+exchangeLimits.maxBdt.toLocaleString("en-US")+" BDT)";
       }
     }
     if(message){
@@ -161,7 +173,8 @@
       $("calcMessage").textContent=(!from||!to) ? "দেওয়ার ও পাওয়ার ওয়ালেট নির্বাচন করুন।" : (from.id===to.id ? "দুটি আলাদা ওয়ালেট নির্বাচন করুন।" : "পরিমাণ ০-এর বেশি লিখুন।"); return;
     }
     const gross = amount * r.rate;
-    const fee=gross*FEE_PERCENT/100, receive=Math.max(0,gross-fee);
+    const feePercent = Number.isFinite(Number(to.feePercent)) ? Number(to.feePercent) : (Number.isFinite(Number(from.feePercent)) ? Number(from.feePercent) : globalFeePercent);
+    const fee=gross*feePercent/100, receive=Math.max(0,gross-fee);
     $("payPreview").textContent=money(amount,from.currency);
     $("receivePreview").textContent=money(receive,to.currency);
     $("ratePreview").textContent=r.text;
@@ -190,7 +203,7 @@
   const DEFAULT_ADDRESSES={bkash:"পেমেন্ট ঠিকানা এখনো যুক্ত করা হয়নি",nagad:"পেমেন্ট ঠিকানা এখনো যুক্ত করা হয়নি",rocket:"পেমেন্ট ঠিকানা এখনো যুক্ত করা হয়নি",upay:"পেমেন্ট ঠিকানা এখনো যুক্ত করা হয়নি",paypal:"অ্যাকাউন্ট ইমেইল এখনো যুক্ত করা হয়নি",perfectmoney:"অ্যাকাউন্ট ID এখনো যুক্ত করা হয়নি",webmoney:"ওয়ালেট ID এখনো যুক্ত করা হয়নি",volet:"অ্যাকাউন্ট ID এখনো যুক্ত করা হয়নি",binance:"USDT নেটওয়ার্ক ঠিকানা এখনো যুক্ত করা হয়নি",kucoin:"USDT নেটওয়ার্ক ঠিকানা এখনো যুক্ত করা হয়নি",bybit:"USDT নেটওয়ার্ক ঠিকানা এখনো যুক্ত করা হয়নি",epay:"অ্যাকাউন্ট ID এখনো যুক্ত করা হয়নি",tunepay:"অ্যাকাউন্ট ID এখনো যুক্ত করা হয়নি"};
   let paymentAddresses={...DEFAULT_ADDRESSES};
   try{paymentAddresses={...paymentAddresses,...JSON.parse(localStorage.getItem(ADDRESS_KEY)||"{}")};}catch(_){}
-  window.metGetPaymentInfo=(walletId)=>{const wallet=walletById(walletId);return wallet?{name:wallet.name,address:paymentAddresses[walletId]||"পেমেন্ট ঠিকানা এখনো যুক্ত করা হয়নি"}:null;};
+  window.metGetPaymentInfo=(walletId)=>{const wallet=walletById(walletId);return wallet?{name:wallet.name,address:wallet.paymentAddress||paymentAddresses[walletId]||"পেমেন্ট ঠিকানা এখনো যুক্ত করা হয়নি",instruction:wallet.paymentInstruction||"",placeholder:wallet.paymentPlaceholder||""}:null;};
   let pendingRequest=null;
   function renderPaymentEditor(){const root=$("adminPaymentEditor");if(!root)return;root.innerHTML=wallets.map(w=>`<div class="admin-payment-row"><label for="address-${w.id}">${escapeHtml(w.name)}<small>${escapeHtml(w.currency)} · পেমেন্ট ঠিকানা</small></label><input id="address-${w.id}" value="${escapeHtml(paymentAddresses[w.id]||"")}" maxlength="220" placeholder="পেমেন্ট নম্বর / ID / ঠিকানা"></div>`).join("");}
   function openModal(id){$(id).classList.add("open");$(id).setAttribute("aria-hidden","false");document.body.style.overflow="hidden";}
@@ -411,8 +424,8 @@
     if(Number.isFinite(Number($("amount").value)) && Number($("amount").value)>0){
       const amountValue=Number($("amount").value);
       const bdtEquivalent=from.type==="bdt" ? amountValue : amountValue*Number(from.sell);
-      if(!Number.isFinite(bdtEquivalent)||bdtEquivalent<500||bdtEquivalent>30000){
-        showError("প্রতি রিকোয়েস্টের সীমা ৳৫০০ থেকে ৳৩০,০০০ (সমমূল্যের USD/USDT)। পরিমাণ পরিবর্তন করুন।");
+      if(!Number.isFinite(bdtEquivalent)||bdtEquivalent<exchangeLimits.minBdt||bdtEquivalent>exchangeLimits.maxBdt){
+        showError("প্রতি রিকোয়েস্টের সীমা ৳"+exchangeLimits.minBdt.toLocaleString("bn-BD")+" থেকে ৳"+exchangeLimits.maxBdt.toLocaleString("bn-BD")+" (সমমূল্যের USD/USDT)। পরিমাণ পরিবর্তন করুন।");
         $("amount").classList.add("invalid");$("amount").focus();return false;
       }
     }
@@ -441,7 +454,8 @@
     if(!validate()) return false;
     const from=walletById($("fromWallet").value),to=walletById($("toWallet").value),amount=Number($("amount").value),r=rateFor(from,to);
     const gross=amount*r.rate;
-    const fee=gross*FEE_PERCENT/100,receive=gross-fee;
+    const feePercent = Number.isFinite(Number(to.feePercent)) ? Number(to.feePercent) : (Number.isFinite(Number(from.feePercent)) ? Number(from.feePercent) : globalFeePercent);
+    const fee=gross*feePercent/100,receive=gross-fee;
     const item={
       code:"MET-"+Array.from(crypto.getRandomValues(new Uint8Array(6)),b=>"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"[b%36]).join(""),
       date:new Date().toLocaleString("bn-BD"),
@@ -474,6 +488,71 @@
     $("adminStatus").classList.remove("error");$("adminStatus").textContent="রেট ও পেমেন্ট ঠিকানা সংরক্ষণ করা হয়েছে।";
   });
   renderRateTable();renderAdminEditor();renderPaymentEditor();updateWalletOptions();renderHistory();
+  async function loadPublicExchangeSettings(){
+    try {
+      const response = await fetch(SETTINGS_API_BASE + "/api/exchange-settings", {cache:"no-store"});
+      if (!response.ok) throw new Error("Settings API (" + response.status + ")");
+      const data = await response.json();
+      const settings = data && data.settings;
+      if (!settings || !Array.isArray(settings.currencies)) throw new Error("Settings data format is not valid");
+
+      const publicCurrencies = settings.currencies
+        .filter(c => c && c.enabled !== false && c.hidden !== true)
+        .map(c => {
+          const type = ["bdt","usd","crypto"].includes(String(c.type || "").toLowerCase())
+            ? String(c.type).toLowerCase() : (String(c.currency || c.code || "").toUpperCase()==="BDT" ? "bdt" : "other");
+          return {
+            id:String(c.id || "").trim(),
+            name:String(c.name || c.id || "Currency"),
+            subtitle:String(c.subtitle || ""),
+            currency:String(c.currency || c.code || "USD").toUpperCase(),
+            type,
+            logo:String(c.logo || ""),
+            buy:Number(c.buy || 0),
+            sell:Number(c.sell || 0),
+            short:String(c.short || c.name || c.id || "MET").slice(0,3),
+            feePercent:c.feePercent === null || c.feePercent === "" || c.feePercent === undefined ? null : Number(c.feePercent),
+            paymentAddress:String(c.paymentAddress || ""),
+            paymentPlaceholder:String(c.paymentPlaceholder || ""),
+            paymentInstruction:String(c.paymentInstruction || ""),
+            enabled:c.enabled !== false,
+            hidden:c.hidden === true,
+            sendEnabled:c.sendEnabled !== false,
+            receiveEnabled:c.receiveEnabled !== false,
+            buyEnabled:c.buyEnabled !== false,
+            sellEnabled:c.sellEnabled !== false
+          };
+        })
+        .filter(c => /^[a-z0-9_-]{2,40}$/i.test(c.id));
+      if (!publicCurrencies.length) throw new Error("No active currencies in Admin settings");
+
+      wallets = publicCurrencies;
+      globalFeePercent = Number.isFinite(Number(settings.feePercent)) ? Number(settings.feePercent) : 1;
+      const minBdt = Number(settings.limits?.minBdt);
+      const maxBdt = Number(settings.limits?.maxBdt);
+      exchangeLimits = {
+        minBdt:Number.isFinite(minBdt) && minBdt >= 0 ? minBdt : 500,
+        maxBdt:Number.isFinite(maxBdt) && maxBdt > 0 ? maxBdt : 10000
+      };
+      paymentAddresses = {...DEFAULT_ADDRESSES};
+      wallets.forEach(w => { if (w.paymentAddress) paymentAddresses[w.id] = w.paymentAddress; });
+
+      renderRateTable();
+      renderAdminEditor();
+      renderPaymentEditor();
+      updateWalletOptions();
+      updateAmountLimitFeedback();
+      updateCalculation();
+      window.dispatchEvent(new CustomEvent("met:exchange-settings-loaded", {
+        detail:{currencyCount:wallets.length,limits:{...exchangeLimits},feePercent:globalFeePercent}
+      }));
+      console.info("MoneyExchangeTaka public exchange settings loaded:", wallets.length);
+    } catch (error) {
+      console.warn("Admin exchange settings unavailable; using safe local defaults:", error);
+    }
+  }
+  loadPublicExchangeSettings();
+
 
   // Load Owner-approved plain-text overrides for elements marked with data-content-key.
   (async function loadWebsiteTextOverrides(){
