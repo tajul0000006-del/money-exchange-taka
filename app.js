@@ -180,7 +180,7 @@ function effectiveFeePercent(from,to){
     const gross = amount * r.rate;
     const feePercent = effectiveFeePercent(from,to);
     const feeLabel=$("serviceFeeLabel");
-    if(feeLabel) feeLabel.textContent="Service Fee ("+feePercent.toLocaleString("bn-BD",{maximumFractionDigits:2})+"%)";
+    if(feeLabel) feeLabel.textContent="Service Fee ("+feePercent.toLocaleString("en-US",{maximumFractionDigits:2})+"%)";
     const fee=gross*feePercent/100, receive=Math.max(0,gross-fee);
     $("payPreview").textContent=money(amount,from.currency);
     $("receivePreview").textContent=money(receive,to.currency);
