@@ -164,6 +164,11 @@
     return true;
   }
   window.metValidateExchangeAmount=updateAmountLimitFeedback;
+function effectiveFeePercent(from,to){
+    if(to && to.feePercent !== null && to.feePercent !== undefined && Number.isFinite(Number(to.feePercent))) return Number(to.feePercent);
+    if(from && from.feePercent !== null && from.feePercent !== undefined && Number.isFinite(Number(from.feePercent))) return Number(from.feePercent);
+    return globalFeePercent;
+  }
   function updateCalculation(){
     const from=walletById($("fromWallet").value), to=walletById($("toWallet").value);
     const amount=Number($("amount").value);
@@ -173,7 +178,9 @@
       $("calcMessage").textContent=(!from||!to) ? "দেওয়ার ও পাওয়ার ওয়ালেট নির্বাচন করুন।" : (from.id===to.id ? "দুটি আলাদা ওয়ালেট নির্বাচন করুন।" : "পরিমাণ ০-এর বেশি লিখুন।"); return;
     }
     const gross = amount * r.rate;
-    const feePercent = to.feePercent !== null && to.feePercent !== undefined && Number.isFinite(Number(to.feePercent)) ? Number(to.feePercent) : (from.feePercent !== null && from.feePercent !== undefined && Number.isFinite(Number(from.feePercent)) ? Number(from.feePercent) : globalFeePercent);
+    const feePercent = effectiveFeePercent(from,to);
+    const feeLabel=$("serviceFeeLabel");
+    if(feeLabel) feeLabel.textContent="সার্ভিস ফি ("+feePercent.toLocaleString("bn-BD",{maximumFractionDigits:2})+"%)";
     const fee=gross*feePercent/100, receive=Math.max(0,gross-fee);
     $("payPreview").textContent=money(amount,from.currency);
     $("receivePreview").textContent=money(receive,to.currency);
