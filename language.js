@@ -9,7 +9,7 @@
     ["th","ไทย"],["tr","Türkçe"],["ur","اردو"],["vi","Tiếng Việt"],["fil","Filipino"],
     ["nl","Nederlands"],["pl","Polski"]
   ];
-  var selectors = [], initialized = false;
+  var selectors = [], initialized = false, sourceLanguage = (document.documentElement.getAttribute("lang") || "en").toLowerCase();
   function optionsMarkup(){return languageOptions.map(function(x){return '<option value="'+x[0]+'">'+x[1]+'</option>';}).join("");}
   function mountControls(){
     var desktop=document.querySelector(".desktop-nav");
@@ -38,10 +38,10 @@
   function sync(code){selectors.forEach(function(s){if(s)s.value=code;});}
   function apply(code){
     if(!languageOptions.some(function(x){return x[0]===code;}))code="en";
-    document.cookie="googtrans="+(code==="en"?"/en/en":"/en/"+code)+";path=/;max-age=31536000;SameSite=Lax";
+    document.cookie="googtrans="+(code===sourceLanguage?"/"+sourceLanguage+"/"+sourceLanguage:"/"+sourceLanguage+"/"+code)+";path=/;max-age=31536000;SameSite=Lax";
     try{localStorage.setItem("fastmoney-language",code);}catch(_){}
     sync(code);
-    if(code==="en"){document.cookie="googtrans=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;SameSite=Lax";window.location.reload();return;}
+    if(code===sourceLanguage){document.cookie="googtrans=;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT;SameSite=Lax";window.location.reload();return;}
     var combo=document.querySelector(".goog-te-combo");
     if(combo){combo.value=code;combo.dispatchEvent(new Event("change",{bubbles:true}));}
     else window.location.reload();
@@ -49,7 +49,7 @@
   window.googleTranslateElementInit=function(){
     if(initialized||!window.google||!google.translate)return;
     initialized=true;
-    new google.translate.TranslateElement({pageLanguage:"en",includedLanguages:languageOptions.filter(function(x){return x[0]!=="en";}).map(function(x){return x[0];}).join(","),autoDisplay:false},"google_translate_element");
+    new google.translate.TranslateElement({pageLanguage:sourceLanguage,includedLanguages:languageOptions.filter(function(x){return x[0]!=="en";}).map(function(x){return x[0];}).join(","),autoDisplay:false},"google_translate_element");
     var saved=readSavedLanguage();sync(saved);
     if(saved!=="en"){var tries=0,timer=window.setInterval(function(){var combo=document.querySelector(".goog-te-combo");tries++;if(combo){window.clearInterval(timer);combo.value=saved;combo.dispatchEvent(new Event("change",{bubbles:true}));}else if(tries>40)window.clearInterval(timer);},250);}
   };
