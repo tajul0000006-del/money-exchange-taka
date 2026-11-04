@@ -310,7 +310,7 @@ function effectiveFeePercent(from,to){
       document.querySelector("#successModal .success-mark").textContent="✓";
       document.querySelector("#successModal .tracking-box").hidden=false;
       document.querySelectorAll("#successModal .modal-copy")[0].textContent="Your exchange request has been received and is now waiting for admin verification. Once verified, we will process it as soon as possible.";
-      document.querySelectorAll("#successModal .modal-copy")[1].textContent="Save this Tracking Code. You can use it to check your request status at any time.";
+      document.querySelectorAll("#successModal .modal-copy")[1].textContent="Save this request reference and share it with Support if you need help.";
       $("successTrackingCode").textContent=pendingRequest.code;
       openModal("successModal");
       pendingRequest=null;$("proofReference").value="";$("proofEmail").value="";$("proofScreenshot").value="";$("proofPreviewWrap").hidden=true;$("proofPreviewImage").removeAttribute("src");$("proofPreviewName").textContent="";$("exchangeForm").reset();updateWalletOptions();
@@ -328,82 +328,6 @@ function effectiveFeePercent(from,to){
   });
   $("copyTrackingCode").addEventListener("click",async()=>{try{await navigator.clipboard.writeText($("successTrackingCode").textContent);$("copyTrackingCode").textContent="Copied";}catch(_){}});
   $("successDone").addEventListener("click",()=>{closeModal("successModal");$("history").scrollIntoView({behavior:"smooth",block:"start"});});
-
-  // Public request tracking through the Cloudflare Worker.
-  $("trackRequestForm").addEventListener("submit", async event => {
-    event.preventDefault();
-    const button = $("trackRequestButton");
-    const statusBox = $("trackRequestStatus");
-    const resultBox = $("trackRequestResult");
-    const trackingCode = $("trackCode").value.trim().toUpperCase();
-    const phoneLast4 = $("trackPhoneLast4").value.replace(/[^0-9]/g, "");
-
-    resultBox.innerHTML = "";
-    statusBox.classList.remove("error");
-    statusBox.textContent = "";
-
-    if (!/^MET-[A-Z0-9]{4,20}$/.test(trackingCode) || ! /^[0-9]{4}$/.test(phoneLast4)) {
-      statusBox.textContent = "Enter the correct Tracking Code and last 4 digits of your phone number.";
-      statusBox.classList.add("error");
-      return;
-    }
-
-    button.disabled = true;
-    button.textContent = "Searching...";
-
-    try {
-      const response = await fetch("https://bold-surf-9356.taijulsheikh60.workers.dev/api/track", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ trackingCode, phoneLast4 })
-      });
-
-      const data = await response.json().catch(() => ({}));
-
-      if (!response.ok || !data.ok) {
-        throw new Error(data.error || "Request not found. Check the details and try again.");
-      }
-
-      const statusInfo = {
-        pending: { label: "Pending · Under review", bg: "#fef3c7", color: "#92400e" },
-        approved: { label: "Approved", bg: "#dcfce7", color: "#166534" },
-        rejected: { label: "Rejected", bg: "#fee2e2", color: "#991b1b" }
-      }[data.status] || { label: "Pending", bg: "#fef3c7", color: "#92400e" };
-
-      const card = document.createElement("div");
-      card.className = "history-item";
-      card.style.marginTop = "16px";
-
-      const details = document.createElement("div");
-      const heading = document.createElement("h3");
-      heading.textContent = data.trackingCode;
-      const badge = document.createElement("span");
-      badge.className = "status-pill";
-      badge.textContent = statusInfo.label;
-      badge.style.background = statusInfo.bg;
-      badge.style.color = statusInfo.color;
-      details.append(heading, badge);
-
-      const meta = document.createElement("p");
-      meta.className = "history-meta";
-      const directionLabel = data.direction === "sell" ? "Sell" : data.direction === "buy" ? "Buy" : "Exchange";
-      meta.textContent = directionLabel + " · " + (data.paymentMethod || "Payment method");
-      details.append(meta);
-
-      const amount = document.createElement("div");
-      amount.className = "history-amount";
-      amount.textContent = data.amount == null ? "—" : Number(data.amount).toLocaleString("en-US") + " " + (data.currency || "");
-      card.append(details, amount);
-      resultBox.append(card);
-      statusBox.textContent = "Your request was found.";
-    } catch (error) {
-      statusBox.textContent = error.message || "Unable to check the status right now. Please try again later.";
-      statusBox.classList.add("error");
-    } finally {
-      button.disabled = false;
-      button.textContent = "Check Status";
-    }
-  });
 
   function showError(message){$("formStatus").hidden=false;$("formStatus").textContent=message;$("formStatus").classList.add("error");}
   function clearError(){$("formStatus").textContent="";$("formStatus").classList.remove("error");}
