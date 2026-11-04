@@ -1,0 +1,16 @@
+/* FastMoney language selector */
+.fm-language-control{position:relative;display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;height:40px;padding:0 11px;border:1px solid rgba(8,91,104,.18);border-radius:12px;background:#f4fbfc;color:#075b68}
+.fm-language-control>i:first-child{font-size:15px;color:#087b8c}
+.fm-language-select{max-width:112px;min-width:82px;padding:7px 17px 7px 2px;border:0;outline:0;background:transparent;color:#12334a;font:600 13px/1.2 Arial,sans-serif;cursor:pointer;appearance:none;-webkit-appearance:none}
+.fm-language-select option{color:#142b40;background:#fff}
+.fm-language-chevron{position:absolute;right:9px;pointer-events:none;font-size:10px;color:#47717b}
+.fm-mobile-language{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;padding:12px 13px;border:1px solid rgba(8,91,104,.16);border-radius:12px;background:#f5fafb;color:#173b4d}
+.fm-mobile-language label{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:700}
+.fm-mobile-language label i{color:#087b8c}
+.fm-mobile-language select{width:min(52%,210px);padding:9px 11px;border:1px solid #d6e4e8;border-radius:9px;background:#fff;color:#173b4d;font-size:14px}
+#google_translate_element{position:fixed!important;left:-10000px!important;top:-10000px!important;width:1px!important;height:1px!important;overflow:hidden!important;opacity:0!important;pointer-events:none!important}
+.goog-te-banner-frame,.skiptranslate iframe{display:none!important}
+body{top:0!important}.goog-logo-link,.goog-te-gadget{display:none!important}
+@media(max-width:760px){.fm-language-control{display:none!important}.fm-mobile-language{display:flex}.mobile-nav{max-height:calc(100vh - 90px);overflow-y:auto}}
+@media(min-width:761px){.fm-mobile-language{display:none!important}}
+@media(prefers-reduced-motion:reduce){.fm-language-control,.fm-mobile-language{transition:none!important}}
