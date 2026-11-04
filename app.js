@@ -422,12 +422,12 @@ function effectiveFeePercent(from,to){
       if(id==="contact") {
         const value=el.value.trim();
         const method=$("contactMethod")?.value||"whatsapp";
-        const isPhone=/^\d{11}$/.test(value);
-        const isTelegramProfile=/^@?[A-Za-z0-9_]{5,32}$/.test(value)||/^(https?:\/\/)?(www\.)?(t\.me|telegram\.me)\/[A-Za-z0-9_]{5,32}\/?$/.test(value);
+        const isPhone=/^01[3-9]\d{8}$/.test(value);
+        const isTelegramProfile=/^[A-Za-z][A-Za-z0-9_]{4,31}$/.test(value)||/^(https?:\/\/)?(www\.)?(t\.me|telegram\.me)\/[A-Za-z][A-Za-z0-9_]{4,31}\/?$/.test(value);
         const isEmail=/^[A-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@gmail\.com$/i.test(value);
         invalid=method==="whatsapp"?!isPhone:method==="telegram"?!(isPhone||isTelegramProfile):!isEmail;
         const contactError=$("contactError");
-        if(contactError) contactError.textContent=invalid?(method==="whatsapp"?"Enter a valid 11-digit WhatsApp number.":method==="telegram"?"Enter a valid Telegram number, @username, or t.me profile link.":"Enter a valid Gmail address."):"";
+        if(contactError) contactError.textContent=invalid?(method==="whatsapp"?"Enter a valid Bangladesh mobile number starting with 013–019 (11 digits).":method==="telegram"?"Enter a valid Bangladesh mobile number or Telegram @username / t.me profile link.":"Enter a valid Gmail address."):"";
       }
       if(id==="account") invalid=el.value.trim().length<3||el.value.trim().length>120;
       if(invalid){el.classList.add("invalid");if(!first)first=el;}
