@@ -410,7 +410,7 @@ function effectiveFeePercent(from,to){
     }
   });
 
-  function showError(message){$("formStatus").textContent=message;$("formStatus").classList.add("error");}
+  function showError(message){$("formStatus").hidden=false;$("formStatus").textContent=message;$("formStatus").classList.add("error");}
   function clearError(){$("formStatus").textContent="";$("formStatus").classList.remove("error");}
   function validate(){
     document.querySelectorAll(".invalid").forEach(el=>el.classList.remove("invalid"));
