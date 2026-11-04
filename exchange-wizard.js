@@ -33,6 +33,8 @@
       set("payMethodDisplay", info?.name || from);
       set("payAmountDisplay", $("payPreview")?.textContent || "—");
       set("payAddressDisplay", info?.address || "পেমেন্ট ঠিকানা এখনো যুক্ত করা হয়নি।");
+      const paymentIntro = $("paymentIntro");
+      if (paymentIntro) paymentIntro.textContent = info?.instruction || "নিচের ঠিকানার তথ্য যাচাই করুন।";
       set("proofMethodDisplay", info?.name || from);
       set("proofAmountDisplay", $("payPreview")?.textContent || "—");
     }
@@ -116,9 +118,10 @@
     function updateAccountMode() {
       const input=$("account"), help=$("accountHelp"), error=$("accountError");
       if(!input) return;
+      const wallet = window.metGetWalletSettings ? window.metGetWalletSettings($("toWallet")?.value) : null;
       const rule=accountRule($("toWallet")?.value);
-      input.placeholder=rule.hint;
-      if(help) help.textContent=rule.hint;
+      input.placeholder=wallet?.paymentPlaceholder || rule.hint;
+      if(help) help.textContent=wallet?.paymentInstruction || rule.hint;
       if(error) error.textContent="";
       input.classList.remove("invalid");
     }
