@@ -69,10 +69,6 @@
             <a class="support-option livechat-option" href="/chat.html"><i class="fa-solid fa-comments"></i><span><b>Live Chat</b><small>Help Center & FAQs</small></span><i class="fa-solid fa-arrow-right"></i></a>
           </div>
         </details>
-        <div class="nav-auth-group" aria-label="Account">
-          <a href="/login.html" class="nav-link nav-auth-login"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
-          <a href="/signup.html" class="nav-link nav-auth-signup"><i class="fa-solid fa-user-plus"></i> Sign Up</a>
-        </div>
 
       </nav>
       <!-- MOBILE MENU BUTTON -->
@@ -94,10 +90,6 @@
           <a class="support-option livechat-option" href="/chat.html"><i class="fa-solid fa-comments"></i><span><b>24/7 Chat</b><small>Help Center & FAQs</small></span><i class="fa-solid fa-arrow-right"></i></a>
         </div>
       </details>
-      <div class="mobile-auth-group" aria-label="Account">
-        <a href="/login.html" class="mobile-nav-link mobile-auth-login"><i class="fa-solid fa-right-to-bracket"></i><span>Login</span></a>
-        <a href="/signup.html" class="mobile-nav-link mobile-auth-signup"><i class="fa-solid fa-user-plus"></i><span>Sign Up</span></a>
-      </div>
 
     </nav>
     <!-- MOBILE NAVIGATION END -->
@@ -121,6 +113,23 @@
     </div>
   </div></div>
 </div>
+
+<div class="public-auth-bar" aria-label="Account access">
+  <a href="/login.html" class="public-auth-button public-auth-login"><i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i><span>Login</span></a>
+  <a href="/signup.html" class="public-auth-button public-auth-signup"><i class="fa-solid fa-user-plus" aria-hidden="true"></i><span>Sign Up</span></a>
+</div>
+<style id="public-auth-bar-style">
+  .public-auth-bar{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:12px 16px;background:#fff;border-bottom:1px solid #edf1f6;box-sizing:border-box}
+  .public-auth-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:132px;min-height:42px;padding:9px 22px;border:1px solid #cbd5e1;border-radius:10px;text-decoration:none!important;font:700 14px/1.2 "Hind Siliguri",sans-serif;box-sizing:border-box;transition:background .18s ease,border-color .18s ease}
+  .public-auth-login{background:#fff;color:#1e293b;border-color:#cbd5e1}
+  .public-auth-login i{color:#2563eb}
+  .public-auth-signup{background:linear-gradient(135deg,#2563eb,#0f766e);color:#fff;border-color:transparent}
+  .public-auth-signup i{color:#fff}
+  .public-auth-button:hover{filter:brightness(.97);transform:translateY(-1px)}
+  @media(max-width:480px){.public-auth-bar{gap:9px;padding:10px 12px}.public-auth-button{flex:1;max-width:170px;min-width:0;min-height:40px;padding:8px 12px}}
+</style>
+
+
 
 
 
