@@ -323,6 +323,37 @@
   </div>
   <div class="fm-about-footer"><span>OUR APPROACH</span><p>Clarity at every step. More choice as the network grows.</p><div class="fm-about-orbit" aria-hidden="true"></div></div>
 </section>
+
+    <section id="exchange" class="section exchange-pro-section">
+  <div class="section-heading exchange-pro-heading">
+    <div><h2>Different Wallets. One Easy Exchange Platform</h2><p class="exchange-heading-copy">Choose from the supported wallets and payment methods, then submit a clear, step-by-step exchange request.</p></div>
+  </div>
+  <form id="exchangeForm" class="exchange-pro-box" novalidate>
+    <select id="direction" class="exchange-direction-hidden" aria-hidden="true" tabindex="-1">
+      <option value="buy">Buy</option><option value="sell">Sell</option><option value="exchange">Global Exchange</option>
+    </select>
+    <div class="exchange-mode-tabs" role="tablist" aria-label="Exchange mode">
+      <button type="button" class="exchange-mode-tab active" data-mode="buy"><i class="fa-solid fa-cart-arrow-down"></i><span>Buy USD / USDT</span></button>
+      <button type="button" class="exchange-mode-tab" data-mode="sell"><i class="fa-solid fa-arrow-up-from-bracket"></i><span>Sell USD / USDT</span></button>
+      <button type="button" class="exchange-mode-tab" data-mode="exchange"><i class="fa-solid fa-globe"></i><span>Global Exchange</span></button>
+    </div>
+    <div class="exchange-stepper" aria-label="Exchange steps">
+      <div class="exchange-step active" data-step-indicator="1"><b>01</b><span>Currency</span></div>
+      <i></i><div class="exchange-step" data-step-indicator="2"><b>02</b><span>Review</span></div>
+      <i></i><div class="exchange-step" data-step-indicator="3"><b>03</b><span>Details</span></div>
+      <i></i><div class="exchange-step" data-step-indicator="4"><b>04</b><span>Payment</span></div><i></i><div class="exchange-step" data-step-indicator="5"><b>05</b><span>Proof</span></div>
+    </div>
+    <div class="exchange-step-viewport">
+      <section class="exchange-step-panel active" data-step-panel="1">
+        <div class="exchange-panel-title"><div><small>STEP 1 OF 5</small><h3>Choose Your Exchange</h3><p id="exchangeModeHint">Buy USD or USDT with BDT.</p></div><span class="secure-mini"><i class="fa-solid fa-shield-halved"></i> Secure flow</span></div>
+        <div class="exchange-wallet-grid">
+          <div class="exchange-wallet-field"><label for="fromWallet"><span>YOU SEND</span>You Send</label><div class="exchange-select-wrap"><i class="fa-solid fa-arrow-up-from-bracket"></i><select id="fromWallet" required></select></div></div>
+          <div class="exchange-swap-mark"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
+          <div class="exchange-wallet-field"><label for="toWallet"><span>YOU RECEIVE</span>You Receive</label><div class="exchange-select-wrap"><i class="fa-solid fa-arrow-down-to-bracket"></i><select id="toWallet" required></select></div></div>
+        </div>
+        <div class="exchange-amount-row"><div class="field"><div class="amount-input"><input id="amount" type="number" min="0.01" max="100000000" step="any" placeholder="Enter Amount" required><span id="amountCurrency">BDT</span><small id="amountHelp" aria-live="polite"></small></div></div></div>
+        <div class="exchange-panel-actions"><span><i class="fa-solid fa-lock"></i> Your information is secure</span><button type="button" class="exchange-next-btn" data-next-step="2">Continue <i class="fa-solid fa-arrow-right"></i></button></div>
+      </section>
       <section class="exchange-step-panel" data-step-panel="2" hidden>
         <div class="exchange-panel-title"><div><small>STEP 2 OF 5</small><h3>Review Exchange Details</h3><p>Review the amount, rate, and applicable fee.</p></div><span class="secure-mini"><i class="fa-solid fa-calculator"></i> Rate preview</span></div>
         <div class="exchange-review-card"><div class="exchange-review-route"><div><small>YOU SEND</small><strong id="stepReviewSend">—</strong></div><i class="fa-solid fa-arrow-right"></i><div><small>YOU RECEIVE</small><strong id="stepReviewReceive">—</strong></div></div><div class="wallet-preview"><div class="preview-row"><span>You Pay</span><strong id="payPreview">—</strong></div><div class="preview-row"><span>Estimated Receive</span><strong id="receivePreview">—</strong></div><div class="preview-row"><span>Exchange Rate</span><strong id="ratePreview">—</strong></div><div class="preview-row"><span id="serviceFeeLabel">Service Fee</span><strong id="feePreview">—</strong></div><p class="note" id="calcMessage">The final rate and fee will be confirmed during order review.</p></div></div>
@@ -361,37 +392,6 @@
     </div>
   </form>
 </section>
-
-    <section id="exchange" class="section exchange-pro-section">
-  <div class="section-heading exchange-pro-heading">
-    <div><h2>Different Wallets. One Easy Exchange Platform</h2><p class="exchange-heading-copy">Choose from the supported wallets and payment methods, then submit a clear, step-by-step exchange request.</p></div>
-  </div>
-  <form id="exchangeForm" class="exchange-pro-box" novalidate>
-    <select id="direction" class="exchange-direction-hidden" aria-hidden="true" tabindex="-1">
-      <option value="buy">Buy</option><option value="sell">Sell</option><option value="exchange">Global Exchange</option>
-    </select>
-    <div class="exchange-mode-tabs" role="tablist" aria-label="Exchange mode">
-      <button type="button" class="exchange-mode-tab active" data-mode="buy"><i class="fa-solid fa-cart-arrow-down"></i><span>Buy USD / USDT</span></button>
-      <button type="button" class="exchange-mode-tab" data-mode="sell"><i class="fa-solid fa-arrow-up-from-bracket"></i><span>Sell USD / USDT</span></button>
-      <button type="button" class="exchange-mode-tab" data-mode="exchange"><i class="fa-solid fa-globe"></i><span>Global Exchange</span></button>
-    </div>
-    <div class="exchange-stepper" aria-label="Exchange steps">
-      <div class="exchange-step active" data-step-indicator="1"><b>01</b><span>Currency</span></div>
-      <i></i><div class="exchange-step" data-step-indicator="2"><b>02</b><span>Review</span></div>
-      <i></i><div class="exchange-step" data-step-indicator="3"><b>03</b><span>Details</span></div>
-      <i></i><div class="exchange-step" data-step-indicator="4"><b>04</b><span>Payment</span></div><i></i><div class="exchange-step" data-step-indicator="5"><b>05</b><span>Proof</span></div>
-    </div>
-    <div class="exchange-step-viewport">
-      <section class="exchange-step-panel active" data-step-panel="1">
-        <div class="exchange-panel-title"><div><small>STEP 1 OF 5</small><h3>Choose Your Exchange</h3><p id="exchangeModeHint">Buy USD or USDT with BDT.</p></div><span class="secure-mini"><i class="fa-solid fa-shield-halved"></i> Secure flow</span></div>
-        <div class="exchange-wallet-grid">
-          <div class="exchange-wallet-field"><label for="fromWallet"><span>YOU SEND</span>You Send</label><div class="exchange-select-wrap"><i class="fa-solid fa-arrow-up-from-bracket"></i><select id="fromWallet" required></select></div></div>
-          <div class="exchange-swap-mark"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
-          <div class="exchange-wallet-field"><label for="toWallet"><span>YOU RECEIVE</span>You Receive</label><div class="exchange-select-wrap"><i class="fa-solid fa-arrow-down-to-bracket"></i><select id="toWallet" required></select></div></div>
-        </div>
-        <div class="exchange-amount-row"><div class="field"><div class="amount-input"><input id="amount" type="number" min="0.01" max="100000000" step="any" placeholder="Enter Amount" required><span id="amountCurrency">BDT</span><small id="amountHelp" aria-live="polite"></small></div></div></div>
-        <div class="exchange-panel-actions"><span><i class="fa-solid fa-lock"></i> Your information is secure</span><button type="button" class="exchange-next-btn" data-next-step="2">Continue <i class="fa-solid fa-arrow-right"></i></button></div>
-      </section>
 
     
 
