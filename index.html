@@ -26,24 +26,6 @@
 <link rel="stylesheet" href="./footer.css?v=20261104-white">
   <link rel="stylesheet" href="./responsive.css?v=20261104-public-white1">
   <link rel="stylesheet" href="./exchange-pro.css?v=13">
-  <style id="met-ticker-visibility-fix">
-    /* Highest-priority visibility fix for the announcement bar */
-    #mainHeader{z-index:99999!important}
-    body>.exchange-ticker{
-      display:flex!important;position:fixed!important;
-      top:72px!important;left:0!important;right:0!important;
-      width:100%!important;height:20px!important;min-height:20px!important;
-      margin:0!important;visibility:visible!important;opacity:1!important;
-      background:#e53935!important;z-index:100000!important;
-    }
-    body>.exchange-ticker .ticker-window{display:flex!important;visibility:visible!important;opacity:1!important}
-    body>.exchange-ticker .ticker-track{display:flex!important;visibility:visible!important;opacity:1!important}
-    .exchange-ticker-spacer{display:block!important;height:20px!important;min-height:20px!important}
-    @media(max-width:900px){
-      body>.exchange-ticker{top:62px!important;height:18px!important;min-height:18px!important}
-      .exchange-ticker-spacer{height:18px!important;min-height:18px!important}
-    }
-  </style>
   <link rel="stylesheet" href="./public-polish.css?v=1">
 <style id="fastmoney-brand-style">.fastmoney-brand{display:flex!important;align-items:center;gap:9px;flex:0 0 auto;text-decoration:none!important;color:#102a43!important;white-space:nowrap}.fastmoney-mark{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:linear-gradient(145deg,#087b8c,#075b68);color:#fff;font-size:25px;font-weight:900;box-shadow:0 5px 14px #087b8c25}.fastmoney-word{display:flex;flex-direction:column;font-size:21px;line-height:1.05;font-weight:850;letter-spacing:-.7px}.fastmoney-word b{color:#087b8c}.fastmoney-word small{margin-top:4px;font-size:8px;letter-spacing:1.35px;color:#718096;font-weight:800}.fastmoney-legal-links{display:flex;justify-content:center;gap:12px 22px;flex-wrap:wrap;padding:16px 18px;border-top:1px solid #e5edf2;background:#fff;font:600 13px/1.5 system-ui,sans-serif}.fastmoney-legal-links a{color:#426174;text-decoration:none}.fastmoney-legal-links a:hover{color:#087b8c;text-decoration:underline}@media(max-width:480px){.fastmoney-mark{width:36px;height:36px}.fastmoney-word{font-size:19px}}.fastmoney-brand{display:inline-flex!important;align-items:center!important;background:transparent!important;border:0!important;outline:0!important;box-shadow:none!important;border-radius:0!important;padding:0!important;margin:0!important;text-decoration:none!important}.fastmoney-brand:before,.fastmoney-brand:after{display:none!important;content:none!important}.fastmoney-brand,.fastmoney-brand:hover,.fastmoney-brand:focus,.fastmoney-brand:active{display:inline-flex!important;align-items:center!important;background:transparent!important;background-color:transparent!important;border:0!important;border-width:0!important;outline:0!important;box-shadow:none!important;border-radius:0!important;padding:0!important;margin:0!important;text-decoration:none!important;-webkit-tap-highlight-color:transparent!important}.fastmoney-brand:before,.fastmoney-brand:after{display:none!important;content:none!important;border:0!important;background:none!important;box-shadow:none!important}.main-header .header-container{height:88px!important;min-height:88px!important;max-height:88px!important;align-items:center!important}.fastmoney-brand{height:74px!important;min-height:74px!important;max-height:74px!important;flex:0 0 300px!important;align-items:center!important;justify-content:flex-start!important;overflow:visible!important;animation:none!important;transition:none!important;transform:none!important;will-change:auto!important}.fastmoney-header-logo{display:block!important;width:300px!important;height:74px!important;min-height:74px!important;max-height:74px!important;object-fit:contain!important;object-position:left center!important;flex:0 0 300px!important;animation:none!important;transition:none!important;transform:none!important;translate:none!important;will-change:auto!important;border:0!important;border-width:0!important;outline:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;background-color:transparent!important;padding:0!important;margin:0!important;filter:none!important}@media(max-width:900px){.main-header .header-container{height:70px!important;min-height:70px!important;max-height:70px!important}.fastmoney-brand{height:62px!important;min-height:62px!important;max-height:62px!important;flex-basis:260px!important}.fastmoney-header-logo{width:260px!important;height:62px!important;min-height:62px!important;max-height:62px!important;flex-basis:260px!important}}@media(max-width:480px){.fastmoney-brand{height:58px!important;min-height:58px!important;max-height:58px!important;flex-basis:240px!important}.fastmoney-header-logo{width:240px!important;height:58px!important;min-height:58px!important;max-height:58px!important;flex-basis:240px!important}}@media(max-width:380px){.fastmoney-brand{height:54px!important;min-height:54px!important;max-height:54px!important;flex-basis:220px!important}.fastmoney-header-logo{width:220px!important;height:54px!important;min-height:54px!important;max-height:54px!important;flex-basis:220px!important}}</style>
 <script>document.documentElement.classList.add("met-header-styles-ready");</script>
@@ -96,50 +78,6 @@
     </nav>
     <!-- MOBILE NAVIGATION END -->
   </header>
-
-<!-- Scrolling announcement bar -->
-<div class="exchange-ticker" aria-label="Website announcements">
-  <div class="ticker-label"><span class="ticker-live-dot"></span><i class="fa-solid fa-bolt"></i><span>Updates</span></div>
-  <div class="ticker-window"><div class="ticker-track">
-    <div class="ticker-content">
-      <span class="ticker-item"><i class="fa-solid fa-bolt"></i><span data-content-key="announcement.welcome">Welcome to FastMoney</span></span><span class="ticker-separator">✦</span>
-      <span class="ticker-item"><i class="fa-solid fa-arrows-rotate"></i><span data-content-key="announcement.exchange">Buy · Sell · Exchange Supported Wallets</span></span><span class="ticker-separator">✦</span>
-      <span class="ticker-item"><i class="fa-solid fa-shield-halved"></i><span data-content-key="announcement.verification">Every request is processed after verification</span></span><span class="ticker-separator">✦</span>
-      <span class="ticker-item"><i class="fa-solid fa-headset"></i><span data-content-key="announcement.support">Contact Support whenever you need assistance</span></span><span class="ticker-separator">✦</span>
-    </div>
-    <div class="ticker-content" aria-hidden="true">
-      <span class="ticker-item"><i class="fa-solid fa-bolt"></i><span>Welcome to FastMoney</span></span><span class="ticker-separator">✦</span>
-      <span class="ticker-item"><i class="fa-solid fa-arrows-rotate"></i><span>Simple and Fast Digital Exchange</span></span><span class="ticker-separator">✦</span>
-      <span class="ticker-item"><i class="fa-solid fa-shield-halved"></i><span>Every request is processed after verification</span></span><span class="ticker-separator">✦</span>
-      <span class="ticker-item"><i class="fa-solid fa-headset"></i><span>Contact Support whenever you need assistance</span></span><span class="ticker-separator">✦</span>
-    </div>
-  </div></div>
-</div>
-
-<div class="public-auth-bar" aria-label="Account access">
-  <a href="/login.html" class="public-auth-button public-auth-login"><i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i><span>Login</span></a>
-  <a href="/signup.html" class="public-auth-button public-auth-signup"><i class="fa-solid fa-user-plus" aria-hidden="true"></i><span>Sign Up</span></a>
-</div>
-<style id="public-auth-bar-style">
-  .public-auth-bar{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;margin-top:22px;padding:12px 16px;background:#fff;border-bottom:1px solid #edf1f6;box-sizing:border-box}
-  .public-auth-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:132px;min-height:42px;padding:9px 22px;border:1px solid #cbd5e1;border-radius:10px;text-decoration:none!important;font:700 14px/1.2 "Hind Siliguri",sans-serif;box-sizing:border-box;transition:background .18s ease,border-color .18s ease}
-  .public-auth-login{background:#fff;color:#1e293b;border-color:#cbd5e1}
-  .public-auth-login i{color:#2563eb}
-  .public-auth-signup{background:linear-gradient(135deg,#2563eb,#0f766e);color:#fff;border-color:transparent}
-  .public-auth-signup i{color:#fff}
-  .public-auth-button:hover{filter:brightness(.97);transform:translateY(-1px)}
-  @media(max-width:480px){.public-auth-bar{gap:9px;padding:10px 12px}.public-auth-button{flex:1;max-width:170px;min-width:0;min-height:40px;padding:8px 12px}}
-</style>
-
-
-
-
-
-
-
-  
-
-  <div class="exchange-ticker-spacer" aria-hidden="true"></div>
 
   <main class="container">
     <section class="hero" id="home" aria-labelledby="homeTitle">
