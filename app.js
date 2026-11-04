@@ -238,7 +238,7 @@ function effectiveFeePercent(from,to){
     let timer;
     return Promise.race([
       Promise.resolve(promise),
-      new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error(label+" নির্ধারিত সময়ের মধ্যে শেষ হয়নি। ইন্টারনেট/Connecting to Firebase পরীক্ষা করুন।")),timeoutMs);})
+      new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error(label+" did not finish within the expected time. Check your internet connection and Firebase connectivity.")),timeoutMs);})
     ]).finally(()=>clearTimeout(timer));
   }
   async function saveRequestToFirestore(item){
@@ -264,7 +264,7 @@ function effectiveFeePercent(from,to){
       proofScreenshotUrl:String(item.proofScreenshotUrl||""),
       proofFileName:String(item.proofFileName||"").slice(0,200),
       uid:null,requestType:"guest",status:"pending",createdAt:fb.serverTimestamp(),proofSubmittedAt:fb.serverTimestamp()
-    }),60000,"Firestore-এ Request Save");
+    }),60000,"Save request to Firestore");
   }
   $("proofScreenshot").addEventListener("change",()=>{
     const file=$("proofScreenshot").files[0];
@@ -365,9 +365,9 @@ function effectiveFeePercent(from,to){
       }
 
       const statusInfo = {
-        pending: { label: "Pending · যাচাই চলছে", bg: "#fef3c7", color: "#92400e" },
-        approved: { label: "Approved · অনুমোদিত", bg: "#dcfce7", color: "#166534" },
-        rejected: { label: "Rejected · বাতিল", bg: "#fee2e2", color: "#991b1b" }
+        pending: { label: "Pending · Under review", bg: "#fef3c7", color: "#92400e" },
+        approved: { label: "Approved", bg: "#dcfce7", color: "#166534" },
+        rejected: { label: "Rejected", bg: "#fee2e2", color: "#991b1b" }
       }[data.status] || { label: "Pending", bg: "#fef3c7", color: "#92400e" };
 
       const card = document.createElement("div");
@@ -421,7 +421,7 @@ function effectiveFeePercent(from,to){
         const isTelegramProfile=/^@?[A-Za-z0-9_]{5,32}$/.test(value)||/^(https?:\/\/)?(www\.)?(t\.me|telegram\.me)\/[A-Za-z0-9_]{5,32}\/?$/.test(value);
         invalid=method==="whatsapp"?!isPhone:!(isPhone||isTelegramProfile);
         const contactError=$("contactError");
-        if(contactError) contactError.textContent=invalid?(method==="whatsapp"?"Enter a valid 11-digit WhatsApp number.":"সঠিক Telegram নম্বর, @username অথবা t.me profile link লিখুন."):"";
+        if(contactError) contactError.textContent=invalid?(method==="whatsapp"?"Enter a valid 11-digit WhatsApp number.":"Enter a valid Telegram number, @username, or t.me profile link."):"";
       }
       if(id==="account") invalid=el.value.trim().length<3||el.value.trim().length>120;
       if(invalid){el.classList.add("invalid");if(!first)first=el;}
@@ -433,7 +433,7 @@ function effectiveFeePercent(from,to){
       const amountValue=Number($("amount").value);
       const bdtEquivalent=from.type==="bdt" ? amountValue : amountValue*Number(from.sell);
       if(!Number.isFinite(bdtEquivalent)||bdtEquivalent<exchangeLimits.minBdt||bdtEquivalent>exchangeLimits.maxBdt){
-        showError("প্রতি রিকোয়েস্টের সীমা ৳"+exchangeLimits.minBdt.toLocaleString("bn-BD")+" থেকে ৳"+exchangeLimits.maxBdt.toLocaleString("bn-BD")+" (সমমূল্যের USD/USDT)। পরিমাণ পরিবর্তন করুন।");
+        showError("Request limit: ৳"+exchangeLimits.minBdt.toLocaleString("en-US")+" to ৳"+exchangeLimits.maxBdt.toLocaleString("en-US")+" (equivalent USD/USDT). Please adjust the amount.");
         $("amount").classList.add("invalid");$("amount").focus();return false;
       }
     }
