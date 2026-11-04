@@ -43,6 +43,7 @@
 </style>
 <script>document.documentElement.classList.add("met-header-styles-ready");</script>
 <style id="met-public-exchange-removed">#exchange{display:none!important}</style>
+  <link rel="stylesheet" href="./language.css?v=1">
 </head>
 <body>
     <header class="main-header" id="mainHeader">
@@ -67,6 +68,8 @@
           </div>
         </details>
 
+      
+        <label class="fm-language-control" aria-label="Select website language"><i class="fa-solid fa-globe"></i><select class="fm-language-select" id="fmLanguageDesktop" aria-label="Website language"><option value="en">English</option><option value="bn">বাংলা</option><option value="ar">العربية</option><option value="zh-CN">中文（简体）</option><option value="zh-TW">中文（繁體）</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="hi">हिन्दी</option><option value="id">Bahasa Indonesia</option><option value="it">Italiano</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="ms">Bahasa Melayu</option><option value="ne">नेपाली</option><option value="fa">فارسی</option><option value="pt">Português</option><option value="ru">Русский</option><option value="si">සිංහල</option><option value="es">Español</option><option value="sw">Kiswahili</option><option value="th">ไทย</option><option value="tr">Türkçe</option><option value="ur">اردو</option><option value="vi">Tiếng Việt</option><option value="fil">Filipino</option><option value="nl">Nederlands</option><option value="pl">Polski</option></select><i class="fa-solid fa-chevron-down fm-language-chevron"></i></label>
       </nav>
       <!-- MOBILE MENU BUTTON -->
       <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
@@ -86,7 +89,8 @@
           <a class="support-option livechat-option" href="/chat.html"><i class="fa-solid fa-comments"></i><span><b>24/7 Chat</b><small>Help Center & FAQs</small></span><i class="fa-solid fa-arrow-right"></i></a>
         </div>
       </details>
-
+      
+      <div class="fm-mobile-language"><label for="fmLanguageMobile"><i class="fa-solid fa-globe"></i><span>Website language</span></label><select class="fm-language-select" id="fmLanguageMobile" aria-label="Website language"><option value="en">English</option><option value="bn">বাংলা</option><option value="ar">العربية</option><option value="zh-CN">中文（简体）</option><option value="zh-TW">中文（繁體）</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="hi">हिन्दी</option><option value="id">Bahasa Indonesia</option><option value="it">Italiano</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="ms">Bahasa Melayu</option><option value="ne">नेपाली</option><option value="fa">فارسی</option><option value="pt">Português</option><option value="ru">Русский</option><option value="si">සිංහල</option><option value="es">Español</option><option value="sw">Kiswahili</option><option value="th">ไทย</option><option value="tr">Türkçe</option><option value="ur">اردو</option><option value="vi">Tiếng Việt</option><option value="fil">Filipino</option><option value="nl">Nederlands</option><option value="pl">Polski</option></select></div>
     </nav>
     <!-- MOBILE NAVIGATION END -->
   </header>
@@ -455,5 +459,7 @@
 <script src="./faq.js" defer></script>
 <script src="./exchange-wizard.js?v=13"></script>
 
+<div id="google_translate_element" aria-hidden="true"></div>
+<script src="./language.js?v=1" defer></script>
 </body>
 </html>
