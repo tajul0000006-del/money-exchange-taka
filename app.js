@@ -424,9 +424,10 @@ function effectiveFeePercent(from,to){
         const method=$("contactMethod")?.value||"whatsapp";
         const isPhone=/^\d{11}$/.test(value);
         const isTelegramProfile=/^@?[A-Za-z0-9_]{5,32}$/.test(value)||/^(https?:\/\/)?(www\.)?(t\.me|telegram\.me)\/[A-Za-z0-9_]{5,32}\/?$/.test(value);
-        invalid=method==="whatsapp"?!isPhone:!(isPhone||isTelegramProfile);
+        const isEmail=/^[A-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[A-Z0-9-]+(?:\.[A-Z0-9-]+)+$/i.test(value);
+        invalid=method==="whatsapp"?!isPhone:method==="telegram"?!(isPhone||isTelegramProfile):!isEmail;
         const contactError=$("contactError");
-        if(contactError) contactError.textContent=invalid?(method==="whatsapp"?"Enter a valid 11-digit WhatsApp number.":"Enter a valid Telegram number, @username, or t.me profile link."):"";
+        if(contactError) contactError.textContent=invalid?(method==="whatsapp"?"Enter a valid 11-digit WhatsApp number.":method==="telegram"?"Enter a valid Telegram number, @username, or t.me profile link.":"Enter a valid Gmail address."):"";
       }
       if(id==="account") invalid=el.value.trim().length<3||el.value.trim().length>120;
       if(invalid){el.classList.add("invalid");if(!first)first=el;}
