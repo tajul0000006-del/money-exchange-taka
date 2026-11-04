@@ -512,7 +512,7 @@ import { firebaseConfig } from "./firebase-config.js";
     if (paymentPanel) {
       const note = document.createElement("div");
       note.className = "info-strip";
-      note.innerHTML = "<b>Payment account settings</b><p>প্রতিটি কারেন্সির Payment Address, Placeholder এবং Instruction একই Currency Control তালিকার কার্ডে সম্পাদনা করুন। Save All Settings চাপলে সব একসঙ্গে সংরক্ষিত হবে।";
+      note.innerHTML = "<b>Payment account settings</b><p>Edit each currency’s payment address, address label, accepted payment type, and additional instructions in its Currency Control card. Select Save All Settings to save your changes.";
       paymentPanel.appendChild(note);
     }
     const status = $("exSettingsStatus");
