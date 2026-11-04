@@ -173,7 +173,7 @@
       $("calcMessage").textContent=(!from||!to) ? "দেওয়ার ও পাওয়ার ওয়ালেট নির্বাচন করুন।" : (from.id===to.id ? "দুটি আলাদা ওয়ালেট নির্বাচন করুন।" : "পরিমাণ ০-এর বেশি লিখুন।"); return;
     }
     const gross = amount * r.rate;
-    const feePercent = Number.isFinite(Number(to.feePercent)) ? Number(to.feePercent) : (Number.isFinite(Number(from.feePercent)) ? Number(from.feePercent) : globalFeePercent);
+    const feePercent = to.feePercent !== null && to.feePercent !== undefined && Number.isFinite(Number(to.feePercent)) ? Number(to.feePercent) : (from.feePercent !== null && from.feePercent !== undefined && Number.isFinite(Number(from.feePercent)) ? Number(from.feePercent) : globalFeePercent);
     const fee=gross*feePercent/100, receive=Math.max(0,gross-fee);
     $("payPreview").textContent=money(amount,from.currency);
     $("receivePreview").textContent=money(receive,to.currency);
@@ -204,6 +204,7 @@
   let paymentAddresses={...DEFAULT_ADDRESSES};
   try{paymentAddresses={...paymentAddresses,...JSON.parse(localStorage.getItem(ADDRESS_KEY)||"{}")};}catch(_){}
   window.metGetPaymentInfo=(walletId)=>{const wallet=walletById(walletId);return wallet?{name:wallet.name,address:wallet.paymentAddress||paymentAddresses[walletId]||"পেমেন্ট ঠিকানা এখনো যুক্ত করা হয়নি",instruction:wallet.paymentInstruction||"",placeholder:wallet.paymentPlaceholder||""}:null;};
+  window.metGetWalletSettings=(walletId)=>walletById(walletId)||null;
   let pendingRequest=null;
   function renderPaymentEditor(){const root=$("adminPaymentEditor");if(!root)return;root.innerHTML=wallets.map(w=>`<div class="admin-payment-row"><label for="address-${w.id}">${escapeHtml(w.name)}<small>${escapeHtml(w.currency)} · পেমেন্ট ঠিকানা</small></label><input id="address-${w.id}" value="${escapeHtml(paymentAddresses[w.id]||"")}" maxlength="220" placeholder="পেমেন্ট নম্বর / ID / ঠিকানা"></div>`).join("");}
   function openModal(id){$(id).classList.add("open");$(id).setAttribute("aria-hidden","false");document.body.style.overflow="hidden";}
@@ -454,7 +455,7 @@
     if(!validate()) return false;
     const from=walletById($("fromWallet").value),to=walletById($("toWallet").value),amount=Number($("amount").value),r=rateFor(from,to);
     const gross=amount*r.rate;
-    const feePercent = Number.isFinite(Number(to.feePercent)) ? Number(to.feePercent) : (Number.isFinite(Number(from.feePercent)) ? Number(from.feePercent) : globalFeePercent);
+    const feePercent = to.feePercent !== null && to.feePercent !== undefined && Number.isFinite(Number(to.feePercent)) ? Number(to.feePercent) : (from.feePercent !== null && from.feePercent !== undefined && Number.isFinite(Number(from.feePercent)) ? Number(from.feePercent) : globalFeePercent);
     const fee=gross*feePercent/100,receive=gross-fee;
     const item={
       code:"MET-"+Array.from(crypto.getRandomValues(new Uint8Array(6)),b=>"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"[b%36]).join(""),
