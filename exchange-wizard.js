@@ -77,17 +77,19 @@
       const method = $("contactMethod")?.value || "whatsapp";
       const value = $("contact")?.value.trim() || "";
       if (method === "whatsapp") return /^\d{11}$/.test(value);
-      return /^\d{11}$/.test(value) || /^@?[A-Za-z0-9_]{5,32}$/.test(value) || /^(https?:\/\/)?(www\.)?(t\.me|telegram\.me)\/[A-Za-z0-9_]{5,32}\/?$/.test(value);
+      if (method === "telegram") return /^\d{11}$/.test(value) || /^@?[A-Za-z0-9_]{5,32}$/.test(value) || /^(https?:\/\/)?(www\.)?(t\.me|telegram\.me)\/[A-Za-z0-9_]{5,32}\/?$/.test(value);
+      return /^[A-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[A-Z0-9-]+(?:\.[A-Z0-9-]+)+$/i.test(value);
     }
     function updateContactMode() {
       const method = $("contactMethod")?.value || "whatsapp";
       const input = $("contact"), label = $("contactLabel"), help = $("contactHelp"), error = $("contactError");
       if (!input) return;
-      const whatsapp = method === "whatsapp";
-      label.textContent = whatsapp ? "WhatsApp Number" : "Telegram Number / Profile Link";
-      input.inputMode = whatsapp ? "numeric" : "text";
-      input.placeholder = whatsapp ? "Enter your 11-digit WhatsApp number" : "Enter Telegram number, @username, or t.me profile link";
-      help.textContent = whatsapp ? "Example: 12345678901 (11 digits only)" : "";
+      const whatsapp = method === "whatsapp", telegram = method === "telegram";
+      label.textContent = whatsapp ? "WhatsApp Number" : telegram ? "Telegram Number / Profile Link" : "Gmail Address";
+      input.inputMode = whatsapp ? "numeric" : "email";
+      input.type = telegram ? "text" : whatsapp ? "tel" : "email";
+      input.placeholder = whatsapp ? "Enter your 11-digit WhatsApp number" : telegram ? "Enter Telegram number, @username, or t.me profile link" : "Enter your Gmail address";
+      help.textContent = whatsapp ? "Example: 12345678901 (11 digits only)" : telegram ? "Enter your Telegram username or profile link." : "Example: yourname@gmail.com";
       error.textContent = "";
       input.classList.remove("invalid");
     }
@@ -97,7 +99,7 @@
       const valid = isValidContact();
       if (showMessage && input) input.classList.toggle("invalid", !valid);
       if (valid && input) input.classList.remove("invalid");
-      if (error) error.textContent = valid || !showMessage ? "" : ($("contactMethod").value === "whatsapp" ? "Enter a valid 11-digit WhatsApp number." : "Enter a valid Telegram number, @username, or t.me profile link.");
+      if (error) { const method=$("contactMethod")?.value; error.textContent = valid || !showMessage ? "" : method === "whatsapp" ? "Enter a valid 11-digit WhatsApp number." : method === "telegram" ? "Enter a valid Telegram number, @username, or t.me profile link." : "Enter a valid Gmail address."; }
       return valid;
     }
     function accountRule(walletId) {
