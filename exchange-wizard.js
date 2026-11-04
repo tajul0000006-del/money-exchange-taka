@@ -32,9 +32,9 @@
       const info = window.metGetPaymentInfo ? window.metGetPaymentInfo($("fromWallet")?.value) : null;
       set("payMethodDisplay", info?.name || from);
       set("payAmountDisplay", $("payPreview")?.textContent || "—");
-      set("payAddressDisplay", info?.address || "পেমেন্ট ঠিকানা এখনো যুক্ত করা হয়নি।");
+      set("payAddressDisplay", info?.address || "Payment address has not been added yet.");
       const paymentIntro = $("paymentIntro");
-      if (paymentIntro) paymentIntro.textContent = info?.instruction || "নিচের ঠিকানার তথ্য যাচাই করুন।";
+      if (paymentIntro) paymentIntro.textContent = info?.instruction || "Please verify the payment address below.";
       set("proofMethodDisplay", info?.name || from);
       set("proofAmountDisplay", $("payPreview")?.textContent || "—");
     }
@@ -63,8 +63,8 @@
       }
       modes.forEach(button => button.classList.toggle("active", button.dataset.mode === mode));
       const hints = {
-        buy: "bKash, Nagad, Rocket অথবা Upay BDT দিয়ে USD / USDT কিনুন.",
-        sell: "USD / USDT পাঠিয়ে bKash, Nagad, Rocket অথবা Upay এ BDT নিন.",
+        buy: "Buy USD / USDT with bKash, Nagad, Rocket, or Upay Personal BDT.",
+        sell: "Send USD / USDT and receive BDT through bKash, Nagad, Rocket, or Upay Personal.",
         exchange: ""
       };
       if ($("exchangeModeHint")) { $("exchangeModeHint").textContent = hints[mode] || hints.buy; $("exchangeModeHint").hidden = mode === "exchange"; }
@@ -83,8 +83,8 @@
       const whatsapp = method === "whatsapp";
       label.textContent = whatsapp ? "WhatsApp Number" : "Telegram Number / Profile Link";
       input.inputMode = whatsapp ? "numeric" : "text";
-      input.placeholder = whatsapp ? "১১ ডিজিটের WhatsApp নম্বর লিখুন" : "Telegram নম্বর, @username অথবা t.me profile link দিন";
-      help.textContent = whatsapp ? "উদাহরণ: 12345678901 (শুধু ১১টি সংখ্যা)" : "";
+      input.placeholder = whatsapp ? "Enter your 11-digit WhatsApp number" : "Enter Telegram number, @username, or t.me profile link";
+      help.textContent = whatsapp ? "Example: 12345678901 (11 digits only)" : "";
       error.textContent = "";
       input.classList.remove("invalid");
     }
@@ -94,26 +94,26 @@
       const valid = isValidContact();
       if (showMessage && input) input.classList.toggle("invalid", !valid);
       if (valid && input) input.classList.remove("invalid");
-      if (error) error.textContent = valid || !showMessage ? "" : ($("contactMethod").value === "whatsapp" ? "সঠিক ১১ ডিজিটের WhatsApp নম্বর লিখুন।" : "সঠিক Telegram নম্বর, @username অথবা t.me profile link লিখুন।");
+      if (error) error.textContent = valid || !showMessage ? "" : ($("contactMethod").value === "whatsapp" ? "সঠিক Enter your 11-digit WhatsApp number।" : "Enter a valid Telegram number, @username, or t.me profile link.");
       return valid;
     }
     function accountRule(walletId) {
       const rules = {
-        bkash: {hint:"bKash Personal-এর ১১ ডিজিটের সঠিক মোবাইল নম্বর দিন।", valid:v=>/^01[3-9]\d{8}$/.test(v), error:"bKash-এর সঠিক ১১ ডিজিটের নম্বর দিন (01 দিয়ে শুরু)।"},
-        nagad: {hint:"Nagad Personal-এর ১১ ডিজিটের সঠিক মোবাইল নম্বর দিন।", valid:v=>/^01[3-9]\d{8}$/.test(v), error:"Nagad-এর সঠিক ১১ ডিজিটের নম্বর দিন (01 দিয়ে শুরু)।"},
-        rocket: {hint:"Rocket Personal-এর ১১ ডিজিটের সঠিক মোবাইল নম্বর দিন।", valid:v=>/^01[3-9]\d{8}$/.test(v), error:"Rocket-এর সঠিক ১১ ডিজিটের নম্বর দিন (01 দিয়ে শুরু)।"},
-        upay: {hint:"Upay Personal-এর ১১ ডিজিটের সঠিক মোবাইল নম্বর দিন।", valid:v=>/^01[3-9]\d{8}$/.test(v), error:"Upay-এর সঠিক ১১ ডিজিটের নম্বর দিন (01 দিয়ে শুরু)।"},
-        paypal: {hint:"আপনার PayPal account-এর সঠিক email address দিন।", valid:v=>/^[A-Z0-9.!#$%&'*+/=?^_{|}~-]+@[A-Z0-9-]+(?:\.[A-Z0-9-]+)+$/i.test(v), error:"সঠিক PayPal account email address দিন।"},
-        perfectmoney: {hint:"আপনার Perfect Money USD account ID দিন (যেমন: U12345678)।", valid:v=>/^U\d{7,8}$/i.test(v), error:"Perfect Money ID অবশ্যই U দিয়ে শুরু হওয়া ৮–৯ অক্ষরের হতে হবে (যেমন U12345678)।"},
-        webmoney: {hint:"আপনার WebMoney WMZ wallet/purse দিন (যেমন: Z123456789012)।", valid:v=>/^Z\d{12}$/i.test(v), error:"সঠিক WebMoney WMZ purse দিন: Z-এর পরে ১২টি সংখ্যা।"},
-        volet: {hint:"আপনার Volet account-এর email অথবা registered phone number দিন।", valid:v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)||/^\+?\d{10,15}$/.test(v), error:"সঠিক Volet account email অথবা ১০–১৫ ডিজিটের registered phone number দিন।"},
-        binance: {hint:"Binance USDT TRC20 deposit address দিন (TRON network)।", valid:v=>/^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(v), error:"সঠিক Binance TRC20 address দিন (T দিয়ে শুরু, মোট ৩৪ অক্ষর)।"},
-        kucoin: {hint:"KuCoin USDT TRC20 deposit address দিন (TRON network)।", valid:v=>/^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(v), error:"সঠিক KuCoin TRC20 address দিন (T দিয়ে শুরু, মোট ৩৪ অক্ষর)।"},
-        bybit: {hint:"Bybit USDT TRC20 deposit address দিন (TRON network)।", valid:v=>/^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(v), error:"সঠিক Bybit TRC20 address দিন (T দিয়ে শুরু, মোট ৩৪ অক্ষর)।"},
-        epay: {hint:"আপনার ePay account-এর registered ID / email দিন।", valid:v=>/^[A-Za-z0-9][A-Za-z0-9._@+-]{3,63}$/.test(v), error:"সঠিক ePay account ID অথবা email দিন (কমপক্ষে ৪ অক্ষর)।"},
-        tunepay: {hint:"আপনার TunePay account-এর registered ID / email দিন।", valid:v=>/^[A-Za-z0-9][A-Za-z0-9._@+-]{3,63}$/.test(v), error:"সঠিক TunePay account ID অথবা email দিন (কমপক্ষে ৪ অক্ষর)।"}
+        bkash: {hint:"Enter a valid 11-digit bKash Personal mobile number.", valid:v=>/^01[3-9]\d{8}$/.test(v), error:"Enter a valid 11-digit bKash number starting with 01."},
+        nagad: {hint:"Enter a valid 11-digit Nagad Personal mobile number.", valid:v=>/^01[3-9]\d{8}$/.test(v), error:"Enter a valid 11-digit Nagad number starting with 01."},
+        rocket: {hint:"Enter a valid 11-digit Rocket Personal mobile number.", valid:v=>/^01[3-9]\d{8}$/.test(v), error:"Enter a valid 11-digit Rocket number starting with 01."},
+        upay: {hint:"Enter a valid 11-digit Upay Personal mobile number.", valid:v=>/^01[3-9]\d{8}$/.test(v), error:"Enter a valid 11-digit Upay number starting with 01."},
+        paypal: {hint:"Enter your correct PayPal account email address.", valid:v=>/^[A-Z0-9.!#$%&'*+/=?^_{|}~-]+@[A-Z0-9-]+(?:\.[A-Z0-9-]+)+$/i.test(v), error:"Enter a valid PayPal account email address."},
+        perfectmoney: {hint:"Enter your Perfect Money USD account ID (e.g. U12345678).", valid:v=>/^U\d{7,8}$/i.test(v), error:"Perfect Money ID must be 8–9 characters and start with U (e.g. U12345678)."},
+        webmoney: {hint:"Enter your WebMoney WMZ wallet/purse (e.g. Z123456789012).", valid:v=>/^Z\d{12}$/i.test(v), error:"Enter a valid WebMoney WMZ purse: Z followed by 12 digits."},
+        volet: {hint:"Enter your Volet account email or registered phone number.", valid:v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)||/^\+?\d{10,15}$/.test(v), error:"Enter a valid Volet account email or registered phone number (10–15 digits)."},
+        binance: {hint:"Enter your Binance USDT TRC20 deposit address (TRON network).", valid:v=>/^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(v), error:"Enter a valid Binance TRC20 address (starts with T, 34 characters)."},
+        kucoin: {hint:"Enter your KuCoin USDT TRC20 deposit address (TRON network).", valid:v=>/^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(v), error:"Enter a valid KuCoin TRC20 address (starts with T, 34 characters)."},
+        bybit: {hint:"Enter your Bybit USDT TRC20 deposit address (TRON network).", valid:v=>/^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(v), error:"Enter a valid Bybit TRC20 address (starts with T, 34 characters)."},
+        epay: {hint:"Enter your registered ePay account ID / email.", valid:v=>/^[A-Za-z0-9][A-Za-z0-9._@+-]{3,63}$/.test(v), error:"Enter a valid ePay account ID or email (at least 4 characters)."},
+        tunepay: {hint:"Enter your registered TunePay account ID / email.", valid:v=>/^[A-Za-z0-9][A-Za-z0-9._@+-]{3,63}$/.test(v), error:"Enter a valid TunePay account ID or email (at least 4 characters)."}
       };
-      return rules[walletId] || {hint:"নির্বাচিত Wallet-এর সঠিক account ID / address দিন।",valid:v=>/^[A-Za-z0-9][A-Za-z0-9._@:+/-]{2,159}$/.test(v),error:"নির্বাচিত Wallet-এর সঠিক account ID / address দিন।"};
+      return rules[walletId] || {hint:"Enter the correct account ID / address for the selected wallet.",valid:v=>/^[A-Za-z0-9][A-Za-z0-9._@:+/-]{2,159}$/.test(v),error:"Enter the correct account ID / address for the selected wallet."};
     }
     function updateAccountMode() {
       const input=$("account"), help=$("accountHelp"), error=$("accountError");
@@ -140,12 +140,12 @@
       if (currentStep === 1) {
         const from = $("fromWallet"), to = $("toWallet"), amount = $("amount");
         if (!from || !to || !from.value || !to.value || from.value === to.value) {
-          alert("Send এবং Receive—দুটি আলাদা Currency নির্বাচন করুন।");
+          alert("Select two different currencies for Send and Receive.");
           return false;
         }
         if (!amount || !amount.value || !Number.isFinite(Number(amount.value)) || Number(amount.value) <= 0) {
           if (window.metValidateExchangeAmount) window.metValidateExchangeAmount();
-          else alert("আগে সঠিক Amount লিখুন।");
+          else alert("Please enter a valid amount.");
           if (amount) amount.focus();
           return false;
         }
@@ -156,7 +156,7 @@
       }
       if (currentStep === 3) {
         if (!$("customerName")?.value.trim()) {
-          alert("আপনার নাম লিখুন।");
+          alert("Please enter your name.");
           $("customerName")?.focus();
           return false;
         }
@@ -164,7 +164,7 @@
         if (!validateAccount(true)) { $("account").focus(); return false; }
       }
       if (currentStep === 4 && $("terms") && !$("terms").checked) {
-        alert("পরবর্তী ধাপে যাওয়ার আগে শর্তাবলিতে সম্মতি দিন।");
+        alert("Please agree to the terms before continuing.");
         $("terms").focus();
         return false;
       }
