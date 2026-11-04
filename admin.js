@@ -566,8 +566,10 @@ import { firebaseConfig } from "./firebase-config.js";
             ${field(i,"feePercent","Individual Fee %",c.feePercent ?? "","number","0.01")}
             ${field(i,"logo","Logo URL",c.logo)}
             ${field(i,"paymentAddress","Payment Address / ID",c.paymentAddress)}
+            ${field(i,"paymentAddressLabel","Payment Address Label (e.g. bKash Agent Number)",c.paymentAddressLabel || (c.name + " Number / Wallet Address"))}
             ${field(i,"paymentPlaceholder","Address Placeholder",c.paymentPlaceholder)}
-            <label style="grid-column:1/-1;font-size:13px;margin:5px 0">Payment Instruction<textarea data-currency-index="${i}" data-currency-field="paymentInstruction" rows="2" style="width:100%;padding:8px;border:1px solid #d5e0e8;border-radius:7px">${esc(c.paymentInstruction)}</textarea></label>
+            <label style="grid-column:1/-1;font-size:13px;margin:5px 0">Accepted Payment Type<select data-currency-index="${i}" data-currency-field="paymentRule" style="width:100%;padding:8px;border:1px solid #d5e0e8;border-radius:7px"><option value="send_money_only" ${c.paymentRule==="send_money_only"?"selected":""}>Only Send Money Accepted</option><option value="cash_out_only" ${c.paymentRule==="cash_out_only"?"selected":""}>Only Cash Out Accepted</option><option value="both" ${c.paymentRule==="both"?"selected":""}>Send Money and Cash Out Accepted</option><option value="custom" ${!c.paymentRule || c.paymentRule==="custom"?"selected":""}>Custom Instruction</option></select></label>
+            <label style="grid-column:1/-1;font-size:13px;margin:5px 0">Additional / Custom Payment Instruction<textarea data-currency-index="${i}" data-currency-field="paymentInstruction" rows="2" placeholder="Write any extra payment instructions in English" style="width:100%;padding:8px;border:1px solid #d5e0e8;border-radius:7px">${esc(c.paymentInstruction)}</textarea></label>
           </div>
           <div style="display:flex;flex-wrap:wrap;gap:3px 8px;border-top:1px solid #edf1f4;margin-top:8px;padding-top:8px">
             ${toggle(i,"enabled","Enabled",c.enabled !== false)}
@@ -624,7 +626,7 @@ import { firebaseConfig } from "./firebase-config.js";
       }
       if (settings.currencies.some(c => c.id === id)) { status.textContent = "এই Currency ID আগে থেকেই আছে।"; return; }
       collect();
-      settings.currencies.push({id,name,subtitle:"",currency,type,logo:"",buy:1,sell:1,enabled:true,hidden:false,sendEnabled:true,receiveEnabled:true,buyEnabled:true,sellEnabled:true,feePercent:null,paymentAddress:"",paymentPlaceholder:"",paymentInstruction:"",short:name.slice(0,3)});
+      settings.currencies.push({id,name,subtitle:"",currency,type,logo:"",buy:1,sell:1,enabled:true,hidden:false,sendEnabled:true,receiveEnabled:true,buyEnabled:true,sellEnabled:true,feePercent:null,paymentAddress:"",paymentAddressLabel:"",paymentPlaceholder:"",paymentRule:"send_money_only",paymentInstruction:"",short:name.slice(0,3)});
       $("exNewId").value = $("exNewName").value = $("exNewCode").value = "";
       render(); status.textContent = "নতুন Currency যোগ হয়েছে। স্থায়ী করতে Save All Settings চাপুন।";
     });
