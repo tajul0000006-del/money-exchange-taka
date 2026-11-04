@@ -1,0 +1,73 @@
+/* FastMoney homepage refresh — clean financial-services visual system */
+:root{--fm-ink:#10233f;--fm-muted:#60718a;--fm-blue:#1765d1;--fm-teal:#0b8c91;--fm-line:#e4eaf2;--fm-surface:#fff;--fm-soft:#f4f8fc}
+html,body{background:#fff!important;color:var(--fm-ink)!important;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif!important}
+body{padding-top:72px!important}
+.main-header{background:rgba(255,255,255,.97)!important;border-bottom:1px solid #e7edf4!important;box-shadow:0 5px 24px rgba(15,39,73,.06)!important}
+.main-header .header-container{max-width:1280px!important;padding-left:clamp(16px,4vw,48px)!important;padding-right:clamp(16px,4vw,48px)!important}
+.desktop-nav .nav-link,.desktop-nav .nav-support summary{color:#263b59!important;font-weight:650!important}
+.desktop-nav .nav-link:hover,.desktop-nav .nav-support summary:hover{color:var(--fm-blue)!important}
+.container{width:min(1200px,calc(100% - 40px))!important;max-width:1200px!important}
+.hero{position:relative;isolation:isolate;grid-template-columns:minmax(0,1.15fr) minmax(330px,.85fr)!important;gap:clamp(28px,5vw,70px)!important;padding:clamp(55px,8vw,100px) 0 76px!important;min-height:530px}
+.hero:before{content:"";position:absolute;z-index:-1;inset:12px -8vw 28px 32%;border-radius:40px;background:radial-gradient(circle at 78% 18%,rgba(54,142,255,.12),transparent 35%),linear-gradient(135deg,#f5f9ff,#edf7fb 70%,#f8fbff)}
+.hero .eyebrow,.fm-kicker{color:#087e91!important;font-size:11px!important;font-weight:800!important;letter-spacing:2px!important}
+.hero h1{color:#112746!important;font-size:clamp(38px,5.2vw,66px)!important;line-height:1.08!important;letter-spacing:-2px!important;font-weight:850!important;max-width:760px}
+.hero h1 span{color:#1765d1!important;background:linear-gradient(100deg,#1765d1,#07949b);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-copy{max-width:610px!important;color:#62738a!important;font-size:clamp(15px,1.35vw,18px)!important;line-height:1.8!important;margin:22px 0 28px!important}
+.hero-actions{display:flex;align-items:center;gap:13px;flex-wrap:wrap}
+.hero .primary-link{min-height:50px;padding:13px 22px!important;border-radius:13px!important;background:linear-gradient(115deg,#145dc5,#087f91)!important;box-shadow:0 10px 22px rgba(23,101,209,.2)!important}
+.hero-secondary-link{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:10px 18px;border:1px solid #d8e3ef;border-radius:13px;color:#26415f!important;font-weight:700;background:#fff}
+.hero-trustline{display:flex;flex-wrap:wrap;gap:12px 20px;margin-top:27px;color:#526780!important;font-size:12px!important}
+.hero-trustline i{color:#0a9990!important}
+.hero-card{padding:clamp(22px,3vw,32px)!important;border:1px solid #e0eaf4!important;border-radius:24px!important;background:rgba(255,255,255,.92)!important;box-shadow:0 24px 65px rgba(20,53,91,.12)!important}
+.hero .hero-card-top{color:#07878d!important;font-size:11px!important;letter-spacing:1.3px}
+.hero .hero-process-title{font-size:22px!important;color:#122b4b!important;margin:16px 0 20px!important}
+.hero-process-list{gap:13px!important}
+.hero-process-item{padding:14px!important;border:1px solid #e7edf4!important;border-radius:15px!important;background:#fbfdff!important}
+.hero-process-item>span{background:#e9f3ff!important;color:#1765d1!important;border-radius:11px!important}
+.hero-process-item strong{font-size:14px!important;color:#203a5b!important}
+.hero-process-item small{font-size:12px!important;color:#697b91!important}
+.hero .hero-card>p{color:#64748b!important}
+.fm-services{margin:0 auto 72px!important;padding:26px 0 12px!important}
+.fm-section-heading{text-align:center;max-width:700px;margin:0 auto 30px}
+.fm-section-heading h2{margin:10px 0 9px;color:#122846;font-size:clamp(26px,3.5vw,38px);line-height:1.2;letter-spacing:-.8px}
+.fm-section-heading p{margin:0;color:#687a90;font-size:15px}
+.fm-service-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.fm-service-card{display:flex;flex-direction:column;align-items:flex-start;min-height:240px;padding:22px 18px;border:1px solid #e5ebf3;border-radius:18px;background:#fff;box-shadow:0 8px 28px rgba(18,43,76,.045);transition:transform .2s,border-color .2s,box-shadow .2s}
+.fm-service-card:hover{transform:translateY(-4px);border-color:#b8d3f3;box-shadow:0 16px 35px rgba(18,70,130,.09)}
+.fm-service-icon{display:grid;place-items:center;width:46px;height:46px;border-radius:14px;background:linear-gradient(145deg,#e9f3ff,#e8f8f7);color:#1765d1;font-size:19px}
+.fm-service-card h3{margin:17px 0 7px;color:#193452;font-size:16px;line-height:1.35}
+.fm-service-card p{margin:0 0 18px;color:#6a7b90;font-size:13px;line-height:1.65}
+.fm-service-card a{display:inline-flex;align-items:center;gap:8px;margin-top:auto;color:#1765d1;font-size:12px;font-weight:800}
+.about-premium{max-width:1200px!important;margin:40px auto!important;padding:56px 0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:#fff!important}
+.about-intro{max-width:720px!important}
+.about-grid{gap:14px!important}
+.about-feature,.about-bottom{background:#f7faff!important;border:1px solid #e7edf5!important;border-radius:16px!important;box-shadow:none!important}
+.about-feature{padding:23px!important}
+.about-feature:hover{transform:translateY(-2px)!important}
+.about-feature h3,.about-bottom h3{color:#183453!important}
+.about-feature p,.about-bottom p{color:#64768d!important}
+.about-icon,.about-index,.about-eyebrow{color:#087e91!important}
+#rates,#transaction-stats,#adminSettings,#exchange{display:none!important}
+#history{max-width:900px;margin:55px auto 65px!important;padding:28px!important;border:1px solid #e5ebf3;border-radius:20px;background:#fff;box-shadow:0 12px 36px rgba(18,43,76,.06)}
+#history .section-heading{align-items:center}
+#history h2,#history h3{color:#193452}
+#history p{color:#687a90}
+#history .form-card{border:0!important;box-shadow:none!important;padding:8px 0!important}
+.faq-section{max-width:1000px!important;margin:60px auto!important;padding:38px 22px!important;background:#f7faff!important;border:1px solid #e5edf5!important;border-radius:22px!important;box-shadow:none!important}
+.faq-heading h2{color:#193452!important}
+.faq-item{background:#fff!important;border-color:#e3eaf2!important}
+.faq-item summary{color:#203a58!important}
+.faq-answer{color:#64768d!important}
+.faq-plus{background:#eaf3ff!important}
+.faq-plus:before,.faq-plus:after{background:#1765d1!important}
+.met-footer{margin-top:60px!important;background:#f7faff!important;border-top:1px solid #e5ebf3!important;box-shadow:none!important}
+.met-footer-inner{max-width:1200px!important;padding-top:48px!important;padding-bottom:40px!important}
+.met-footer-logo{color:#132d4d!important}.met-footer-logo span{color:#087e91!important}
+.met-footer h3{color:#1765d1!important}.met-footer p,.met-footer-bottom{color:#64768d!important}
+.met-footer a{color:#425873!important}.met-footer a:hover{color:#1765d1!important}
+.fastmoney-legal-links{background:#f7faff!important;border-color:#e5ebf3!important}
+@media(max-width:1050px){.fm-service-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.hero{gap:28px!important}}
+@media(max-width:760px){body{padding-top:62px!important}.container{width:calc(100% - 28px)!important}.hero{grid-template-columns:1fr!important;min-height:0;padding:42px 0 48px!important;gap:24px!important}.hero:before{inset:0 -18px 20px 8%!important;border-radius:24px!important}.hero h1{font-size:clamp(35px,9vw,48px)!important;letter-spacing:-1.2px!important}.hero-copy{font-size:15px!important;margin:16px 0 22px!important}.hero-card{max-width:620px}.fm-services{margin-bottom:48px!important}.fm-service-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.fm-service-card{min-height:220px;padding:17px 14px}.about-premium{padding:35px 0!important}.about-grid{grid-template-columns:1fr 1fr!important}.about-feature{padding:17px!important}.faq-section{margin:40px auto!important;padding:28px 14px!important}#history{margin:35px auto 45px!important;padding:19px!important}.met-footer-inner{grid-template-columns:1fr 1fr!important;gap:25px!important}}
+@media(max-width:480px){.fm-service-grid{grid-template-columns:1fr 1fr}.fm-service-card{min-height:230px}.fm-service-card h3{font-size:15px}.fm-service-card p{font-size:12px}.about-grid{grid-template-columns:1fr!important}.hero-trustline{display:grid!important;gap:9px!important}.hero-actions>a{width:100%}.met-footer-inner{grid-template-columns:1fr!important}.met-footer-brand{grid-column:auto!important}}
+@media(prefers-color-scheme:dark){html,body{background:#0b1424!important;color:#edf4ff!important}.main-header{background:rgba(12,23,40,.97)!important;border-color:#25364e!important}.desktop-nav .nav-link,.desktop-nav .nav-support summary{color:#dce8f8!important}.hero:before{background:radial-gradient(circle at 78% 18%,rgba(42,126,229,.18),transparent 35%),linear-gradient(135deg,#101f35,#12283b 70%,#101d31)!important}.hero h1,.fm-section-heading h2,.hero .hero-process-title,.hero-process-item strong,.fm-service-card h3,.about-feature h3,.about-bottom h3,.faq-heading h2,.faq-item summary,#history h2,#history h3{color:#edf4ff!important}.hero-copy,.hero-trustline,.hero-process-item small,.fm-section-heading p,.fm-service-card p,.about-feature p,.about-bottom p,.faq-answer,#history p{color:#a9bad0!important}.hero-card,.hero-process-item,.fm-service-card,.about-feature,.about-bottom,#history,.faq-section,.faq-item{background:#111f33!important;border-color:#293c55!important;color:#edf4ff!important;box-shadow:0 12px 32px rgba(0,0,0,.18)!important}.hero-secondary-link{background:#14243a!important;color:#e6f0ff!important;border-color:#334861!important}.fm-service-icon{background:#1a3553!important;color:#77b5ff!important}.fm-service-card a{color:#83baff!important}.met-footer,.fastmoney-legal-links{background:#0e1a2b!important;border-color:#293c55!important}.met-footer-logo,.met-footer a{color:#e0ebfa!important}.met-footer p,.met-footer-bottom{color:#a9bad0!important}.faq-plus{background:#1b3552!important}.faq-plus:before,.faq-plus:after{background:#83baff!important}}
+@media(prefers-reduced-motion:reduce){.fm-service-card,.about-feature{transition:none!important}}
