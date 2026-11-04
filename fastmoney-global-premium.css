@@ -1,0 +1,202 @@
+/* FastMoney Global — open-layout premium homepage. No nested cards or boxed-in-box layouts. */
+:root{
+ --fg:#10243d;--muted:#60748c;--accent:#1267d5;--teal:#079b9b;--line:#e4ebf3;
+ --paper:#fff;--soft:#f4f8fc;--deep:#0b1d33;
+}
+html,body{background:var(--paper)!important;color:var(--fg)!important}
+body{font-family:Inter,"Segoe UI",Arial,sans-serif!important;overflow-x:hidden}
+.main-header{background:rgba(255,255,255,.94)!important;border:0!important;border-bottom:1px solid var(--line)!important;box-shadow:0 8px 28px rgba(16,36,61,.045)!important;backdrop-filter:blur(16px)}
+.main-header .header-container{max-width:1360px!important}
+.desktop-nav .nav-link,.desktop-nav .nav-support summary{font-size:13px!important;font-weight:650!important;letter-spacing:.1px;color:#29415d!important}
+.desktop-nav .nav-link:hover,.desktop-nav .nav-support summary:hover{color:var(--accent)!important}
+.container{width:min(1240px,calc(100% - 48px))!important;max-width:1240px!important}
+/* Hero: editorial two-column composition, not nested cards */
+.hero{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(340px,.92fr)!important;align-items:center;gap:clamp(38px,6vw,90px)!important;min-height:600px;padding:clamp(64px,8vw,112px) 0 88px!important}
+.hero:before{content:"";position:absolute;z-index:-1;inset:20px -8vw 18px 28%;border-radius:0 0 0 120px;background:radial-gradient(ellipse at 78% 20%,rgba(30,132,231,.12),transparent 38%),linear-gradient(115deg,#f7faff 0%,#eff8fb 62%,#f9fcff 100%)}
+.hero .eyebrow,.fm-kicker{display:inline-block;color:#087e91!important;font-size:10px!important;font-weight:850!important;letter-spacing:2.3px!important}
+.hero h1{max-width:780px!important;margin:17px 0 0!important;color:#102946!important;font-size:clamp(42px,5.6vw,72px)!important;line-height:1.035!important;letter-spacing:-2.7px!important;font-weight:820!important}
+.hero h1 span{background:linear-gradient(100deg,#1768d4 5%,#079a9a 95%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-copy{max-width:600px!important;margin:24px 0 30px!important;color:#63758c!important;font-size:clamp(15px,1.3vw,18px)!important;line-height:1.85!important}
+.hero-actions{display:flex;align-items:center;gap:15px;flex-wrap:wrap}
+.hero .primary-link{min-height:54px;padding:15px 25px!important;border:0!important;border-radius:4px!important;background:linear-gradient(110deg,#155fc7,#087f91)!important;box-shadow:0 12px 25px rgba(20,99,193,.18)!important;font-size:14px!important;font-weight:750!important}
+.hero-secondary-link{min-height:52px;padding:14px 8px!important;border:0!important;border-bottom:1px solid #9db4cc!important;border-radius:0!important;background:transparent!important;color:#274663!important;font-weight:750!important}
+.hero-trustline{display:flex;flex-wrap:wrap;gap:12px 23px;margin-top:32px;color:#526a83!important;font-size:11px!important;font-weight:650}
+.hero-trustline i{margin-right:6px;color:#079b91!important}
+/* Hero right side is a single open information panel, never card-inside-card */
+.hero-card{position:relative!important;padding:12px 0 12px 34px!important;border:0!important;border-left:1px solid #cbd9e8!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+.hero .hero-card-top{color:#087f91!important;font-size:10px!important;letter-spacing:1.8px!important;font-weight:850}
+.hero .hero-process-title{margin:18px 0 18px!important;color:#142e4e!important;font-size:25px!important;letter-spacing:-.6px}
+.hero-process-list{display:grid!important;gap:0!important}
+.hero-process-item{display:grid!important;grid-template-columns:42px 1fr;gap:13px!important;align-items:start;padding:16px 0!important;border:0!important;border-bottom:1px solid #dce6ef!important;border-radius:0!important;background:transparent!important}
+.hero-process-item>span{display:grid;place-items:center;width:34px;height:34px;background:#e7f1ff!important;color:#1765d1!important;border-radius:50%!important;font-size:11px;font-weight:850}
+.hero-process-item strong{color:#1b3858!important;font-size:14px!important}
+.hero-process-item small{display:block;margin-top:5px;color:#6a7d92!important;font-size:12px!important;line-height:1.6}
+.hero .hero-card>p{margin:17px 0 0;color:#6c7f94!important;font-size:12px}
+/* Section headings and services — open columns with fine separators */
+.fm-section-heading{max-width:760px;margin:0 auto 42px!important;text-align:center}
+.fm-section-heading h2{margin:12px 0 12px!important;color:#142e4c;font-size:clamp(29px,3.7vw,43px);line-height:1.13;letter-spacing:-1.2px;font-weight:780}
+.fm-section-heading p{margin:0;color:#6a7d93;font-size:15px;line-height:1.7}
+.fm-services{margin:0 auto 62px!important;padding:42px 0 70px!important;border-top:1px solid var(--line)}
+.fm-service-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0!important}
+.fm-service-card{position:relative;display:flex;flex-direction:column;align-items:flex-start;min-height:225px;padding:18px 22px 18px!important;border:0!important;border-right:1px solid var(--line)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;transition:transform .2s!important}
+.fm-service-card:first-child{padding-left:0!important}.fm-service-card:last-child{border-right:0!important;padding-right:0!important}
+.fm-service-card:hover{transform:translateY(-4px)!important;box-shadow:none!important}
+.fm-service-icon{display:grid;place-items:center;width:42px;height:42px;border-radius:50%!important;background:#edf5ff!important;color:#1765d1!important;font-size:17px}
+.fm-service-card h3{margin:17px 0 8px!important;color:#1a3655!important;font-size:15px!important;line-height:1.4}
+.fm-service-card p{margin:0 0 17px!important;color:#6b7d92!important;font-size:12px!important;line-height:1.75}
+.fm-service-card a{display:inline-flex;align-items:center;gap:8px;margin-top:auto;color:#1765d1!important;font-size:11px!important;font-weight:850!important;text-decoration:none}
+.fm-service-card a:hover{gap:12px}
+/* How it works: numbered timeline, not four boxes */
+.fm-how{padding:68px 0 76px!important;margin:0 auto 48px!important;border-top:1px solid var(--line)!important;border-bottom:1px solid var(--line)!important}
+.fm-how-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0!important}
+.fm-how-step{position:relative;min-height:210px;padding:12px 24px 12px!important;border:0!important;border-right:1px solid var(--line)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;overflow:visible!important}
+.fm-how-step:first-child{padding-left:0!important}.fm-how-step:last-child{padding-right:0!important;border-right:0!important}
+.fm-step-number{position:static!important;display:block;margin-bottom:20px;color:#9cb3cb!important;font-size:12px!important;letter-spacing:1.5px!important}
+.fm-step-icon{display:inline-grid!important;place-items:center;width:42px;height:42px;border-radius:50%!important;background:#edf5ff!important;color:#1765d1!important;font-size:17px}
+.fm-how-step h3{margin:18px 0 9px!important;color:#1a3655!important;font-size:15px!important;line-height:1.45}
+.fm-how-step p{margin:0!important;color:#6b7d92!important;font-size:12px!important;line-height:1.75}
+/* Why FastMoney: open split layout, list rows separated by rules */
+.fm-why{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:center;gap:clamp(36px,7vw,95px);padding:70px 0!important;margin:0 auto 75px!important;border:0!important;border-radius:0!important;background:transparent!important}
+.fm-why-copy h2{margin:13px 0 17px!important;color:#142e4c!important;font-size:clamp(30px,3.7vw,44px)!important;line-height:1.12!important;letter-spacing:-1.2px}
+.fm-why-copy>p{margin:0 0 23px!important;color:#687c92!important;font-size:15px!important;line-height:1.85!important}
+.fm-text-link{display:inline-flex;align-items:center;gap:10px;color:#1765d1!important;font-size:13px!important;font-weight:850!important}
+.fm-why-list{display:grid;gap:0!important;border-top:1px solid var(--line)!important}
+.fm-why-list article{display:flex;align-items:flex-start;gap:16px!important;padding:18px 0!important;border:0!important;border-bottom:1px solid var(--line)!important;border-radius:0!important;background:transparent!important}
+.fm-why-list article>span{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;border-radius:50%!important;background:#edf5ff!important;color:#1765d1!important;font-size:15px}
+.fm-why-list h3{margin:0 0 5px!important;color:#1b3858!important;font-size:14px!important}
+.fm-why-list p{margin:0!important;color:#6b7d92!important;font-size:12px!important;line-height:1.7!important}
+/* Payment network: typography and tags float directly on the page */
+.fm-methods{padding:36px 0 68px!important;margin:0 auto 20px!important;border-top:1px solid var(--line)!important}
+.fm-method-panel{max-width:1040px;margin:0 auto;padding:10px 0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+.fm-method-group{display:grid;grid-template-columns:210px 1fr;align-items:start;gap:24px}
+.fm-method-label{padding-top:9px;color:#8294a9!important;font-size:10px!important;font-weight:850!important;letter-spacing:1.5px!important}
+.fm-method-chips{display:flex;flex-wrap:wrap;gap:8px 22px!important}
+.fm-method-chips>span{display:inline-flex;align-items:center;gap:8px;min-height:32px;padding:4px 0!important;border:0!important;border-radius:0!important;background:transparent!important;color:#344e6b!important;font-size:13px!important;font-weight:700!important}
+.fm-method-dot{width:7px;height:7px;border-radius:50%;background:#1765d1}
+.fm-method-dot.bkash{background:#e2136e}.fm-method-dot.nagad{background:#f26a21}.fm-method-dot.rocket{background:#8a2be2}.fm-method-dot.upay{background:#0c9a68}
+.fm-method-divider{height:1px;margin:22px 0!important;border:0!important;background:var(--line)!important}
+.fm-method-note{display:flex;align-items:flex-start;gap:9px;margin:24px 0 0!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;color:#74869b!important;font-size:11px!important;line-height:1.7!important}
+.fm-method-note i{color:#1765d1;margin-top:3px}
+/* One strong CTA band — it is a single section, with no nested card */
+.fm-cta{display:flex;align-items:center;justify-content:space-between;gap:28px;margin:28px 0 78px!important;padding:clamp(30px,5vw,56px) clamp(26px,5vw,64px)!important;border:0!important;border-radius:3px!important;background:linear-gradient(112deg,#102b4c 0%,#145b80 64%,#087f85 100%)!important;color:#fff!important;box-shadow:none!important}
+.fm-cta .fm-kicker{color:#a8e8e2!important}
+.fm-cta h2{margin:11px 0 9px!important;color:#fff!important;font-size:clamp(26px,3.6vw,39px)!important;line-height:1.15!important;letter-spacing:-.8px}
+.fm-cta p{margin:0!important;color:#d6e5f2!important;font-size:14px!important;line-height:1.7}
+.fm-cta>a{display:inline-flex;align-items:center;justify-content:center;gap:12px;flex:0 0 auto;min-height:50px;padding:13px 21px!important;border:0!important;border-radius:3px!important;background:#fff!important;color:#1459a5!important;font-size:13px!important;font-weight:850!important;box-shadow:none!important;transition:transform .2s}
+.fm-cta>a:hover{transform:translateY(-2px)}
+/* About, tracking, FAQ and footer also use open editorial structure */
+.about-premium{max-width:1240px!important;margin:20px auto 60px!important;padding:64px 0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+.about-intro{max-width:760px!important}
+.about-intro h2{color:#142e4c!important;font-size:clamp(30px,3.8vw,43px)!important;letter-spacing:-1px}
+.about-intro p{color:#687c92!important;line-height:1.8!important}
+.about-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:0!important;border-top:1px solid var(--line)!important;border-bottom:1px solid var(--line)!important}
+.about-feature,.about-bottom{padding:24px 22px!important;border:0!important;border-right:1px solid var(--line)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+.about-feature:first-child{padding-left:0!important}.about-feature:last-child{border-right:0!important;padding-right:0!important}
+.about-feature h3,.about-bottom h3{color:#1b3858!important}.about-feature p,.about-bottom p{color:#6b7d92!important;line-height:1.75!important}
+.about-bottom{display:flex!important;justify-content:space-between;gap:28px!important;padding:28px 0!important;border:0!important;border-bottom:1px solid var(--line)!important}
+.about-fee{display:flex;flex-direction:column;gap:5px;min-width:180px}
+#history{max-width:940px!important;margin:55px auto 70px!important;padding:28px 0!important;border:0!important;border-top:1px solid var(--line)!important;border-bottom:1px solid var(--line)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+#history .form-card{padding:18px 0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+#history .field input{border-radius:3px!important}
+.faq-section{max-width:1050px!important;margin:65px auto!important;padding:55px 0!important;border:0!important;border-top:1px solid var(--line)!important;border-bottom:1px solid var(--line)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+.faq-card{border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+.faq-item{border:0!important;border-bottom:1px solid var(--line)!important;border-radius:0!important;background:transparent!important}
+.faq-item summary{padding:18px 2px!important;color:#1b3858!important}
+.faq-answer{padding:0 2px 18px!important;color:#687c92!important}
+.faq-plus{background:#edf5ff!important}
+.met-footer{margin-top:55px!important;border:0!important;border-top:1px solid var(--line)!important;background:#f5f8fc!important;box-shadow:none!important}
+.met-footer-inner{max-width:1240px!important}
+.met-footer-logo{color:#142e4c!important}.met-footer p,.met-footer-bottom{color:#687c92!important}
+.met-footer h3{color:#1765d1!important}.met-footer a{color:#425873!important}
+.fastmoney-legal-links{border:0!important;border-top:1px solid var(--line)!important;border-radius:0!important;background:#f5f8fc!important}
+/* Tablet and mobile: keep the open layout, stack cleanly without card nesting */
+@media(max-width:1050px){
+ .fm-service-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .fm-service-card:nth-child(3){border-right:0!important}
+ .fm-service-card:nth-child(4),.fm-service-card:nth-child(5){border-top:1px solid var(--line)!important;padding-top:24px!important}
+ .fm-how-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .fm-how-step:nth-child(2){border-right:0!important}
+ .fm-how-step:nth-child(3),.fm-how-step:nth-child(4){border-top:1px solid var(--line)!important;padding-top:25px!important}
+ .about-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .about-feature:nth-child(2){border-right:0!important}
+ .about-feature:nth-child(3),.about-feature:nth-child(4){border-top:1px solid var(--line)!important}
+}
+@media(max-width:760px){
+ body{padding-top:62px!important}
+ .container{width:calc(100% - 32px)!important}
+ .hero{grid-template-columns:1fr!important;min-height:0;padding:48px 0 56px!important;gap:35px!important}
+ .hero:before{inset:0 -16px 20px 8%!important;border-radius:0 0 0 55px}
+ .hero h1{font-size:clamp(37px,9vw,53px)!important;letter-spacing:-1.6px!important}
+ .hero-copy{font-size:15px!important;margin:18px 0 24px!important}
+ .hero-card{max-width:100%;padding:8px 0 8px 20px!important}
+ .hero-trustline{display:grid!important;grid-template-columns:1fr 1fr;gap:10px!important}
+ .fm-services{padding:36px 0 48px!important;margin-bottom:25px!important}
+ .fm-section-heading{margin-bottom:28px!important}
+ .fm-service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .fm-service-card{min-height:205px;padding:18px 14px!important}
+ .fm-service-card:nth-child(2),.fm-service-card:nth-child(4){border-right:0!important}
+ .fm-service-card:nth-child(3){border-right:1px solid var(--line)!important}
+ .fm-service-card:nth-child(3),.fm-service-card:nth-child(4),.fm-service-card:nth-child(5){border-top:1px solid var(--line)!important}
+ .fm-service-card:first-child{padding-left:14px!important}
+ .fm-service-card:last-child{padding-right:14px!important}
+ .fm-how{padding:45px 0 48px!important;margin-bottom:25px!important}
+ .fm-how-step{padding:16px 14px!important;min-height:190px}
+ .fm-how-step:first-child{padding-left:14px!important}
+ .fm-how-step:last-child{padding-right:14px!important}
+ .fm-how-step h3{font-size:14px!important}
+ .fm-why{grid-template-columns:1fr;gap:25px;padding:45px 0!important;margin-bottom:40px!important}
+ .fm-why-copy h2{font-size:32px!important}
+ .fm-methods{padding:36px 0 45px!important}
+ .fm-method-group{grid-template-columns:1fr;gap:10px}
+ .fm-method-chips{gap:5px 17px!important}
+ .fm-cta{align-items:flex-start;flex-direction:column;margin:20px 0 48px!important;padding:30px 22px!important}
+ .fm-cta>a{width:100%}
+ .about-premium{padding:40px 0!important}
+ .about-grid{grid-template-columns:1fr 1fr!important}
+ .about-feature{padding:18px 14px!important}
+ .about-feature:first-child{padding-left:14px!important}
+ .about-feature:nth-child(2){border-right:0!important}
+ .about-feature:nth-child(3){border-right:1px solid var(--line)!important}
+ .about-feature:nth-child(3),.about-feature:nth-child(4){border-top:1px solid var(--line)!important}
+ .about-bottom{flex-direction:column;padding:22px 0!important}
+ #history{margin:35px auto 45px!important;padding:22px 0!important}
+ .faq-section{margin:40px auto!important;padding:38px 0!important}
+ .met-footer-inner{grid-template-columns:1fr 1fr!important;gap:24px!important}
+}
+@media(max-width:430px){
+ .hero-actions>a{width:100%;justify-content:center}
+ .hero-secondary-link{justify-content:center}
+ .hero-trustline{grid-template-columns:1fr!important}
+ .fm-service-grid,.fm-how-grid{grid-template-columns:1fr}
+ .fm-service-card,.fm-how-step{min-height:0!important;padding:20px 4px!important;border-right:0!important;border-bottom:1px solid var(--line)!important}
+ .fm-service-card:first-child,.fm-how-step:first-child{padding-left:4px!important}
+ .fm-service-card:last-child,.fm-how-step:last-child{padding-right:4px!important;border-bottom:0!important}
+ .fm-service-card:nth-child(3),.fm-service-card:nth-child(4),.fm-service-card:nth-child(5),.fm-how-step:nth-child(3),.fm-how-step:nth-child(4){border-top:0!important}
+ .about-grid{grid-template-columns:1fr!important}
+ .about-feature,.about-feature:first-child,.about-feature:last-child{padding:19px 4px!important;border-right:0!important;border-bottom:1px solid var(--line)!important}
+ .about-feature:last-child{border-bottom:0!important}
+ .about-feature:nth-child(3),.about-feature:nth-child(4){border-top:0!important}
+ .met-footer-inner{grid-template-columns:1fr!important}
+}
+/* Dark mode — high contrast, same open composition */
+@media(prefers-color-scheme:dark){
+ :root{--fg:#edf4ff;--muted:#a9bad0;--line:#2a3d56;--paper:#0b1424;--soft:#101e32}
+ html,body{background:#0b1424!important;color:#edf4ff!important}
+ .main-header{background:rgba(10,20,36,.95)!important;border-color:#293b54!important}
+ .desktop-nav .nav-link,.desktop-nav .nav-support summary{color:#dce8f8!important}
+ .hero:before{background:radial-gradient(ellipse at 78% 20%,rgba(42,126,229,.2),transparent 38%),linear-gradient(115deg,#101f35,#12283b 62%,#101d31)!important}
+ .hero h1,.fm-section-heading h2,.hero .hero-process-title,.hero-process-item strong,.fm-service-card h3,.fm-how-step h3,.fm-why-copy h2,.fm-why-list h3,.about-intro h2,.about-feature h3,.about-bottom h3,#history h2,#history h3,.faq-item summary{color:#edf4ff!important}
+ .hero-copy,.hero-trustline,.hero-process-item small,.hero .hero-card>p,.fm-section-heading p,.fm-service-card p,.fm-how-step p,.fm-why-copy>p,.fm-why-list p,.about-intro p,.about-feature p,.about-bottom p,#history p,.faq-answer{color:#a9bad0!important}
+ .hero-card{border-left-color:#334b68!important}
+ .hero-process-item{border-bottom-color:#2a3d56!important}
+ .hero-process-item>span,.fm-service-icon,.fm-step-icon,.fm-why-list article>span,.faq-plus{background:#1b3552!important;color:#83baff!important}
+ .hero-secondary-link{color:#e0ecfa!important;border-color:#49627f!important}
+ .fm-service-card,.fm-how-step,.fm-why-list article,.about-feature,.about-bottom{background:transparent!important}
+ .fm-method-chips>span{color:#dce8f8!important}
+ .fm-method-note{color:#a9bad0!important}
+ .fm-cta{background:linear-gradient(112deg,#102b4c,#145b80 64%,#087f85)!important}
+ .met-footer,.fastmoney-legal-links{background:#0e1a2b!important;border-color:#293b54!important}
+ .met-footer-logo,.met-footer a{color:#e0ebfa!important}.met-footer p,.met-footer-bottom{color:#a9bad0!important}
+ .met-footer h3{color:#83baff!important}
+}
+@media(prefers-reduced-motion:reduce){.fm-service-card,.fm-cta>a{transition:none!important}}
