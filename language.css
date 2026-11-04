@@ -14,3 +14,7 @@ body{top:0!important}.goog-logo-link,.goog-te-gadget{display:none!important}
 @media(max-width:760px){.fm-language-control{display:none!important}.fm-mobile-language{display:flex}.mobile-nav{max-height:calc(100vh - 90px);overflow-y:auto}}
 @media(min-width:761px){.fm-mobile-language{display:none!important}}
 @media(prefers-reduced-motion:reduce){.fm-language-control,.fm-mobile-language{transition:none!important}}
+
+.fm-language-float{position:fixed;z-index:1100;top:14px;right:14px;display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid #d7e5e9;border-radius:12px;background:#fff;box-shadow:0 8px 24px rgba(9,40,60,.12);color:#087b8c}
+.fm-language-float select{max-width:150px;border:0;background:transparent;color:#173b4d;font-size:13px;font-weight:700;outline:0}
+@media(max-width:760px){.fm-language-float{top:9px;right:9px}.fm-language-float select{max-width:125px}}
