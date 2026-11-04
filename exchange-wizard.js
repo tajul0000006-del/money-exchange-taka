@@ -78,7 +78,7 @@
       const value = $("contact")?.value.trim() || "";
       if (method === "whatsapp") return /^\d{11}$/.test(value);
       if (method === "telegram") return /^\d{11}$/.test(value) || /^@?[A-Za-z0-9_]{5,32}$/.test(value) || /^(https?:\/\/)?(www\.)?(t\.me|telegram\.me)\/[A-Za-z0-9_]{5,32}\/?$/.test(value);
-      return /^[A-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[A-Z0-9-]+(?:\.[A-Z0-9-]+)+$/i.test(value);
+      return /^[A-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@gmail\.com$/i.test(value);
     }
     function updateContactMode() {
       const method = $("contactMethod")?.value || "whatsapp";
