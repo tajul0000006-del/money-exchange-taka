@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#082f49">
-  <meta name="description" content="MoneyExchangeTaka - ডিজিটাল ওয়ালেট ও কারেন্সি Exchange, রেট এবং Track Requestিং।">
+  <meta name="description" content="MoneyExchangeTaka - ডিজিটাল ওয়ালেট ও Currency Exchange, রেট এবং Track Requestিং।">
   <title>MoneyExchangeTaka | Currency Exchange</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./style.css">
   <link rel="stylesheet" href="./header.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-  <script type="module" src="./app.js?v=15"></script>
+  <script type="module" src="./app.js?v=16"></script>
   <script src="./header.js" defer></script>
   <link rel="stylesheet" href="./theme.css">
   <link rel="stylesheet" href="./about.css">
@@ -186,7 +186,7 @@
         <div class="exchange-review-card"><div class="exchange-review-route"><div><small>PAYMENT METHOD</small><strong id="proofMethodDisplay">—</strong></div><i class="fa-solid fa-arrow-right"></i><div><small>AMOUNT</small><strong id="proofAmountDisplay">—</strong></div></div></div>
         <div class="exchange-details-grid proof-fields">
           <div class="field"><label for="proofScreenshot">Payment Receipt Screenshot <span aria-hidden="true">*</span></label><input id="proofScreenshot" type="file" accept="image/png,image/jpeg,image/webp" required><small class="field-help">Upload the receipt or screenshot after completing payment. JPG, PNG, or WEBP · Max 5 MB</small><div id="proofPreviewWrap" class="proof-preview-wrap" hidden><img id="proofPreviewImage" alt="Payment screenshot preview"><span id="proofPreviewName"></span></div></div>
-          <div class="field"><label for="proofEmail">Email Address <small>(Optional)</small></label><input id="proofEmail" type="email" maxlength="160" placeholder="আপনার Email Address লিখুন"></div>
+          <div class="field"><label for="proofEmail">Email Address <small>(Optional)</small></label><input id="proofEmail" type="email" maxlength="160" placeholder="Enter your email address"></div>
           <div class="field"><label for="proofReference">Payment Transaction ID / Reference Number <span aria-hidden="true">*</span></label><input id="proofReference" required maxlength="160" placeholder="Enter the Transaction ID shown on your payment receipt"></div>
         </div>
         <div class="exchange-panel-actions"><button type="button" class="exchange-back-btn" data-prev-step="4"><i class="fa-solid fa-arrow-left"></i> Back</button><button type="button" class="submit-btn exchange-submit-btn" id="submitPaymentProof">Submit Request with Proof <i class="fa-solid fa-arrow-right"></i></button></div>
@@ -198,16 +198,16 @@
 
     <section id="rates" class="section">
       <div class="section-heading">
-        <div><p class="eyebrow">EXCHANGE RATES</p><h2>কারেন্সি ও ওয়ালেট রেট</h2></div>
-        <span class="hint">লোগো + নাম + কেনা/বিক্রি</span>
+        <div><p class="eyebrow">EXCHANGE RATES</p><h2>Currency & Wallet Rates</h2></div>
+        <span class="hint">Logo + Name + Buy/Sell</span>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>ওয়ালেট / কারেন্সি</th><th>কারেন্সি</th><th>আমরা কিনি</th><th>আমরা বিক্রি করি</th></tr></thead>
+          <thead><tr><th>Wallet / Currency</th><th>Currency</th><th>We Buy</th><th>We Sell</th></tr></thead>
           <tbody id="rateTableBody"></tbody>
         </table>
       </div>
-      <p class="note rate-limit-note"><strong>প্রতি লেনদেনের সীমা:</strong> সর্বনিম্ন ৳৫০০ এবং সর্বোচ্চ ৳১,৫০,০০০ (সমমূল্যের USD/USDT)।</p>
+      <p class="note rate-limit-note"><strong>Transaction Limit:</strong> Minimum ৳500 and maximum ৳150,000 (equivalent USD/USDT).</p>
     </section>
 
     <section class="hero" id="home">
@@ -227,7 +227,7 @@
 
 
 <section class="about-premium section" id="about" aria-labelledby="aboutTitle">
-  <div class="about-intro reveal-about"><span class="about-eyebrow">ABOUT MONEYEXCHANGETAKA</span><h2 id="aboutTitle" data-content-key="home.about.title">One Platform. Multiple Payment Possibilities.</h2><p data-content-key="home.about.description">MoneyExchangeTaka — ডিজিটাল ওয়ালেট ও কারেন্সি Exchangeের জন্য একটি আধুনিক প্ল্যাটফর্ম। সহজে মেথড নির্বাচন, রেট দেখা ও Track Request করুন।</p></div>
+  <div class="about-intro reveal-about"><span class="about-eyebrow">ABOUT MONEYEXCHANGETAKA</span><h2 id="aboutTitle" data-content-key="home.about.title">One Platform. Multiple Payment Possibilities.</h2><p data-content-key="home.about.description">MoneyExchangeTaka — ডিজিটাল ওয়ালেট ও Currency Exchangeের জন্য একটি আধুনিক প্ল্যাটফর্ম। সহজে মেথড নির্বাচন, রেট দেখা ও Track Request করুন।</p></div>
   <div class="about-grid">
     <article class="about-feature reveal-about"><span class="about-icon">⚡</span><span class="about-index">● / SPEED</span><h3>Instant Transaction AI</h3><p>দ্রুত ও সহজ Exchange রিকোয়েস্টের জন্য স্মার্ট ডিজিটাল অভিজ্ঞতা। প্রতিটি রিকোয়েস্ট যাচাই সাপেক্ষে প্রক্রিয়াকরণ করা হয়।</p></article>
     <article class="about-feature about-currencies reveal-about"><span class="about-icon">◈</span><span class="about-index">● / NETWORK</span><h3>Diverse Currency</h3><div class="currency-tags"><span>Perfect Money</span><span>WebMoney</span><span>Bitcoin</span><span>Crypto</span><span>Binance USDT</span><span>BingX USDT</span><span>KuCoin USDT</span><span>Bybit USDT</span><span>ePay</span><span>Volet USD</span><span>RedotPay USD</span><span>bKash Personal</span><span>Nagad Personal</span><span>Rocket Personal</span><span>Upay Personal</span><span>TunePay</span><span>PayPal</span></div></article>
@@ -280,8 +280,8 @@
   </main>
 
   <footer class="met-footer"><div class="met-footer-inner"><div class="met-footer-brand"><a href="./index.html" class="met-footer-logo">Money<span>Exchange</span>Taka</a><p>ডিজিটাল Exchange সম্পর্কিত তথ্য, সহায়তা ও প্রয়োজনীয় নীতিমালা এক জায়গায়।</p></div><nav class="met-footer-links" aria-label="Footer navigation"><h3>Quick Links</h3><a href="./about.html">About</a><a href="./affiliate.html">Affiliate</a><a href="./terms-and-conditions.html">Terms &amp; Conditions</a><a href="./privacy-policy.html">Privacy Policy</a><a href="./guidelines.html">Guidelines</a><a href="./licence.html">Licence</a></nav><div class="met-footer-help"><h3>Help &amp; Information</h3><p>কোনো লেনদেনের আগে প্রযোজ্য শর্ত, ফি এবং পরিচয় যাচাইয়ের নিয়ম দেখে নিন।</p><a href="./index.html#faq">Frequently Asked Questions</a></div></div><div class="met-footer-bottom"><span>© <span id="footerYear">2026</span> MoneyExchangeTaka. All rights reserved.</span><span>Clear information · Responsive design</span></div></footer><script>document.getElementById("footerYear").textContent=new Date().getFullYear();</script>
-  <div class="modal-backdrop" id="paymentModal" aria-hidden="true"><section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="paymentTitle"><button class="modal-close" type="button" data-close-modal="paymentModal">×</button><div class="modal-step">ধাপ ১ / ৩</div><h2 id="paymentTitle">পেমেন্ট সম্পন্ন করুন</h2><p id="paymentIntro" class="modal-copy">নিচের ঠিকানার তথ্য যাচাই করুন।</p><div class="payment-summary" id="paymentSummary"></div><div class="payment-address"><span>পেমেন্ট ঠিকানা</span><strong id="paymentAddress">—</strong><button id="copyPaymentAddress" type="button" class="secondary-btn">Copy Address</button></div><p class="address-warning"><strong>গুরুত্বপূর্ণ:</strong> পেমেন্ট পাঠানোর আগে ঠিকানা, পরিমাণ এবং ক্রিপ্টো নেটওয়ার্ক ভালোভাবে যাচাই করুন। ভুল ঠিকানায় পাঠানো সম্পদ ফেরত পাওয়া নাও যেতে পারে।</p><button id="goProof" type="button" class="submit-btn">পেমেন্ট করেছি · পরবর্তী ধাপ</button></section></div>
-  <div class="modal-backdrop" id="successModal" aria-hidden="true"><section class="modal-card success-card" role="dialog" aria-modal="true" aria-labelledby="successTitle"><div class="success-mark" aria-hidden="true">✓</div><h2 id="successTitle">আপনার অনুরোধ গ্রহণ করা হয়েছে</h2><p class="modal-copy">আপনার অনুরোধটি গ্রহণ করা হয়েছে। অনুগ্রহ করে কিছুক্ষণ অপেক্ষা করুন, আপনার অনুরোধ দ্রুত সম্পন্ন করার ব্যবস্থা নেওয়া হবে।</p><div class="tracking-box"><span>আপনার ট্র্যাকিং কোড</span><strong id="successTrackingCode">MET-XXXXXX</strong><button id="copyTrackingCode" type="button" class="secondary-btn">কোড কপি করুন</button></div><p class="modal-copy">এই কোড দিয়ে আপনি আপনার অনুরোধের অগ্রগতি যাচাই করতে পারবেন।</p><button id="successDone" type="button" class="submit-btn">ঠিক আছে</button></section></div>
+  <div class="modal-backdrop" id="paymentModal" aria-hidden="true"><section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="paymentTitle"><button class="modal-close" type="button" data-close-modal="paymentModal">×</button><div class="modal-step">STEP 1 / 3</div><h2 id="paymentTitle">Complete Payment</h2><p id="paymentIntro" class="modal-copy">Please verify the payment details below.</p><div class="payment-summary" id="paymentSummary"></div><div class="payment-address"><span>পেমেন্ট ঠিকানা</span><strong id="paymentAddress">—</strong><button id="copyPaymentAddress" type="button" class="secondary-btn">Copy Address</button></div><p class="address-warning"><strong>গুরুত্বপূর্ণ:</strong> পেমেন্ট পাঠানোর আগে ঠিকানা, পরিমাণ এবং ক্রিপ্টো নেটওয়ার্ক ভালোভাবে যাচাই করুন। ভুল ঠিকানায় পাঠানো সম্পদ ফেরত পাওয়া নাও যেতে পারে।</p><button id="goProof" type="button" class="submit-btn">পেমেন্ট করেছি · পরবর্তী ধাপ</button></section></div>
+  <div class="modal-backdrop" id="successModal" aria-hidden="true"><section class="modal-card success-card" role="dialog" aria-modal="true" aria-labelledby="successTitle"><div class="success-mark" aria-hidden="true">✓</div><h2 id="successTitle">Your Request Has Been Received</h2><p class="modal-copy">Your request has been received. Please wait while we process it as soon as possible.</p><div class="tracking-box"><span>Your Tracking Code</span><strong id="successTrackingCode">MET-XXXXXX</strong><button id="copyTrackingCode" type="button" class="secondary-btn">Copy Code</button></div><p class="modal-copy">Use this code to track the progress of your request.</p><button id="successDone" type="button" class="submit-btn">ঠিক আছে</button></section></div>
 <script>
   document.querySelectorAll('[data-auth-action]').forEach(button => {
     button.addEventListener('click', () => {
@@ -292,6 +292,6 @@
 <script src="./about.js" defer></script>
 <script src="./stats.js" defer></script>
 <script src="./faq.js" defer></script>
-<script src="./exchange-wizard.js?v=10"></script>
+<script src="./exchange-wizard.js?v=11"></script>
 </body>
 </html>
