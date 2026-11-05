@@ -499,7 +499,7 @@ import { firebaseConfig } from "./firebase-config.js";
         <button type="button" id="exSaveAll">Save All Settings</button>
       </div>
       <div id="exCurrencyCards" style="display:grid;gap:12px"></div>
-      <h3 style="margin:18px 0 8px">Add New Currency</h3>
+      <h3 style="margin:18px 0 8px">Add New Currency</h3><p style="margin:0 0 10px;font-size:12px;color:#526579">নতুন Currency যোগ করলে আগে Editor-এ যুক্ত হবে। Homepage-এ প্রকাশ করতে Save All Settings চাপুন। Remove করলেও স্থায়ীভাবে সরাতে Save All Settings প্রয়োজন।</p>
       <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
         <label>Unique ID<input id="exNewId" placeholder="e.g. newwallet"></label>
         <label>Currency Name<input id="exNewName" placeholder="e.g. New Wallet USD"></label>
@@ -551,8 +551,11 @@ import { firebaseConfig } from "./firebase-config.js";
         const card = document.createElement("article");
         card.style.cssText = "background:#fff;border:1px solid #dbe5ec;border-radius:10px;padding:12px;min-width:0";
         card.innerHTML = `
-          <div style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap">
-            <strong>${esc(c.name || c.id)}</strong>
+          <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;gap:10px;min-width:0">
+              ${c.logo ? `<img src="${esc(c.logo)}" alt="" loading="lazy" onerror="this.style.display='none'" style="width:38px;height:38px;object-fit:contain;background:#f2f6fa;border:1px solid #e1e8ef;border-radius:9px;padding:4px">` : ""}
+              <div><strong>${esc(c.name || c.id)}</strong><div style="font-size:11px;color:#64748b">${esc(c.currency || "")} · ${esc(c.type || "other")}</div></div>
+            </div>
             <button type="button" class="danger exRemoveCurrency" data-index="${i}" style="padding:5px 9px">Remove</button>
           </div>
           <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:8px">
@@ -564,7 +567,8 @@ import { firebaseConfig } from "./firebase-config.js";
             ${field(i,"buy","Buy Rate",c.buy,"number","0.000001")}
             ${field(i,"sell","Sell Rate",c.sell,"number","0.000001")}
             ${field(i,"feePercent","Individual Fee %",c.feePercent ?? "","number","0.01")}
-            ${field(i,"logo","Logo URL (Cloudinary / HTTPS)",c.logo)}\n            ${field(i,"short","Logo Fallback Text",c.short || c.name || c.id)}
+            ${field(i,"logo","Logo URL (Cloudinary / HTTPS)",c.logo)}
+            ${field(i,"short","Logo Fallback Text",c.short || c.name || c.id)}
             ${field(i,"paymentAddress","Payment Address / ID",c.paymentAddress)}
             ${field(i,"paymentAddressLabel","Payment Address Label (e.g. bKash Agent Number)",c.paymentAddressLabel || (c.name + " Number / Wallet Address"))}
             ${field(i,"paymentPlaceholder","Address Placeholder",c.paymentPlaceholder)}
