@@ -507,3 +507,57 @@ body{font-family:Inter,"Segoe UI",Arial,sans-serif!important;overflow-x:hidden}
   }
   .fm-finance-float{background:transparent!important}
 }
+
+
+/* EXCHANGE STEPS — refined typography and premium text contrast */
+.fm-how-step{color:#183451!important}
+.fm-how-step .fm-step-number{
+  color:#8aa3bf!important;
+  font-size:11px!important;
+  font-weight:850!important;
+  letter-spacing:2px!important;
+  line-height:1!important;
+  margin-bottom:17px!important;
+}
+.fm-how-step .fm-step-icon{
+  width:46px!important;height:46px!important;
+  border:1px solid #dce9f6!important;
+  border-radius:14px!important;
+  background:linear-gradient(145deg,#edf5ff 0%,#e8f8f5 100%)!important;
+  color:#1767c8!important;
+  font-size:18px!important;
+  box-shadow:0 7px 18px rgba(24,91,157,.08)!important;
+}
+.fm-how-step h3{
+  color:#153454!important;
+  font-size:clamp(15px,1.2vw,17px)!important;
+  font-weight:780!important;
+  line-height:1.4!important;
+  letter-spacing:-.25px!important;
+  margin:17px 0 9px!important;
+}
+.fm-how-step p{
+  max-width:270px!important;
+  color:#5d7189!important;
+  font-size:13px!important;
+  font-weight:450!important;
+  line-height:1.8!important;
+  letter-spacing:.05px!important;
+}
+@media(max-width:700px){
+  .fm-how-step .fm-step-number{margin-bottom:13px!important}
+  .fm-how-step h3{font-size:15px!important}
+  .fm-how-step p{font-size:12.5px!important;line-height:1.75!important}
+}
+@media(prefers-color-scheme:dark){
+  .fm-how-step{color:#eaf2fc!important}
+  .fm-how-step .fm-step-number{color:#8faaca!important}
+  .fm-how-step .fm-step-icon{
+    background:linear-gradient(145deg,#1b3858,#173b43)!important;
+    border-color:#34516e!important;
+    color:#8bc3ff!important;
+    box-shadow:0 7px 18px rgba(0,0,0,.18)!important;
+  }
+  .fm-how-step h3{color:#f0f6ff!important}
+  .fm-how-step p{color:#b3c3d7!important}
+}
