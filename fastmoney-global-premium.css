@@ -561,3 +561,75 @@ body{font-family:Inter,"Segoe UI",Arial,sans-serif!important;overflow-x:hidden}
   .fm-how-step h3{color:#f0f6ff!important}
   .fm-how-step p{color:#b3c3d7!important}
 }
+
+/* FASTMONEY HERO: keep intro and finance artwork in two independent sections */
+.hero{
+  display:block!important;
+  min-height:0!important;
+  padding:clamp(48px,7vw,86px) 0 34px!important;
+  background:transparent!important;
+}
+.hero:before{display:none!important}
+.hero-content{
+  width:100%;
+  max-width:920px;
+  margin:0 auto;
+}
+.fm-hero-visual-section{
+  position:relative;
+  isolation:isolate;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  min-height:440px;
+  margin:12px 0 58px;
+  padding:28px clamp(12px,4vw,42px);
+  overflow:hidden;
+  border:1px solid #e1edf5;
+  border-radius:26px;
+  background:radial-gradient(ellipse at 50% 45%,rgba(49,143,224,.13),transparent 58%),linear-gradient(135deg,#f4f9ff 0%,#eaf5fa 55%,#f7fbff 100%);
+}
+.fm-hero-visual-section:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  opacity:.34;
+  background-image:radial-gradient(#91b8d5 1px,transparent 1px);
+  background-size:22px 22px;
+  mask-image:radial-gradient(ellipse at center,#000 18%,transparent 78%);
+}
+.fm-hero-visual-section .fm-finance-visual{
+  width:100%;
+  max-width:560px!important;
+  min-height:400px!important;
+  margin:0 auto!important;
+}
+@media(max-width:850px){
+  .hero{padding:42px 0 24px!important}
+  .hero-content{max-width:100%}
+  .fm-hero-visual-section{
+    min-height:370px;
+    margin:12px 0 42px;
+    padding:18px 10px;
+    border-radius:22px;
+  }
+  .fm-hero-visual-section .fm-finance-visual{min-height:340px!important}
+}
+@media(max-width:520px){
+  .hero{padding:38px 0 22px!important}
+  .fm-hero-visual-section{
+    min-height:350px;
+    margin:12px 0 38px;
+    padding:14px 6px;
+  }
+  .fm-hero-visual-section .fm-finance-visual{min-height:320px!important}
+}
+@media(prefers-color-scheme:dark){
+  .fm-hero-visual-section{
+    border-color:#2b425d;
+    background:radial-gradient(ellipse at 50% 45%,rgba(49,143,224,.16),transparent 58%),linear-gradient(135deg,#101f34 0%,#122b3d 55%,#101e32 100%);
+  }
+  .fm-hero-visual-section:before{opacity:.14}
+}
