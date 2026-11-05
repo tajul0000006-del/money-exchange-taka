@@ -1348,3 +1348,20 @@ main.container>.fm-hero-visual-section{
  .fm-finance-main-label{font-size:19px!important}
  .fm-finance-exchange-line{margin-top:16px!important;padding-top:13px!important}
 }
+
+
+/* Keep Local & global label clear of the dollar symbol and main card. */
+.fm-finance-visual .fm-finance-float-two{
+  bottom:1%!important;
+  left:0!important;
+  top:auto!important;
+  transform:none!important;
+  z-index:4!important;
+}
+@media(max-width:520px){
+  .fm-finance-visual .fm-finance-float-two{
+    bottom:0!important;
+    left:0!important;
+    transform:none!important;
+  }
+}
