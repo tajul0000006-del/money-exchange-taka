@@ -510,3 +510,19 @@
   background:#172b40!important;border-color:#355064!important;
  }
 }
+
+
+/* Strict cleanup: the upper Secure process card is the only visible
+   element inside the finance illustration; remove every other child layer. */
+.fm-hero-visual-section .fm-finance-visual > :not(.fm-finance-float-one){
+  display:none!important;
+}
+.fm-hero-visual-section .fm-finance-visual{
+  position:relative!important;
+  isolation:isolate!important;
+}
+.fm-hero-visual-section .fm-finance-float-one{
+  display:flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
