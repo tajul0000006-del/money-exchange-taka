@@ -948,3 +948,52 @@ main,main.container,.container:not(.mobile-nav),.about-page,.track-page,.chat-wr
 .track-field input{background:#fff!important;color:#102a43!important;border-color:#cbd8e2!important}
 .chat-hero h1{color:#082f49!important}
 @media(prefers-reduced-motion:reduce){.about-feature,.faq-plus:before,.faq-plus:after{transition:none!important}}
+
+
+/* FASTMONEY MOBILE USABILITY REFINEMENT — 2026-11
+   Additive overrides: preserve existing page structure and navigation behavior. */
+@media (max-width: 760px) {
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  body { padding-left: 0; padding-right: 0; }
+  .container { padding-left: 0; padding-right: 0; }
+  .hero { align-items: stretch; }
+  .hero-content { width: 100%; min-width: 0; }
+  .hero h1 { line-height: 1.18; letter-spacing: -0.025em; overflow-wrap: anywhere; }
+  .hero h1 br { display: none; }
+  .hero-copy { font-size: 15px; line-height: 1.7; }
+  .hero-actions { display: flex; flex-direction: column; align-items: stretch; gap: 10px; }
+  .hero-actions a, .primary-link, .hero-secondary-link {
+    display: flex; justify-content: center; align-items: center;
+    width: 100%; min-height: 48px; text-align: center;
+  }
+  .fm-section-heading { padding-left: 2px; padding-right: 2px; }
+  .fm-section-heading h2 { font-size: clamp(23px, 6vw, 30px); line-height: 1.25; }
+  .fm-section-heading p { font-size: 14px; line-height: 1.7; }
+  .fm-service-grid { grid-template-columns: minmax(0, 1fr) !important; gap: 14px; }
+  .fm-service-card { width: 100%; min-width: 0; padding: 20px 18px; }
+  .fm-service-card h3 { font-size: 18px; line-height: 1.35; }
+  .fm-service-card p { font-size: 14px; line-height: 1.65; }
+  .fm-service-card a { display: inline-flex; align-items: center; min-height: 42px; }
+  .fm-mobile-language { width: 100%; min-width: 0; }
+  .fm-mobile-language label { display: flex; align-items: center; gap: 9px; }
+  .fm-mobile-language select { width: 100%; min-height: 46px; font-size: 16px; }
+  .main-header .menu-toggle { flex: 0 0 42px; min-width: 42px; min-height: 42px; }
+  .main-header .brand-logo { min-width: 0; max-width: calc(100% - 58px); }
+  .main-header .fastmoney-header-logo,
+  .main-header .met-logo-image { max-width: 100%; height: auto; object-fit: contain; }
+  button, a, summary, select { touch-action: manipulation; }
+  a, button, summary { -webkit-tap-highlight-color: rgba(8, 123, 140, .12); }
+  input, select, textarea { font-size: 16px; }
+  .section { scroll-margin-top: 76px; }
+}
+@media (max-width: 420px) {
+  .container, .chat-wrap, .dash-wrap, .track-page { width: calc(100% - 28px); }
+  .hero { padding-top: 24px; }
+  .hero h1 { font-size: clamp(26px, 8vw, 34px); }
+  .fm-service-card { border-radius: 16px; }
+  .main-header .mobile-nav { padding-left: 14px !important; padding-right: 14px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
