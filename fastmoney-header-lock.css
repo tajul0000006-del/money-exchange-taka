@@ -118,3 +118,17 @@
     margin:0!important;
   }
 }
+
+/* FINAL LOGO LEFT SHIFT — override every earlier left:0 rule. */
+.main-header .header-container > a.fastmoney-brand{
+  position:relative!important;
+  left:-30px!important;
+  right:auto!important;
+  margin-left:0!important;
+  transform:none!important;
+}
+@media(max-width:900px){
+  .main-header .header-container > a.fastmoney-brand{
+    left:-18px!important;
+  }
+}
