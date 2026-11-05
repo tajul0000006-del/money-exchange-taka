@@ -2268,5 +2268,5 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
 
 /* Fine alignment: move the FastMoney logo 3px to the left */
 .main-header .fastmoney-header-logo{
-  transform:translateX(-30px)!important;
+  transform:translateX(-50px)!important;
 }
