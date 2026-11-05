@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#07182f">
+<meta name="description" content="FastMoney Help Center — find answers about exchange requests, payment methods, rates, fees, tracking and account security.">
+<title>Help &amp; FAQ | FastMoney</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./header.css">
+<link rel="stylesheet" href="./responsive.css?v=20261104-public-white1">
+<link rel="stylesheet" href="./language.css?v=1">
+<link rel="stylesheet" href="./faq.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f4f8fc;color:#142e4c;font-family:Inter,Arial,sans-serif}
+.help-main{min-height:75vh;padding:38px 16px 70px;background:radial-gradient(circle at 8% 0%,rgba(32,126,204,.09),transparent 30%),linear-gradient(180deg,#f7fbff,#eef5fa)}
+.help-hero{max-width:900px;margin:0 auto 26px;text-align:center;padding:30px 16px 18px}
+.help-kicker{display:inline-flex;align-items:center;gap:9px;color:#078391;font-size:11px;font-weight:900;letter-spacing:2px}
+.help-kicker:before,.help-kicker:after{content:"";width:22px;height:2px;border-radius:3px;background:linear-gradient(90deg,#176bd0,#0aa99b)}
+.help-hero h1{margin:15px 0 10px;color:#142e4c;font-size:clamp(30px,5vw,46px);line-height:1.1;letter-spacing:-1.5px;font-weight:900}
+.help-hero p{margin:0;color:#63798e;font-size:14px;line-height:1.8}
+.help-content{width:min(900px,100%);margin:auto;padding:clamp(18px,4vw,34px);border:1px solid #dce8f1;border-radius:24px;background:#fff;box-shadow:0 18px 48px rgba(22,61,94,.07)}
+.help-content .faq-heading{display:none}
+.help-content .faq-card{max-width:none;gap:11px}
+.help-content .faq-item{border:1px solid #e0eaf1;border-radius:14px;background:#f9fbfd;color:#1a3854;transition:border-color .2s,background .2s}
+.help-content .faq-item[open]{border-color:#78c9d0;background:#f2fbfb}
+.help-content .faq-item summary{padding:18px 19px;font-size:14px;font-weight:750;color:#183653}
+.help-content .faq-plus{background:#e5f2f7}
+.help-content .faq-plus:before,.help-content .faq-plus:after{background:#087f91}
+.help-content .faq-answer{padding:0 19px 18px;color:#60758a;font-size:13px;line-height:1.8}
+.help-contact{max-width:900px;margin:24px auto 0;padding:20px 22px;border:1px solid #dce8f1;border-radius:18px;background:linear-gradient(110deg,#eef6ff,#effaf8);display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+.help-contact h2{margin:0 0 5px;font-size:17px;color:#183653}
+.help-contact p{margin:0;color:#62788c;font-size:12px;line-height:1.7}
+.help-contact a{display:inline-flex;align-items:center;gap:9px;padding:12px 16px;border-radius:11px;background:linear-gradient(105deg,#1769ce,#078e99);color:#fff;text-decoration:none;font-size:12px;font-weight:800}
+.help-footer{padding:22px 16px;text-align:center;background:#fff;border-top:1px solid #e1eaf0;color:#6b8092;font-size:12px}
+.help-footer a{color:#087f91;text-decoration:none;font-weight:700}
+@media(max-width:600px){.help-main{padding:20px 10px 42px}.help-hero{padding:24px 10px 16px;margin-bottom:12px}.help-hero h1{letter-spacing:-1px}.help-content{padding:13px;border-radius:18px}.help-content .faq-item summary{padding:15px 13px;font-size:13px;line-height:1.6}.help-content .faq-answer{padding:0 13px 15px;font-size:12px}.help-contact{padding:17px}.help-contact a{width:100%;justify-content:center}}
+@media(prefers-color-scheme:dark){body{background:#0b1425;color:#edf5ff}.help-main{background:radial-gradient(circle at 8% 0%,rgba(32,126,204,.12),transparent 30%),linear-gradient(180deg,#0b1425,#101e31)}.help-hero h1{color:#f0f6ff}.help-hero p{color:#b7c9dc}.help-content{background:#14253a;border-color:#2b455e;box-shadow:0 18px 48px rgba(0,0,0,.18)}.help-content .faq-item{background:#192e45;border-color:#35516a;color:#eef6ff}.help-content .faq-item[open]{background:#183b49;border-color:#398d91}.help-content .faq-item summary{color:#f0f6ff}.help-content .faq-answer{color:#bfd0e2}.help-content .faq-plus{background:#24475a}.help-contact{background:linear-gradient(110deg,#172d46,#17383e);border-color:#35516a}.help-contact h2{color:#f0f6ff}.help-contact p{color:#bfd0e2}.help-footer{background:#101e31;border-color:#2b455e;color:#aebfd0}}
+</style>
+</head>
+<body>
+<header class="main-header" id="mainHeader">
+
+    <div class="header-container">
+
+      <!-- FastMoney brand wordmark -->
+      <a href="/index.html" class="brand-logo fastmoney-brand" aria-label="FastMoney Home"><img class="fastmoney-header-logo" src="./assets/fastmoneylogo.png" alt="FastMoney" width="250" height="74" loading="eager" decoding="sync" fetchpriority="high"></a>
+      
+      <!-- DESKTOP NAVIGATION -->
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <a href="/index.html#services" class="nav-link"><i class="fa-solid fa-layer-group"></i> Services</a>
+        <a href="/login.html?next=%2Fdashboard.html" class="nav-link"><i class="fa-solid fa-right-left"></i> Exchange</a>
+        <a href="/help.html" class="nav-link"><i class="fa-regular fa-circle-question"></i> Help &amp; FAQ</a>
+        <details class="header-support nav-support">
+          <summary><i class="fa-solid fa-headset"></i><span>Support</span><i class="fa-solid fa-chevron-down support-chevron"></i></summary>
+          <div class="support-panel">
+            <div class="support-panel-title"><strong>Customer Support</strong><small>Choose how to contact us</small></div>
+            <a class="support-option whatsapp-option" href="https://wa.me/8801806338018" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp"></i><span><b>WhatsApp</b><small>01806338018</small></span><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            <a class="support-option telegram-option" href="https://t.me/+8801806338018" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-telegram"></i><span><b>Telegram</b><small>01806338018</small></span><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            <a class="support-option livechat-option" href="/chat.html"><i class="fa-solid fa-comments"></i><span><b>Live Chat</b><small>Help Center & FAQs</small></span><i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </details>
+
+      
+        <label class="fm-language-control" aria-label="Select website language"><i class="fa-solid fa-globe"></i><select class="fm-language-select" id="fmLanguageDesktop" aria-label="Website language"><option value="en">English</option><option value="bn">বাংলা</option><option value="ar">العربية</option><option value="zh-CN">中文（简体）</option><option value="zh-TW">中文（繁體）</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="hi">हिन्दी</option><option value="id">Bahasa Indonesia</option><option value="it">Italiano</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="ms">Bahasa Melayu</option><option value="ne">नेपाली</option><option value="fa">فارسی</option><option value="pt">Português</option><option value="ru">Русский</option><option value="si">සිංහල</option><option value="es">Español</option><option value="sw">Kiswahili</option><option value="th">ไทย</option><option value="tr">Türkçe</option><option value="ur">اردو</option><option value="vi">Tiếng Việt</option><option value="fil">Filipino</option><option value="nl">Nederlands</option><option value="pl">Polski</option></select><i class="fa-solid fa-chevron-down fm-language-chevron"></i></label>
+      </nav>
+      <!-- MOBILE MENU BUTTON -->
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span><span></span>
+      </button>
+      <!-- MOBILE NAVIGATION -->
+      <nav class="mobile-nav" id="mobileMenu" aria-label="Mobile navigation" aria-hidden="true">
+      <div class="mobile-menu-heading"><span>Menu</span><small>Choose a service</small></div>
+      <a href="/index.html#services" class="mobile-nav-link"><i class="fa-solid fa-layer-group"></i><span>Our Services</span><i class="fa-solid fa-chevron-right nav-arrow"></i></a>
+      <a href="/login.html?next=%2Fdashboard.html" class="mobile-nav-link"><i class="fa-solid fa-right-left"></i><span>Start Exchange</span><i class="fa-solid fa-chevron-right nav-arrow"></i></a>
+      <a href="/help.html" class="mobile-nav-link"><i class="fa-regular fa-circle-question"></i><span>Help &amp; FAQ</span><i class="fa-solid fa-chevron-right nav-arrow"></i></a>
+      <details class="header-support mobile-support">
+        <summary><i class="fa-solid fa-headset"></i><span>Support</span><i class="fa-solid fa-chevron-down support-chevron"></i></summary>
+        <div class="support-panel">
+          <a class="support-option whatsapp-option" href="https://wa.me/8801806338018" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp"></i><span><b>WhatsApp</b><small>01806338018</small></span><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+          <a class="support-option telegram-option" href="https://t.me/+8801806338018" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-telegram"></i><span><b>Telegram</b><small>01806338018</small></span><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+          <a class="support-option livechat-option" href="/chat.html"><i class="fa-solid fa-comments"></i><span><b>24/7 Chat</b><small>Help Center & FAQs</small></span><i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </details>
+      
+      <div class="fm-mobile-language"><label for="fmLanguageMobile"><i class="fa-solid fa-globe"></i><span>Website language</span></label><select class="fm-language-select" id="fmLanguageMobile" aria-label="Website language"><option value="en">English</option><option value="bn">বাংলা</option><option value="ar">العربية</option><option value="zh-CN">中文（简体）</option><option value="zh-TW">中文（繁體）</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="hi">हिन्दी</option><option value="id">Bahasa Indonesia</option><option value="it">Italiano</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="ms">Bahasa Melayu</option><option value="ne">नेपाली</option><option value="fa">فارسی</option><option value="pt">Português</option><option value="ru">Русский</option><option value="si">සිංහල</option><option value="es">Español</option><option value="sw">Kiswahili</option><option value="th">ไทย</option><option value="tr">Türkçe</option><option value="ur">اردو</option><option value="vi">Tiếng Việt</option><option value="fil">Filipino</option><option value="nl">Nederlands</option><option value="pl">Polski</option></select></div>
+    </nav>
+    <!-- MOBILE NAVIGATION END -->
+  </header>
+<main class="help-main">
+<section class="help-hero">
+<span class="help-kicker">FAST MONEY HELP CENTER</span>
+<h1>How Can We Help You?</h1>
+<p>Find clear answers about exchange requests, payment methods, rates, fees and account safety.</p>
+</section>
+<section class="help-content" aria-label="Frequently asked questions">
+<div class="faq-card">
+<details class="faq-item"><summary>How does FastMoney work?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">Select your sending and receiving payment methods, enter the amount and required details, then submit your exchange request. Review the rate and payment instructions before continuing.</div></details>
+<details class="faq-item"><summary>How do I check the rate and fee?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">The current rate and applicable service fee are shown in your exchange review before you submit a request. Please check the final details before making payment.</div></details>
+<details class="faq-item"><summary>Which payment methods are supported?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">Supported methods include Perfect Money, WebMoney, Binance USDT, KuCoin USDT, BingX USDT, Bybit USDT, ePay, Volet, RedotPay, bKash Personal, Nagad Personal, Rocket Personal, Upay Personal, and other methods displayed on the website.</div></details>
+<details class="faq-item"><summary>What do Pending and Approved mean?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">Pending means your request is waiting for review or processing. Approved means the request has been approved. Check the final status for confirmation that the transaction is complete.</div></details>
+<details class="faq-item"><summary>How do I submit an exchange request?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">Enter your payment method, amount, and required account details. Review the displayed instructions and submit the form.</div></details>
+<details class="faq-item"><summary>What should I do if I enter the wrong wallet address?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">Contact Support as soon as possible. Funds sent to an incorrect address or network may not be recoverable.</div></details>
+<details class="faq-item"><summary>Which network should I use to send USDT?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">Use only the network specified in your payment instructions. Verify that the network matches the wallet address.</div></details>
+<details class="faq-item"><summary>How can I check the exchange fee?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">Review the exchange rate, network fee, and service charge before confirming your order. Fees may vary by payment method.</div></details>
+<details class="faq-item"><summary>Can I use a Binance Pay ID?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">If available, use the Binance Pay ID shown in the payment instructions. Check applicable fees and limits before confirming.</div></details>
+<details class="faq-item"><summary>How do I submit payment proof?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">Enter the Transaction ID or reference number and attach a payment screenshot when requested.</div></details>
+<details class="faq-item"><summary>Can I view multiple orders with the same Tracking Code?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">Use the unique Tracking Code provided for each request.</div></details>
+<details class="faq-item"><summary>How can I cancel or change an order?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">Contact Support promptly to ask about your order status and whether a change is possible.</div></details>
+<details class="faq-item"><summary>How can I contact Support?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">Use the WhatsApp, Telegram, or Live Chat contact methods listed in the Support menu.</div></details>
+<details class="faq-item"><summary>How can I keep my information safe?<span class="faq-plus" aria-hidden="true"></span></summary><div class="faq-answer">Never share your password, OTP, or recovery phrase. Be careful when sharing payment account and tracking information.</div></details>
+</div>
+</section>
+<section class="help-contact">
+<div><h2>Still need help?</h2><p>Our support team can help you with questions about your exchange request.</p></div>
+<a href="https://wa.me/8801806338018" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp"></i> Contact Support</a>
+</section>
+</main>
+<footer class="help-footer"><a href="/index.html">FastMoney</a> · <a href="/index.html">Home</a> · <a href="/about.html">About Us</a><p>© 2026 FastMoney · Digital exchange, made clear.</p></footer>
+<script src="./header.js" defer></script>
+<script src="./language.js?v=1" defer></script>
+</body>
+</html>
