@@ -466,3 +466,47 @@
   .fm-finance-float-one{display:none!important}
   .fm-finance-float-two{top:auto!important;bottom:7%!important;transform:none!important}
 }
+
+
+/* Final requested composition: retain only the upper floating information box. */
+.fm-hero-visual-section .fm-finance-main,
+.fm-hero-visual-section .fm-finance-float-two,
+.fm-hero-visual-section .fm-finance-coin,
+.fm-hero-visual-section .fm-finance-glow,
+.fm-hero-visual-section .fm-finance-orbit,
+.fm-hero-visual-section .fm-finance-chart{
+  display:none!important;
+}
+.fm-hero-visual-section .fm-finance-visual{
+  display:flex!important;
+  align-items:flex-start!important;
+  justify-content:center!important;
+  min-height:150px!important;
+  height:auto!important;
+  padding:26px 18px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+.fm-hero-visual-section .fm-finance-float-one{
+  display:flex!important;
+  position:relative!important;
+  inset:auto!important;
+  transform:none!important;
+  z-index:1!important;
+  width:min(100%,360px)!important;
+  min-height:66px!important;
+  justify-content:flex-start!important;
+  padding:16px 20px!important;
+  border:1px solid #dce8ed!important;
+  border-radius:13px!important;
+  background:#fff!important;
+  box-shadow:0 8px 24px rgba(22,54,81,.07)!important;
+}
+@media(prefers-color-scheme:dark){
+ .fm-hero-visual-section .fm-finance-float-one{
+  background:#172b40!important;border-color:#355064!important;
+ }
+}
