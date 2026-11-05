@@ -488,7 +488,7 @@ import { firebaseConfig } from "./firebase-config.js";
     root.style.cssText = "margin-top:18px;background:#f7fbff;border:1px solid #cfe0ef;padding:15px;border-radius:12px;color:#263b50";
     root.innerHTML = `
       <h3 style="margin:0 0 6px">Live Currency & Payment Control</h3>
-      <p style="margin:0 0 12px">এখানে পরিবর্তন করলে Firestore-এর exchangeSettings/global ডকুমেন্টে সংরক্ষিত হবে। Save না করা পর্যন্ত কোনো পরিবর্তন কার্যকর হবে না।</p>
+      <p style="margin:0 0 12px">এখানে Currency Name, Logo URL, fallback mark, subtitle, currency code, group type, rate, payment address এবং visibility পরিবর্তন করুন। একই Active/Visible settings Homepage-এর FastMoney Network section-এও দেখাবে। সব পরিবর্তন Firestore-এর exchangeSettings/global ডকুমেন্টে Save All Settings চাপলে সংরক্ষিত হবে।</p>
       <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
         <label>Global Fee (%)<input id="exGlobalFee" type="number" min="0" max="100" step="0.01"></label>
         <label>Minimum BDT<input id="exMinBdt" type="number" min="0" step="0.01"></label>
@@ -564,7 +564,7 @@ import { firebaseConfig } from "./firebase-config.js";
             ${field(i,"buy","Buy Rate",c.buy,"number","0.000001")}
             ${field(i,"sell","Sell Rate",c.sell,"number","0.000001")}
             ${field(i,"feePercent","Individual Fee %",c.feePercent ?? "","number","0.01")}
-            ${field(i,"logo","Logo URL",c.logo)}
+            ${field(i,"logo","Logo URL (Cloudinary / HTTPS)",c.logo)}\n            ${field(i,"short","Logo Fallback Text",c.short || c.name || c.id)}
             ${field(i,"paymentAddress","Payment Address / ID",c.paymentAddress)}
             ${field(i,"paymentAddressLabel","Payment Address Label (e.g. bKash Agent Number)",c.paymentAddressLabel || (c.name + " Number / Wallet Address"))}
             ${field(i,"paymentPlaceholder","Address Placeholder",c.paymentPlaceholder)}
