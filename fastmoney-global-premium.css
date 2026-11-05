@@ -447,3 +447,63 @@ body{font-family:Inter,"Segoe UI",Arial,sans-serif!important;overflow-x:hidden}
  .fm-check-list h3{color:#edf4ff}.fm-check-list p{color:#a9bad0}
 }
 @media(prefers-reduced-motion:reduce){.fm-route-link{transition:none}}
+
+
+/* HERO LAYOUT REFINEMENT: remove the boxed-in-box appearance */
+.hero{
+  grid-template-columns:minmax(0,1.08fr) minmax(320px,.92fr)!important;
+  align-items:center!important;
+  gap:clamp(30px,5vw,68px)!important;
+  min-height:0!important;
+}
+.hero-content{position:relative;z-index:2;min-width:0}
+.fm-finance-visual{
+  min-width:0;
+  min-height:450px!important;
+  max-width:540px!important;
+  overflow:visible!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.fm-finance-visual:before{display:none!important}
+.fm-finance-glow{z-index:0;opacity:.7}
+.fm-finance-main{
+  width:min(76%,360px)!important;
+  padding:25px 24px 22px!important;
+  border:1px solid #dce8f2!important;
+  border-radius:22px!important;
+  background:linear-gradient(145deg,#fff,#f5faff)!important;
+  box-shadow:0 22px 48px rgba(24,67,112,.13)!important;
+  backdrop-filter:none!important;
+}
+.fm-finance-float{
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  padding:8px 0!important;
+}
+.fm-finance-float-one{top:13%!important;right:0!important}
+.fm-finance-float-two{bottom:13%!important;left:0!important}
+.fm-finance-coin{box-shadow:0 8px 18px rgba(26,86,139,.12)!important}
+@media(max-width:850px){
+  .hero{grid-template-columns:minmax(0,1fr)!important;gap:24px!important;padding-top:48px!important}
+  .fm-finance-visual{width:100%;min-height:410px!important;margin:0 auto!important}
+}
+@media(max-width:520px){
+  .fm-finance-visual{min-height:340px!important}
+  .fm-finance-main{width:min(76%,330px)!important;padding:20px 16px 18px!important}
+  .fm-finance-float-one{top:8%!important;right:0!important}
+  .fm-finance-float-two{bottom:8%!important;left:0!important}
+}
+@media(prefers-color-scheme:dark){
+  .fm-finance-main{
+    background:linear-gradient(145deg,#172b43,#12243a)!important;
+    border-color:#314a66!important;
+    box-shadow:0 22px 48px rgba(0,0,0,.24)!important;
+  }
+  .fm-finance-float{background:transparent!important}
+}
