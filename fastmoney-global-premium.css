@@ -633,3 +633,79 @@ body{font-family:Inter,"Segoe UI",Arial,sans-serif!important;overflow-x:hidden}
   }
   .fm-hero-visual-section:before{opacity:.14}
 }
+
+/* FINAL MOBILE HERO FIX — override legacy main.container hero grid/pseudo panel */
+main.container>.hero{
+  display:block!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  width:100%!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:clamp(38px,7vw,76px) 0 30px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+main.container>.hero:before,
+main.container>.hero:after,
+main.container>.hero-content:before,
+main.container>.hero-content:after{
+  content:none!important;
+  display:none!important;
+  background:none!important;
+  box-shadow:none!important;
+}
+main.container>.hero .hero-content{
+  display:block!important;
+  width:100%!important;
+  max-width:920px!important;
+  margin:0 auto!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+main.container>.fm-hero-visual-section{
+  display:flex!important;
+  box-sizing:border-box!important;
+  width:100%!important;
+  margin:16px 0 52px!important;
+  border:1px solid #d8e6f0!important;
+  border-radius:24px!important;
+  background:linear-gradient(135deg,#f2f8fc 0%,#e8f3f8 55%,#f7fbff 100%)!important;
+  box-shadow:0 18px 42px rgba(17,58,91,.07)!important;
+}
+@media(max-width:850px){
+  main.container>.hero{padding:34px 0 24px!important}
+  main.container>.fm-hero-visual-section{
+    width:100%!important;
+    margin:12px 0 38px!important;
+    border-radius:20px!important;
+  }
+}
+@media(max-width:520px){
+  main.container>.hero{padding:30px 0 20px!important}
+  main.container>.hero .hero-content{max-width:100%!important}
+  main.container>.fm-hero-visual-section{
+    min-height:340px!important;
+    padding:12px 5px!important;
+    margin:12px 0 34px!important;
+  }
+}
+@media(prefers-color-scheme:dark){
+  main.container>.hero,
+  main.container>.hero .hero-content{
+    background:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+  }
+  main.container>.hero:before,
+  main.container>.hero:after{content:none!important;display:none!important}
+  main.container>.fm-hero-visual-section{
+    border-color:#314b65!important;
+    background:linear-gradient(135deg,#142940 0%,#102b3e 55%,#14243a 100%)!important;
+    box-shadow:0 18px 42px rgba(0,0,0,.2)!important;
+  }
+}
