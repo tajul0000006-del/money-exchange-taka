@@ -47,3 +47,15 @@
   content:none!important;
   display:none!important;
 }
+
+
+/* ACTUAL LOGO POSITION FIX:
+   The lock stylesheet was loaded after header.css and forced transform:none,
+   so earlier image transforms could not move the brand. Move the whole brand
+   anchor itself 20px left on desktop and mobile. */
+.main-header .header-container > a.fastmoney-brand{
+  position:relative!important;
+  left:-20px!important;
+  right:auto!important;
+  margin-left:0!important;
+}
