@@ -1323,3 +1323,7 @@ main.container>.fm-hero-visual-section{
 .fm-finance-float-two{
   transform:translateY(-10px)!important;
 }
+
+
+/* Move Local & global / Connected wallets label 5px higher. */
+.fm-finance-float-two{transform:translateY(-15px)!important;}
