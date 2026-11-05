@@ -1250,3 +1250,70 @@ main.container>.fm-hero-visual-section{
   .fm-route-line{background:linear-gradient(180deg,transparent,#47788b,transparent)!important}
 }
 @media(prefers-reduced-motion:reduce){.fm-route-link{transition:none!important}}
+
+
+/* Premium USD vs USDT comparison — public homepage */
+.fm-currency-insight{padding-top:86px;padding-bottom:86px}
+.fm-currency-insight .fm-knowledge-heading{max-width:1180px;margin:0 auto 34px}
+.fm-currency-insight .fm-money-explain{max-width:1180px;margin:0 auto;grid-template-columns:minmax(0,1fr) 120px minmax(0,1fr);gap:18px}
+.fm-currency-insight .fm-money-type{min-height:0;padding:30px;border-radius:22px;box-shadow:0 16px 44px rgba(24,53,83,.055)}
+.fm-currency-insight .fm-money-usd{background:linear-gradient(145deg,#f3f7ff 0%,#fff 72%)}
+.fm-currency-insight .fm-money-usdt{background:linear-gradient(145deg,#effbf7 0%,#fff 72%)}
+.fm-currency-card-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.fm-currency-insight .fm-money-symbol{width:64px;height:64px;border-radius:19px;font-size:36px}
+.fm-currency-insight .fm-money-type-tag{display:inline-flex;align-items:center;gap:8px;margin:0;padding:9px 12px;border:1px solid rgba(108,133,161,.18);border-radius:30px;background:rgba(255,255,255,.72);font-size:9px}
+.fm-currency-insight .fm-money-type-tag i{font-size:12px}
+.fm-currency-insight .fm-money-type h3{margin:23px 0 8px;font-size:27px;letter-spacing:-.8px}
+.fm-currency-insight .fm-money-type h3 span{color:#8192a7;font-size:17px;font-weight:650}
+.fm-currency-lead{min-height:66px;margin:0;color:#647990;font-size:13px;line-height:1.8}
+.fm-currency-facts{display:grid;grid-template-columns:1fr 1fr;gap:0 18px;margin-top:22px;border-top:1px solid rgba(117,143,170,.2)}
+.fm-currency-facts>div{display:flex;flex-direction:column;gap:5px;padding:14px 0;border-bottom:1px solid rgba(117,143,170,.17)}
+.fm-currency-facts small{color:#8a9bb0;font-size:8px;font-weight:850;letter-spacing:1.35px}
+.fm-currency-facts b{color:#28435f;font-size:11px;line-height:1.5;font-weight:750}
+.fm-currency-note{display:flex;align-items:flex-start;gap:10px;margin-top:18px;padding:13px 14px;border-radius:13px;background:rgba(255,255,255,.7);color:#61768d;font-size:10px;line-height:1.7}
+.fm-currency-note i{margin-top:2px;color:#3478b8}
+.fm-money-usdt .fm-currency-note i{color:#07877f}
+.fm-currency-vs{gap:12px}
+.fm-currency-vs>span{color:#91a1b3;font-size:8px;font-weight:900;letter-spacing:1.4px}
+.fm-currency-vs i{width:48px;height:48px;border:0;background:linear-gradient(145deg,#173e65,#087f83);color:#fff;box-shadow:0 10px 25px rgba(15,83,113,.2)}
+.fm-currency-vs b{color:#5d7188;font-size:10px;text-align:center;line-height:1.5}
+.fm-currency-bottom{display:flex;align-items:flex-start;gap:16px;max-width:1180px;margin:22px auto 14px;padding:20px 22px;border:1px solid #dce8ef;border-radius:17px;background:linear-gradient(110deg,#f5f9fc,#f2faf8)}
+.fm-currency-bottom-icon{flex:0 0 42px;display:grid;place-items:center;width:42px;height:42px;border-radius:13px;background:#e0edf7;color:#236b9d;font-size:17px}
+.fm-currency-bottom strong{display:block;margin:1px 0 5px;color:#1c3a58;font-size:13px}
+.fm-currency-bottom p{margin:0;color:#647990;font-size:11px;line-height:1.8}
+.fm-currency-insight .fm-money-disclaimer{max-width:1180px;margin:0 auto;padding:14px 17px;border-radius:0 12px 12px 0;font-size:10px}
+@media(max-width:900px){
+ .fm-currency-insight .fm-money-explain{grid-template-columns:minmax(0,1fr) 70px minmax(0,1fr);gap:10px}
+ .fm-currency-insight .fm-money-type{padding:22px}
+ .fm-currency-insight .fm-money-type h3{font-size:23px}
+ .fm-currency-facts{grid-template-columns:1fr}
+ .fm-currency-lead{min-height:0}
+}
+@media(max-width:650px){
+ .fm-currency-insight{padding-top:55px;padding-bottom:55px}
+ .fm-currency-insight .fm-money-explain{grid-template-columns:1fr;gap:10px}
+ .fm-currency-insight .fm-money-type{padding:22px}
+ .fm-currency-insight .fm-money-type h3{margin-top:18px;font-size:24px}
+ .fm-currency-facts{grid-template-columns:1fr 1fr;gap:0 12px}
+ .fm-currency-facts b{font-size:10px}
+ .fm-currency-vs{flex-direction:row;padding:4px}
+ .fm-currency-vs i{transform:none}
+ .fm-currency-bottom{padding:16px;gap:12px}
+ .fm-currency-bottom-icon{flex-basis:36px;width:36px;height:36px}
+}
+@media(prefers-color-scheme:dark){
+ .fm-currency-insight .fm-money-usd{background:linear-gradient(145deg,#172943,#112238)}
+ .fm-currency-insight .fm-money-usdt{background:linear-gradient(145deg,#123331,#102a30)}
+ .fm-currency-insight .fm-money-type-tag{border-color:#354b62;background:rgba(14,31,50,.7);color:#a9bfd5}
+ .fm-currency-insight .fm-money-type h3{color:#edf4ff}
+ .fm-currency-insight .fm-money-type h3 span,.fm-currency-lead{color:#a9bad0}
+ .fm-currency-facts{border-color:#354b62}
+ .fm-currency-facts>div{border-color:#354b62}
+ .fm-currency-facts b{color:#d1e0ef}
+ .fm-currency-note{background:rgba(8,22,39,.65);color:#b5c8dc}
+ .fm-currency-vs b{color:#b3c4d7}
+ .fm-currency-bottom{border-color:#354b62;background:linear-gradient(110deg,#172943,#123331)}
+ .fm-currency-bottom strong{color:#edf4ff}
+ .fm-currency-bottom p{color:#b5c8dc}
+ .fm-currency-bottom-icon{background:#1d3b54;color:#8fc4e6}
+}
