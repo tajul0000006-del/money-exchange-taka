@@ -452,3 +452,17 @@
  .fm-service-card,.fm-service-card:nth-child(n),.fm-service-card:after{transition:none!important}
  .fm-service-card:hover{transform:none!important}
 }
+
+
+/* Desktop visual cleanup: remove the extra upper floating card.
+   Keep one central finance panel and one supporting label only. */
+@media(min-width:761px){
+  .fm-finance-float-one{display:none!important}
+  .fm-finance-visual{isolation:isolate!important}
+  .fm-finance-main{z-index:2!important}
+  .fm-finance-float-two{z-index:1!important;top:50%!important;bottom:auto!important;transform:translateY(-50%)!important}
+}
+@media(max-width:760px){
+  .fm-finance-float-one{display:none!important}
+  .fm-finance-float-two{top:auto!important;bottom:7%!important;transform:none!important}
+}
