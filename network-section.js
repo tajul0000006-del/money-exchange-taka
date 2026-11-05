@@ -22,13 +22,27 @@
     if (/^https:\/\//i.test(raw) || /^http:\/\//i.test(raw) || /^(\.\.\/|\.\/|\/)/.test(raw)) return raw;
     return "";
   };
-  const applyTextOverrides = async () => {\n    try {\n      const response = await fetch("https://bold-surf-9356.taijulsheikh60.workers.dev/api/content", {cache:"no-store"});\n      if (!response.ok) return;\n      const data = await response.json();\n      const entries = data && data.entries && typeof data.entries === "object" ? data.entries : {};\n      section.querySelectorAll("[data-content-key]").forEach(el => {\n        const item = entries[el.getAttribute("data-content-key")];\n        if (item && typeof item.text === "string") { el.textContent = item.text; el.style.textDecoration = item.struck ? "line-through" : ""; }\n      });\n    } catch (_) {}\n  };\n  const render = currencies => {
+  const applyTextOverrides = async () => {
+    try {
+      const response = await fetch("https://bold-surf-9356.taijulsheikh60.workers.dev/api/content", {cache:"no-store"});
+      if (!response.ok) return;
+      const data = await response.json();
+      const entries = data && data.entries && typeof data.entries === "object" ? data.entries : {};
+      section.querySelectorAll("[data-content-key]").forEach(el => {
+        const item = entries[el.getAttribute("data-content-key")];
+        if (item && typeof item.text === "string") { el.textContent = item.text; el.style.textDecoration = item.struck ? "line-through" : ""; }
+      });
+    } catch (_) {}
+  };
+  const render = currencies => {
     const active = currencies.filter(c => c && c.enabled !== false && c.hidden !== true && String(c.id || "").trim());
     const sections = groups.map(group => {
       const items = active.filter(c => group.type === "global" ? !["crypto","bdt"].includes(String(c.type || "").toLowerCase()) : String(c.type || "").toLowerCase() === group.type);
       if (!items.length) return null;
       const row = make("div","fm-network-group");
-      const groupLabel = make("span","fm-network-label",group.label);\n      groupLabel.setAttribute("data-content-key", "network.group." + group.type);\n      row.append(groupLabel);
+      const groupLabel = make("span","fm-network-label",group.label);
+      groupLabel.setAttribute("data-content-key", "network.group." + group.type);
+      row.append(groupLabel);
       const list = make("div","fm-network-logos");
       items.forEach(item => {
         const entry = make("span","fm-network-method");
@@ -57,7 +71,8 @@
     }).filter(Boolean);
     if (!sections.length) return;
     root.replaceChildren(...sections);
-    root.dataset.source = "admin-settings";\n    applyTextOverrides();
+    root.dataset.source = "admin-settings";
+    applyTextOverrides();
   };
   fetch(SETTINGS_API,{cache:"no-store"})
     .then(response => { if (!response.ok) throw new Error("Exchange settings unavailable"); return response.json(); })
