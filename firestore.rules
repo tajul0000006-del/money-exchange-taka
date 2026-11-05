@@ -1,48 +1,41 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function validGuestExchangeRequest() {
+    function validAuthenticatedExchangeRequest() {
       let d = request.resource.data;
-      return d.keys().hasAll([
-        'trackingCode', 'direction', 'currency', 'amount', 'paymentMethod',
-        'contactMethod', 'contact', 'paymentAccount', 'note', 'affiliateCode',
-        'transactionReference', 'proofEmail', 'proofScreenshotUrl', 'proofFileName',
-        'uid', 'requestType', 'status', 'createdAt', 'proofSubmittedAt'
-      ])
-      && d.keys().hasOnly([
-        'trackingCode', 'direction', 'currency', 'amount', 'paymentMethod',
-        'contactMethod', 'contact', 'paymentAccount', 'note', 'affiliateCode',
-        'transactionReference', 'proofEmail', 'proofScreenshotUrl', 'proofFileName',
-        'uid', 'requestType', 'status', 'createdAt', 'proofSubmittedAt'
-      ])
-      && d.trackingCode is string && d.trackingCode.matches('MET-[A-Z0-9]{6}')
-      && d.direction in ['buy', 'sell', 'exchange']
-      && d.currency in ['USD', 'USDT', 'BDT']
-      && d.amount is number && d.amount > 0 && d.amount <= 1000000
-      && d.paymentMethod in ['bKash', 'Nagad', 'Rocket', 'Upay', 'ePay', 'TunePay', 'Bank', 'Other']
-      && d.contactMethod in ['whatsapp', 'telegram']
-      && d.contact is string && d.contact.size() >= 5 && d.contact.size() <= 160
-      && d.paymentAccount is string && d.paymentAccount.size() >= 3 && d.paymentAccount.size() <= 120
-      && d.note is string && d.note.size() <= 500
-      && d.affiliateCode is string && d.affiliateCode.size() <= 40
-      && d.transactionReference is string && d.transactionReference.size() >= 1 && d.transactionReference.size() <= 160
-      && d.proofEmail is string && d.proofEmail.size() <= 160
-      && d.proofScreenshotUrl is string && d.proofScreenshotUrl.size() <= 2048
-      && d.proofFileName is string && d.proofFileName.size() >= 1 && d.proofFileName.size() <= 200
-      && d.uid == null && d.requestType == 'guest' && d.status == 'pending'
-      && d.createdAt == request.time && d.proofSubmittedAt == request.time;
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && d.keys().hasAll(['trackingCode','direction','currency','amount','paymentMethod','contactMethod','contact','paymentAccount','note','affiliateCode','transactionReference','proofEmail','proofScreenshotUrl','proofFileName','uid','requestType','userEmail','status','createdAt','proofSubmittedAt'])
+        && d.keys().hasOnly(['trackingCode','direction','currency','amount','paymentMethod','contactMethod','contact','paymentAccount','note','affiliateCode','transactionReference','proofEmail','proofScreenshotUrl','proofFileName','uid','requestType','userEmail','status','createdAt','proofSubmittedAt'])
+        && d.trackingCode is string && d.trackingCode.matches('MET-[A-Z0-9]{6}')
+        && d.direction in ['buy','sell','exchange']
+        && d.currency in ['USD','USDT','BDT']
+        && d.amount is number && d.amount > 0 && d.amount <= 1000000
+        && d.paymentMethod in ['bKash','Nagad','Rocket','Upay','ePay','TunePay','Bank','Other']
+        && d.contactMethod in ['whatsapp','telegram','email']
+        && d.contact is string && d.contact.size() >= 5 && d.contact.size() <= 160
+        && d.paymentAccount is string && d.paymentAccount.size() >= 3 && d.paymentAccount.size() <= 120
+        && d.note is string && d.note.size() <= 500
+        && d.affiliateCode is string && d.affiliateCode.size() <= 40
+        && d.transactionReference is string && d.transactionReference.size() >= 1 && d.transactionReference.size() <= 160
+        && d.proofEmail is string && d.proofEmail.size() <= 160
+        && d.proofScreenshotUrl is string && d.proofScreenshotUrl.size() <= 2048
+        && d.proofFileName is string && d.proofFileName.size() >= 1 && d.proofFileName.size() <= 200
+        && d.uid == request.auth.uid
+        && d.requestType == 'user'
+        && d.userEmail == request.auth.token.email
+        && d.status == 'pending'
+        && d.createdAt == request.time
+        && d.proofSubmittedAt == request.time;
     }
-
     match /exchangeRequests/{requestId} {
-      allow create: if validGuestExchangeRequest();
+      allow create: if validAuthenticatedExchangeRequest();
       allow read: if request.auth != null && resource.data.uid == request.auth.uid;
       allow update, delete: if false;
     }
-
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
-
     match /wallets/{document=**} { allow read, write: if false; }
     match /ledger/{document=**} { allow read, write: if false; }
     match /rates/{document=**} { allow read, write: if false; }
