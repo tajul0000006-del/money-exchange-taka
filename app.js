@@ -249,7 +249,7 @@ function effectiveFeePercent(from,to){
     return waitForFirebaseResult(fb.addDoc(fb.collection(fb.db,"exchangeRequests"),{
       trackingCode:item.code,direction,currency:from?.currency==="USDT"||to?.currency==="USDT"?"USDT":from?.currency==="USD"||to?.currency==="USD"?"USD":"BDT",
       amount:Number(item.amount),paymentMethod:method,
-      contactMethod:String($("contactMethod")?.value||"whatsapp"),
+      contactMethod:(["whatsapp","telegram","email"].includes(String($("contactMethod")?.value||"").toLowerCase())?String($("contactMethod")?.value||"whatsapp").toLowerCase():"whatsapp"),
       contact:String($("contact").value.trim()).slice(0,160),
       paymentAccount:String($("account").value.trim()).slice(0,80),
       note:String(item.note||"").slice(0,500),
