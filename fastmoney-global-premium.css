@@ -1317,3 +1317,9 @@ main.container>.fm-hero-visual-section{
  .fm-currency-bottom p{color:#b5c8dc}
  .fm-currency-bottom-icon{background:#1d3b54;color:#8fc4e6}
 }
+
+
+/* Lift the Local & global / Connected wallets label slightly. */
+.fm-finance-float-two{
+  transform:translateY(-10px)!important;
+}
