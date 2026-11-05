@@ -1327,3 +1327,24 @@ main.container>.fm-hero-visual-section{
 
 /* Move Local & global / Connected wallets label 5px higher. */
 .fm-finance-float-two{transform:translateY(-15px)!important;}
+
+
+/* HERO VISUAL — cleaner hierarchy and spacing, preserving the existing design. */
+.fm-finance-main{width:min(78%,370px)!important;padding:23px 23px 20px!important}
+.fm-finance-main-top{gap:9px!important;font-size:9px!important;letter-spacing:1.25px!important}
+.fm-finance-wallet-icon{width:56px!important;height:56px!important;margin:21px auto 14px!important;border-radius:17px!important;transform:none!important}
+.fm-finance-main-label{font-size:clamp(19px,2.1vw,22px)!important;line-height:1.25!important;letter-spacing:-.45px!important}
+.fm-finance-main-sub{font-size:11px!important;line-height:1.5!important;margin-top:7px!important}
+.fm-finance-exchange-line{margin-top:19px!important;padding-top:15px!important;gap:12px!important}
+.fm-finance-exchange-line>span{gap:8px!important}
+.fm-finance-float{gap:9px!important}
+.fm-finance-float b{font-size:10px!important;line-height:1.35!important}
+.fm-finance-float small{font-size:9px!important;line-height:1.35!important}
+.fm-finance-float-two{transform:translateY(-15px)!important}
+.hero-trustline{align-items:center!important;gap:10px 20px!important;line-height:1.5!important}
+@media(max-width:520px){
+ .fm-finance-main{width:min(80%,330px)!important;padding:19px 15px 17px!important}
+ .fm-finance-wallet-icon{width:51px!important;height:51px!important;margin:18px auto 12px!important}
+ .fm-finance-main-label{font-size:19px!important}
+ .fm-finance-exchange-line{margin-top:16px!important;padding-top:13px!important}
+}
