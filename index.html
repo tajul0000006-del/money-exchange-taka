@@ -34,6 +34,21 @@
 <script>document.documentElement.classList.add("met-header-styles-ready");</script>
 <style id="met-public-exchange-removed">#exchange{display:none!important}</style>
   <link rel="stylesheet" href="./language.css?v=1">
+
+  <style id="fm-home-banner-slider-styles">
+    .fm-banner-slider{position:relative;width:100%;margin:22px auto 30px;overflow:hidden;border:1px solid #dce9f7;border-radius:22px;background:linear-gradient(135deg,#edf7ff,#fff);box-shadow:0 14px 38px rgba(17,68,120,.09)}
+    .fm-banner-track{position:relative;min-height:240px}
+    .fm-banner-slide{display:none;width:100%}
+    .fm-banner-slide.is-active{display:block;animation:fmBannerFade .55s ease}
+    .fm-banner-slide img{display:block;width:100%;height:clamp(250px,43vw,510px);object-fit:contain;object-position:center;background:#f7fbff}
+    .fm-banner-control{position:absolute;z-index:3;top:50%;display:grid;place-items:center;width:44px;height:44px;border:1px solid rgba(255,255,255,.8);border-radius:50%;background:rgba(8,37,79,.72);color:#fff;font-size:20px;cursor:pointer;transform:translateY(-50%);box-shadow:0 5px 18px rgba(0,0,0,.16)}
+    .fm-banner-control:hover{background:#075bd8}.fm-banner-prev{left:15px}.fm-banner-next{right:15px}
+    .fm-banner-dots{position:absolute;z-index:4;left:50%;bottom:13px;display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid rgba(255,255,255,.7);border-radius:999px;background:rgba(8,37,79,.48);transform:translateX(-50%)}
+    .fm-banner-dot{width:9px;height:9px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.7);cursor:pointer}.fm-banner-dot[aria-current="true"]{width:24px;border-radius:99px;background:#fff}
+    @keyframes fmBannerFade{from{opacity:.45}to{opacity:1}}
+    @media(max-width:650px){.fm-banner-slider{margin:14px auto 22px;border-radius:15px}.fm-banner-track{min-height:185px}.fm-banner-slide img{height:clamp(185px,72vw,350px)}.fm-banner-control{width:35px;height:35px;font-size:16px}.fm-banner-prev{left:8px}.fm-banner-next{right:8px}.fm-banner-dots{bottom:8px;padding:6px 9px;gap:7px}.fm-banner-dot{width:7px;height:7px}.fm-banner-dot[aria-current="true"]{width:19px}}
+    @media(prefers-reduced-motion:reduce){.fm-banner-slide.is-active{animation:none}}
+  </style>
 </head>
 <body>
     <header class="main-header" id="mainHeader">
@@ -84,6 +99,21 @@
     </nav>
     <!-- MOBILE NAVIGATION END -->
   </header>
+
+  <section class="fm-banner-slider" data-fm-banner-slider aria-label="FastMoney featured banners">
+    <div class="fm-banner-track">
+      <div class="fm-banner-slide is-active" aria-hidden="false"><img src="./assets/12345.png" alt="FastMoney featured banner 1" fetchpriority="high"></div>
+      <div class="fm-banner-slide" aria-hidden="true"><img src="./assets/123456.png" alt="FastMoney featured banner 2" loading="lazy"></div>
+      <div class="fm-banner-slide" aria-hidden="true"><img src="./assets/1234567.png" alt="FastMoney featured banner 3" loading="lazy"></div>
+    </div>
+    <button class="fm-banner-control fm-banner-prev" type="button" data-fm-banner-prev aria-label="Previous banner">‹</button>
+    <button class="fm-banner-control fm-banner-next" type="button" data-fm-banner-next aria-label="Next banner">›</button>
+    <div class="fm-banner-dots" aria-label="Choose banner">
+      <button class="fm-banner-dot" type="button" aria-label="Show banner 1" aria-current="true"></button>
+      <button class="fm-banner-dot" type="button" aria-label="Show banner 2"></button>
+      <button class="fm-banner-dot" type="button" aria-label="Show banner 3"></button>
+    </div>
+  </section>
 
   <main class="container">
     <section class="hero" id="home" aria-labelledby="homeTitle">
@@ -351,5 +381,43 @@
 
 <div id="google_translate_element" aria-hidden="true"></div>
 <script src="./language.js?v=1" defer></script>
+
+<script>
+(() => {
+  const slider = document.querySelector('[data-fm-banner-slider]');
+  if (!slider) return;
+  const slides = [...slider.querySelectorAll('.fm-banner-slide')];
+  const dots = [...slider.querySelectorAll('.fm-banner-dot')];
+  const prev = slider.querySelector('[data-fm-banner-prev]');
+  const next = slider.querySelector('[data-fm-banner-next]');
+  let active = 0, timer;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function show(index) {
+    active = (index + slides.length) % slides.length;
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('is-active', i === active);
+      slide.setAttribute('aria-hidden', String(i !== active));
+    });
+    dots.forEach((dot, i) => i === active ? dot.setAttribute('aria-current','true') : dot.removeAttribute('aria-current'));
+  }
+  function stop(){ if(timer) window.clearInterval(timer); timer = null; }
+  function start(){ stop(); if(!reduced && !document.hidden) timer = window.setInterval(() => show(active + 1), 5000); }
+  prev.addEventListener('click', () => { show(active - 1); start(); });
+  next.addEventListener('click', () => { show(active + 1); start(); });
+  dots.forEach((dot, i) => dot.addEventListener('click', () => { show(i); start(); }));
+  slider.addEventListener('mouseenter', stop);
+  slider.addEventListener('mouseleave', start);
+  slider.addEventListener('focusin', stop);
+  slider.addEventListener('focusout', e => { if(!slider.contains(e.relatedTarget)) start(); });
+  document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
+  let touchX = 0;
+  slider.addEventListener('touchstart', e => { touchX = e.changedTouches[0].clientX; }, {passive:true});
+  slider.addEventListener('touchend', e => {
+    const delta = e.changedTouches[0].clientX - touchX;
+    if(Math.abs(delta) > 45){ show(active + (delta < 0 ? 1 : -1)); start(); }
+  }, {passive:true});
+  show(0); start();
+})();
+</script>
 </body>
 </html>
