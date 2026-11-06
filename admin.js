@@ -522,7 +522,7 @@ import { firebaseConfig } from "./firebase-config.js";
       const user = auth.currentUser;
       if (!user) throw new Error("Admin session পাওয়া যায়নি। আবার লগইন করুন।");
       const token = await user.getIdToken(true);
-      const response = await fetch(API_BASE + (method === "GET" ? "/api/content" : "/api/admin/content"), {
+      const response = await fetch(API_BASE + ("/api/admin/content"), {
         method, headers: {Authorization:"Bearer " + token, ...(body ? {"content-type":"application/json"} : {})},
         ...(body ? {body:JSON.stringify(body)} : {}), cache:"no-store"
       });
