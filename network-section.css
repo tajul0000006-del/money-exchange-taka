@@ -376,3 +376,49 @@
 @media(max-width:700px){
   .fm-network-v2 .fm-mobile-banking-title{font-size:24px!important;margin:24px 0 12px!important;letter-spacing:-.35px!important}
 }
+
+
+/* FastMoney compliance and security section */
+.fm-security-section{
+  padding:58px 0 64px!important;
+  background:linear-gradient(145deg,#e9effb 0%,#e3ebfa 58%,#edf3ff 100%)!important;
+  overflow:hidden;
+}
+.fm-security-inner{width:min(1120px,calc(100% - 40px));margin:0 auto}
+.fm-security-heading{margin:0 0 28px}
+.fm-security-eyebrow{display:flex;align-items:center;gap:11px;color:#174b9d;font-size:18px;font-weight:800;margin-bottom:16px}
+.fm-security-brandmark{display:inline-grid;place-items:center;width:25px;height:25px;border-radius:7px;background:#1748bd;color:#fff;font-size:15px;font-weight:900}
+.fm-security-heading h2{max-width:900px;margin:0;color:#080d18;font-size:clamp(30px,4.1vw,50px);line-height:1.15;letter-spacing:-1.3px;font-weight:850}
+.fm-security-cards{display:grid;grid-template-columns:1fr;gap:16px}
+.fm-security-card{display:grid;grid-template-columns:78px 1fr;align-items:start;gap:20px;min-height:166px;padding:34px 32px;border:2px solid rgba(255,255,255,.95);border-radius:29px;background:rgba(255,255,255,.58);box-shadow:0 8px 24px rgba(28,62,125,.035)}
+.fm-security-card.is-featured{background:#1941b5;border-color:#1941b5;color:#fff}
+.fm-security-icon{display:grid;place-items:center;width:62px;height:62px;color:#2448a6;font-size:42px}
+.fm-security-card.is-featured .fm-security-icon{color:#fff}
+.fm-security-card h3{margin:2px 0 13px;font-size:clamp(20px,2.1vw,27px);line-height:1.25;font-weight:650;color:#101827}
+.fm-security-card p{margin:0;max-width:760px;color:#6d7482;font-size:17px;line-height:1.55}
+.fm-security-card.is-featured h3,.fm-security-card.is-featured p{color:#fff}
+.fm-security-points{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:28px 18px 0}
+.fm-security-points>div{min-height:104px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px 10px;border:2px solid #fff;border-radius:22px;background:rgba(255,255,255,.55);color:#17449d;text-align:center}
+.fm-security-points i{font-size:27px}.fm-security-points span{font-size:14px;font-weight:750}
+.fm-security-note{margin:24px 0 0;color:#65718a;font-size:13px;line-height:1.5;text-align:center}
+@media(min-width:850px){
+ .fm-security-cards{grid-template-columns:1fr 1fr}
+ .fm-security-card{min-height:190px}
+}
+@media(max-width:600px){
+ .fm-security-section{padding:34px 0 40px!important}
+ .fm-security-inner{width:calc(100% - 28px)}
+ .fm-security-heading{margin-bottom:22px}
+ .fm-security-eyebrow{font-size:15px;margin-bottom:12px}
+ .fm-security-heading h2{font-size:32px;letter-spacing:-.8px}
+ .fm-security-cards{gap:13px}
+ .fm-security-card{grid-template-columns:54px 1fr;gap:12px;min-height:0;padding:24px 17px;border-radius:25px}
+ .fm-security-icon{width:48px;height:48px;font-size:33px}
+ .fm-security-card h3{font-size:20px;margin:1px 0 10px}
+ .fm-security-card p{font-size:15px;line-height:1.48}
+ .fm-security-points{gap:9px;margin:20px 4px 0}
+ .fm-security-points>div{min-height:88px;border-radius:16px;padding:12px 5px}
+ .fm-security-points i{font-size:22px}
+ .fm-security-points span{font-size:11px}
+ .fm-security-note{font-size:11px;margin-top:18px}
+}
