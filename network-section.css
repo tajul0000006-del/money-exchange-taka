@@ -75,3 +75,9 @@
 .fm-network-v2 .fm-currency-code-grid::-webkit-scrollbar{height:4px}
 .fm-network-v2 .fm-currency-code-grid::-webkit-scrollbar-thumb{background:#aebfd2;border-radius:10px}
 @media(max-width:700px){.fm-network-v2 .fm-currency-code-grid{display:flex!important;flex-wrap:nowrap!important;gap:6px}.fm-network-v2 .fm-currency-code-card{flex:0 0 100px!important;width:100px!important;min-width:100px!important;min-height:52px!important}}
+
+
+/* Popular e-wallet directory — match the compact horizontal crypto ticker */
+.fm-network-v2 .fm-wallet-code-panel .fm-network-label{margin-bottom:14px}
+.fm-network-v2 .fm-wallet-code-panel .fm-crypto-code-card{background:linear-gradient(145deg,#fff,#f7fbff)}
+.fm-network-v2 .fm-wallet-code-panel .fm-crypto-code-card .fm-currency-flag{background:#fff}
