@@ -48,24 +48,45 @@
     if (value !== undefined) el.textContent = value;
     return el;
   };
-  const renderCurrencyCodes = () => {
-    if (root.querySelector(".fm-currency-code-panel")) return;
-    const panel = make("div","fm-network-group fm-currency-code-panel");
+  const popularCryptocurrencies = [
+    ["BTC","Bitcoin"],["ETH","Ethereum"],["USDT","Tether"],["BNB","BNB"],["XRP","XRP"],["SOL","Solana"],["USDC","USD Coin"],["TRX","TRON"],["DOGE","Dogecoin"],["ADA","Cardano"],
+    ["BCH","Bitcoin Cash"],["LINK","Chainlink"],["AVAX","Avalanche"],["XLM","Stellar"],["TON","Toncoin"],["SUI","Sui"],["DOT","Polkadot"],["LTC","Litecoin"],["HBAR","Hedera"],["SHIB","Shiba Inu"],
+    ["DAI","Dai"],["UNI","Uniswap"],["ETC","Ethereum Classic"],["NEAR","NEAR Protocol"],["APT","Aptos"],["ICP","Internet Computer"],["FIL","Filecoin"],["ARB","Arbitrum"],["OP","Optimism"],["AAVE","Aave"],
+    ["MKR","Maker"],["XMR","Monero"],["ATOM","Cosmos"],["CRO","Cronos"],["VET","VeChain"],["ALGO","Algorand"],["FTM","Fantom"],["EOS","EOS"],["XTZ","Tezos"],["FLOW","Flow"],
+    ["GRT","The Graph"],["THETA","Theta Network"],["EGLD","MultiversX"],["KAS","Kaspa"],["RUNE","THORChain"],["MANA","Decentraland"],["SAND","The Sandbox"],["ENJ","Enjin Coin"],["COMP","Compound"],["ZEC","Zcash"]
+  ];
+  const renderDirectory = (className,title,items,kind) => {
+    const panel = make("div","fm-network-group " + className);
     const heading = make("div","fm-network-label");
-    heading.append(make("span","fm-network-label-text","CURRENCY CODES"));
-    heading.append(make("b","fm-network-count",currencyCodes.length + " CURRENCIES"));
+    heading.append(make("span","fm-network-label-text",title));
+    heading.append(make("b","fm-network-count",items.length + " LISTED"));
     panel.append(heading);
-    const list = make("div","fm-currency-code-grid");
-    currencyCodes.forEach(([code,name,flag]) => {
-      const card = make("div","fm-currency-code-card");
-      card.append(make("span","fm-currency-flag",flag));
-      const details = make("span","fm-currency-code-copy");
+    const list = make("div",kind === "crypto" ? "fm-crypto-code-grid" : "fm-currency-code-grid");
+    items.forEach(item => {
+      const code = Array.isArray(item) ? item[0] : item.code;
+      const name = Array.isArray(item) ? item[1] : item.name;
+      const flag = Array.isArray(item) ? item[2] : item.flag;
+      const logo = !Array.isArray(item) ? safeImage(item.logo) : "";
+      const card = make("div",kind === "crypto" ? "fm-crypto-code-card" : "fm-currency-code-card");
+      if (logo) {
+        const img = document.createElement("img"); img.src=logo; img.alt=""; img.loading="lazy"; img.onerror=()=>img.remove();
+        const wrap=make("span","fm-currency-flag"); wrap.append(img); card.append(wrap);
+      } else card.append(make("span","fm-currency-flag",flag || "◈"));
+      const details = make("span",kind === "crypto" ? "fm-crypto-code-copy" : "fm-currency-code-copy");
       details.append(make("b","",code),make("small","",name));
-      card.append(details);
-      list.append(card);
+      card.append(details); list.append(card);
     });
-    panel.append(list);
-    root.append(panel);
+    panel.append(list); root.append(panel);
+  };
+  const renderCurrencyCodes = custom => {
+    root.querySelector(".fm-currency-code-panel")?.remove();
+    const items = Array.isArray(custom) && custom.length ? custom.filter(x => x && (Array.isArray(x) || x.enabled !== false)) : currencyCodes;
+    renderDirectory("fm-currency-code-panel","GLOBAL FIAT CURRENCY CODES",items,"fiat");
+  };
+  const renderPopularCrypto = custom => {
+    root.querySelector(".fm-crypto-code-panel")?.remove();
+    const items = Array.isArray(custom) && custom.length ? custom.filter(x => x && (Array.isArray(x) || x.enabled !== false)) : popularCryptocurrencies;
+    renderDirectory("fm-crypto-code-panel","POPULAR CRYPTOCURRENCIES",items,"crypto");
   };
   const safeImage = value => {
     const raw = String(value || "").trim();
@@ -85,6 +106,7 @@
       });
     } catch (_) {}
   };
+  let directorySettings = {};
   const render = currencies => {
     const active = currencies.filter(c => c && c.enabled !== false && c.hidden !== true && String(c.id || "").trim());
     const sections = groups.map(group => {
@@ -125,13 +147,15 @@
     }).filter(Boolean);
     if (!sections.length) return;
     root.replaceChildren(...sections);
-    renderCurrencyCodes();
+    renderCurrencyCodes(directorySettings.publicCurrencyCodes);
+    renderPopularCrypto(directorySettings.popularCryptocurrencies);
     root.dataset.source = "admin-settings";
     applyTextOverrides();
   };
   renderCurrencyCodes();
+  renderPopularCrypto();
   fetch(SETTINGS_API,{cache:"no-store"})
     .then(response => { if (!response.ok) throw new Error("Exchange settings unavailable"); return response.json(); })
-    .then(data => { if (Array.isArray(data?.settings?.currencies)) render(data.settings.currencies); })
+    .then(data => { directorySettings = data?.settings || {}; if (Array.isArray(data?.settings?.currencies)) render(data.settings.currencies); })
     .catch(() => { /* Keep the built-in public fallback if settings cannot be reached. */ });
 })();
