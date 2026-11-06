@@ -81,3 +81,68 @@
 .fm-network-v2 .fm-wallet-code-panel .fm-network-label{margin-bottom:14px}
 .fm-network-v2 .fm-wallet-code-panel .fm-crypto-code-card{background:linear-gradient(145deg,#fff,#f7fbff)}
 .fm-network-v2 .fm-wallet-code-panel .fm-crypto-code-card .fm-currency-flag{background:#fff}
+
+
+/* Large single-card network carousel: auto-advance, touch swipe and manual controls */
+.fm-network-v2{padding:82px 24px 76px!important}
+.fm-network-v2 .fm-network-inner{max-width:1320px}
+.fm-network-v2 .fm-network-heading{margin-bottom:46px}
+.fm-network-v2 .fm-network-heading>p{font-size:15px;line-height:1.9}
+.fm-network-v2 .fm-network-showcase{
+  display:flex!important;gap:0!important;overflow-x:auto!important;overflow-y:hidden!important;
+  scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;border:0!important;padding:8px 3px 14px;
+}
+.fm-network-v2 .fm-network-showcase::-webkit-scrollbar{display:none}
+.fm-network-v2 .fm-network-showcase>.fm-network-group{
+  flex:0 0 100%;width:100%;min-width:100%;box-sizing:border-box;
+  min-height:260px;padding:32px 30px 30px;border:1px solid #dce9f5;border-radius:24px;
+  background:linear-gradient(145deg,#fff 0%,#f5faff 58%,#f1fbfa 100%);
+  box-shadow:0 18px 48px rgba(22,57,91,.10);scroll-snap-align:center;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-network-label{
+  font-size:15px;letter-spacing:1px;margin-bottom:24px
+}
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-network-count{font-size:11px;padding:6px 11px}
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-grid,
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-grid{
+  gap:12px;padding:4px 2px 14px
+}
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-card,
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-card{
+  flex-basis:145px!important;width:145px!important;min-width:145px!important;min-height:76px!important;
+  padding:12px;border-radius:15px;gap:10px
+}
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-flag{width:38px;height:38px;flex-basis:38px;font-size:22px}
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-copy b,
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-copy b{font-size:13px}
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-copy small,
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-copy small{font-size:10px}
+.fm-network-v2 .fm-network-carousel-controls{display:flex;align-items:center;justify-content:center;gap:14px;margin:12px auto 0}
+.fm-network-v2 .fm-network-carousel-arrow{
+  display:grid;place-items:center;width:42px;height:42px;border:1px solid #d8e6f2;border-radius:50%;
+  background:#fff;color:#1768d4;font-size:17px;cursor:pointer;box-shadow:0 5px 16px rgba(22,57,91,.08)
+}
+.fm-network-v2 .fm-network-carousel-arrow:hover{background:#1768d4;color:#fff;border-color:#1768d4}
+.fm-network-v2 .fm-network-carousel-dots{display:flex;align-items:center;justify-content:center;gap:8px}
+.fm-network-v2 .fm-network-carousel-dot{width:9px;height:9px;padding:0;border:0;border-radius:99px;background:#c7d6e5;cursor:pointer}
+.fm-network-v2 .fm-network-carousel-dot[aria-current="true"]{width:26px;background:linear-gradient(90deg,#1768d4,#08a7a1)}
+@media(max-width:700px){
+ .fm-network-v2{padding:55px 13px 50px!important}
+ .fm-network-v2 .fm-network-heading{margin-bottom:30px}
+ .fm-network-v2 .fm-network-heading>p{font-size:13px}
+ .fm-network-v2 .fm-network-showcase>.fm-network-group{min-height:230px;padding:22px 14px 20px;border-radius:19px}
+ .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-network-label{font-size:12px;gap:7px;margin-bottom:18px;flex-wrap:wrap}
+ .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-grid,
+ .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-grid{gap:8px}
+ .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-card,
+ .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-card{flex-basis:120px!important;width:120px!important;min-width:120px!important;min-height:68px!important;padding:9px;gap:7px}
+ .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-flag{width:30px;height:30px;flex-basis:30px;font-size:18px}
+ .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-copy b,
+ .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-copy b{font-size:11px}
+ .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-copy small,
+ .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-copy small{font-size:8px}
+ .fm-network-v2 .fm-network-carousel-arrow{width:38px;height:38px}
+}
+@media(prefers-reduced-motion:reduce){.fm-network-v2 .fm-network-showcase{scroll-behavior:auto}}
