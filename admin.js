@@ -31,6 +31,7 @@ import { firebaseConfig } from "./firebase-config.js";
     setupFirestoreTest();
     setupRequestList();
     setupWebsiteContentEditor();
+    setupImpactStatsEditor();
     setupExchangeSettingsEditor();
     let identity = $("adminIdentity");
     if (!identity) {
@@ -476,6 +477,94 @@ import { firebaseConfig } from "./firebase-config.js";
     load();
   }
 
+
+  // Owner-controlled homepage impact statistics (same secure Website Content API).
+  function setupImpactStatsEditor() {
+    const panel = $("panel-website");
+    if (!panel || $("impactStatsEditor")) return;
+    const root = document.createElement("div");
+    root.id = "impactStatsEditor";
+    root.className = "info-strip";
+    root.style.cssText = "margin-top:18px;background:#f7fbff;border:1px solid #cfe0ef;padding:16px;border-radius:12px;color:#263b50";
+    root.innerHTML = `
+      <h3 style="margin:0 0 6px">Homepage Impact Statistics Control</h3>
+      <p style="margin:0 0 12px">Start an Exchange বাটনের ঠিক নিচের ৪টি Statistics এখান থেকে সম্পূর্ণ নিয়ন্ত্রণ করুন। Number, Label, heading, description এবং section show/hide পরিবর্তন করে Save চাপুন।</p>
+      <label style="display:flex;align-items:center;gap:9px;margin:10px 0 16px"><input id="impactVisible" type="checkbox" checked style="width:auto"> Homepage-এ Statistics Section দেখান</label>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px">
+        <label>Section Heading<input id="impactTitle" maxlength="120"></label>
+        <label>Small Heading<input id="impactKicker" maxlength="100"></label>
+        <label style="grid-column:1/-1">Description<textarea id="impactDescription" rows="2" maxlength="300"></textarea></label>
+        <label>Card 1 Number<input id="impactValue1" maxlength="30"></label>
+        <label>Card 1 Label<input id="impactLabel1" maxlength="120"></label>
+        <label>Card 2 Number<input id="impactValue2" maxlength="30"></label>
+        <label>Card 2 Label<input id="impactLabel2" maxlength="120"></label>
+        <label>Card 3 Number<input id="impactValue3" maxlength="30"></label>
+        <label>Card 3 Label<input id="impactLabel3" maxlength="120"></label>
+        <label>Card 4 Number<input id="impactValue4" maxlength="30"></label>
+        <label>Card 4 Label<input id="impactLabel4" maxlength="120"></label>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button type="button" id="impactReload" class="outline">Reload</button><button type="button" id="impactSave">Save Statistics</button></div>
+      <p id="impactStatus" role="status" aria-live="polite"></p>`;
+    panel.appendChild(root);
+    const $i = id => root.querySelector("#" + id);
+    const defaults = {
+      "impact.kicker":"FASTMONEY · OUR REACH",
+      "impact.title":"Our Impact in Numbers",
+      "impact.description":"A growing digital exchange network, built around choice, access and support.",
+      "impact.item1.value":"100+","impact.item1.label":"Countries and Regions Covered",
+      "impact.item2.value":"1,000,000+","impact.item2.label":"Number of Registered Users",
+      "impact.item3.value":"6,000+","impact.item3.label":"Global Financial Institution Partners",
+      "impact.item4.value":"80+","impact.item4.label":"Currencies Supported"
+    };
+    let entries = {};
+    const status = $i("impactStatus");
+    const api = async (method, body) => {
+      const user = auth.currentUser;
+      if (!user) throw new Error("Admin session পাওয়া যায়নি। আবার লগইন করুন।");
+      const token = await user.getIdToken(true);
+      const response = await fetch(API_BASE + (method === "GET" ? "/api/content" : "/api/admin/content"), {
+        method, headers: {Authorization:"Bearer " + token, ...(body ? {"content-type":"application/json"} : {})},
+        ...(body ? {body:JSON.stringify(body)} : {}), cache:"no-store"
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || data.ok !== true) throw new Error(data.error || "Content API error (" + response.status + ")");
+      return data;
+    };
+    function render() {
+      Object.entries(defaults).forEach(([key,value]) => {
+        const item = entries[key];
+        const field = key === "impact.kicker" ? "impactKicker" :
+          key === "impact.title" ? "impactTitle" :
+          key === "impact.description" ? "impactDescription" :
+          "impact" + (key.match(/item(\d)/)?.[1] || "") + (key.endsWith(".value") ? "Value" : "Label");
+        $i(field).value = item && typeof item.text === "string" ? item.text : value;
+      });
+      $i("impactVisible").checked = entries["impact.visible"]?.text !== "false";
+    }
+    async function load() {
+      status.textContent = "লোড হচ্ছে...";
+      try { const data = await api("GET"); entries = data.entries || {}; render(); status.textContent = "Statistics settings লোড হয়েছে।"; }
+      catch (error) { status.textContent = "লোড হয়নি: " + error.message; }
+    }
+    async function save() {
+      const map = {
+        "impact.kicker":"impactKicker","impact.title":"impactTitle","impact.description":"impactDescription",
+        "impact.item1.value":"impactValue1","impact.item1.label":"impactLabel1",
+        "impact.item2.value":"impactValue2","impact.item2.label":"impactLabel2",
+        "impact.item3.value":"impactValue3","impact.item3.label":"impactLabel3",
+        "impact.item4.value":"impactValue4","impact.item4.label":"impactLabel4"
+      };
+      Object.entries(map).forEach(([key,id]) => { entries[key] = {text:$i(id).value.trim(),struck:false}; });
+      entries["impact.visible"] = {text:$i("impactVisible").checked ? "true" : "false",struck:false};
+      if (Object.entries(map).some(([,id]) => !$i(id).value.trim())) { status.textContent = "কোনো ঘর খালি রাখা যাবে না।"; return; }
+      status.textContent = "সংরক্ষণ হচ্ছে...";
+      try { const data = await api("POST",{entries}); entries = data.entries || entries; render(); status.textContent = "সফল! Homepage Statistics সংরক্ষিত হয়েছে।"; }
+      catch (error) { status.textContent = "সংরক্ষণ হয়নি: " + error.message; }
+    }
+    $i("impactReload").addEventListener("click",load);
+    $i("impactSave").addEventListener("click",save);
+    load();
+  }
 
   // Owner-controlled currency, rate and payment configuration via the separate Admin Worker.
   function setupExchangeSettingsEditor() {
