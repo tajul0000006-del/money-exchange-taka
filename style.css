@@ -98,3 +98,51 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
  .table-wrap th,.table-wrap td{white-space:nowrap}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+/* Global payment solution cards */
+.fm-global-products{padding:76px 0 82px;background:#fff}
+.fm-global-products-inner{width:min(1160px,calc(100% - 40px));margin:0 auto}
+.fm-global-products-heading{max-width:760px;margin:0 0 34px}
+.fm-global-products-heading .fm-kicker{display:inline-block;margin-bottom:12px;color:#1744b4;font-size:13px;font-weight:800;letter-spacing:.11em}
+.fm-global-products-heading h2{margin:0 0 12px;color:#101828;font-size:clamp(30px,4vw,44px);line-height:1.16;letter-spacing:-.035em}
+.fm-global-products-heading p{margin:0;color:#687385;font-size:17px;line-height:1.65}
+.fm-global-products-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px}
+.fm-global-product-card{min-width:0;padding:30px 30px 26px;border:1.5px solid #e5eaf4;border-radius:34px;background:#fff;box-shadow:0 8px 28px rgba(28,55,105,.035);display:flex;flex-direction:column;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+.fm-global-product-card:hover{transform:translateY(-4px);border-color:#cbd8f5;box-shadow:0 16px 38px rgba(28,55,105,.09)}
+.fm-global-product-copy h3{margin:0 0 10px;color:#111827;font-size:30px;line-height:1.2;letter-spacing:-.025em}
+.fm-global-product-copy p{margin:0 0 20px;color:#737b88;font-size:17px;line-height:1.5}
+.fm-global-product-copy ul{display:grid;gap:13px;margin:0 0 25px;padding:0;list-style:none}
+.fm-global-product-copy li{position:relative;padding-left:32px;color:#737b88;font-size:16px;line-height:1.4}
+.fm-global-product-copy li:before{content:"✓";position:absolute;left:0;top:0;width:21px;height:21px;display:grid;place-items:center;border-radius:50%;background:#1945b7;color:#fff;font-size:13px;font-weight:800}
+.fm-global-product-cta{width:225px;max-width:100%;height:56px;padding:5px 7px 5px 22px;display:flex;align-items:center;justify-content:space-between;border-radius:999px;background:#1945b7;color:#fff;text-decoration:none;font-size:17px;font-weight:600;box-shadow:0 5px 12px rgba(25,69,183,.13)}
+.fm-global-product-cta span{width:44px;height:44px;display:grid;place-items:center;border-radius:50%;background:#fff;color:#1945b7;font-size:25px;line-height:1}
+.fm-global-product-art{position:relative;isolation:isolate;overflow:hidden;min-height:270px;margin-top:30px;border-radius:22px;background:#f3f5fa;display:flex;align-items:center;justify-content:center}
+.fm-art-globe{position:absolute;right:8%;top:17%;width:190px;height:190px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(140deg,#9cb7ff,#315ee0);color:rgba(255,255,255,.78);font-size:105px;box-shadow:inset -20px -18px 40px rgba(19,53,164,.2)}
+.fm-art-currency-card,.fm-art-amount,.fm-art-payout-card,.fm-cny-rate-card{position:absolute;z-index:2;padding:16px 18px;border:1px solid rgba(222,229,242,.95);border-radius:16px;background:rgba(255,255,255,.94);box-shadow:0 12px 28px rgba(37,61,120,.1)}
+.fm-art-currency-card{left:8%;top:18%;width:58%}
+.fm-art-currency-card small,.fm-art-amount small,.fm-art-payout-card small,.fm-cny-rate-card small{display:block;margin-bottom:11px;color:#8892a5;font-size:10px;font-weight:800;letter-spacing:.08em}
+.fm-art-flags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.fm-art-flags b{width:34px;height:30px;display:grid;place-items:center;border-radius:9px;background:#f1f4fb;font-size:18px}
+.fm-art-currency-card strong{display:block;color:#294cae;font-size:16px}.fm-art-currency-card span{color:#8a93a4;font-size:12px}
+.fm-art-amount{right:7%;bottom:12%;min-width:190px}
+.fm-art-amount strong{color:#244db7;font-size:14px}.fm-art-amount i{margin-right:6px;color:#20ad78}
+.fm-art-transfer{position:absolute;top:22%;left:12%;right:12%;display:flex;align-items:center;justify-content:space-between}
+.fm-art-node{width:82px;height:82px;display:grid;place-items:center;border-radius:50%;background:#fff;color:#1b4bb8;font-size:32px;box-shadow:0 10px 28px rgba(40,68,130,.12)}
+.fm-art-node-blue{background:#315fe0;color:#fff}
+.fm-art-dotted{height:3px;flex:1;margin:0 10px;background:repeating-linear-gradient(90deg,#8aa7f5 0 8px,transparent 8px 15px)}
+.fm-art-payout-card{left:12%;right:12%;bottom:13%}
+.fm-art-payout-card strong{display:block;margin-bottom:13px;color:#244db7;font-size:15px}
+.fm-art-payout-card strong i{margin-right:7px}
+.fm-art-payout-card div{display:flex;flex-wrap:wrap;gap:7px}
+.fm-art-payout-card b{padding:7px 10px;border-radius:8px;background:#f0f3fb;color:#66738c;font-size:11px}
+.fm-art-check{position:absolute;right:12%;top:15%;width:38px;height:38px;display:grid;place-items:center;border-radius:50%;background:#28b783;color:#fff;box-shadow:0 5px 16px rgba(40,183,131,.25)}
+.fm-cny-symbol{position:absolute;right:10%;top:10%;width:190px;height:190px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(145deg,#dce6ff,#91adf5);color:#2856c5;font-size:105px;font-weight:800;box-shadow:inset -15px -15px 30px rgba(37,77,180,.12)}
+.fm-cny-rate-card{left:8%;top:18%;width:58%}
+.fm-cny-rate-card div{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #edf0f6;color:#6e788b;font-size:13px}
+.fm-cny-rate-card div b{color:#2750b8;font-size:17px}
+.fm-cny-rate-card>i{display:block;margin:8px auto;text-align:center;color:#2750b8}
+.fm-cny-rate-card em{display:block;margin-top:10px;color:#98a1b0;font-size:10px;font-style:normal}
+.fm-cny-orbit{position:absolute;right:3%;bottom:13%;width:210px;height:70px;border:2px dashed rgba(57,99,218,.35);border-radius:50%;transform:rotate(-25deg)}
+.fm-global-products-note{margin:22px 0 0;color:#929aaa;font-size:12px;line-height:1.5;text-align:center}
+@media(min-width:900px){.fm-global-product-card:last-child{grid-column:1/-1}.fm-global-product-card:last-child .fm-global-product-art{min-height:300px}}
+@media(max-width:700px){.fm-global-products{padding:52px 0 58px}.fm-global-products-inner{width:calc(100% - 30px)}.fm-global-products-heading{margin-bottom:25px}.fm-global-products-heading h2{font-size:32px}.fm-global-products-heading p{font-size:15px}.fm-global-products-grid{grid-template-columns:1fr;gap:20px}.fm-global-product-card{padding:25px 22px 21px;border-radius:29px}.fm-global-product-copy h3{font-size:27px}.fm-global-product-copy p{font-size:16px}.fm-global-product-art{min-height:245px;margin-top:25px}.fm-art-globe,.fm-cny-symbol{width:155px;height:155px;font-size:82px}.fm-art-currency-card,.fm-cny-rate-card{left:5%;width:62%;padding:13px}.fm-art-amount{right:4%;min-width:160px}.fm-art-payout-card{left:7%;right:7%;padding:14px}.fm-art-node{width:68px;height:68px;font-size:27px}}
