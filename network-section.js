@@ -65,24 +65,36 @@
     ["EURS","STASIS EURO"],
     ["RLUSD","Ripple USD"]
   ];
+  const popularEWallets = [
+    {code:"VOLET",name:"Volet",logo:"https://cdn.simpleicons.org/volet"},
+    {code:"REDOTPAY",name:"RedotPay",logo:"https://cdn.simpleicons.org/redotpay"},
+    {code:"WEBMONEY",name:"WebMoney",logo:"https://cdn.simpleicons.org/webmoney"},
+    {code:"SKRILL",name:"Skrill",logo:"https://cdn.simpleicons.org/skrill"},
+    {code:"NETELLER",name:"Neteller",logo:"https://cdn.simpleicons.org/neteller"},
+    {code:"PAYPAL",name:"PayPal",logo:"https://cdn.simpleicons.org/paypal"},
+    {code:"WISE",name:"Wise",logo:"https://cdn.simpleicons.org/wise"},
+    {code:"PAYONEER",name:"Payoneer",logo:"https://cdn.simpleicons.org/payoneer"},
+    {code:"REVOLUT",name:"Revolut",logo:"https://cdn.simpleicons.org/revolut"},
+    {code:"AIRTM",name:"Airtm",logo:"https://cdn.simpleicons.org/airtm"}
+  ];
   const renderDirectory = (className,title,items,kind) => {
     const panel = make("div","fm-network-group " + className);
     const heading = make("div","fm-network-label");
     heading.append(make("span","fm-network-label-text",title));
     heading.append(make("b","fm-network-count",items.length + " LISTED"));
     panel.append(heading);
-    const list = make("div",kind === "crypto" ? "fm-crypto-code-grid" : "fm-currency-code-grid");
+    const list = make("div",(kind === "crypto" || kind === "wallet") ? "fm-crypto-code-grid" : "fm-currency-code-grid");
     items.forEach(item => {
       const code = Array.isArray(item) ? item[0] : item.code;
       const name = Array.isArray(item) ? item[1] : item.name;
       const flag = Array.isArray(item) ? item[2] : item.flag;
       const logo = kind === "crypto" ? ((!Array.isArray(item) && safeImage(item.logo)) || "https://assets.coincap.io/assets/icons/" + String(code).toLowerCase() + "@2x.png") : (!Array.isArray(item) ? safeImage(item.logo) : "");
-      const card = make("div",kind === "crypto" ? "fm-crypto-code-card" : "fm-currency-code-card");
+      const card = make("div",(kind === "crypto" || kind === "wallet") ? "fm-crypto-code-card" : "fm-currency-code-card");
       if (logo) {
         const img = document.createElement("img"); img.src=logo; img.alt=""; img.loading="lazy"; img.onerror=()=>img.remove();
         const wrap=make("span","fm-currency-flag"); wrap.append(img); card.append(wrap);
       } else card.append(make("span","fm-currency-flag",flag || "◈"));
-      const details = make("span",kind === "crypto" ? "fm-crypto-code-copy" : "fm-currency-code-copy");
+      const details = make("span",(kind === "crypto" || kind === "wallet") ? "fm-crypto-code-copy" : "fm-currency-code-copy");
       details.append(make("b","",code),make("small","",name));
       card.append(details); list.append(card);
     });
@@ -92,6 +104,10 @@
     root.querySelector(".fm-currency-code-panel")?.remove();
     const items = Array.isArray(custom) ? custom.filter(x => x && (Array.isArray(x) || x.enabled !== false)) : currencyCodes;
     renderDirectory("fm-currency-code-panel","WE SUPPORT THESE CURRENCY CODES",items,"fiat");
+  };
+  const renderPopularEWallets = () => {
+    root.querySelector(".fm-wallet-code-panel")?.remove();
+    renderDirectory("fm-wallet-code-panel","WE SUPPORT POPULAR E-WALLETS",popularEWallets,"wallet");
   };
   const renderPopularCrypto = custom => {
     root.querySelector(".fm-crypto-code-panel")?.remove();
@@ -167,6 +183,7 @@
   };
   renderCurrencyCodes();
   renderPopularCrypto();
+  renderPopularEWallets();
   fetch(SETTINGS_API,{cache:"no-store"})
     .then(response => { if (!response.ok) throw new Error("Exchange settings unavailable"); return response.json(); })
     .then(data => { directorySettings = data?.settings || {}; if (Array.isArray(data?.settings?.currencies)) render(data.settings.currencies); })
