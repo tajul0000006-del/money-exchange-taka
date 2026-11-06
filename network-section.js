@@ -130,6 +130,53 @@
       });
     } catch (_) {}
   };
+
+  const setupNetworkCarousel = () => {
+    const panels = [...root.querySelectorAll(".fm-network-group")];
+    if (panels.length < 2) return;
+    root.setAttribute("aria-label","Payment network categories. Swipe or use the arrows to browse.");
+    const controls = make("div","fm-network-carousel-controls");
+    const previous = make("button","fm-network-carousel-arrow","‹");
+    const dots = make("div","fm-network-carousel-dots");
+    const next = make("button","fm-network-carousel-arrow","›");
+    previous.type = next.type = "button";
+    previous.setAttribute("aria-label","Previous category");
+    next.setAttribute("aria-label","Next category");
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let active = 0, timer = null;
+    const go = index => {
+      active = (index + panels.length) % panels.length;
+      panels[active].scrollIntoView({behavior:reduced ? "auto" : "smooth",block:"nearest",inline:"start"});
+      dots.querySelectorAll("button").forEach((dot,i)=>dot.setAttribute("aria-current",String(i===active)));
+    };
+    panels.forEach((panel,i)=>{
+      const dot=make("button","fm-network-carousel-dot");
+      dot.type="button";dot.setAttribute("aria-label","Show category "+(i+1));
+      dot.setAttribute("aria-current",String(i===0));
+      dot.addEventListener("click",()=>{go(i);restart();});
+      dots.append(dot);
+    });
+    const stop=()=>{if(timer)window.clearInterval(timer);timer=null;};
+    const start=()=>{stop();if(!reduced&&!document.hidden)timer=window.setInterval(()=>go(active+1),5000);};
+    const restart=()=>start();
+    previous.addEventListener("click",()=>{go(active-1);restart();});
+    next.addEventListener("click",()=>{go(active+1);restart();});
+    root.addEventListener("scroll",()=>{
+      const center=root.getBoundingClientRect().left+root.clientWidth/2;
+      let closest=0,best=Infinity;
+      panels.forEach((panel,i)=>{const r=panel.getBoundingClientRect();const d=Math.abs(r.left+r.width/2-center);if(d<best){best=d;closest=i;}});
+      active=closest;
+      dots.querySelectorAll("button").forEach((dot,i)=>dot.setAttribute("aria-current",String(i===active)));
+    },{passive:true});
+    controls.append(previous,dots,next);
+    root.insertAdjacentElement("afterend",controls);
+    root.addEventListener("mouseenter",stop);root.addEventListener("mouseleave",start);
+    root.addEventListener("touchstart",stop,{passive:true});root.addEventListener("touchend",start,{passive:true});
+    root.addEventListener("focusin",stop);root.addEventListener("focusout",e=>{if(!root.contains(e.relatedTarget))start();});
+    document.addEventListener("visibilitychange",()=>document.hidden?stop():start());
+    start();
+  };
+
   let directorySettings = {};
   const render = () => {
     root.replaceChildren();
@@ -137,6 +184,7 @@
     if (directorySettings.popularCryptoDirectoryEnabled !== false) renderPopularCrypto(directorySettings.popularCryptocurrencies);
     if (directorySettings.popularEWalletDirectoryEnabled !== false) renderPopularEWallets(directorySettings.popularEWallets);
     root.dataset.source = "admin-settings";
+    setupNetworkCarousel();
   };
   fetch(SETTINGS_API,{cache:"no-store"})
     .then(response => { if (!response.ok) throw new Error("Exchange settings unavailable"); return response.json(); })
