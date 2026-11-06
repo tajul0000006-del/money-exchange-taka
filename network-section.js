@@ -191,8 +191,8 @@
           if (paused || track.matches(":active")) return;
           const max = track.scrollWidth - track.clientWidth;
           if (max > 0 && track.scrollLeft >= max - 2) track.scrollTo({left:0,behavior:"auto"});
-          else track.scrollLeft += 1;
-        }, 24);
+          else track.scrollLeft += 0.5;
+        }, 60);
       };
       track.addEventListener("touchstart",stop,{passive:true});
       track.addEventListener("touchend",()=>window.setTimeout(start,900),{passive:true});
