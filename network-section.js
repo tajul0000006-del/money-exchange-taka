@@ -91,7 +91,7 @@
   const renderCurrencyCodes = custom => {
     root.querySelector(".fm-currency-code-panel")?.remove();
     const items = Array.isArray(custom) ? custom.filter(x => x && (Array.isArray(x) || x.enabled !== false)) : currencyCodes;
-    renderDirectory("fm-currency-code-panel","GLOBAL FIAT CURRENCY CODES",items,"fiat");
+    renderDirectory("fm-currency-code-panel","WE SUPPORT THESE CURRENCY CODES",items,"fiat");
   };
   const renderPopularCrypto = custom => {
     root.querySelector(".fm-crypto-code-panel")?.remove();
