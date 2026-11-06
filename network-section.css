@@ -198,3 +198,43 @@
   .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-copy small,
   .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-copy small{font-size:9px!important}
 }
+
+
+/* Three stacked directory panels: fixed 300px height with horizontal card scrolling. */
+.fm-network-v2 .fm-network-showcase{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:18px!important;overflow:visible!important;padding:0!important}
+.fm-network-v2 .fm-network-showcase>.fm-network-group{
+  box-sizing:border-box!important;display:flex!important;flex-direction:column!important;justify-content:flex-start!important;
+  flex:none!important;width:100%!important;min-width:0!important;height:300px!important;min-height:300px!important;max-height:300px!important;
+  overflow:hidden!important;padding:24px 24px 18px!important;border-radius:20px!important;
+}
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-network-label{flex:0 0 auto!important;margin-bottom:20px!important}
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-grid,
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-grid{
+  display:flex!important;flex:1 1 auto!important;align-items:center!important;align-self:stretch!important;
+  flex-wrap:nowrap!important;grid-template-columns:none!important;grid-auto-flow:unset!important;grid-template-rows:none!important;grid-auto-columns:unset!important;
+  width:100%!important;min-width:0!important;min-height:0!important;overflow-x:auto!important;overflow-y:hidden!important;
+  gap:12px!important;padding:4px 2px 12px!important;scroll-snap-type:x mandatory!important;
+  scroll-behavior:auto!important;-webkit-overflow-scrolling:touch!important;overscroll-behavior-x:contain!important;
+  scrollbar-width:thin!important;touch-action:pan-x!important;
+}
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-card,
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-card{
+  flex:0 0 180px!important;width:180px!important;min-width:180px!important;min-height:90px!important;
+  box-sizing:border-box!important;padding:14px!important;gap:11px!important;scroll-snap-align:start!important;
+}
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-flag{width:42px!important;height:42px!important;flex-basis:42px!important;font-size:23px!important}
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-copy b,
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-copy b{font-size:14px!important}
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-copy small,
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-copy small{font-size:10px!important}
+.fm-network-v2 .fm-network-carousel-controls{display:none!important}
+@media(max-width:700px){
+  .fm-network-v2 .fm-network-showcase{gap:14px!important}
+  .fm-network-v2 .fm-network-showcase>.fm-network-group{height:300px!important;min-height:300px!important;max-height:300px!important;padding:18px 13px 14px!important;border-radius:16px!important}
+  .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-network-label{margin-bottom:16px!important;font-size:11px!important}
+  .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-grid,
+  .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-grid{gap:9px!important}
+  .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-card,
+  .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-card{flex-basis:145px!important;width:145px!important;min-width:145px!important;min-height:78px!important;padding:10px!important;gap:8px!important}
+  .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-flag{width:32px!important;height:32px!important;flex-basis:32px!important;font-size:18px!important}
+}
