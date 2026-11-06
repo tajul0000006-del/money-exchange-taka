@@ -181,13 +181,13 @@
   const render = () => {
     root.replaceChildren();
     if (directorySettings.publicCurrencyDirectoryEnabled !== false) renderCurrencyCodes(directorySettings.publicCurrencyCodes);
-    if (directorySettings.popularCryptoDirectoryEnabled !== false) renderPopularCrypto(directorySettings.popularCryptocurrencies);
-    if (directorySettings.popularEWalletDirectoryEnabled !== false) renderPopularEWallets(directorySettings.popularEWallets);
+    renderPopularCrypto(directorySettings.popularCryptocurrencies);
+    renderPopularEWallets(directorySettings.popularEWallets);
     root.dataset.source = "admin-settings";
     setupNetworkCarousel();
   };
   fetch(SETTINGS_API,{cache:"no-store"})
     .then(response => { if (!response.ok) throw new Error("Exchange settings unavailable"); return response.json(); })
     .then(data => { directorySettings = data?.settings || {}; render(); })
-    .catch(() => { /* Keep the built-in public fallback if settings cannot be reached. */ });
+    .catch(() => { /* Keep the built-in public fallback if settings cannot be reached. */ setupNetworkCarousel(); });
 })();
