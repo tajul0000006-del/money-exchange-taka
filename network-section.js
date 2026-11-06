@@ -40,8 +40,11 @@
       const items = active.filter(c => group.type === "global" ? !["crypto","bdt"].includes(String(c.type || "").toLowerCase()) : String(c.type || "").toLowerCase() === group.type);
       if (!items.length) return null;
       const row = make("div","fm-network-group");
-      const groupLabel = make("span","fm-network-label",group.label);
-      groupLabel.setAttribute("data-content-key", "network.group." + group.type);
+      const groupLabel = make("span","fm-network-label");
+      const groupName = make("span","fm-network-label-text",group.label);
+      groupName.setAttribute("data-content-key", "network.group." + group.type);
+      groupLabel.append(groupName);
+      if (group.type === "crypto") groupLabel.append(make("b","fm-network-count","100+ CURRENCIES"));
       row.append(groupLabel);
       const list = make("div","fm-network-logos");
       items.forEach(item => {
