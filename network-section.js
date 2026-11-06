@@ -66,7 +66,7 @@
       const code = Array.isArray(item) ? item[0] : item.code;
       const name = Array.isArray(item) ? item[1] : item.name;
       const flag = Array.isArray(item) ? item[2] : item.flag;
-      const logo = !Array.isArray(item) ? safeImage(item.logo) : "";
+      const logo = kind === "crypto" ? ((!Array.isArray(item) && safeImage(item.logo)) || "https://assets.coincap.io/assets/icons/" + String(code).toLowerCase() + "@2x.png") : (!Array.isArray(item) ? safeImage(item.logo) : "");
       const card = make("div",kind === "crypto" ? "fm-crypto-code-card" : "fm-currency-code-card");
       if (logo) {
         const img = document.createElement("img"); img.src=logo; img.alt=""; img.loading="lazy"; img.onerror=()=>img.remove();
