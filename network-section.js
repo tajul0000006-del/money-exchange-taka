@@ -49,11 +49,21 @@
     return el;
   };
   const popularCryptocurrencies = [
-    ["BTC","Bitcoin"],["ETH","Ethereum"],["USDT","Tether"],["BNB","BNB"],["XRP","XRP"],["SOL","Solana"],["USDC","USD Coin"],["TRX","TRON"],["DOGE","Dogecoin"],["ADA","Cardano"],
-    ["BCH","Bitcoin Cash"],["LINK","Chainlink"],["AVAX","Avalanche"],["XLM","Stellar"],["TON","Toncoin"],["SUI","Sui"],["DOT","Polkadot"],["LTC","Litecoin"],["HBAR","Hedera"],["SHIB","Shiba Inu"],
-    ["DAI","Dai"],["UNI","Uniswap"],["ETC","Ethereum Classic"],["NEAR","NEAR Protocol"],["APT","Aptos"],["ICP","Internet Computer"],["FIL","Filecoin"],["ARB","Arbitrum"],["OP","Optimism"],["AAVE","Aave"],
-    ["MKR","Maker"],["XMR","Monero"],["ATOM","Cosmos"],["CRO","Cronos"],["VET","VeChain"],["ALGO","Algorand"],["FTM","Fantom"],["EOS","EOS"],["XTZ","Tezos"],["FLOW","Flow"],
-    ["GRT","The Graph"],["THETA","Theta Network"],["EGLD","MultiversX"],["KAS","Kaspa"],["RUNE","THORChain"],["MANA","Decentraland"],["SAND","The Sandbox"],["ENJ","Enjin Coin"],["COMP","Compound"],["ZEC","Zcash"]
+    ["USDT","Tether"],
+    ["USDC","USDC"],
+    ["DAI","Dai"],
+    ["FDUSD","First Digital USD"],
+    ["TUSD","TrueUSD"],
+    ["USDE","Ethena USDe"],
+    ["USDS","Sky Dollar"],
+    ["PYUSD","PayPal USD"],
+    ["USDD","Decentralized USD"],
+    ["FRAX","Frax"],
+    ["USDP","Pax Dollar"],
+    ["GUSD","Gemini Dollar"],
+    ["EURC","Euro Coin"],
+    ["EURS","STASIS EURO"],
+    ["RLUSD","Ripple USD"]
   ];
   const renderDirectory = (className,title,items,kind) => {
     const panel = make("div","fm-network-group " + className);
@@ -85,8 +95,9 @@
   };
   const renderPopularCrypto = custom => {
     root.querySelector(".fm-crypto-code-panel")?.remove();
-    const items = Array.isArray(custom) ? custom.filter(x => x && (Array.isArray(x) || x.enabled !== false)) : popularCryptocurrencies;
-    renderDirectory("fm-crypto-code-panel","POPULAR CRYPTOCURRENCIES",items,"crypto");
+    const supportedCodes = new Set(popularCryptocurrencies.map(item => item[0]));
+    const items = Array.isArray(custom) ? custom.filter(x => x && supportedCodes.has(String(Array.isArray(x) ? x[0] : x.code || "").toUpperCase()) && (Array.isArray(x) || x.enabled !== false)) : popularCryptocurrencies;
+    renderDirectory("fm-crypto-code-panel","WE SUPPORT THESE CRYPTOCURRENCIES",items,"crypto");
   };
   const safeImage = value => {
     const raw = String(value || "").trim();
