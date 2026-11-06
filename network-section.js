@@ -178,6 +178,7 @@
     else root.querySelector('.fm-currency-code-panel')?.remove();
     if (directorySettings.popularCryptoDirectoryEnabled !== false) renderPopularCrypto(directorySettings.popularCryptocurrencies);
     else root.querySelector('.fm-crypto-code-panel')?.remove();
+    renderPopularEWallets();
     root.dataset.source = "admin-settings";
     applyTextOverrides();
   };
