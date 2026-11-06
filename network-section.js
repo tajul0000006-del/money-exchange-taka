@@ -74,6 +74,7 @@
     }).filter(Boolean);
     if (!sections.length) return;
     root.replaceChildren(...sections);
+    renderCurrencyCodes();
     root.dataset.source = "admin-settings";
     applyTextOverrides();
   };
