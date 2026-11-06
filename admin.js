@@ -618,6 +618,19 @@ import { firebaseConfig } from "./firebase-config.js";
     const status = $("exSettingsStatus");
     const cards = $("exCurrencyCards");
     let settings = null;
+    const defaultEWallets = [
+      {code:"VOLET",name:"Volet",logo:"https://cdn.simpleicons.org/volet",enabled:true},
+      {code:"REDOTPAY",name:"RedotPay",logo:"https://cdn.simpleicons.org/redotpay",enabled:true},
+      {code:"WEBMONEY",name:"WebMoney",logo:"https://cdn.simpleicons.org/webmoney",enabled:true},
+      {code:"SKRILL",name:"Skrill",logo:"https://cdn.simpleicons.org/skrill",enabled:true},
+      {code:"NETELLER",name:"Neteller",logo:"https://cdn.simpleicons.org/neteller",enabled:true},
+      {code:"PAYPAL",name:"PayPal",logo:"https://cdn.simpleicons.org/paypal",enabled:true},
+      {code:"WISE",name:"Wise",logo:"https://cdn.simpleicons.org/wise",enabled:true},
+      {code:"PAYONEER",name:"Payoneer",logo:"https://cdn.simpleicons.org/payoneer",enabled:true},
+      {code:"REVOLUT",name:"Revolut",logo:"https://cdn.simpleicons.org/revolut",enabled:true},
+      {code:"AIRTM",name:"Airtm",logo:"https://cdn.simpleicons.org/airtm",enabled:true},
+      {code:"EPAY",name:"ePay",logo:"",enabled:true}
+    ];
     const esc = value => String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
     const api = async (method, path, body) => {
       const user = auth.currentUser;
@@ -652,7 +665,7 @@ import { firebaseConfig } from "./firebase-config.js";
       $("exWalletDirectoryEnabled").checked = settings.popularEWalletDirectoryEnabled !== false;
       $("exFiatDirectoryJson").value = Array.isArray(settings.publicCurrencyCodes) ? JSON.stringify(settings.publicCurrencyCodes,null,2) : "";
       $("exCryptoDirectoryJson").value = Array.isArray(settings.popularCryptocurrencies) ? JSON.stringify(settings.popularCryptocurrencies,null,2) : "";
-      $("exWalletDirectoryJson").value = Array.isArray(settings.popularEWallets) ? JSON.stringify(settings.popularEWallets,null,2) : "";
+      $("exWalletDirectoryJson").value = JSON.stringify(Array.isArray(settings.popularEWallets) ? settings.popularEWallets : defaultEWallets,null,2);
       settings.currencies.forEach((c, i) => {
         const card = document.createElement("article");
         card.style.cssText = "background:#fff;border:1px solid #dbe5ec;border-radius:10px;padding:12px;min-width:0";
