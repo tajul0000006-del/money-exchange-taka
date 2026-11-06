@@ -595,8 +595,6 @@ import { firebaseConfig } from "./firebase-config.js";
         <label style="display:block;font-size:13px;font-weight:700">Fiat Currency List (JSON)<textarea id="exFiatDirectoryJson" rows="7" spellcheck="false" placeholder='[{"code":"USD","name":"US Dollar","flag":"🇺🇸","enabled":true}]' style="width:100%;margin-top:5px;padding:10px;border:1px solid #d5e0e8;border-radius:8px;font:12px monospace"></textarea></label>
         <label style="display:flex;gap:8px;align-items:center;margin:14px 0 10px"><input id="exCryptoDirectoryEnabled" type="checkbox" checked style="width:auto"> Popular Crypto List দেখাবে</label>
         <label style="display:block;font-size:13px;font-weight:700">Popular Crypto List (JSON)<textarea id="exCryptoDirectoryJson" rows="7" spellcheck="false" placeholder='[{"code":"BTC","name":"Bitcoin","logo":"https://...","enabled":true}]' style="width:100%;margin-top:5px;padding:10px;border:1px solid #d5e0e8;border-radius:8px;font:12px monospace"></textarea></label>
-        <label style="display:flex;gap:8px;align-items:center;margin:14px 0 10px"><input id="exWalletDirectoryEnabled" type="checkbox" checked style="width:auto"> Popular E-Wallet List দেখাবে</label>
-        <label style="display:block;font-size:13px;font-weight:700">Popular E-Wallet List (JSON)<textarea id="exWalletDirectoryJson" rows="8" spellcheck="false" placeholder='[{"code":"VOLET","name":"Volet","logo":"https://...","enabled":true}]' style="width:100%;margin-top:5px;padding:10px;border:1px solid #d5e0e8;border-radius:8px;font:12px monospace"></textarea></label>
         <small style="display:block;color:#64748b;line-height:1.6">প্রতিটি আইটেমে code ও name আবশ্যক। Fiat-এর জন্য flag এবং Crypto-এর জন্য HTTPS logo URL দিতে পারবেন। enabled:false দিলে শুধু ওই আইটেমটি লুকাবে। JSON পরিবর্তনের পর Save All Settings চাপুন।</small>
       </section>
       <h3 style="margin:18px 0 8px">Add New Currency</h3><p style="margin:0 0 10px;font-size:12px;color:#526579">নতুন Currency যোগ করলে আগে Editor-এ যুক্ত হবে। Homepage-এ প্রকাশ করতে Save All Settings চাপুন। Remove করলেও স্থায়ীভাবে সরাতে Save All Settings প্রয়োজন।</p>
@@ -662,10 +660,8 @@ import { firebaseConfig } from "./firebase-config.js";
       $("exMaxBdt").value = settings.limits?.maxBdt ?? 10000;
       $("exFiatDirectoryEnabled").checked = settings.publicCurrencyDirectoryEnabled !== false;
       $("exCryptoDirectoryEnabled").checked = settings.popularCryptoDirectoryEnabled !== false;
-      $("exWalletDirectoryEnabled").checked = settings.popularEWalletDirectoryEnabled !== false;
       $("exFiatDirectoryJson").value = Array.isArray(settings.publicCurrencyCodes) ? JSON.stringify(settings.publicCurrencyCodes,null,2) : "";
       $("exCryptoDirectoryJson").value = Array.isArray(settings.popularCryptocurrencies) ? JSON.stringify(settings.popularCryptocurrencies,null,2) : "";
-      $("exWalletDirectoryJson").value = JSON.stringify(Array.isArray(settings.popularEWallets) ? settings.popularEWallets : defaultEWallets,null,2);
       settings.currencies.forEach((c, i) => {
         const card = document.createElement("article");
         card.style.cssText = "background:#fff;border:1px solid #dbe5ec;border-radius:10px;padding:12px;min-width:0";
@@ -718,16 +714,12 @@ import { firebaseConfig } from "./firebase-config.js";
       settings.limits = {minBdt:Number($("exMinBdt").value),maxBdt:Number($("exMaxBdt").value)};
       settings.publicCurrencyDirectoryEnabled = $("exFiatDirectoryEnabled").checked;
       settings.popularCryptoDirectoryEnabled = $("exCryptoDirectoryEnabled").checked;
-      settings.popularEWalletDirectoryEnabled = $("exWalletDirectoryEnabled").checked;
       const fiatJson = $("exFiatDirectoryJson").value.trim();
       const cryptoJson = $("exCryptoDirectoryJson").value.trim();
-      const walletJson = $("exWalletDirectoryJson").value.trim();
       try {
         if (fiatJson) settings.publicCurrencyCodes = JSON.parse(fiatJson); else delete settings.publicCurrencyCodes;
         if (cryptoJson) settings.popularCryptocurrencies = JSON.parse(cryptoJson); else delete settings.popularCryptocurrencies;
-        if (walletJson) settings.popularEWallets = JSON.parse(walletJson); else delete settings.popularEWallets;
       } catch (_) { throw new Error("Currency Directory JSON সঠিক নয়। JSON ঠিক করে আবার Save করুন।"); }
-      for (const [key,list] of [["Fiat",settings.publicCurrencyCodes],["Crypto",settings.popularCryptocurrencies],["E-Wallet",settings.popularEWallets]]) {
         if (list !== undefined && (!Array.isArray(list) || list.some(item => !item || typeof item !== "object" || !/^[A-Z0-9]{2,12}$/.test(String(item.code || "")) || !String(item.name || "").trim())) {
           throw new Error(key + " list-এ প্রতিটি item-এর সঠিক code ও name থাকতে হবে।");
         }
