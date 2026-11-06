@@ -59,3 +59,11 @@
 .fm-network-v2 .fm-crypto-code-grid::-webkit-scrollbar{height:4px}
 .fm-network-v2 .fm-crypto-code-grid::-webkit-scrollbar-thumb{background:#aebfd2;border-radius:10px}
 @media(max-width:700px){.fm-network-v2 .fm-crypto-code-grid{display:flex!important;flex-wrap:nowrap!important;gap:6px}.fm-network-v2 .fm-crypto-code-card{flex:0 0 100px!important;width:100px;min-width:100px;min-height:52px}}
+
+
+/* Currency code directory: three visible rows with horizontal scrolling */
+.fm-network-v2 .fm-currency-code-grid{display:grid!important;grid-auto-flow:column!important;grid-template-columns:none!important;grid-template-rows:repeat(3,minmax(48px,auto))!important;grid-auto-columns:150px;gap:8px;overflow-x:auto;overflow-y:hidden;padding:2px 1px 10px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.fm-network-v2 .fm-currency-code-card{min-height:48px;scroll-snap-align:start}
+.fm-network-v2 .fm-currency-code-grid::-webkit-scrollbar{height:4px}
+.fm-network-v2 .fm-currency-code-grid::-webkit-scrollbar-thumb{background:#aebfd2;border-radius:10px}
+@media(max-width:700px){.fm-network-v2 .fm-currency-code-grid{grid-template-rows:repeat(3,minmax(45px,auto))!important;grid-auto-columns:132px;gap:6px}.fm-network-v2 .fm-currency-code-card{min-height:45px}}
