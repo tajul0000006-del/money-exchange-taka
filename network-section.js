@@ -80,12 +80,12 @@
   };
   const renderCurrencyCodes = custom => {
     root.querySelector(".fm-currency-code-panel")?.remove();
-    const items = Array.isArray(custom) && custom.length ? custom.filter(x => x && (Array.isArray(x) || x.enabled !== false)) : currencyCodes;
+    const items = Array.isArray(custom) ? custom.filter(x => x && (Array.isArray(x) || x.enabled !== false)) : currencyCodes;
     renderDirectory("fm-currency-code-panel","GLOBAL FIAT CURRENCY CODES",items,"fiat");
   };
   const renderPopularCrypto = custom => {
     root.querySelector(".fm-crypto-code-panel")?.remove();
-    const items = Array.isArray(custom) && custom.length ? custom.filter(x => x && (Array.isArray(x) || x.enabled !== false)) : popularCryptocurrencies;
+    const items = Array.isArray(custom) ? custom.filter(x => x && (Array.isArray(x) || x.enabled !== false)) : popularCryptocurrencies;
     renderDirectory("fm-crypto-code-panel","POPULAR CRYPTOCURRENCIES",items,"crypto");
   };
   const safeImage = value => {
@@ -147,8 +147,10 @@
     }).filter(Boolean);
     if (!sections.length) return;
     root.replaceChildren(...sections);
-    renderCurrencyCodes(directorySettings.publicCurrencyCodes);
-    renderPopularCrypto(directorySettings.popularCryptocurrencies);
+    if (directorySettings.publicCurrencyDirectoryEnabled !== false) renderCurrencyCodes(directorySettings.publicCurrencyCodes);
+    else root.querySelector('.fm-currency-code-panel')?.remove();
+    if (directorySettings.popularCryptoDirectoryEnabled !== false) renderPopularCrypto(directorySettings.popularCryptocurrencies);
+    else root.querySelector('.fm-crypto-code-panel')?.remove();
     root.dataset.source = "admin-settings";
     applyTextOverrides();
   };
