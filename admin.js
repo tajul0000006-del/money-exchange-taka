@@ -588,6 +588,15 @@ import { firebaseConfig } from "./firebase-config.js";
         <button type="button" id="exSaveAll">Save All Settings</button>
       </div>
       <div id="exCurrencyCards" style="display:grid;gap:12px"></div>
+      <section style="margin:18px 0;padding:14px;border:1px solid #cfe0ef;border-radius:12px;background:#fff">
+        <h3 style="margin:0 0 8px">Homepage Currency Directory Control</h3>
+        <p style="font-size:12px;color:#526579">দুটি Public Directory এখান থেকে চালু/বন্ধ ও সম্পাদনা করুন। JSON ফরম্যাটে code, name, flag/logo এবং enabled নিয়ন্ত্রণ করা যাবে। খালি রাখলে ওয়েবসাইটের built-in default list থাকবে।</p>
+        <label style="display:flex;gap:8px;align-items:center;margin:10px 0"><input id="exFiatDirectoryEnabled" type="checkbox" checked style="width:auto"> Fiat Currency List দেখাবে</label>
+        <label style="display:block;font-size:13px;font-weight:700">Fiat Currency List (JSON)<textarea id="exFiatDirectoryJson" rows="7" spellcheck="false" placeholder='[{"code":"USD","name":"US Dollar","flag":"🇺🇸","enabled":true}]' style="width:100%;margin-top:5px;padding:10px;border:1px solid #d5e0e8;border-radius:8px;font:12px monospace"></textarea></label>
+        <label style="display:flex;gap:8px;align-items:center;margin:14px 0 10px"><input id="exCryptoDirectoryEnabled" type="checkbox" checked style="width:auto"> Popular Crypto List দেখাবে</label>
+        <label style="display:block;font-size:13px;font-weight:700">Popular Crypto List (JSON)<textarea id="exCryptoDirectoryJson" rows="7" spellcheck="false" placeholder='[{"code":"BTC","name":"Bitcoin","logo":"https://...","enabled":true}]' style="width:100%;margin-top:5px;padding:10px;border:1px solid #d5e0e8;border-radius:8px;font:12px monospace"></textarea></label>
+        <small style="display:block;color:#64748b;line-height:1.6">প্রতিটি আইটেমে code ও name আবশ্যক। Fiat-এর জন্য flag এবং Crypto-এর জন্য HTTPS logo URL দিতে পারবেন। enabled:false দিলে শুধু ওই আইটেমটি লুকাবে। JSON পরিবর্তনের পর Save All Settings চাপুন।</small>
+      </section>
       <h3 style="margin:18px 0 8px">Add New Currency</h3><p style="margin:0 0 10px;font-size:12px;color:#526579">নতুন Currency যোগ করলে আগে Editor-এ যুক্ত হবে। Homepage-এ প্রকাশ করতে Save All Settings চাপুন। Remove করলেও স্থায়ীভাবে সরাতে Save All Settings প্রয়োজন।</p>
       <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
         <label>Unique ID<input id="exNewId" placeholder="e.g. newwallet"></label>
@@ -636,6 +645,10 @@ import { firebaseConfig } from "./firebase-config.js";
       $("exGlobalFee").value = settings.feePercent ?? 1;
       $("exMinBdt").value = settings.limits?.minBdt ?? 500;
       $("exMaxBdt").value = settings.limits?.maxBdt ?? 10000;
+      $("exFiatDirectoryEnabled").checked = settings.publicCurrencyDirectoryEnabled !== false;
+      $("exCryptoDirectoryEnabled").checked = settings.popularCryptoDirectoryEnabled !== false;
+      $("exFiatDirectoryJson").value = Array.isArray(settings.publicCurrencyCodes) ? JSON.stringify(settings.publicCurrencyCodes,null,2) : "";
+      $("exCryptoDirectoryJson").value = Array.isArray(settings.popularCryptocurrencies) ? JSON.stringify(settings.popularCryptocurrencies,null,2) : "";
       settings.currencies.forEach((c, i) => {
         const card = document.createElement("article");
         card.style.cssText = "background:#fff;border:1px solid #dbe5ec;border-radius:10px;padding:12px;min-width:0";
@@ -686,6 +699,19 @@ import { firebaseConfig } from "./firebase-config.js";
       });
       settings.feePercent = Number($("exGlobalFee").value);
       settings.limits = {minBdt:Number($("exMinBdt").value),maxBdt:Number($("exMaxBdt").value)};
+      settings.publicCurrencyDirectoryEnabled = $("exFiatDirectoryEnabled").checked;
+      settings.popularCryptoDirectoryEnabled = $("exCryptoDirectoryEnabled").checked;
+      const fiatJson = $("exFiatDirectoryJson").value.trim();
+      const cryptoJson = $("exCryptoDirectoryJson").value.trim();
+      try {
+        if (fiatJson) settings.publicCurrencyCodes = JSON.parse(fiatJson); else delete settings.publicCurrencyCodes;
+        if (cryptoJson) settings.popularCryptocurrencies = JSON.parse(cryptoJson); else delete settings.popularCryptocurrencies;
+      } catch (_) { throw new Error("Currency Directory JSON সঠিক নয়। JSON ঠিক করে আবার Save করুন।"); }
+      for (const [key,list] of [["Fiat",settings.publicCurrencyCodes],["Crypto",settings.popularCryptocurrencies]]) {
+        if (list !== undefined && (!Array.isArray(list) || list.some(item => !item || typeof item !== "object" || !/^[A-Z0-9]{2,12}$/.test(String(item.code || "")) || !String(item.name || "").trim())) {
+          throw new Error(key + " list-এ প্রতিটি item-এর সঠিক code ও name থাকতে হবে।");
+        }
+      }
     }
     async function load() {
       status.textContent = "Exchange settings Firestore থেকে লোড হচ্ছে...";
@@ -697,8 +723,8 @@ import { firebaseConfig } from "./firebase-config.js";
       } catch (error) { status.textContent = "Settings লোড হয়নি: " + error.message; }
     }
     async function save() {
-      collect();
-      status.textContent = "সব Currency ও Payment Settings সংরক্ষণ হচ্ছে...";
+      try { collect(); } catch (error) { status.textContent = error.message; return; }
+      status.textContent = "সব Currency, Fiat Directory ও Crypto Directory Settings সংরক্ষণ হচ্ছে...";
       try {
         const data = await api("PUT","/api/admin/exchange-settings",{settings});
         settings = data.settings;
