@@ -146,3 +146,25 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
 .fm-global-products-note{margin:22px 0 0;color:#929aaa;font-size:12px;line-height:1.5;text-align:center}
 @media(min-width:900px){.fm-global-product-card:last-child{grid-column:1/-1}.fm-global-product-card:last-child .fm-global-product-art{min-height:300px}}
 @media(max-width:700px){.fm-global-products{padding:52px 0 58px}.fm-global-products-inner{width:calc(100% - 30px)}.fm-global-products-heading{margin-bottom:25px}.fm-global-products-heading h2{font-size:32px}.fm-global-products-heading p{font-size:15px}.fm-global-products-grid{grid-template-columns:1fr;gap:20px}.fm-global-product-card{padding:25px 22px 21px;border-radius:29px}.fm-global-product-copy h3{font-size:27px}.fm-global-product-copy p{font-size:16px}.fm-global-product-art{min-height:245px;margin-top:25px}.fm-art-globe,.fm-cny-symbol{width:155px;height:155px;font-size:82px}.fm-art-currency-card,.fm-cny-rate-card{left:5%;width:62%;padding:13px}.fm-art-amount{right:4%;min-width:160px}.fm-art-payout-card{left:7%;right:7%;padding:14px}.fm-art-node{width:68px;height:68px;font-size:27px}}
+
+/* Buy/Sell and Exchange service card illustrations */
+.fm-buy-sell-art{background:linear-gradient(145deg,#f4f6fb,#edf2ff)}
+.fm-bs-orbit{position:absolute;width:245px;height:245px;border:2px dashed rgba(48,91,205,.25);border-radius:50%;transform:rotate(-22deg)}
+.fm-bs-card{position:absolute;z-index:2;width:48%;min-height:132px;padding:16px;border:1px solid #e2e8f5;border-radius:17px;background:rgba(255,255,255,.96);box-shadow:0 13px 30px rgba(37,61,120,.12)}
+.fm-bs-card small{display:block;color:#8993a5;font-size:9px;font-weight:800;letter-spacing:.06em}
+.fm-bs-card strong{display:inline-grid;place-items:center;width:34px;height:34px;margin:13px 8px 8px 0;border-radius:50%;background:#eaf0ff;color:#2452c2;font-size:23px}
+.fm-bs-card b{color:#244db7;font-size:19px}
+.fm-bs-card span{display:block;color:#8993a5;font-size:10px}
+.fm-bs-buy{left:7%;top:18%;transform:rotate(-5deg)}
+.fm-bs-sell{right:7%;bottom:15%;transform:rotate(5deg)}
+.fm-bs-sell strong{background:#e7f8f1;color:#20a878}
+.fm-bs-center{position:absolute;z-index:3;left:50%;top:50%;width:48px;height:48px;display:grid;place-items:center;border:5px solid #f3f5fa;border-radius:50%;background:#2857c9;color:#fff;font-size:17px;transform:translate(-50%,-50%);box-shadow:0 7px 18px rgba(35,76,185,.2)}
+.fm-exchange-art{background:linear-gradient(145deg,#f4f6fb,#edf2ff)}
+.fm-exchange-orb{position:absolute;z-index:1;display:grid;place-items:center;border-radius:50%;font-weight:800;box-shadow:0 12px 28px rgba(37,61,120,.13)}
+.fm-exchange-orb-one{top:13%;left:13%;width:112px;height:112px;background:linear-gradient(145deg,#fff,#dfe8ff);color:#2854bc;font-size:23px}
+.fm-exchange-orb-two{right:13%;bottom:13%;width:132px;height:132px;background:linear-gradient(145deg,#9cb7ff,#315ee0);color:#fff;font-size:23px}
+.fm-exchange-flow{position:absolute;z-index:2;left:23%;right:23%;top:43%;display:flex;align-items:center;justify-content:space-between}
+.fm-exchange-flow span{width:62px;height:62px;display:grid;place-items:center;border:5px solid #f3f5fa;border-radius:50%;background:#fff;color:#2854bc;font-size:24px;box-shadow:0 8px 20px rgba(37,61,120,.13)}
+.fm-exchange-flow b{color:#2854bc;font-size:22px}
+.fm-exchange-label{position:absolute;left:0;right:0;bottom:8%;text-align:center;color:#75829a;font-size:10px;font-weight:800;letter-spacing:.12em}
+@media(max-width:700px){.fm-bs-card{width:53%;padding:13px}.fm-bs-buy{left:4%;top:17%}.fm-bs-sell{right:4%;bottom:15%}.fm-bs-card small{font-size:8px}.fm-exchange-orb-one{width:95px;height:95px}.fm-exchange-orb-two{width:112px;height:112px}.fm-exchange-flow{left:18%;right:18%}}
