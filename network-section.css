@@ -358,3 +358,9 @@
  .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-card,
  .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-card{transition:none!important}
 }
+
+
+/* Reduce excess space above the network heading. */
+.fm-network-v2{padding-top:48px!important}
+.fm-network-v2 .fm-network-heading{margin-top:0!important}
+@media(max-width:700px){.fm-network-v2{padding-top:30px!important}}
