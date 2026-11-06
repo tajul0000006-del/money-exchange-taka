@@ -256,6 +256,9 @@
     if (directorySettings.publicCurrencyDirectoryEnabled !== false) renderCurrencyCodes(directorySettings.publicCurrencyCodes);
     renderPopularCrypto(directorySettings.popularCryptocurrencies);
     renderPopularEWallets(directorySettings.popularEWallets);
+    const mobileBankingTitle = make("h2","fm-mobile-banking-title","WE SUPPORT THESE MOBILE BANKING APPS");
+    mobileBankingTitle.setAttribute("aria-label","We support these mobile banking apps");
+    root.append(mobileBankingTitle);
     renderDirectory("fm-mobile-banking-panel","POPULAR MOBILE BANKING APPS",popularMobileBankingApps,"wallet");
     root.dataset.source = "admin-settings";
     setupDirectoryAutoScroll();
