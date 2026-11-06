@@ -52,3 +52,10 @@
 @media(max-width:700px){.fm-network-v2 .fm-crypto-code-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.fm-network-v2 .fm-crypto-code-card{min-height:47px;gap:5px;padding:6px 5px;border-radius:9px}.fm-network-v2 .fm-crypto-code-copy b{font-size:10px}.fm-network-v2 .fm-crypto-code-copy small{font-size:7px}}
 @media(max-width:360px){.fm-network-v2 .fm-crypto-code-grid{gap:4px}.fm-network-v2 .fm-crypto-code-card{gap:3px;padding:5px 3px}.fm-network-v2 .fm-crypto-code-copy b{font-size:9px}.fm-network-v2 .fm-crypto-code-copy small{font-size:6px}}
 @media(prefers-color-scheme:dark){.fm-network-v2 .fm-crypto-code-card{background:linear-gradient(145deg,#fff,#f7faff)!important;border-color:#e4edf5!important}.fm-network-v2 .fm-crypto-code-copy b{color:#1748b4!important}.fm-network-v2 .fm-crypto-code-copy small{color:#6b7d91!important}}
+
+/* Compact horizontal crypto ticker: one coin immediately after another */
+.fm-network-v2 .fm-crypto-code-grid{display:flex!important;flex-wrap:nowrap!important;gap:8px;overflow-x:auto;overflow-y:hidden;padding:2px 1px 10px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.fm-network-v2 .fm-crypto-code-card{flex:0 0 112px!important;width:112px;min-width:112px;min-height:58px;scroll-snap-align:start}
+.fm-network-v2 .fm-crypto-code-grid::-webkit-scrollbar{height:4px}
+.fm-network-v2 .fm-crypto-code-grid::-webkit-scrollbar-thumb{background:#aebfd2;border-radius:10px}
+@media(max-width:700px){.fm-network-v2 .fm-crypto-code-grid{display:flex!important;flex-wrap:nowrap!important;gap:6px}.fm-network-v2 .fm-crypto-code-card{flex:0 0 100px!important;width:100px;min-width:100px;min-height:52px}}
