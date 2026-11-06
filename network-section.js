@@ -75,7 +75,8 @@
     {code:"WISE",name:"Wise",logo:"https://cdn.simpleicons.org/wise"},
     {code:"PAYONEER",name:"Payoneer",logo:"https://cdn.simpleicons.org/payoneer"},
     {code:"REVOLUT",name:"Revolut",logo:"https://cdn.simpleicons.org/revolut"},
-    {code:"AIRTM",name:"Airtm",logo:"https://cdn.simpleicons.org/airtm"}
+    {code:"AIRTM",name:"Airtm",logo:"https://cdn.simpleicons.org/airtm"},
+    {code:"EPAY",name:"ePay",logo:""}
   ];
   const renderDirectory = (className,title,items,kind) => {
     const panel = make("div","fm-network-group " + className);
@@ -104,9 +105,10 @@
     const items = Array.isArray(custom) ? custom.filter(x => x && (Array.isArray(x) || x.enabled !== false)) : currencyCodes;
     renderDirectory("fm-currency-code-panel","WE SUPPORT THESE CURRENCY CODES",items,"fiat");
   };
-  const renderPopularEWallets = () => {
+  const renderPopularEWallets = custom => {
     root.querySelector(".fm-wallet-code-panel")?.remove();
-    renderDirectory("fm-wallet-code-panel","WE SUPPORT POPULAR E-WALLETS",popularEWallets,"wallet");
+    const items = Array.isArray(custom) ? custom.filter(x => x && (Array.isArray(x) || x.enabled !== false)) : popularEWallets;
+    renderDirectory("fm-wallet-code-panel","WE SUPPORT POPULAR E-WALLETS",items,"wallet");
   };
   const renderPopularCrypto = custom => {
     root.querySelector(".fm-crypto-code-panel")?.remove();
@@ -177,7 +179,8 @@
     else root.querySelector('.fm-currency-code-panel')?.remove();
     if (directorySettings.popularCryptoDirectoryEnabled !== false) renderPopularCrypto(directorySettings.popularCryptocurrencies);
     else root.querySelector('.fm-crypto-code-panel')?.remove();
-    renderPopularEWallets();
+    if (directorySettings.popularEWalletDirectoryEnabled !== false) renderPopularEWallets(directorySettings.popularEWallets);
+    else root.querySelector(".fm-wallet-code-panel")?.remove();
     root.dataset.source = "admin-settings";
     applyTextOverrides();
   };
