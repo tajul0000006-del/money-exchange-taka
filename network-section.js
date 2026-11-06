@@ -73,6 +73,50 @@
     {code:"AIRTM",name:"Airtm",logo:"https://cdn.simpleicons.org/airtm"},
     {code:"EPAY",name:"ePay",logo:""}
   ];
+  const popularMobileBankingApps = [
+    ["bKash","Bangladesh","bkash"],["Nagad","Bangladesh",""],["Rocket","Bangladesh",""],["Upay","Bangladesh",""],
+    ["Paytm","India","paytm"],["PhonePe","India","phonepe"],["Google Pay","India","googlepay"],["BHIM","India",""],
+    ["YONO SBI","India",""],["HDFC PayZapp","India",""],["iMobile Pay","India",""],["MobiKwik","India","mobikwik"],
+    ["GCash","Philippines","gcash"],["Maya","Philippines",""],["GoTyme","Philippines",""],
+    ["Dana","Indonesia","dana"],["OVO","Indonesia","ovo"],["GoPay","Indonesia",""],["LinkAja","Indonesia",""],
+    ["ShopeePay","Southeast Asia","shopee"],["Touch 'n Go eWallet","Malaysia",""],["Boost","Malaysia",""],
+    ["MAE","Malaysia",""],["GrabPay","Singapore & SEA","grab"],["PayNow","Singapore",""],
+    ["DBS PayLah!","Singapore",""],["GXS","Singapore",""],["TrueMoney","Thailand",""],
+    ["PromptPay","Thailand",""],["K PLUS","Thailand",""],["SCB EASY","Thailand",""],
+    ["MoMo","Vietnam",""],["ZaloPay","Vietnam",""],["Viettel Money","Vietnam",""],
+    ["KBZPay","Myanmar",""],["Wave Money","Myanmar",""],["Bakong","Cambodia",""],
+    ["Wing Money","Cambodia",""],["LaoApp","Laos",""],["eSewa","Nepal","esewa"],
+    ["Khalti","Nepal",""],["Fonepay","Nepal",""],["FriMi","Sri Lanka",""],
+    ["Genie","Sri Lanka",""],["mCash","Sri Lanka",""],["JazzCash","Pakistan",""],
+    ["Easypaisa","Pakistan",""],["SadaPay","Pakistan",""],["NayaPay","Pakistan",""],
+    ["Careem Pay","Middle East","careem"],["STC Pay","Saudi Arabia",""],["urpay","Saudi Arabia",""],
+    ["D360","Saudi Arabia",""],["e& money","UAE",""],["Careem Pay","UAE","careem"],
+    ["Payit","UAE",""],["Botim Pay","UAE",""],["Wio","UAE",""],["Ooredoo Money","Qatar",""],
+    ["QNB Mobile","Qatar",""],["BenefitPay","Bahrain",""],["KFHOnline","Kuwait",""],
+    ["ZainCash","Iraq",""],["FIB","Iraq",""],["Orange Money","Africa","orange"],
+    ["MTN MoMo","Africa","mtn"],["Airtel Money","Africa","airtel"],["M-Pesa","Kenya",""],
+    ["PesaLink","Kenya",""],["Equitel","Kenya",""],["M-Pesa","Tanzania",""],
+    ["Tigo Pesa","Tanzania",""],["Airtel Money","Tanzania","airtel"],["M-Pesa","Uganda",""],
+    ["Airtel Money","Uganda","airtel"],["MTN MoMo","Ghana","mtn"],["AirtelTigo Money","Ghana",""],
+    ["Zeepay","Ghana",""],["Telebirr","Ethiopia",""],["M-Pesa","Mozambique",""],
+    ["EcoCash","Zimbabwe",""],["OneMoney","Zimbabwe",""],["Innbucks","Zimbabwe",""],
+    ["MoMo","Cameroon",""],["Orange Money","Senegal","orange"],["Wave","Senegal",""],
+    ["Orange Money","Côte d’Ivoire","orange"],["Wave","Côte d’Ivoire",""],["Moov Money","West Africa",""],
+    ["Fawry","Egypt",""],["Vodafone Cash","Egypt",""],["InstaPay","Egypt",""],
+    ["BaridiMob","Algeria",""],["D17","Tunisia",""],["My Orange","Morocco","orange"],
+    ["PayPal","Global","paypal"],["Wise","Global","wise"],["Revolut","Europe","revolut"],
+    ["Monzo","United Kingdom","monzo"],["Starling","United Kingdom",""],["Lydia","France",""],
+    ["Paylib","France",""],["Bizum","Spain",""],["MB WAY","Portugal",""],
+    ["Twint","Switzerland",""],["Vipps","Norway",""],["Swish","Sweden",""],
+    ["MobilePay","Denmark & Finland",""],["iDEAL","Netherlands",""],["BLIK","Poland",""],
+    ["Satispay","Italy",""],["Bancontact Pay","Belgium",""],["Zelle","United States","zelle"],
+    ["Venmo","United States","venmo"],["Cash App","United States","cashapp"],["Apple Pay","Global","applepay"],
+    ["Google Wallet","Global","googlepay"],["Interac","Canada",""],["PIX","Brazil",""],
+    ["PicPay","Brazil",""],["Mercado Pago","Latin America","mercadopago"],["Nequi","Colombia",""],
+    ["Daviplata","Colombia",""],["Yape","Peru",""],["Plin","Peru",""],["Tigo Money","Latin America",""],
+    ["MiDinero","Uruguay",""],["Prex","Uruguay",""],["OXXO Pay","Mexico",""],
+    ["CoDi","Mexico",""],["Fintual","Chile",""],["M-Paisa","Fiji",""]
+  ].map(([code,name,slug]) => ({code,name,logo:slug ? "https://cdn.simpleicons.org/"+slug : ""}));
   const renderDirectory = (className,title,items,kind) => {
     const panel = make("div","fm-network-group notranslate " + className);
     panel.setAttribute("translate","no");
@@ -212,6 +256,7 @@
     if (directorySettings.publicCurrencyDirectoryEnabled !== false) renderCurrencyCodes(directorySettings.publicCurrencyCodes);
     renderPopularCrypto(directorySettings.popularCryptocurrencies);
     renderPopularEWallets(directorySettings.popularEWallets);
+    renderDirectory("fm-mobile-banking-panel","POPULAR MOBILE BANKING APPS",popularMobileBankingApps,"wallet");
     root.dataset.source = "admin-settings";
     setupDirectoryAutoScroll();
   };
