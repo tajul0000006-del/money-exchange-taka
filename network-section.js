@@ -5,11 +5,6 @@
   const root = section?.querySelector("[data-network-live]");
   if (!root) return;
   const SETTINGS_API = "https://moneyexchange-admin.taijulsheikh60.workers.dev/api/exchange-settings";
-  const groups = [
-    {type:"crypto", label:"DIGITAL CURRENCIES", note:"USDT and other supported digital currency networks"},
-    {type:"global", label:"INTERNATIONAL E-WALLETS", note:"Global online wallets and e-payment services"},
-    {type:"bdt", label:"BANGLADESH PAYMENT SERVICES", note:"Local mobile financial and payment services"}
-  ];
   const currencyCodes = [
     ["USD","US Dollar","🇺🇸"],["BDT","Bangladeshi Taka","🇧🇩"],["EUR","Euro","🇪🇺"],["GBP","British Pound","🇬🇧"],
     ["INR","Indian Rupee","🇮🇳"],["AED","UAE Dirham","🇦🇪"],["SAR","Saudi Riyal","🇸🇦"],["MYR","Malaysian Ringgit","🇲🇾"],
@@ -135,60 +130,15 @@
     } catch (_) {}
   };
   let directorySettings = {};
-  const render = currencies => {
-    const active = currencies.filter(c => c && c.enabled !== false && c.hidden !== true && String(c.id || "").trim());
-    const sections = groups.map(group => {
-      const items = active.filter(c => group.type === "global" ? !["crypto","bdt"].includes(String(c.type || "").toLowerCase()) : String(c.type || "").toLowerCase() === group.type);
-      if (!items.length) return null;
-      const row = make("div","fm-network-group");
-      const groupLabel = make("span","fm-network-label");
-      const groupName = make("span","fm-network-label-text",group.label);
-      groupName.setAttribute("data-content-key", "network.group." + group.type);
-      groupLabel.append(groupName);
-      if (group.type === "crypto") groupLabel.append(make("b","fm-network-count","100+ CURRENCIES"));
-      row.append(groupLabel);
-      const list = make("div","fm-network-logos");
-      items.forEach(item => {
-        const entry = make("span","fm-network-method");
-        const mark = make("b","fm-logo-mark",String(item.short || item.name || item.id || "FM").slice(0,3));
-        const imageUrl = safeImage(item.logo);
-        if (imageUrl) {
-          const img = document.createElement("img");
-          img.src = imageUrl;
-          img.alt = "";
-          img.loading = "lazy";
-          img.onerror = () => { img.remove(); mark.textContent = String(item.short || item.name || item.id || "FM").slice(0,3); };
-          mark.textContent = "";
-          mark.append(img);
-        }
-        const copy = make("span","fm-network-method-copy");
-        copy.append(make("span","fm-network-method-name",String(item.name || item.id)));
-        let meta = String(item.currency || "").toUpperCase();
-        if (String(item.type || "").toLowerCase() === "bdt") meta = "PERSONAL BDT";
-        else if (String(item.type || "").toLowerCase() === "crypto" && /TRC20|TRON/i.test(String(item.subtitle || ""))) meta += " · TRC20";
-        copy.append(make("small","",meta));
-        entry.append(mark,copy);
-        list.append(entry);
-      });
-      row.append(list);
-      return row;
-    }).filter(Boolean);
-    if (!sections.length) return;
-    root.replaceChildren(...sections);
+  const render = () => {
+    root.replaceChildren();
     if (directorySettings.publicCurrencyDirectoryEnabled !== false) renderCurrencyCodes(directorySettings.publicCurrencyCodes);
-    else root.querySelector('.fm-currency-code-panel')?.remove();
     if (directorySettings.popularCryptoDirectoryEnabled !== false) renderPopularCrypto(directorySettings.popularCryptocurrencies);
-    else root.querySelector('.fm-crypto-code-panel')?.remove();
     if (directorySettings.popularEWalletDirectoryEnabled !== false) renderPopularEWallets(directorySettings.popularEWallets);
-    else root.querySelector(".fm-wallet-code-panel")?.remove();
     root.dataset.source = "admin-settings";
-    applyTextOverrides();
   };
-  renderCurrencyCodes();
-  renderPopularCrypto();
-  renderPopularEWallets();
   fetch(SETTINGS_API,{cache:"no-store"})
     .then(response => { if (!response.ok) throw new Error("Exchange settings unavailable"); return response.json(); })
-    .then(data => { directorySettings = data?.settings || {}; if (Array.isArray(data?.settings?.currencies)) render(data.settings.currencies); })
+    .then(data => { directorySettings = data?.settings || {}; render(); })
     .catch(() => { /* Keep the built-in public fallback if settings cannot be reached. */ });
 })();
