@@ -238,3 +238,41 @@
   .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-card{flex-basis:145px!important;width:145px!important;min-width:145px!important;min-height:78px!important;padding:10px!important;gap:8px!important}
   .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-flag{width:32px!important;height:32px!important;flex-basis:32px!important;font-size:18px!important}
 }
+
+
+/* One large directory card visible at a time; swipe/scroll horizontally inside each 300px panel. */
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-grid,
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-grid{
+  align-items:stretch!important;gap:14px!important;scroll-snap-type:x mandatory!important;
+}
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-card,
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-card{
+  flex:0 0 100%!important;width:100%!important;min-width:100%!important;
+  min-height:150px!important;height:150px!important;justify-content:flex-start!important;
+  padding:24px!important;gap:18px!important;border-radius:18px!important;scroll-snap-align:start!important;
+}
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-flag{
+  width:64px!important;height:64px!important;flex-basis:64px!important;border-radius:15px!important;font-size:32px!important;
+}
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-copy,
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-copy{gap:7px!important}
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-copy b,
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-copy b{font-size:22px!important}
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-copy small,
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-copy small{font-size:14px!important}
+@media(max-width:700px){
+ .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-grid,
+ .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-grid{gap:10px!important}
+ .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-card,
+ .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-card{
+  flex-basis:100%!important;width:100%!important;min-width:100%!important;
+  min-height:145px!important;height:145px!important;padding:18px!important;gap:13px!important;
+ }
+ .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-flag{
+  width:52px!important;height:52px!important;flex-basis:52px!important;font-size:26px!important;
+ }
+ .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-copy b,
+ .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-copy b{font-size:19px!important}
+ .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-copy small,
+ .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-copy small{font-size:12px!important}
+}
