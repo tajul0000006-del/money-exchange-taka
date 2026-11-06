@@ -74,7 +74,8 @@
     {code:"EPAY",name:"ePay",logo:""}
   ];
   const renderDirectory = (className,title,items,kind) => {
-    const panel = make("div","fm-network-group " + className);
+    const panel = make("div","fm-network-group notranslate " + className);
+    panel.setAttribute("translate","no");
     const heading = make("div","fm-network-label");
     heading.append(make("span","fm-network-label-text",title));
     heading.append(make("b","fm-network-count",items.length + " LISTED"));
