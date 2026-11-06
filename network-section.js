@@ -91,8 +91,7 @@
       const logo = kind === "crypto" ? ((!Array.isArray(item) && safeImage(item.logo)) || "https://assets.coincap.io/assets/icons/" + String(code).toLowerCase() + "@2x.png") : (!Array.isArray(item) ? safeImage(item.logo) : "");
       const card = make("div",(kind === "crypto" || kind === "wallet") ? "fm-crypto-code-card" : "fm-currency-code-card");
       if (logo) {
-        const img = document.createElement("img"); img.src=logo; img.alt=""; img.loading="lazy"; img.onerror=()=>img.remove();
-        const wrap=make("span","fm-currency-flag"); wrap.append(img); card.append(wrap);
+        const img = document.createElement("img"); img.src=logo; img.alt=""; img.loading="lazy"; const wrap=make("span","fm-currency-flag"); img.onerror=()=>{img.remove();wrap.textContent=String(code).slice(0,2)}; wrap.append(img); card.append(wrap);
       } else card.append(make("span","fm-currency-flag",flag || "◈"));
       const details = make("span",(kind === "crypto" || kind === "wallet") ? "fm-crypto-code-copy" : "fm-currency-code-copy");
       details.append(make("b","",code),make("small","",name));
