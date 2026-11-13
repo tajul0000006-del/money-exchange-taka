@@ -11,3 +11,9 @@
 @media(max-width:760px){.met-footer-inner{grid-template-columns:125px minmax(0,1fr)!important;grid-template-rows:43px 42px!important;gap:0 12px!important;padding:7px 16px!important}.met-footer-logo{font-size:21px!important}.met-footer-links{justify-content:flex-end!important;gap:7px 12px!important}.met-footer-links a{font-size:10px!important}.met-footer-bottom{grid-column:1/-1!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;padding-top:7px!important;border-top:1px solid #dce9ed!important;text-align:left!important}.met-footer-bottom span{font-size:9px!important}}
 @media(max-width:390px){.met-footer-inner{grid-template-columns:105px minmax(0,1fr)!important;padding-left:12px!important;padding-right:12px!important}.met-footer-logo{font-size:19px!important}.met-footer-links{gap:6px 9px!important}.met-footer-links a{font-size:9px!important}.met-footer-bottom span{font-size:8px!important}}
 @media(prefers-reduced-motion:reduce){.met-footer-links a{transition:none!important}}
+
+
+/* Use the official FastMoney logo image in the footer. */
+.met-footer-logo{display:inline-flex!important;align-items:center!important;text-decoration:none!important}
+.met-footer-logo img{display:block;width:190px;max-width:100%;height:auto;object-fit:contain}
+@media(max-width:600px){.met-footer-logo img{width:160px}}
