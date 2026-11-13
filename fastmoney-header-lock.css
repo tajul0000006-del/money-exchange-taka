@@ -386,3 +386,14 @@ body.fm-menu-open::before{z-index:999!important}
     bottom:0!important;
   }
 }
+
+
+/* DESKTOP MENU: reveal downward from the header edge and show its language selector. */
+@media(min-width:901px){
+  .main-header .mobile-nav{
+    transform:translateY(-100%)!important;
+    transform-origin:top center!important;
+  }
+  .main-header .mobile-nav.open{transform:translateY(0)!important}
+  .main-header .mobile-nav .fm-mobile-language{display:flex!important}
+}
