@@ -227,3 +227,28 @@ body.fm-menu-open::before{z-index:999!important}
 .main-header .mobile-nav .fm-mobile-language{margin-top:18px!important;color:#15284a!important}
 .main-header .mobile-nav .fm-mobile-language label{color:#15284a!important}
 .main-header .mobile-nav .fm-language-select{color:#15284a!important;background:#f1f5fd!important;border:1px solid #dbe4f2!important}
+
+
+/* Match the same right-side navigation drawer on desktop and mobile. */
+@media(min-width:761px){
+  .main-header .header-container>.menu-toggle{
+    display:flex!important;align-items:center!important;justify-content:center!important;
+  }
+  .main-header .mobile-nav{
+    width:min(440px,38vw)!important;
+    min-width:360px!important;
+    padding:32px 28px 38px!important;
+    border-radius:24px 0 0 24px!important;
+  }
+  .main-header .mobile-nav .mobile-nav-link{
+    min-height:64px!important;padding:17px 16px!important;
+    font-size:17px!important;border-radius:15px!important;
+  }
+  .main-header .mobile-nav .header-support summary{
+    min-height:64px!important;padding:17px 16px!important;font-size:17px!important;
+  }
+  .main-header .mobile-menu-close{width:44px!important;height:44px!important}
+}
+@media(min-width:1200px){
+  .main-header .mobile-nav{width:460px!important}
+}
