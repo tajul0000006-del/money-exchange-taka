@@ -252,3 +252,27 @@ body.fm-menu-open::before{z-index:999!important}
 @media(min-width:1200px){
   .main-header .mobile-nav{width:460px!important}
 }
+
+
+/* FINAL: desktop drawer must use exactly the mobile drawer dimensions and styling. */
+@media(min-width:761px){
+  .main-header .mobile-nav{
+    width:min(370px,88vw)!important;
+    min-width:0!important;
+    max-width:88vw!important;
+    padding:26px 22px 32px!important;
+    border-radius:22px 0 0 22px!important;
+  }
+  .main-header .mobile-nav .mobile-nav-link{
+    min-height:56px!important;
+    padding:14px 12px!important;
+    font-size:15px!important;
+    border-radius:13px!important;
+  }
+  .main-header .mobile-nav .header-support summary{
+    min-height:56px!important;
+    padding:14px 12px!important;
+    font-size:15px!important;
+  }
+  .main-header .mobile-menu-close{width:40px!important;height:40px!important}
+}
