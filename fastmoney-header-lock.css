@@ -132,3 +132,13 @@
     left:-18px!important;
   }
 }
+
+
+/* Nudge the mobile navigation (hamburger) icon slightly to the right. */
+@media(max-width:900px){
+  .main-header .header-container > .menu-toggle{
+    position:relative!important;
+    left:6px!important;
+    right:auto!important;
+  }
+}
