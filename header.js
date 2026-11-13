@@ -14,6 +14,7 @@
 const header = document.getElementById("mainHeader");
 const menuToggle = document.getElementById("menuToggle");
 const mobileMenu = document.getElementById("mobileMenu");
+const mobileMenuClose = document.getElementById("mobileMenuClose");
 
 const desktopLinks = document.querySelectorAll(
   ".desktop-nav .nav-link"
@@ -44,6 +45,7 @@ function setMenuState(isOpen) {
 
   // Dropdown animation
   mobileMenu.classList.toggle("open", isOpen);
+  document.body.classList.toggle("fm-menu-open", isOpen);
 
   // Accessibility attributes
   menuToggle.setAttribute(
@@ -66,6 +68,13 @@ function setMenuState(isOpen) {
 /* ==========================================
    3. MENU BUTTON CLICK
 ========================================== */
+
+if (mobileMenuClose) {
+  mobileMenuClose.addEventListener("click", function () {
+    setMenuState(false);
+    if (menuToggle) menuToggle.focus();
+  });
+}
 
 if (menuToggle && mobileMenu) {
 
