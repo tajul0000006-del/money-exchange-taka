@@ -354,3 +354,15 @@ body.fm-menu-open::before{z-index:999!important}
     bottom:0!important;
   }
 }
+
+
+/* Desktop header alignment: same right-edge menu button position as mobile. */
+@media(min-width:901px){
+  .main-header .header-container{width:calc(100% - 30px)!important;max-width:none!important;gap:12px!important}
+  .main-header .header-container>.menu-toggle{display:flex!important;margin-left:auto!important;margin-right:0!important;flex:0 0 39px!important;width:39px!important;height:39px!important}
+  .main-header .header-container>.desktop-nav{display:none!important}
+  .main-header .mobile-nav,.main-header .mobile-nav.open{
+    top:88px!important;height:calc(100dvh - 88px)!important;max-height:calc(100dvh - 88px)!important;
+  }
+  body.fm-menu-open::before{top:88px!important}
+}
