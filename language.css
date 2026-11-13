@@ -18,3 +18,33 @@ body{top:0!important}.goog-logo-link,.goog-te-gadget{display:none!important}
 .fm-language-float{position:fixed;z-index:1100;top:14px;right:14px;display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid #d7e5e9;border-radius:12px;background:#fff;box-shadow:0 8px 24px rgba(9,40,60,.12);color:#087b8c}
 .fm-language-float select{max-width:150px;border:0;background:transparent;color:#173b4d;font-size:13px;font-weight:700;outline:0}
 @media(max-width:760px){.fm-language-float{top:9px;right:9px}.fm-language-float select{max-width:125px}}
+
+
+/* Language selector should span the full navigation-menu width like other menu items. */
+.main-header .mobile-nav .fm-mobile-language{
+  display:flex!important;
+  width:100%!important;
+  max-width:none!important;
+  box-sizing:border-box!important;
+  margin:12px 0 0!important;
+}
+.main-header .mobile-nav .fm-mobile-language select{
+  flex:1 1 auto!important;
+  width:auto!important;
+  min-width:0!important;
+  max-width:none!important;
+  box-sizing:border-box!important;
+}
+@media(min-width:761px){
+  .main-header .mobile-nav .fm-mobile-language{
+    width:100%!important;
+    max-width:none!important;
+    margin:18px 0 0!important;
+    padding:14px 18px!important;
+  }
+  .main-header .mobile-nav .fm-mobile-language select{
+    flex:1 1 auto!important;
+    width:auto!important;
+    max-width:none!important;
+  }
+}
