@@ -366,3 +366,23 @@ body.fm-menu-open::before{z-index:999!important}
   }
   body.fm-menu-open::before{top:88px!important}
 }
+
+
+/* DESKTOP NAV PANEL: attach directly to the actual 64px desktop header, with no gap. */
+@media (min-width:901px){
+  .main-header .mobile-nav,
+  .main-header .mobile-nav.open{
+    top:64px!important;
+    height:calc(100vh - 64px)!important;
+    height:calc(100dvh - 64px)!important;
+    max-height:calc(100dvh - 64px)!important;
+    margin-top:0!important;
+    border-top:0!important;
+  }
+  body.fm-menu-open::before{
+    top:64px!important;
+    left:0!important;
+    right:0!important;
+    bottom:0!important;
+  }
+}
