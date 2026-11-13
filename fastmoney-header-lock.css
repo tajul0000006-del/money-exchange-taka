@@ -209,3 +209,21 @@ body.fm-menu-open::before{
 @media(max-width:760px){
   .main-header .mobile-nav{width:min(370px,88vw)!important}
 }
+
+
+/* FIX: keep the right drawer above the page dimmer (header is its stacking context). */
+.main-header{position:sticky!important;top:0!important;z-index:1000!important;isolation:isolate!important}
+body.fm-menu-open::before{z-index:999!important}
+.main-header .mobile-nav{z-index:1001!important;color:#14213b!important}
+.main-header .mobile-nav.open{background:#fff!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important}
+.main-header .mobile-menu-heading span{display:block!important;color:#123f91!important;font-size:25px!important;font-weight:850!important}
+.main-header .mobile-menu-heading small{display:block!important;color:#71809a!important;font-size:12px!important;margin-left:auto!important}
+.main-header .mobile-nav .mobile-nav-link{display:flex!important;align-items:center!important;gap:13px!important;width:100%!important;min-height:56px!important;padding:14px 12px!important;margin:7px 0!important;border-radius:13px!important;color:#15284a!important;background:#f1f5fd!important;font-size:15px!important;font-weight:700!important;text-decoration:none!important;opacity:1!important;visibility:visible!important}
+.main-header .mobile-nav .mobile-nav-link>i:first-child{color:#1b50ad!important;width:22px!important;text-align:center!important}
+.main-header .mobile-nav .mobile-nav-link .nav-arrow{margin-left:auto!important;color:#8393ad!important}
+.main-header .mobile-nav .header-support summary{display:flex!important;align-items:center!important;gap:13px!important;min-height:56px!important;padding:14px 12px!important;border-radius:13px!important;background:#f1f5fd!important;color:#15284a!important;font-weight:700!important}
+.main-header .mobile-nav .support-panel{background:#fff!important}
+.main-header .mobile-nav .support-option{color:#15284a!important}
+.main-header .mobile-nav .fm-mobile-language{margin-top:18px!important;color:#15284a!important}
+.main-header .mobile-nav .fm-mobile-language label{color:#15284a!important}
+.main-header .mobile-nav .fm-language-select{color:#15284a!important;background:#f1f5fd!important;border:1px solid #dbe4f2!important}
