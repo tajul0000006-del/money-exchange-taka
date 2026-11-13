@@ -397,3 +397,11 @@ body.fm-menu-open::before{z-index:999!important}
   .main-header .mobile-nav.open{transform:translateY(0)!important}
   .main-header .mobile-nav .fm-mobile-language{display:flex!important}
 }
+
+
+/* Desktop only: shift the navigation toggle slightly to the right. */
+@media(min-width:901px){
+  .main-header .header-container>.menu-toggle{
+    transform:translateX(6px)!important;
+  }
+}
