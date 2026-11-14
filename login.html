@@ -64,6 +64,18 @@ html,body{background:#f4f8fc!important;color:#18324b!important}
  .auth-submit{box-shadow:0 10px 22px rgba(8,127,155,.22),inset 0 1px 0 rgba(255,255,255,.2)!important}
 }
 
+
+/* Match the Sign Up page background exactly in Light Mode. */
+@media(prefers-color-scheme:light){
+ html,body{
+  background:
+   radial-gradient(ellipse at 8% 18%,rgba(77,190,220,.15) 0,rgba(77,190,220,0) 34%),
+   radial-gradient(ellipse at 92% 72%,rgba(54,211,166,.13) 0,rgba(54,211,166,0) 35%),
+   linear-gradient(135deg,#fbfdff 0%,#f5f9ff 48%,#f8fffc 100%)!important;
+  background-attachment:fixed!important;
+ }
+}
+
 </style><script src="./header.js" defer></script><script>document.documentElement.classList.add("met-header-styles-ready");</script>  <link rel="stylesheet" href="./responsive.css?v=20261104-public-white1">
 <link rel="stylesheet" href="./account-responsive.css?v=1"><link rel="stylesheet" href="./footer.css?v=20261114-layout3"><link rel="stylesheet" href="./fastmoney-header-lock.css?v=20261114-align1"><link rel="stylesheet" href="./public-dark-mode.css?v=20261114-2">
 
