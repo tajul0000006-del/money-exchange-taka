@@ -670,3 +670,80 @@
   cursor:grabbing!important;
   user-select:none!important;
 }
+
+
+/* Complete premium dark mode for currency, crypto, e-wallet and mobile-banking directories. */
+@media (prefers-color-scheme: dark) {
+  .fm-network-v2,
+  .fm-network-v2.fm-network-premium {
+    color-scheme:dark!important;
+    background:linear-gradient(145deg,#091525 0%,#0d1d31 52%,#0a192b 100%)!important;
+    color:#eaf2fc!important;
+  }
+  .fm-network-v2:before {
+    background:radial-gradient(circle at 8% 12%,rgba(54,126,225,.13),transparent 27%),radial-gradient(circle at 92% 80%,rgba(13,164,157,.11),transparent 30%)!important;
+  }
+  .fm-network-v2:after {background:radial-gradient(ellipse,rgba(18,174,178,.12),transparent 68%)!important}
+  .fm-network-v2 .fm-network-heading h2,
+  .fm-network-v2 .fm-network-heading h2 em {color:#edf5ff!important}
+  .fm-network-v2 .fm-network-heading>p {color:#a9bad0!important}
+  .fm-network-v2 .fm-network-overline,
+  .fm-network-v2 .fm-overline {color:#78d4d0!important}
+  .fm-network-v2 .fm-network-showcase>.fm-network-group,
+  .fm-network-v2 .fm-network-group {
+    background:linear-gradient(145deg,#12243a 0%,#102137 65%,#11283a 100%)!important;
+    background-color:#12243a!important;
+    border:1px solid #30465f!important;
+    box-shadow:0 12px 30px rgba(0,0,0,.24),inset 0 1px 0 rgba(178,211,241,.045)!important;
+  }
+  .fm-network-v2 .fm-network-label {color:#e5effb!important}
+  .fm-network-v2 .fm-network-count {
+    color:#8fe0dc!important;background:#17394a!important;border-color:#28596a!important;
+  }
+  .fm-network-v2 .fm-network-logos>span,
+  .fm-network-v2 .fm-network-method {
+    background:linear-gradient(145deg,#192e46,#14283e)!important;
+    background-color:#192e46!important;
+    border-color:#30475f!important;
+    box-shadow:0 5px 14px rgba(0,0,0,.17)!important;
+  }
+  .fm-network-v2 .fm-network-logos>span:hover {
+    background:#203a55!important;border-color:#527493!important;
+    box-shadow:0 8px 18px rgba(0,0,0,.24)!important;
+  }
+  .fm-network-v2 .fm-logo-mark,
+  .fm-network-v2 .fm-currency-flag {
+    background:#203750!important;background-color:#203750!important;
+    border-color:#3a5873!important;color:#b9dcff!important;
+  }
+  .fm-network-v2 .fm-network-method-name,
+  .fm-network-v2 .fm-currency-code-copy b,
+  .fm-network-v2 .fm-crypto-code-copy b {color:#e7f1ff!important}
+  .fm-network-v2 .fm-network-logos>span small,
+  .fm-network-v2 .fm-currency-code-copy small,
+  .fm-network-v2 .fm-crypto-code-copy small {color:#a8bad0!important}
+  .fm-network-v2 .fm-currency-code-card,
+  .fm-network-v2 .fm-crypto-code-card,
+  .fm-network-v2 .fm-wallet-code-panel .fm-crypto-code-card {
+    background:linear-gradient(145deg,#192f48,#14283e)!important;
+    background-color:#192f48!important;
+    border-color:#344e68!important;
+    box-shadow:0 5px 14px rgba(0,0,0,.2)!important;
+  }
+  .fm-network-v2 .fm-currency-code-card:hover,
+  .fm-network-v2 .fm-crypto-code-card:hover {
+    background:linear-gradient(145deg,#203b57,#19334b)!important;
+    border-color:#527493!important;
+  }
+  .fm-network-v2 .fm-wallet-code-panel .fm-crypto-code-card .fm-currency-flag {
+    background:#203750!important;border-color:#3a5873!important;
+  }
+  .fm-network-v2 .fm-network-disclaimer {
+    color:#a9bad0!important;background:#12243a!important;border-color:#30465f!important;
+  }
+  .fm-network-v2 .fm-network-carousel-arrow {
+    color:#dcecff!important;background:#19334d!important;border-color:#385672!important;
+  }
+  .fm-network-v2 .fm-network-carousel-dot {background:#49627a!important}
+  .fm-network-v2 .fm-network-carousel-dot[aria-current="true"] {background:linear-gradient(90deg,#66aaff,#55d5c9)!important}
+}
