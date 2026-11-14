@@ -1326,7 +1326,7 @@ main.container>.fm-hero-visual-section{
 
 /* Global Pay-in: stack the currency and payment overview panels cleanly. */
 .fm-pay-in-art{
-  min-height:370px!important;
+  min-height:270px!important;
   align-items:stretch!important;
 }
 .fm-pay-in-art .fm-art-currency-card{
@@ -1354,7 +1354,7 @@ main.container>.fm-hero-visual-section{
   line-height:1.45!important;
 }
 @media(max-width:760px){
-  .fm-pay-in-art{min-height:350px!important}
+  .fm-pay-in-art{min-height:270px!important}
   .fm-pay-in-art .fm-art-currency-card{
     top:6%!important;left:6%!important;right:6%!important;
     padding:14px 15px!important;
