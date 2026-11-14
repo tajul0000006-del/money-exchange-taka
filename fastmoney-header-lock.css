@@ -405,3 +405,25 @@ body.fm-menu-open::before{z-index:999!important}
     transform:translateX(6px)!important;
   }
 }
+
+
+/* Navigation icon: no button border or background; shift slightly farther right. */
+.main-header .header-container > .menu-toggle,
+.main-header .header-container > .menu-toggle:hover,
+.main-header .header-container > .menu-toggle:focus,
+.main-header .header-container > .menu-toggle:focus-visible,
+.main-header .header-container > .menu-toggle:active{
+  border:0!important;
+  outline:0!important;
+  background:transparent!important;
+  background-color:transparent!important;
+  background-image:none!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+  transform:translateX(12px)!important;
+}
+.main-header .header-container > .menu-toggle::before,
+.main-header .header-container > .menu-toggle::after{
+  content:none!important;
+  display:none!important;
+}
