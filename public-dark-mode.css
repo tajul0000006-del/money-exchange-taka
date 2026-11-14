@@ -274,3 +274,35 @@
 @media (prefers-color-scheme: dark) and (max-width:480px) {
   .main-header .menu-toggle { width:36px!important;height:36px!important;border-radius:10px!important; }
 }
+
+
+/* Final navigation icon polish: clean floating hamburger, no button frame or fill. */
+@media (prefers-color-scheme: dark) {
+  .main-header .header-container > .menu-toggle,
+  .main-header .header-container > .menu-toggle:hover,
+  .main-header .header-container > .menu-toggle:focus,
+  .main-header .header-container > .menu-toggle:focus-visible,
+  .main-header .header-container > .menu-toggle:active {
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:42px!important;
+    height:42px!important;
+    padding:0!important;
+    border:0!important;
+    outline:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    background-color:transparent!important;
+    box-shadow:none!important;
+    transform:translateX(12px)!important;
+  }
+  .main-header .header-container > .menu-toggle span {
+    display:block!important;
+    width:21px!important;
+    height:2.5px!important;
+    border-radius:4px!important;
+    background:linear-gradient(90deg,#8fc7ff,#70ddd2)!important;
+    box-shadow:0 0 9px rgba(112,221,210,.24)!important;
+  }
+}
