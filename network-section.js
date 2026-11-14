@@ -223,30 +223,15 @@
 
   const setupDirectoryAutoScroll = () => {
     root.querySelectorAll(".fm-currency-code-grid,.fm-crypto-code-grid").forEach(track => {
-      if (track.dataset.autoScrollReady === "true") return;
-      track.dataset.autoScrollReady = "true";
-      let timer = null, paused = false;
-      const stop = () => { paused = true; if (timer) window.clearInterval(timer); timer = null; };
-      const start = () => {
-        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || track.scrollWidth <= track.clientWidth) return;
-        if (timer) window.clearInterval(timer);
-        paused = false;
-        timer = window.setInterval(() => {
-          if (paused || track.matches(":active")) return;
-          const max = track.scrollWidth - track.clientWidth;
-          if (max > 0 && track.scrollLeft >= max - 2) track.scrollTo({left:0,behavior:"auto"});
-          else track.scrollLeft += 0.5;
-        }, 60);
-      };
-      track.addEventListener("touchstart",stop,{passive:true});
-      track.addEventListener("touchend",()=>window.setTimeout(start,900),{passive:true});
-      track.addEventListener("pointerdown",stop);
-      track.addEventListener("pointerup",()=>window.setTimeout(start,900));
-      track.addEventListener("mouseenter",stop);
-      track.addEventListener("mouseleave",start);
-      track.addEventListener("focusin",stop);
-      track.addEventListener("focusout",start);
-      start();
+      if (track.dataset.pageWheelReady === "true") return;
+      track.dataset.pageWheelReady = "true";
+      // Keep the directory cards stationary; vertical wheel input always scrolls the page.
+      track.addEventListener("wheel", event => {
+        if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+          event.preventDefault();
+          window.scrollBy({top:event.deltaY, left:0, behavior:"auto"});
+        }
+      }, {passive:false});
     });
   };
 
