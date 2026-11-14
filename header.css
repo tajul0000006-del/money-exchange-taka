@@ -2489,3 +2489,41 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
     border-color:#304a66!important;
   }
 }
+
+
+/* FINAL DARK-MODE SUPPORT BORDER + LANGUAGE SELECTOR FIX */
+@media (prefers-color-scheme: dark) {
+  html body header.main-header#mainHeader .desktop-nav .nav-support>summary,
+  html body header.main-header#mainHeader .desktop-nav .nav-support[open]>summary,
+  html body header.main-header#mainHeader #mobileMenu .mobile-support>summary,
+  html body header.main-header#mainHeader #mobileMenu .mobile-support[open]>summary {
+    border:1px solid #385570!important;border-color:#385570!important;
+    box-shadow:inset 0 1px 0 rgba(190,220,250,.035)!important;
+  }
+  html body header.main-header#mainHeader .support-panel .support-option,
+  html body header.main-header#mainHeader .support-panel .support-option:focus {
+    border:1px solid #304a66!important;background:#172d45!important;color:#e5eefb!important;
+  }
+  html body header.main-header#mainHeader .support-panel .support-option:hover {
+    border-color:#527493!important;background:#203b57!important;
+  }
+  html body header.main-header#mainHeader .fm-language-control,
+  html body header.main-header#mainHeader .fm-mobile-language {
+    color:#e3effc!important;background:linear-gradient(145deg,#142a42,#10243a)!important;
+    background-color:#142a42!important;border:1px solid #385570!important;
+    box-shadow:0 5px 16px rgba(0,0,0,.2)!important;
+  }
+  html body header.main-header#mainHeader .fm-language-control>i,
+  html body header.main-header#mainHeader .fm-mobile-language label,
+  html body header.main-header#mainHeader .fm-mobile-language label i {color:#9bd9e8!important}
+  html body header.main-header#mainHeader select.fm-language-select,
+  html body header.main-header#mainHeader .fm-mobile-language select {
+    color:#edf5ff!important;background:#1a334d!important;background-color:#1a334d!important;
+    border:1px solid #405d79!important;color-scheme:dark!important;
+  }
+  html body header.main-header#mainHeader select.fm-language-select option,
+  html body header.main-header#mainHeader .fm-mobile-language select option {
+    color:#edf5ff!important;background:#14283f!important;
+  }
+  html body header.main-header#mainHeader .fm-language-chevron {color:#9bd9e8!important}
+}
