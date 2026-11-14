@@ -91,9 +91,54 @@
 }
 
 
+
+/* Total balance and horizontally scrollable wallet overview */
+.wallet-overview{width:100%;margin:96px 0 22px;min-width:0}
+.wallet-balance-panel{position:relative;overflow:hidden;padding:21px 23px;border:1px solid #dce8f0;border-radius:19px;background:linear-gradient(115deg,#eaf7fb 0%,#f4f8ff 54%,#eaf8f4 100%);box-shadow:0 8px 24px rgba(19,55,82,.06)}
+.wallet-balance-panel:after{content:"";position:absolute;width:190px;height:190px;right:-65px;top:-105px;border:26px solid rgba(8,127,145,.07);border-radius:50%;pointer-events:none}
+.wallet-balance-heading,.wallet-list-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.wallet-eyebrow{display:inline-flex;align-items:center;gap:8px;color:#087f91;font:800 10px/1.3 Arial,sans-serif;letter-spacing:1.25px}
+.wallet-live-label{display:inline-flex;align-items:center;gap:7px;color:#547083;font:600 11px Arial,sans-serif}
+.wallet-live-label>span{width:7px;height:7px;border-radius:50%;background:#16a37a;box-shadow:0 0 0 4px rgba(22,163,122,.11)}
+.wallet-balance-panel h2{margin:13px 0 10px;color:#183b58;font-size:19px;font-weight:700}
+.wallet-total-values{display:flex;align-items:center;gap:22px}
+.wallet-total-item{display:grid;gap:3px}
+.wallet-total-item>span{color:#668094;font:700 11px Arial,sans-serif;letter-spacing:.7px}
+.wallet-total-item strong{color:#123a59;font:800 clamp(23px,3vw,30px)/1.2 Arial,sans-serif;letter-spacing:-.7px;font-variant-numeric:tabular-nums}
+.wallet-total-divider{height:39px;width:1px;background:#cbdce6}
+.wallet-list-heading{margin:22px 2px 12px}
+.wallet-list-heading h3{margin:0;color:#18334f;font-size:18px}
+.wallet-list-heading p{margin:3px 0 0;color:#7a8da0;font-size:12px}
+.wallet-scroll-hint{display:inline-flex;align-items:center;gap:6px;color:#7a8da0;font:600 10px Arial,sans-serif}
+.wallet-scroller{display:flex;gap:12px;width:100%;overflow-x:auto;overflow-y:hidden;padding:2px 2px 12px;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:#b8cbd7 transparent;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+.wallet-scroller::-webkit-scrollbar{height:5px}
+.wallet-scroller::-webkit-scrollbar-track{background:transparent}
+.wallet-scroller::-webkit-scrollbar-thumb{background:#c2d2dd;border-radius:99px}
+.wallet-item{position:relative;flex:0 0 158px;min-width:0;min-height:135px;padding:14px;border:1px solid #e2eaf1;border-radius:15px;background:#fff;box-shadow:0 4px 14px rgba(22,48,72,.045);scroll-snap-align:start;display:grid;grid-template-columns:35px 1fr;grid-template-rows:35px auto auto;column-gap:9px;align-items:center}
+.wallet-symbol{width:35px;height:35px;display:grid;place-items:center;border-radius:11px;background:#e8f7f4;color:#078b78;font-size:19px;font-weight:800}
+.wallet-name{color:#29465e;font:800 13px Arial,sans-serif}
+.wallet-item strong{grid-column:1/-1;margin-top:10px;color:#173b59;font:800 19px Arial,sans-serif;font-variant-numeric:tabular-nums}
+.wallet-item small{grid-column:1/-1;margin-top:2px;color:#8495a5;font-size:10px}
+.wallet-usd .wallet-symbol{background:#edf4ff;color:#2865c5}.wallet-bdt .wallet-symbol{background:#eaf8ef;color:#17834d}.wallet-epay .wallet-symbol{background:#fff5e8;color:#d18419}.wallet-fastmoney .wallet-symbol{background:#e8f7fa;color:#087f91}.wallet-btc .wallet-symbol{background:#fff2e8;color:#d47a24}.wallet-eth .wallet-symbol{background:#f0efff;color:#6657c8}.wallet-paypal .wallet-symbol{background:#edf3ff;color:#2356a7}
+@media(prefers-color-scheme:dark){
+ .wallet-balance-panel{background:linear-gradient(115deg,#132d42,#14283f 55%,#12352f);border-color:#29465b;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+ .wallet-balance-panel:after{border-color:rgba(104,218,207,.08)}
+ .wallet-eyebrow{color:#72d5d4}.wallet-live-label{color:#a3b9c9}
+ .wallet-balance-panel h2,.wallet-total-item strong{color:#edf7ff}.wallet-total-item>span{color:#9cb5c8}.wallet-total-divider{background:#35536a}
+ .wallet-list-heading h3{color:#e6f0fa}.wallet-list-heading p,.wallet-scroll-hint{color:#91a8bc}
+ .wallet-scroller{scrollbar-color:#47647b transparent}.wallet-scroller::-webkit-scrollbar-thumb{background:#47647b}
+ .wallet-item{background:#14283e;border-color:#2b435a;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+ .wallet-name,.wallet-item strong{color:#e6f1fb}.wallet-item small{color:#91a8bc}
+ .wallet-usdt .wallet-symbol,.wallet-fastmoney .wallet-symbol{background:#173d43;color:#73d9ce}
+ .wallet-usd .wallet-symbol,.wallet-paypal .wallet-symbol{background:#1b3558;color:#8eb8ff}
+ .wallet-bdt .wallet-symbol{background:#173d30;color:#7dd7a2}.wallet-epay .wallet-symbol,.wallet-btc .wallet-symbol{background:#49351e;color:#f2bd73}.wallet-eth .wallet-symbol{background:#302c58;color:#b8adff}
+}
+@media(max-width:760px){.wallet-overview{margin-top:84px;margin-bottom:18px}.wallet-balance-panel{padding:18px;border-radius:16px}.wallet-list-heading{margin-top:18px}.wallet-item{flex-basis:146px;min-height:128px}}
+@media(max-width:520px){.wallet-overview{margin-top:82px}.wallet-balance-panel{padding:16px}.wallet-total-values{gap:16px}.wallet-total-item strong{font-size:24px}.wallet-item{flex-basis:140px}}
+
 /* Fixed, full-width enterprise dashboard header */
 .dashboard-header{position:fixed!important;inset:0 0 auto 0!important;z-index:3000!important;width:100%!important;max-width:none!important;min-height:76px;margin:0!important;padding:10px max(22px,calc((100vw - 1440px)/2))!important;border:0!important;border-bottom:1px solid #e2eaf2!important;border-radius:0!important;box-shadow:0 8px 30px rgba(15,38,65,.10)!important}
-.dash-top{margin-top:106px!important}
+.dash-top{margin-top:18px!important}
 .dashboard-brand{gap:0!important}
 .dashboard-brand-mark,.dashboard-brand-name{display:none!important}
 .dashboard-brand img{display:block;width:204px;height:54px;object-fit:contain;object-position:left center}
@@ -111,7 +156,7 @@
 @media(max-width:760px){
  .dashboard-header{min-height:66px;padding:8px 13px!important}
  .dashboard-brand img{width:160px;height:46px}
- .dash-top{margin-top:88px!important}
+ .dash-top{margin-top:16px!important}
  .dashboard-header-actions,.dashboard-header .desktop-nav{gap:7px}
  .dashboard-icon-btn{width:39px;height:39px}
  .dashboard-header .fm-language-control{height:39px;min-width:41px;padding:0 7px}\n .dashboard-header-actions{gap:7px!important}\n .dashboard-language-control{height:39px;min-width:70px;padding:0 6px}\n .dashboard-language-control select{width:34px!important;max-width:34px!important;font-size:11px!important}
@@ -159,6 +204,28 @@
       <button type="button" id="headerLogoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
     </nav>
   </header>
+  <section class="wallet-overview" aria-label="Total balance and wallets">
+    <div class="wallet-balance-panel">
+      <div class="wallet-balance-heading"><span class="wallet-eyebrow"><i class="fa-solid fa-wallet"></i> ACCOUNT OVERVIEW</span><span class="wallet-live-label"><span></span> Wallet summary</span></div>
+      <h2>Total Balance</h2>
+      <div class="wallet-total-values">
+        <div class="wallet-total-item"><span>USD</span><strong>$0.000</strong></div>
+        <div class="wallet-total-divider"></div>
+        <div class="wallet-total-item"><span>BDT</span><strong>৳0.000</strong></div>
+      </div>
+    </div>
+    <div class="wallet-list-heading"><div><h3>My Wallets</h3><p>Swipe or scroll to explore your wallets</p></div><span class="wallet-scroll-hint"><i class="fa-solid fa-arrows-left-right"></i> Scroll</span></div>
+    <div class="wallet-scroller" role="list" aria-label="Available wallets">
+      <article class="wallet-item wallet-usdt" role="listitem"><span class="wallet-symbol">₮</span><span class="wallet-name">USDT</span><strong>0.000</strong><small>Tether Wallet</small></article>
+      <article class="wallet-item wallet-usd" role="listitem"><span class="wallet-symbol">$</span><span class="wallet-name">USD</span><strong>0.000</strong><small>US Dollar</small></article>
+      <article class="wallet-item wallet-bdt" role="listitem"><span class="wallet-symbol">৳</span><span class="wallet-name">BDT</span><strong>0.000</strong><small>Bangladeshi Taka</small></article>
+      <article class="wallet-item wallet-epay" role="listitem"><span class="wallet-symbol"><i class="fa-solid fa-bolt"></i></span><span class="wallet-name">ePay</span><strong>0.000</strong><small>ePay Wallet</small></article>
+      <article class="wallet-item wallet-fastmoney" role="listitem"><span class="wallet-symbol"><i class="fa-solid fa-bolt"></i></span><span class="wallet-name">FastMoney</span><strong>0.000</strong><small>FastMoney Wallet</small></article>
+      <article class="wallet-item wallet-btc" role="listitem"><span class="wallet-symbol">₿</span><span class="wallet-name">BTC</span><strong>0.000</strong><small>Bitcoin Wallet</small></article>
+      <article class="wallet-item wallet-eth" role="listitem"><span class="wallet-symbol">Ξ</span><span class="wallet-name">ETH</span><strong>0.000</strong><small>Ethereum Wallet</small></article>
+      <article class="wallet-item wallet-paypal" role="listitem"><span class="wallet-symbol"><i class="fa-brands fa-paypal"></i></span><span class="wallet-name">PayPal</span><strong>0.000</strong><small>PayPal Wallet</small></article>
+    </div>
+  </section>
   <div class="dash-top">
     <div><h1>My Dashboard</h1><p>Manage your FastMoney account.</p></div>
     <div class="user-chip"><i class="fa-solid fa-circle-user"></i><span id="userEmail">Verified user</span></div>
