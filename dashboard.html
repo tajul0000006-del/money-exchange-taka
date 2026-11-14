@@ -52,7 +52,7 @@
 .dashboard-popover[hidden]{display:none!important}
 .dashboard-popover-title{display:flex;align-items:center;gap:9px;font-weight:800;font-size:15px}
 .dashboard-popover-title i{color:#087f91}
-.notification-popover p{margin:12px 0 2px;color:#64748b;font-size:13px;line-height:1.6}
+.notification-popover p{margin:12px 0;color:#64748b;font-size:13px;line-height:1.6}\n.dashboard-notification-link{display:flex;align-items:center;gap:9px;margin-top:12px;padding:11px 12px;border-radius:10px;background:#edf7f8;color:#087487;text-decoration:none;font-size:13px;font-weight:800}.dashboard-notification-link i:last-child{margin-left:auto}\n@media(prefers-color-scheme:dark){.dashboard-notification-link{background:#1b3852;color:#8fe0df}}
 .dashboard-menu-popover{display:grid;gap:5px}
 .dashboard-menu-popover a,.dashboard-menu-popover button{display:flex;align-items:center;gap:12px;min-height:43px;padding:10px 11px;border:0;border-radius:10px;background:transparent;color:#304760;text-decoration:none;text-align:left;font:600 13px 'Hind Siliguri',Arial,sans-serif;cursor:pointer}
 .dashboard-menu-popover a:hover,.dashboard-menu-popover button:hover{background:#eef7f9;color:#087487}
@@ -89,9 +89,33 @@
 }
 
 
-/* Full-bleed dashboard header */
-.dashboard-header{width:100vw;margin-top:-34px;margin-left:calc(50% - 50vw);padding-left:max(18px,calc((100vw - 1440px)/2));padding-right:max(18px,calc((100vw - 1440px)/2));border-top:0;border-left:0;border-right:0}
-@media(max-width:760px){.dashboard-header{margin-top:-22px;padding-left:14px;padding-right:14px}}
+/* Fixed, full-width enterprise dashboard header */
+.dashboard-header{position:fixed!important;inset:0 0 auto 0!important;z-index:3000!important;width:100%!important;max-width:none!important;min-height:76px;margin:0!important;padding:10px max(22px,calc((100vw - 1440px)/2))!important;border:0!important;border-bottom:1px solid #e2eaf2!important;border-radius:0!important;box-shadow:0 8px 30px rgba(15,38,65,.10)!important}
+.dash-top{margin-top:106px!important}
+.dashboard-brand{gap:0!important}
+.dashboard-brand-mark,.dashboard-brand-name{display:none!important}
+.dashboard-brand img{display:block;width:204px;height:54px;object-fit:contain;object-position:left center}
+.dashboard-header-actions{margin-left:auto}
+.dashboard-header .desktop-nav{gap:12px}
+.dashboard-header .fm-language-control{min-width:48px;box-shadow:0 2px 8px rgba(20,45,70,.04)}
+.dashboard-icon-btn{width:44px;height:44px;border-radius:13px}
+.dashboard-menu-toggle{margin-left:1px}
+.notification-popover{top:calc(100% + 9px)!important;right:max(22px,calc((100vw - 1440px)/2))!important}
+.dashboard-menu-popover{top:calc(100% + 9px)!important;right:max(22px,calc((100vw - 1440px)/2))!important}
+@media(prefers-color-scheme:dark){
+ .dashboard-header{background:rgba(10,23,39,.97)!important;border-bottom-color:#2a4058!important;box-shadow:0 8px 30px rgba(0,0,0,.38)!important}
+ .dashboard-brand img{filter:brightness(1.08)}
+}
+@media(max-width:760px){
+ .dashboard-header{min-height:66px;padding:8px 13px!important}
+ .dashboard-brand img{width:160px;height:46px}
+ .dash-top{margin-top:88px!important}
+ .dashboard-header-actions,.dashboard-header .desktop-nav{gap:7px}
+ .dashboard-icon-btn{width:39px;height:39px}
+ .dashboard-header .fm-language-control{height:39px;min-width:41px;padding:0 7px}
+ .notification-popover,.dashboard-menu-popover{right:10px!important}
+}
+@media(max-width:370px){.dashboard-brand img{width:132px;height:42px}.dashboard-header{padding-inline:9px!important}.dashboard-header-actions,.dashboard-header .desktop-nav{gap:5px}}
 
 </style>
   <link rel="stylesheet" href="./responsive.css">
@@ -103,8 +127,7 @@
 <main class="dash-wrap" id="dashboard" hidden>
   <header class="dashboard-header" id="dashboardHeader">
     <a class="dashboard-brand" href="/dashboard.html" aria-label="FastMoney Dashboard">
-      <span class="dashboard-brand-mark">F<span>M</span></span>
-      <span class="dashboard-brand-name">Fast<span>Money</span><small>YOUR FINANCIAL SPACE</small></span>
+      <img src="./assets/fastmoneylogo.png" alt="FastMoney" width="204" height="54">
     </a>
     <div class="dashboard-header-actions">
       <div class="desktop-nav">
@@ -117,8 +140,9 @@
       </button>
     </div>
     <div class="dashboard-popover notification-popover" id="notificationPopover" hidden>
-      <div class="dashboard-popover-title"><i class="fa-regular fa-bell"></i> Notifications</div>
-      <p>You’re all caught up. New account updates will appear here.</p>
+      <div class="dashboard-popover-title"><i class="fa-regular fa-bell"></i> Transaction Notifications</div>
+      <p>Check the latest status and updates for all your exchange requests from your transaction history.</p>
+      <a class="dashboard-notification-link" href="/history.html"><i class="fa-solid fa-clock-rotate-left"></i> View all transactions <i class="fa-solid fa-arrow-right"></i></a>
     </div>
     <nav class="dashboard-popover dashboard-menu-popover" id="dashboardMenu" aria-label="Dashboard navigation" hidden>
       <a href="#dashboard"><i class="fa-solid fa-house"></i> Dashboard Home</a>
