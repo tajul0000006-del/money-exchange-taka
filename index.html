@@ -37,6 +37,28 @@
   <link rel="stylesheet" href="./language.css?v=1">
   <link rel="stylesheet" href="./public-dark-mode.css?v=20261114-2">
 
+  <style id="fm-public-header-edge-alignment">
+    /* Public homepage only: move the logo left and the menu icon right.
+       Account pages keep their existing header alignment. */
+    .main-header .header-container{
+      width:calc(100% - 16px)!important;
+      max-width:none!important;
+    }
+    .main-header .header-container>a.fastmoney-brand,
+    .main-header .header-container>a.fastmoney-brand:hover,
+    .main-header .header-container>a.fastmoney-brand:focus{
+      transform:translateX(-24px)!important;
+    }
+    .main-header .header-container>.menu-toggle,
+    .main-header .header-container>.menu-toggle:hover,
+    .main-header .header-container>.menu-toggle:focus,
+    .main-header .header-container>.menu-toggle:focus-visible,
+    .main-header .header-container>.menu-toggle:active{
+      transform:translateX(24px)!important;
+    }
+  </style>
+
+
   <style id="fm-home-banner-slider-styles">
     .fm-banner-slider{position:relative;left:50%;transform:translateX(-50%);width:100vw;max-width:100vw;height:380px;margin:0 0 30px;overflow:hidden;border:0;border-radius:0;background:#fff;box-shadow:0 10px 30px rgba(17,68,120,.08)}
     .fm-banner-track{position:relative;width:100%;height:380px;min-height:0}
