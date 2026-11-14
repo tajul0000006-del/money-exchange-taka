@@ -35,6 +35,25 @@
 <script>document.documentElement.classList.add("met-header-styles-ready");</script>
 <style id="met-public-exchange-removed">#exchange{display:none!important}</style>
   <link rel="stylesheet" href="./language.css?v=1">
+
+  <style id="fm-home-header-marked-position">
+    /* Match the logo and menu-toggle edges to the positions marked in the user's screenshot. */
+    @media(max-width:900px){
+      .main-header .header-container>a.fastmoney-brand,
+      .main-header .header-container>a.fastmoney-brand:hover,
+      .main-header .header-container>a.fastmoney-brand:focus{
+        transform:translateX(-16px)!important;
+      }
+      .main-header .header-container>.menu-toggle,
+      .main-header .header-container>.menu-toggle:hover,
+      .main-header .header-container>.menu-toggle:focus,
+      .main-header .header-container>.menu-toggle:focus-visible,
+      .main-header .header-container>.menu-toggle:active{
+        transform:translateX(24px)!important;
+      }
+    }
+  </style>
+
   <link rel="stylesheet" href="./public-dark-mode.css?v=20261114-2">
 
 
