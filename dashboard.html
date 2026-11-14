@@ -226,26 +226,11 @@
       <article class="wallet-item wallet-paypal" role="listitem"><span class="wallet-symbol"><i class="fa-brands fa-paypal"></i></span><span class="wallet-name">PayPal</span><strong>0.000</strong><small>PayPal Wallet</small></article>
     </div>
   </section>
-  <div class="dash-top">
-    <div><h1>My Dashboard</h1><p>Manage your FastMoney account.</p></div>
-    <div class="user-chip"><i class="fa-solid fa-circle-user"></i><span id="userEmail">Verified user</span></div>
-  </div>
-  <section class="welcome">
-    <h2>Welcome to your dashboard</h2>
-    <p>Your account is signed in and your email is verified. You can access your account services here.</p>
-    <div class="dash-actions"><a class="dash-btn" href="#memberExchange"><i class="fa-solid fa-arrow-right-left"></i> Start Exchange</a><a class="dash-btn secondary" href="/history.html"> <i class="fa-solid fa-clock-rotate-left"></i> Track Request</a></div>
-  </section>
   <section class="dash-card" id="memberExchange" style="margin-top:20px;padding:12px">
     <h2 style="margin:4px 6px 12px;font-size:21px">New Exchange</h2>
     <iframe title="FastMoney secure exchange form" src="/member-exchange.html" loading="eager" style="display:block;width:100%;height:1500px;border:0;border-radius:12px;background:#fff" referrerpolicy="same-origin"></iframe>
   </section>
-  <section class="dash-grid" aria-label="Account services">
-    <article class="dash-card"><div class="card-icon"><i class="fa-solid fa-right-left"></i></div><h3>New Exchange</h3><p>Create a new digital currency or payment exchange request from your verified account.</p><div class="dash-actions"><a class="dash-btn" href="#memberExchange">Exchange Now</a></div></article>
-    <article class="dash-card"><div class="card-icon"><i class="fa-solid fa-list-check"></i></div><h3>My Requests</h3><p>Check the progress of your exchange request using its tracking details.</p><div class="dash-actions"><a class="dash-btn secondary" href="/history.html">View Tracking</a></div></article>
-    <article class="dash-card"><div class="card-icon"><i class="fa-solid fa-headset"></i></div><h3>Customer Support</h3><p>Get help with your account or an exchange request.</p><div class="dash-actions"><a class="dash-btn secondary" href="/chat.html">Open Support</a></div></article>
-  </section>
-  <div class="dash-note"><strong>Account notice:</strong> Wallet balance, personal transaction history and profile editing will appear here after their secure database features are connected. Do not send money based only on a displayed balance.</div>
-  <div class="dash-actions"><button class="dash-btn secondary" id="logoutBtn" type="button"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button></div>
+  <button class="dash-btn secondary" id="logoutBtn" type="button" hidden>Log Out</button>
 </main>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
@@ -256,7 +241,6 @@ const loading=document.getElementById("loading"),dashboard=document.getElementBy
 onAuthStateChanged(auth,async user=>{
   if(!user){location.replace("/login.html?next=%2Fdashboard.html");return;}
   if(!user.emailVerified){await signOut(auth);location.replace("/login.html");return;}
-  document.getElementById("userEmail").textContent=user.email||"Verified user";
   loading.hidden=true;dashboard.hidden=false;
 });
 document.getElementById("logoutBtn").addEventListener("click",async()=>{
@@ -265,7 +249,7 @@ document.getElementById("logoutBtn").addEventListener("click",async()=>{
   catch(error){button.disabled=false;button.textContent="Log Out";alert("Could not log out. Please try again.");}
 });
 </script>
-<nav class="fastmoney-legal-links" aria-label="Legal and company information"><a href="/about.html">About FastMoney</a><a href="/terms-and-conditions.html">Terms &amp; Conditions</a><a href="/privacy-policy.html">Privacy Policy</a><a href="/index.html">Home</a></nav><script>
+<script>
 (function(){
  const menuBtn=document.getElementById("dashboardMenuToggle");
  const menu=document.getElementById("dashboardMenu");
