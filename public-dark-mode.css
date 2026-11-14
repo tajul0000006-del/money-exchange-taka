@@ -1,0 +1,160 @@
+/* FastMoney public homepage — automatic system dark mode.
+   Light mode remains unchanged; this layer activates only when the device requests dark mode. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --fm-ink:#edf4ff;
+    --fm-muted:#a9bad0;
+    --fm-line:#293c53;
+    --fm-surface:#111f33;
+    --fm-soft:#14243a;
+  }
+  html,body { background:#0b1424!important; color:#e8f0fa!important; }
+  body { color-scheme:dark; }
+  main, main.container, .container { color:#e8f0fa!important; }
+  .main-header,#mainHeader {
+    background:rgba(12,23,40,.97)!important;
+    border-color:#293c53!important;
+    box-shadow:0 6px 24px rgba(0,0,0,.22)!important;
+  }
+  .main-header .desktop-nav .nav-link,
+  .main-header .desktop-nav .nav-support>summary { color:#dce8f8!important; }
+  .main-header .desktop-nav .nav-link:hover { background:#1a3049!important;color:#8bc7ff!important; }
+  .main-header .menu-toggle { background:transparent!important;border-color:transparent!important; }
+  .main-header .menu-toggle span { background:#dce8f8!important; }
+  .main-header .mobile-nav,
+  .main-header .mobile-nav.open { background:#101d30!important;color:#edf4ff!important;border-color:#293c53!important; }
+  .main-header .mobile-menu-heading { border-color:#293c53!important; }
+  .main-header .mobile-menu-heading span,
+  .main-header .mobile-nav-link { color:#e5eefb!important; }
+  .main-header .mobile-menu-heading small { color:#a9bad0!important; }
+  .main-header .mobile-nav-link,
+  .main-header .mobile-support>summary { background:#16263b!important;border-color:#2b4059!important; }
+  .main-header .mobile-nav-link i:first-child,
+  .main-header .mobile-nav-link .nav-arrow,
+  .main-header .mobile-support>summary i { color:#82c6d4!important; }
+  .main-header .support-panel { background:#14243a!important;border-color:#30445e!important;box-shadow:0 18px 42px rgba(0,0,0,.38)!important; }
+  .main-header .support-panel-title strong,
+  .main-header .support-option b { color:#edf4ff!important; }
+  .main-header .support-panel-title small,
+  .main-header .support-option small { color:#a9bad0!important; }
+  .main-header .support-option { border-color:#293c53!important; }
+  .main-header .fm-language-control,
+  .main-header .fm-mobile-language { color:#c8d9ed!important; }
+  .main-header .fm-language-select,
+  .main-header .fm-mobile-language select { color:#e8f0fa!important;background:#16263b!important;border-color:#30445e!important; }
+  .fm-banner-slider,.fm-banner-track,.fm-banner-slide { background:#0b1424!important; }
+  .fm-slider-auth-actions { background:#0f1c2e!important; }
+  .fm-slider-auth-btn { border-color:#38516e!important; }
+  .fm-slider-login { background:#173a62!important;color:#eaf4ff!important; }
+  .fm-slider-signup { background:#087f83!important;color:#fff!important; }
+  .hero:before {
+    background:radial-gradient(circle at 78% 18%,rgba(42,126,229,.18),transparent 35%),
+      linear-gradient(135deg,#101f35,#12283b 70%,#101d31)!important;
+  }
+  .hero h1,.hero .hero-process-title { color:#edf4ff!important; }
+  .hero h1 span { color:#83baff!important; }
+  .hero-copy,.hero-trustline,.hero-trustline span { color:#b2c2d6!important; }
+  .hero .eyebrow,.fm-kicker { color:#78d4d0!important; }
+  .hero .hero-card {
+    background:#111f33!important;border-color:#2b4059!important;
+    box-shadow:0 14px 36px rgba(0,0,0,.22)!important;
+  }
+  .hero .hero-card-top { color:#78d4d0!important; }
+  .hero-process-item { background:#14243a!important;border-color:#2b4059!important; }
+  .hero-process-item strong { color:#edf4ff!important; }
+  .hero-process-item small,.hero .hero-card>p { color:#a9bad0!important; }
+  .hero-process-item>span { background:#1a3553!important;color:#83baff!important; }
+  .hero .primary-link { color:#fff!important; }
+  .fm-reach-section { background:transparent!important;border-color:#293c53!important; }
+  .fm-reach-heading h2,.fm-reach-card strong,.fm-reach-number { color:#edf4ff!important; }
+  .fm-reach-heading p,.fm-reach-label { color:#a9bad0!important; }
+  .fm-reach-card { background:#111f33!important;border-color:#293c53!important;box-shadow:0 10px 28px rgba(0,0,0,.18)!important; }
+  .fm-global-products { background:transparent!important; }
+  .fm-global-products-heading h2 { color:#edf4ff!important; }
+  .fm-global-products-heading p,.fm-global-products-note { color:#a9bad0!important; }
+  .fm-global-product-card {
+    background:#111f33!important;border-color:#2b4059!important;
+    box-shadow:0 12px 30px rgba(0,0,0,.2)!important;
+  }
+  .fm-global-product-copy h3 { color:#edf4ff!important; }
+  .fm-global-product-copy p { color:#a9bad0!important; }
+  .fm-global-product-cta { color:#82c6d4!important; }
+  .fm-global-product-art { background:linear-gradient(145deg,#14243a,#172b40)!important;border-color:#30445e!important; }
+  .fm-art-currency-card,.fm-art-amount,.fm-art-payout-card,
+  .fm-cny-preview,.fm-bs-card,.fm-finance-main,.fm-finance-float {
+    background:#172a40!important;border-color:#354c66!important;color:#edf4ff!important;
+    box-shadow:0 12px 28px rgba(0,0,0,.28)!important;
+  }
+  .fm-art-currency-card strong,.fm-art-amount strong,.fm-art-payout-card strong,
+  .fm-cny-preview strong,.fm-bs-card strong,.fm-finance-main-label,
+  .fm-finance-float b { color:#edf4ff!important; }
+  .fm-art-currency-card small,.fm-art-amount small,.fm-art-payout-card small,
+  .fm-cny-preview small,.fm-cny-rate-line,.fm-cny-preview-foot,
+  .fm-finance-main-sub,.fm-finance-main-top,.fm-finance-exchange-line small,
+  .fm-finance-float small { color:#a9bad0!important; }
+  .fm-art-currency-card,.fm-art-amount,.fm-art-payout-card { border-color:#354c66!important; }
+  .fm-art-payout-card b,.fm-cny-currency-row,.fm-cny-currency-pill,
+  .fm-cny-rate-line,.fm-bs-buy,.fm-bs-sell {
+    background:#1c334d!important;border-color:#3a526c!important;color:#dce8f8!important;
+  }
+  .fm-cny-preview-head,.fm-cny-preview-foot { border-color:#354c66!important; }
+  .fm-network-premium,.fm-network-v2 { background:transparent!important; }
+  .fm-network-heading h2,.fm-network-label,.fm-network-count { color:#edf4ff!important; }
+  .fm-network-heading p,.fm-network-disclaimer { color:#a9bad0!important; }
+  .fm-network-group { background:#111f33!important;border-color:#293c53!important; }
+  .fm-logo-mark { background:#172a40!important;border-color:#354c66!important; }
+  .fm-security-section { background:transparent!important; }
+  .fm-security-heading h2,.fm-security-card h3 { color:#edf4ff!important; }
+  .fm-security-heading p,.fm-security-card p,.fm-security-note { color:#a9bad0!important; }
+  .fm-security-card { background:#111f33!important;border-color:#293c53!important;box-shadow:0 10px 28px rgba(0,0,0,.18)!important; }
+  .fm-security-icon { background:#1a3553!important;color:#83baff!important; }
+  .fm-security-points { border-color:#293c53!important; }
+  .fm-security-points>div { color:#dce8f8!important;border-color:#293c53!important; }
+  .fm-cta { background:linear-gradient(112deg,#102b4c 0%,#145b70 64%,#087b79 100%)!important;color:#fff!important; }
+  .fm-cta h2,.fm-cta p { color:#fff!important; }
+  .fm-cta p { color:#d6e5f2!important; }
+  .met-footer {
+    background:#0e1a2b!important;background-image:none!important;
+    color:#dce8f8!important;border-color:#293c53!important;box-shadow:none!important;
+  }
+  .met-footer-inner { color:#dce8f8!important; }
+  .met-footer-links a,.met-footer a { color:#c1d0e2!important; }
+  .met-footer-links a:hover,.met-footer a:hover { color:#78d4d0!important; }
+  .met-footer-links a+a { border-color:#40536b!important; }
+  .met-footer-bottom { color:#9fb1c7!important; }
+  .met-footer-bottom:before { border-color:#293c53!important; }
+  .met-footer-bottom span { color:#9fb1c7!important; }
+  .modal-backdrop { background:rgba(2,8,18,.78)!important; }
+  .modal-card,.payment-summary,.payment-address,.tracking-box {
+    background:#14243a!important;border-color:#354c66!important;color:#edf4ff!important;
+  }
+  .modal-card h2,.payment-address strong,.tracking-box strong { color:#edf4ff!important; }
+  .modal-card p,.modal-copy,.tracking-box span { color:#a9bad0!important; }
+  input,select,textarea {
+    color:#edf4ff!important;background:#14243a!important;border-color:#3a506b!important;
+  }
+  input::placeholder,textarea::placeholder { color:#8fa3bb!important; }
+  input:focus,select:focus,textarea:focus { border-color:#64a8ef!important; }
+  .secondary-btn,.exchange-back-btn {
+    color:#dce8f8!important;background:#1a3049!important;border-color:#3a506b!important;
+  }
+  .exchange-pro-box,.exchange-review-card,.exchange-step-panel,
+  .exchange-wallet-field,.exchange-mode-tabs,.exchange-mode-tab,
+  .exchange-select-wrap,.amount-input,.exchange-final-summary {
+    background:#111f33!important;border-color:#30445e!important;color:#edf4ff!important;
+  }
+  .exchange-panel-title h3,.exchange-panel-title p,.exchange-heading-copy,
+  .field label,.field-help,.note,.hint { color:#c2d0e0!important; }
+  .exchange-step,.exchange-stepper { color:#a9bad0!important; }
+  .table-wrap,.stats-panel,.stats-orders,.history-list,.admin-panel {
+    background:#111f33!important;border-color:#293c53!important;color:#edf4ff!important;
+  }
+  table th { background:#172a40!important;color:#cbd9e9!important;border-color:#293c53!important; }
+  table td { background:#111f33!important;color:#dce8f8!important;border-color:#293c53!important; }
+  tbody tr:hover { background:#1a3049!important; }
+  .stats-heading h2,.stats-panel-title h3,.stats-columns h4 { color:#edf4ff!important; }
+  .stats-heading p,.stats-panel-title span,.stats-baseline-note,
+  .stats-scroll-hint,.stats-empty { color:#a9bad0!important; }
+  .form-status { color:#b9cbe0!important; }
+}
