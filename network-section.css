@@ -635,3 +635,22 @@
     box-shadow:0 8px 18px rgba(25,69,110,.1)!important;
   }
 }
+
+
+/* Stable directory scrolling: no automatic ticker movement or hover bounce. */
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-grid,
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-grid{
+  scroll-behavior:auto!important;
+  overscroll-behavior-x:contain!important;
+}
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-card,
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-card{
+  transform:none!important;
+  transition:border-color .18s ease,box-shadow .18s ease!important;
+}
+@media(hover:hover){
+  .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-card:hover,
+  .fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-card:hover{
+    transform:none!important;
+  }
+}
