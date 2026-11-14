@@ -18,23 +18,88 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 <script type="module" src="./app.js"></script>
 <script src="./header.js" defer></script>
-<style>
-html,body{background:#fff!important}
-.about-page{width:min(100% - 40px,820px);min-height:calc(100vh - 150px);margin:0 auto;padding:64px 0 76px;color:#243449;background:#fff;font-family:Inter,Arial,sans-serif}
-.about-hero{text-align:center;margin:0 auto 38px;max-width:700px}
-.about-label{display:inline-block;color:#079b70;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
-.about-hero h1{font-size:clamp(34px,6vw,52px);line-height:1.15;letter-spacing:-1.6px;margin:13px 0;color:#14283f}
-.about-hero h1 span{color:#079fbd}
-.about-hero p{font-size:16px;line-height:1.7;color:#617286;margin:0}
-.about-copy{max-width:700px;margin:auto}
-.about-copy section{margin:0 0 25px}
-.about-copy h2{font-size:21px;line-height:1.35;color:#14283f;margin:0 0 8px}
-.about-copy p{font-size:15px;line-height:1.8;color:#526579;margin:0}
-.about-highlight{margin-top:30px!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important}
-.about-highlight p{color:#526579}
-.about-highlight strong{color:#079b70}
-.about-copyright{padding:18px 16px;text-align:center;border-top:1px solid #e8edf2;color:#657487;background:#fff;font-size:13px}
-@media(max-width:600px){.about-page{width:calc(100% - 34px);padding:44px 0 54px}.about-hero{margin-bottom:30px}.about-hero h1{letter-spacing:-1px}.about-hero p,.about-copy p{font-size:14px}.about-copy section{margin-bottom:21px}.about-copy h2{font-size:19px}}
+<style id="fm-about-enterprise-design">
+:root{--about-ink:#10243b;--about-muted:#60748a;--about-line:#e2eaf1;--about-blue:#176bd0;--about-teal:#078f91;--about-soft:#f3f8fc}
+html,body{margin:0!important;background:#f7f9fc!important;color:var(--about-ink);font-family:Inter,Arial,sans-serif}
+.about-page{width:100%;min-height:calc(100vh - 150px);margin:0 auto;padding:0 0 84px;overflow:hidden;background:#f7f9fc;color:var(--about-ink)}
+.about-shell{width:min(1160px,calc(100% - 48px));margin:0 auto}
+.about-hero{position:relative;padding:82px 0 70px;background:radial-gradient(circle at 82% 25%,rgba(24,145,173,.14),transparent 28%),radial-gradient(circle at 12% 0%,rgba(34,108,208,.09),transparent 32%),linear-gradient(135deg,#fff 0%,#f3f8fd 58%,#eef8f8 100%);border-bottom:1px solid #e4edf3}
+.about-hero-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);align-items:center;gap:54px}
+.about-eyebrow,.about-section-kicker{display:inline-flex;align-items:center;gap:9px;color:#078b88;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
+.about-eyebrow:before,.about-section-kicker:before{content:"";width:22px;height:2px;border-radius:4px;background:linear-gradient(90deg,#176bd0,#0aa99b)}
+.about-hero h1{max-width:700px;margin:18px 0 18px;color:#10243b;font-size:clamp(40px,6vw,68px);line-height:1.04;letter-spacing:-2.8px;font-weight:850}
+.about-hero h1 span{color:#078f9b}
+.about-hero-copy{max-width:610px;margin:0;color:#5d7186;font-size:17px;line-height:1.85}
+.about-hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:29px}
+.about-button{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:0 19px;border:1px solid #176bd0;border-radius:10px;background:linear-gradient(110deg,#176bd0,#087f91);box-shadow:0 9px 22px rgba(23,107,208,.17);color:#fff;text-decoration:none;font-size:13px;font-weight:750;transition:transform .2s,box-shadow .2s}
+.about-button:hover{transform:translateY(-2px);box-shadow:0 13px 26px rgba(23,107,208,.23)}
+.about-button.secondary{border-color:#d4e0eb;background:#fff;box-shadow:none;color:#193b5a}
+.about-visual{position:relative;min-height:340px;display:grid;place-items:center}
+.about-orbit{position:absolute;width:290px;height:290px;border:1px solid rgba(23,107,208,.18);border-radius:50%;box-shadow:0 0 0 28px rgba(23,107,208,.035),0 0 0 58px rgba(7,143,145,.025)}
+.about-visual-card{position:relative;z-index:1;width:min(100%,370px);padding:25px;border:1px solid rgba(255,255,255,.85);border-radius:22px;background:rgba(255,255,255,.88);box-shadow:0 25px 65px rgba(25,65,102,.14);backdrop-filter:blur(12px)}
+.about-visual-top{display:flex;align-items:center;justify-content:space-between;padding-bottom:18px;border-bottom:1px solid #e7eef4}
+.about-visual-brand{display:flex;align-items:center;gap:10px;color:#183b59;font-size:14px;font-weight:850}
+.about-visual-mark{display:grid;place-items:center;width:35px;height:35px;border-radius:11px;background:linear-gradient(145deg,#087f91,#176bd0);color:#fff;font-size:16px}
+.about-visual-status{display:inline-flex;align-items:center;gap:6px;color:#078b78;font-size:10px;font-weight:800}
+.about-visual-status:before{content:"";width:7px;height:7px;border-radius:50%;background:#10b981;box-shadow:0 0 0 4px #d9f7ed}
+.about-visual-title{margin:20px 0 5px;color:#718398;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.about-visual-line{height:10px;margin-top:12px;border-radius:8px;background:#eaf0f6}
+.about-visual-line.long{width:88%}.about-visual-line.mid{width:65%}.about-visual-line.short{width:42%}
+.about-visual-bottom{display:flex;gap:9px;margin-top:22px}
+.about-visual-pill{height:34px;flex:1;border:1px solid #e0eaf2;border-radius:9px;background:#f6f9fc}
+.about-intro-strip{position:relative;z-index:2;width:min(1050px,calc(100% - 48px));margin:-1px auto 0;padding:25px 30px;border:1px solid #e2eaf1;border-radius:0 0 16px 16px;background:#fff;display:grid;grid-template-columns:repeat(3,1fr);gap:22px;box-shadow:0 12px 34px rgba(24,58,88,.045)}
+.about-intro-item{display:flex;align-items:flex-start;gap:12px}
+.about-intro-icon{flex:0 0 38px;width:38px;height:38px;display:grid;place-items:center;border-radius:11px;background:#edf6fb;color:#087f91;font-size:15px}
+.about-intro-item strong{display:block;margin:1px 0 4px;color:#193650;font-size:13px}
+.about-intro-item small{display:block;color:#708297;font-size:11px;line-height:1.55}
+.about-section{padding:82px 0 0}
+.about-section-heading{max-width:680px;margin:0 auto 35px;text-align:center}
+.about-section-heading h2{margin:12px 0 10px;color:#122a43;font-size:clamp(28px,4vw,40px);line-height:1.15;letter-spacing:-1.3px}
+.about-section-heading p{margin:0;color:#687c90;font-size:14px;line-height:1.8}
+.about-story-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;align-items:start}
+.about-story-aside{padding:28px;border:1px solid #dce8ef;border-radius:18px;background:linear-gradient(145deg,#edf6fb,#f6fbfc)}
+.about-story-aside .about-section-kicker{font-size:10px}
+.about-story-aside h3{margin:15px 0 11px;color:#16334f;font-size:25px;line-height:1.2;letter-spacing:-.6px}
+.about-story-aside p{margin:0;color:#62788c;font-size:13px;line-height:1.85}
+.about-story-copy p{margin:0 0 16px;color:#5c7186;font-size:14px;line-height:1.95}
+.about-principles{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
+.about-principle{min-height:205px;padding:25px 23px;border:1px solid #e0e9f0;border-radius:15px;background:#fff;box-shadow:0 9px 28px rgba(21,57,89,.035)}
+.about-principle-icon{width:43px;height:43px;display:grid;place-items:center;border-radius:12px;background:#edf6fb;color:#087f91;font-size:17px}
+.about-principle h3{margin:18px 0 8px;color:#183650;font-size:16px}
+.about-principle p{margin:0;color:#687d91;font-size:12px;line-height:1.8}
+.about-process{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;counter-reset:about-step}
+.about-step{position:relative;padding:22px 19px;border:1px solid #e0e9f0;border-radius:14px;background:#fff}
+.about-step-number{display:grid;place-items:center;width:32px;height:32px;margin-bottom:17px;border-radius:10px;background:#eaf4fb;color:#176bd0;font-size:12px;font-weight:850}
+.about-step h3{margin:0 0 7px;color:#183650;font-size:14px}
+.about-step p{margin:0;color:#6b8094;font-size:12px;line-height:1.75}
+.about-responsibility{display:grid;grid-template-columns:1fr auto;align-items:center;gap:28px;padding:30px 34px;border:1px solid #d9e8ed;border-radius:18px;background:linear-gradient(110deg,#edf7fa,#f5f9ff)}
+.about-responsibility h2{margin:0 0 8px;color:#16334f;font-size:22px;letter-spacing:-.5px}
+.about-responsibility p{max-width:780px;margin:0;color:#60768a;font-size:13px;line-height:1.85}
+.about-responsibility-icon{display:grid;place-items:center;width:58px;height:58px;border-radius:17px;background:#fff;color:#078b88;font-size:23px;box-shadow:0 8px 22px rgba(23,78,108,.08)}
+.about-mission{margin-top:65px;padding:42px 24px;border-radius:20px;background:linear-gradient(115deg,#102b4c,#145a70 65%,#087f83);text-align:center;box-shadow:0 18px 40px rgba(14,65,92,.15)}
+.about-mission span{color:#8ee1dc;font-size:10px;font-weight:850;letter-spacing:2px;text-transform:uppercase}
+.about-mission h2{max-width:780px;margin:13px auto 12px;color:#fff;font-size:clamp(25px,4vw,36px);line-height:1.25;letter-spacing:-.8px}
+.about-mission p{margin:0;color:#d2e7ee;font-size:13px;line-height:1.8}
+@media(max-width:850px){.about-hero{padding:62px 0 55px}.about-hero-grid{grid-template-columns:1fr;gap:28px}.about-visual{min-height:270px}.about-orbit{width:235px;height:235px}.about-visual-card{max-width:350px}.about-intro-strip{grid-template-columns:1fr;gap:17px;padding:22px}.about-story-grid{grid-template-columns:1fr;gap:20px}.about-principles{grid-template-columns:1fr 1fr}.about-process{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.about-shell{width:calc(100% - 32px)}.about-page{padding-bottom:54px}.about-hero{padding:48px 0 40px}.about-hero h1{font-size:clamp(37px,11vw,52px);letter-spacing:-1.8px}.about-hero-copy{font-size:14px;line-height:1.8}.about-hero-actions{gap:9px}.about-button{min-height:45px;padding:0 14px;font-size:12px}.about-visual{min-height:245px}.about-visual-card{padding:19px}.about-orbit{width:205px;height:205px}.about-intro-strip{width:calc(100% - 32px);padding:19px}.about-section{padding-top:57px}.about-section-heading{margin-bottom:25px}.about-section-heading h2{font-size:29px}.about-section-heading p{font-size:13px}.about-story-aside{padding:22px}.about-principles,.about-process{grid-template-columns:1fr;gap:12px}.about-principle{min-height:0;padding:21px}.about-principle h3{margin-top:13px}.about-step{padding:19px}.about-step-number{margin-bottom:12px}.about-responsibility{grid-template-columns:1fr;padding:23px;gap:17px}.about-responsibility-icon{width:48px;height:48px}.about-mission{margin-top:48px;padding:32px 20px}.about-mission h2{font-size:26px}}
+@media(prefers-color-scheme:dark){
+ html,body{background:#0b1424!important;color:#e8f0fa!important}
+ .about-page{background:#0b1424!important;color:#e8f0fa!important}
+ .about-hero{background:radial-gradient(circle at 82% 25%,rgba(24,145,173,.15),transparent 28%),radial-gradient(circle at 12% 0%,rgba(34,108,208,.12),transparent 32%),linear-gradient(135deg,#0d1a2c 0%,#10243a 58%,#102d36 100%)!important;border-color:#293c53!important}
+ .about-hero h1,.about-section-heading h2{color:#edf4ff!important}
+ .about-hero h1 span{color:#7bd3d4!important}
+ .about-hero-copy,.about-section-heading p,.about-story-copy p{color:#a9bad0!important}
+ .about-intro-strip,.about-principle,.about-step{background:#111f33!important;border-color:#293c53!important;box-shadow:none!important}
+ .about-intro-item strong,.about-principle h3,.about-step h3{color:#edf4ff!important}
+ .about-intro-item small,.about-principle p,.about-step p{color:#a9bad0!important}
+ .about-intro-icon,.about-principle-icon,.about-step-number{background:#1a3553!important;color:#83cbd4!important}
+ .about-story-aside,.about-responsibility{background:linear-gradient(120deg,#14283e,#152b3b)!important;border-color:#30465d!important}
+ .about-story-aside h3,.about-responsibility h2{color:#edf4ff!important}
+ .about-story-aside p,.about-responsibility p{color:#a9bad0!important}
+ .about-responsibility-icon{background:#1a3553!important;color:#83d4d4!important}
+ .about-button.secondary{background:#172a40!important;border-color:#38516e!important;color:#e5effc!important}
+ .about-mission{background:linear-gradient(115deg,#102b4c,#145568 65%,#08676d)!important;box-shadow:none!important}
+}
 </style>
   <link rel="stylesheet" href="./responsive.css?v=20261104-public-white1">
 <style id="fastmoney-brand-style">.fastmoney-brand{display:flex!important;align-items:center;gap:9px;flex:0 0 auto;text-decoration:none!important;color:#102a43!important;white-space:nowrap}.fastmoney-mark{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:linear-gradient(145deg,#087b8c,#075b68);color:#fff;font-size:25px;font-weight:900;box-shadow:0 5px 14px #087b8c25}.fastmoney-word{display:flex;flex-direction:column;font-size:21px;line-height:1.05;font-weight:850;letter-spacing:-.7px}.fastmoney-word b{color:#087b8c}.fastmoney-word small{margin-top:4px;font-size:8px;letter-spacing:1.35px;color:#718096;font-weight:800}.fastmoney-legal-links{display:flex;justify-content:center;gap:12px 22px;flex-wrap:wrap;padding:16px 18px;border-top:1px solid #e5edf2;background:#fff;font:600 13px/1.5 system-ui,sans-serif}.fastmoney-legal-links a{color:#426174;text-decoration:none}.fastmoney-legal-links a:hover{color:#087b8c;text-decoration:underline}@media(max-width:480px){.fastmoney-mark{width:36px;height:36px}.fastmoney-word{font-size:19px}}</style>
@@ -123,7 +188,95 @@ html,body{background:#fff!important}
     </nav>
     <!-- MOBILE NAVIGATION END -->
   </header>
-<main class="about-page"><section class="about-hero"><span class="about-label">ABOUT FASTMONEY</span><h1>One Platform.<br><span>More Ways to Move Money.</span></h1><p>FastMoney is built to make supported digital wallet and currency exchanges easier to understand and access.</p></section><div class="about-copy"><section><h2>Our Purpose</h2><p>FastMoney was created with a simple vision: people should be able to use the digital wallets and payment methods they already have, and exchange supported balances without unnecessary complexity. We are building a convenient place to request digital money exchanges with clear information and a straightforward process.</p></section><section><h2>Buy, Sell and Exchange</h2><p>Users can submit buy, sell and exchange requests involving the payment methods and digital currencies currently listed on our platform. Availability, rates, limits, fees and payment instructions are shown during the request process and may change. Each request is subject to review and manual verification before completion.</p></section><section><h2>More Wallets, One Place</h2><p>Our goal is to support a growing range of digital wallets, payment services and currencies. We want users to have more flexibility when moving between supported payment systems, while keeping the process understandable and transparent.</p></section><section><h2>Our Global Vision</h2><p>Global money transfer and broader international payment services are part of our long-term vision. These services are not represented as currently available unless they are specifically listed as active on the platform. Any future service will be introduced only when operational and legal requirements are met.</p></section><section><h2>How We Work</h2><p>FastMoney aims to provide clear exchange details, visible payment instructions, request tracking and customer support. Please verify the selected wallet, account details, amount, network and fees before sending funds. Never share your PIN, password, OTP or account recovery codes with anyone.</p></section><section class="about-highlight"><p><strong>Our mission:</strong> Make digital money exchange simpler today and help connect more wallets and payment options over time.</p><p><strong>FastMoney — Your Money, Your Wallet, Your World.</strong></p></section></div></main>
+<main class="about-page">
+  <section class="about-hero">
+    <div class="about-shell about-hero-grid">
+      <div>
+        <span class="about-eyebrow">About FastMoney</span>
+        <h1>Moving money should feel <span>clear and simple.</span></h1>
+        <p class="about-hero-copy">We are building a more straightforward way to request supported digital wallet and currency exchanges—with clear details, helpful guidance and a process people can understand.</p>
+        <div class="about-hero-actions">
+          <a class="about-button" href="/index.html#services">Explore our services <i class="fa-solid fa-arrow-right"></i></a>
+          <a class="about-button secondary" href="/help.html">Visit Help Center</a>
+        </div>
+      </div>
+      <div class="about-visual" aria-label="FastMoney digital exchange illustration">
+        <div class="about-orbit"></div>
+        <div class="about-visual-card">
+          <div class="about-visual-top">
+            <div class="about-visual-brand"><span class="about-visual-mark"><i class="fa-solid fa-arrow-right-arrow-left"></i></span> FastMoney</div>
+            <span class="about-visual-status">Clear process</span>
+          </div>
+          <div class="about-visual-title">Your exchange, made clearer</div>
+          <div class="about-visual-line long"></div>
+          <div class="about-visual-line mid"></div>
+          <div class="about-visual-line short"></div>
+          <div class="about-visual-bottom"><span class="about-visual-pill"></span><span class="about-visual-pill"></span><span class="about-visual-pill"></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="about-intro-strip">
+    <div class="about-intro-item"><span class="about-intro-icon"><i class="fa-solid fa-wallet"></i></span><div><strong>Supported payment options</strong><small>Explore the wallets and currencies currently listed on our platform.</small></div></div>
+    <div class="about-intro-item"><span class="about-intro-icon"><i class="fa-solid fa-circle-info"></i></span><div><strong>Clear exchange details</strong><small>Review rates, limits, fees and instructions before you submit a request.</small></div></div>
+    <div class="about-intro-item"><span class="about-intro-icon"><i class="fa-solid fa-headset"></i></span><div><strong>Help when you need it</strong><small>Find guidance and contact options through our support channels.</small></div></div>
+  </div>
+
+  <section class="about-section about-shell">
+    <div class="about-story-grid">
+      <div class="about-story-aside">
+        <span class="about-section-kicker">Our purpose</span>
+        <h3>A simpler experience for digital exchange.</h3>
+        <p>FastMoney is shaped around one idea: make it easier to understand the steps involved in exchanging supported digital balances.</p>
+      </div>
+      <div class="about-story-copy">
+        <p>People use different digital wallets, payment services and currencies in everyday life. Moving between those options can feel complicated when information is unclear or the process is difficult to follow.</p>
+        <p>FastMoney brings supported exchange options into one place, so users can review the available route, understand the displayed details and submit a request through a straightforward flow.</p>
+        <p>Rates, limits, fees, availability and payment instructions may change. Each request is subject to review and manual verification before completion. Only services shown as active on the platform should be considered currently available.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-section about-shell">
+    <div class="about-section-heading">
+      <span class="about-section-kicker">What guides us</span>
+      <h2>Built around clarity, care and choice.</h2>
+      <p>These principles shape how we present exchange information and how we want the experience to feel.</p>
+    </div>
+    <div class="about-principles">
+      <article class="about-principle"><span class="about-principle-icon"><i class="fa-solid fa-eye"></i></span><h3>Clarity first</h3><p>We aim to make rates, fees, limits and payment instructions easy to review before a request is submitted.</p></article>
+      <article class="about-principle"><span class="about-principle-icon"><i class="fa-solid fa-sliders"></i></span><h3>More flexibility</h3><p>Our goal is to support a growing range of wallets, payment services and currencies as they become available.</p></article>
+      <article class="about-principle"><span class="about-principle-icon"><i class="fa-solid fa-user-shield"></i></span><h3>Careful by design</h3><p>We encourage users to check recipient details, amounts, networks and instructions before sending funds.</p></article>
+    </div>
+  </section>
+
+  <section class="about-section about-shell">
+    <div class="about-section-heading">
+      <span class="about-section-kicker">The process</span>
+      <h2>Know what to expect at every step.</h2>
+      <p>A simple overview of how an exchange request works on FastMoney.</p>
+    </div>
+    <div class="about-process">
+      <article class="about-step"><span class="about-step-number">01</span><h3>Choose an option</h3><p>Select a supported wallet, currency or exchange direction shown on the platform.</p></article>
+      <article class="about-step"><span class="about-step-number">02</span><h3>Review the details</h3><p>Check the displayed rate, amount, limits, fees and payment instructions.</p></article>
+      <article class="about-step"><span class="about-step-number">03</span><h3>Submit your request</h3><p>Enter the required information carefully and submit your exchange request.</p></article>
+      <article class="about-step"><span class="about-step-number">04</span><h3>Verification</h3><p>Your request is reviewed and manually verified before it can be completed.</p></article>
+    </div>
+  </section>
+
+  <section class="about-section about-shell">
+    <div class="about-responsibility">
+      <div><h2>Stay informed. Keep your account details private.</h2><p>Always verify the recipient, amount, wallet and network before sending funds. FastMoney will never need you to share your password, PIN, OTP or account recovery codes with another person.</p></div>
+      <span class="about-responsibility-icon"><i class="fa-solid fa-shield-halved"></i></span>
+    </div>
+    <div class="about-mission">
+      <span>Our mission</span>
+      <h2>Make digital money exchange simpler today—and more connected over time.</h2>
+      <p>FastMoney — Your Money, Your Wallet, Your World.</p>
+    </div>
+  </section>
+</main>
 <footer class="met-footer" aria-label="FastMoney footer"><div class="met-footer-inner"><a href="./index.html" class="met-footer-logo" aria-label="FastMoney home"><img src="./assets/fastmoneylogo.png" alt="FastMoney" width="210" height="62" loading="lazy"></a><nav class="met-footer-links" aria-label="Footer navigation"><a href="./affiliate.html">Affiliate</a><a href="./terms-and-conditions.html">Terms</a><a href="./privacy-policy.html">Privacy</a><a href="./guidelines.html">Guidelines</a><a href="./licence.html">Licence</a><a href="./help.html">Help &amp; FAQ</a></nav><div class="met-footer-bottom"><span>© <span class="footer-year">2026</span> FastMoney</span><span>Learn about FastMoney's purpose and supported exchange services.</span></div></div></footer>
 
 
