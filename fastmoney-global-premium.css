@@ -1323,3 +1323,44 @@ main.container>.fm-hero-visual-section{
 .fm-pay-out-art .fm-art-payout-card{
   transform:translateY(25px)!important;
 }
+
+/* Global Pay-in: stack the currency and payment overview panels cleanly. */
+.fm-pay-in-art{
+  min-height:370px!important;
+  align-items:stretch!important;
+}
+.fm-pay-in-art .fm-art-currency-card{
+  top:7%!important;
+  left:8%!important;
+  right:8%!important;
+  width:auto!important;
+  box-sizing:border-box!important;
+}
+.fm-pay-in-art .fm-art-amount{
+  left:8%!important;
+  right:8%!important;
+  bottom:7%!important;
+  width:auto!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+}
+.fm-pay-in-art .fm-art-amount small{
+  margin-bottom:7px!important;
+  font-size:9px!important;
+}
+.fm-pay-in-art .fm-art-amount strong{
+  display:block!important;
+  font-size:13px!important;
+  line-height:1.45!important;
+}
+@media(max-width:760px){
+  .fm-pay-in-art{min-height:350px!important}
+  .fm-pay-in-art .fm-art-currency-card{
+    top:6%!important;left:6%!important;right:6%!important;
+    padding:14px 15px!important;
+  }
+  .fm-pay-in-art .fm-art-amount{
+    left:6%!important;right:6%!important;bottom:6%!important;
+    padding:13px 15px!important;
+  }
+}
