@@ -76,6 +76,23 @@ html,body{background:#f4f8fc!important;color:#18324b!important}
  }
 }
 
+/* FINAL LOGIN PAGE CANVAS: mirror Sign Up in light mode and stay navy in dark mode. */
+@media(prefers-color-scheme:light){
+ :root{color-scheme:light!important}
+ html,body{
+  background:
+   radial-gradient(ellipse at 8% 18%,rgba(77,190,220,.15) 0,rgba(77,190,220,0) 34%),
+   radial-gradient(ellipse at 92% 72%,rgba(54,211,166,.13) 0,rgba(54,211,166,0) 35%),
+   linear-gradient(135deg,#fbfdff 0%,#f5f9ff 48%,#f8fffc 100%)!important;
+  background-color:#fbfdff!important;
+  background-attachment:fixed!important;
+ }
+}
+@media(prefers-color-scheme:dark){
+ :root{color-scheme:dark!important}
+ html,body{background:#0b1424!important;background-image:none!important;color:#e8f0fa!important}
+}
+
 </style><script src="./header.js" defer></script><script>document.documentElement.classList.add("met-header-styles-ready");</script>  <link rel="stylesheet" href="./responsive.css?v=20261104-public-white1">
 <link rel="stylesheet" href="./account-responsive.css?v=1"><link rel="stylesheet" href="./footer.css?v=20261114-layout3"><link rel="stylesheet" href="./fastmoney-header-lock.css?v=20261114-align1"><link rel="stylesheet" href="./public-dark-mode.css?v=20261114-2">
 
