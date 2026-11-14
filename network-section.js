@@ -225,13 +225,89 @@
     root.querySelectorAll(".fm-currency-code-grid,.fm-crypto-code-grid").forEach(track => {
       if (track.dataset.pageWheelReady === "true") return;
       track.dataset.pageWheelReady = "true";
-      // Keep the directory cards stationary; vertical wheel input always scrolls the page.
+
+      // Duplicate one full set so the horizontal ticker can loop without a visible jump.
+      const originalWidth = track.scrollWidth;
+      if (originalWidth > track.clientWidth + 4) {
+        [...track.children].forEach(card => {
+          const clone = card.cloneNode(true);
+          clone.setAttribute("aria-hidden","true");
+          clone.querySelectorAll("img").forEach(img => { img.alt=""; img.loading="lazy"; });
+          track.append(clone);
+        });
+      }
+      const loopWidth = originalWidth;
+      let frame = 0, lastTime = 0, paused = false, dragging = false;
+      let pointerStart = 0, scrollStart = 0, dragMoved = false;
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const stop = () => { paused = true; if (frame) cancelAnimationFrame(frame); frame = 0; lastTime = 0; };
+      const tick = now => {
+        if (paused || reduced || track.scrollWidth <= track.clientWidth) { frame = 0; return; }
+        if (lastTime) {
+          const elapsed = Math.min(40, now - lastTime);
+          track.scrollLeft += elapsed * 0.027;
+          if (loopWidth > 0 && track.scrollLeft >= loopWidth) track.scrollLeft -= loopWidth;
+        }
+        lastTime = now;
+        frame = requestAnimationFrame(tick);
+      };
+      const startTicker = () => {
+        if (paused === false && frame) return;
+        paused = false;
+        if (!reduced && !frame && track.scrollWidth > track.clientWidth) frame = requestAnimationFrame(tick);
+      };
+      const resume = () => { window.setTimeout(() => { if (!dragging && !track.matches(":hover")) startTicker(); }, 800); };
+
+      // Vertical wheel movement scrolls the whole page, not the card strip.
       track.addEventListener("wheel", event => {
         if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
           event.preventDefault();
           window.scrollBy({top:event.deltaY, left:0, behavior:"auto"});
         }
       }, {passive:false});
+
+      // Pause while the user interacts; native touch scrolling remains available.
+      track.addEventListener("mouseenter", stop);
+      track.addEventListener("mouseleave", () => { if (!dragging) startTicker(); });
+      track.addEventListener("touchstart", stop, {passive:true});
+      track.addEventListener("touchend", resume, {passive:true});
+      track.addEventListener("touchcancel", resume, {passive:true});
+
+      // Mouse drag support for desktop users.
+      track.addEventListener("pointerdown", event => {
+        if (event.pointerType === "touch" || event.button !== 0) return;
+        stop();
+        dragging = true;
+        dragMoved = false;
+        pointerStart = event.clientX;
+        scrollStart = track.scrollLeft;
+        track.classList.add("is-dragging");
+        track.setPointerCapture?.(event.pointerId);
+      });
+      track.addEventListener("pointermove", event => {
+        if (!dragging) return;
+        const delta = event.clientX - pointerStart;
+        if (Math.abs(delta) > 3) dragMoved = true;
+        if (dragMoved) {
+          event.preventDefault();
+          track.scrollLeft = scrollStart - delta;
+        }
+      });
+      const finishDrag = () => {
+        if (!dragging) return;
+        dragging = false;
+        track.classList.remove("is-dragging");
+        if (loopWidth > 0) {
+          if (track.scrollLeft >= loopWidth) track.scrollLeft -= loopWidth;
+          if (track.scrollLeft < 0) track.scrollLeft += loopWidth;
+        }
+        resume();
+      };
+      track.addEventListener("pointerup", finishDrag);
+      track.addEventListener("pointercancel", finishDrag);
+      track.addEventListener("lostpointercapture", finishDrag);
+      track.addEventListener("click", event => { if (dragMoved) { event.preventDefault(); event.stopPropagation(); dragMoved = false; } }, true);
+      startTicker();
     });
   };
 
