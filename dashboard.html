@@ -52,7 +52,9 @@
 .dashboard-popover[hidden]{display:none!important}
 .dashboard-popover-title{display:flex;align-items:center;gap:9px;font-weight:800;font-size:15px}
 .dashboard-popover-title i{color:#087f91}
-.notification-popover p{margin:12px 0;color:#64748b;font-size:13px;line-height:1.6}\n.dashboard-notification-link{display:flex;align-items:center;gap:9px;margin-top:12px;padding:11px 12px;border-radius:10px;background:#edf7f8;color:#087487;text-decoration:none;font-size:13px;font-weight:800}.dashboard-notification-link i:last-child{margin-left:auto}\n@media(prefers-color-scheme:dark){.dashboard-notification-link{background:#1b3852;color:#8fe0df}}
+.notification-popover p{margin:12px 0;color:#64748b;font-size:13px;line-height:1.6}
+.dashboard-notification-link{display:flex;align-items:center;gap:9px;margin-top:12px;padding:11px 12px;border-radius:10px;background:#edf7f8;color:#087487;text-decoration:none;font-size:13px;font-weight:800}.dashboard-notification-link i:last-child{margin-left:auto}
+@media(prefers-color-scheme:dark){.dashboard-notification-link{background:#1b3852;color:#8fe0df}}
 .dashboard-menu-popover{display:grid;gap:5px}
 .dashboard-menu-popover a,.dashboard-menu-popover button{display:flex;align-items:center;gap:12px;min-height:43px;padding:10px 11px;border:0;border-radius:10px;background:transparent;color:#304760;text-decoration:none;text-align:left;font:600 13px 'Hind Siliguri',Arial,sans-serif;cursor:pointer}
 .dashboard-menu-popover a:hover,.dashboard-menu-popover button:hover{background:#eef7f9;color:#087487}
@@ -96,7 +98,7 @@
 .dashboard-brand-mark,.dashboard-brand-name{display:none!important}
 .dashboard-brand img{display:block;width:204px;height:54px;object-fit:contain;object-position:left center}
 .dashboard-header-actions{margin-left:auto}
-.dashboard-header .desktop-nav{gap:12px}
+.dashboard-header .desktop-nav{gap:12px}\n.dashboard-header-actions{display:flex!important;align-items:center!important;gap:12px!important;flex:0 0 auto!important}\n.dashboard-header-actions>.dashboard-icon-btn,.dashboard-header-actions>.dashboard-language-control{display:flex!important;visibility:visible!important;opacity:1!important;flex:0 0 auto!important}\n.dashboard-header-actions>.notification-trigger{display:grid!important}\n.dashboard-language-control{height:44px;min-width:88px;gap:7px;padding:0 10px;border:1px solid #e2e9f1;border-radius:13px;background:#f7f9fc;color:#28415e}\n.dashboard-language-control>i:first-child{color:#087f91;font-size:16px}\n.dashboard-language-control select{display:block!important;width:42px!important;max-width:42px!important;padding:0!important;border:0!important;outline:0!important;background:transparent!important;color:inherit!important;font:700 12px Arial,sans-serif!important;appearance:auto!important}\n.dashboard-language-control .fm-language-chevron{display:block!important;font-size:10px;color:inherit}
 .dashboard-header .fm-language-control{min-width:48px;box-shadow:0 2px 8px rgba(20,45,70,.04)}
 .dashboard-icon-btn{width:44px;height:44px;border-radius:13px}
 .dashboard-menu-toggle{margin-left:1px}
@@ -112,7 +114,7 @@
  .dash-top{margin-top:88px!important}
  .dashboard-header-actions,.dashboard-header .desktop-nav{gap:7px}
  .dashboard-icon-btn{width:39px;height:39px}
- .dashboard-header .fm-language-control{height:39px;min-width:41px;padding:0 7px}
+ .dashboard-header .fm-language-control{height:39px;min-width:41px;padding:0 7px}\n .dashboard-header-actions{gap:7px!important}\n .dashboard-language-control{height:39px;min-width:70px;padding:0 6px}\n .dashboard-language-control select{width:34px!important;max-width:34px!important;font-size:11px!important}
  .notification-popover,.dashboard-menu-popover{right:10px!important}
 }
 @media(max-width:370px){.dashboard-brand img{width:132px;height:42px}.dashboard-header{padding-inline:9px!important}.dashboard-header-actions,.dashboard-header .desktop-nav{gap:5px}}
@@ -130,11 +132,16 @@
       <img src="./assets/fastmoneylogo.png" alt="FastMoney" width="204" height="54">
     </a>
     <div class="dashboard-header-actions">
-      <div class="desktop-nav">
-        <button class="dashboard-icon-btn notification-trigger" id="notificationToggle" type="button" aria-label="Notifications" aria-expanded="false">
-          <i class="fa-regular fa-bell"></i><span class="notification-dot" aria-hidden="true"></span>
-        </button>
-      </div>
+      <button class="dashboard-icon-btn notification-trigger" id="notificationToggle" type="button" aria-label="Transaction notifications" aria-expanded="false" title="Transaction notifications">
+        <i class="fa-solid fa-bell" aria-hidden="true"></i><span class="notification-dot" aria-hidden="true"></span>
+      </button>
+      <label class="fm-language-control dashboard-language-control" aria-label="Select website language" title="Select website language">
+        <i class="fa-solid fa-globe" aria-hidden="true"></i>
+        <select class="fm-language-select" aria-label="Website language">
+          <option value="en">EN</option><option value="bn">বাংলা</option><option value="ar">العربية</option><option value="zh-CN">中文</option><option value="fr">FR</option><option value="de">DE</option><option value="hi">हिन्दी</option><option value="es">ES</option><option value="it">IT</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="pt">PT</option><option value="ru">RU</option><option value="tr">TR</option><option value="ur">اردو</option>
+        </select>
+        <i class="fa-solid fa-chevron-down fm-language-chevron" aria-hidden="true"></i>
+      </label>
       <button class="dashboard-icon-btn dashboard-menu-toggle" id="dashboardMenuToggle" type="button" aria-label="Open navigation menu" aria-expanded="false">
         <i class="fa-solid fa-bars"></i>
       </button>
