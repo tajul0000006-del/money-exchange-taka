@@ -174,6 +174,29 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 @media(prefers-color-scheme:dark){.dashboard-bottom-nav{background:rgba(10,23,39,.97);border-top-color:#2a4058;box-shadow:0 -8px 28px rgba(0,0,0,.38)}.bottom-nav-item{color:#9bb0c4}.bottom-nav-item.active,.bottom-nav-item:hover{color:#82dfdc;background:#17394a}}
 @media(max-width:380px){.dashboard-bottom-nav{padding-left:5px;padding-right:5px;gap:1px}.bottom-nav-item{font-size:9px;gap:4px}.bottom-nav-item i{font-size:17px}}
 
+
+/* Colorful premium quick-service navigation */
+.dashboard-bottom-nav{min-height:82px!important;padding-top:9px!important;padding-bottom:calc(9px + env(safe-area-inset-bottom))!important;gap:8px!important}
+.bottom-nav-item{min-height:64px!important;gap:6px!important;padding:5px 3px!important;border-radius:14px!important;color:#31465e!important;font:800 12px/1.15 'Hind Siliguri',Arial,sans-serif!important;transition:transform .18s ease,background .18s ease!important}
+.bottom-nav-icon{width:36px;height:36px;display:grid;place-items:center;border-radius:12px;font-size:19px;box-shadow:0 4px 10px rgba(20,40,65,.08)}
+.bottom-nav-label{font-size:12px;font-weight:800;letter-spacing:.05px}
+.bottom-nav-convert .bottom-nav-icon{background:linear-gradient(145deg,#dbeafe,#bfdbfe);color:#2563eb}
+.bottom-nav-payin .bottom-nav-icon{background:linear-gradient(145deg,#d1fae5,#a7f3d0);color:#059669}
+.bottom-nav-payout .bottom-nav-icon{background:linear-gradient(145deg,#ffedd5,#fed7aa);color:#ea580c}
+.bottom-nav-buysell .bottom-nav-icon{background:linear-gradient(145deg,#ede9fe,#ddd6fe);color:#7c3aed}
+.bottom-nav-item:hover{transform:translateY(-2px);background:#f1f6fb!important}
+.bottom-nav-item.active{background:#f1f7fc!important;color:#173c5a!important}
+.bottom-nav-item.active .bottom-nav-icon{box-shadow:0 5px 13px rgba(20,50,80,.14);transform:translateY(-1px)}
+@media(prefers-color-scheme:dark){
+ .bottom-nav-item{color:#dce9f7!important}
+ .bottom-nav-item:hover,.bottom-nav-item.active{background:#172f47!important;color:#fff!important}
+ .bottom-nav-convert .bottom-nav-icon{background:linear-gradient(145deg,#193d68,#244f86);color:#9dc4ff}
+ .bottom-nav-payin .bottom-nav-icon{background:linear-gradient(145deg,#164d40,#176b53);color:#8df0c5}
+ .bottom-nav-payout .bottom-nav-icon{background:linear-gradient(145deg,#633b22,#814c25);color:#ffd09b}
+ .bottom-nav-buysell .bottom-nav-icon{background:linear-gradient(145deg,#3d326f,#51428f);color:#d0c3ff}
+}
+@media(max-width:380px){.dashboard-bottom-nav{min-height:78px!important;gap:2px!important}.bottom-nav-item{font-size:11px!important}.bottom-nav-icon{width:33px;height:33px;font-size:18px}.bottom-nav-label{font-size:11px}}
+
 </style>
   <link rel="stylesheet" href="./responsive.css">
 <style id="fastmoney-brand-style">.fastmoney-brand{display:flex!important;align-items:center;gap:9px;flex:0 0 auto;text-decoration:none!important;color:#102a43!important;white-space:nowrap}.fastmoney-mark{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:linear-gradient(145deg,#087b8c,#075b68);color:#fff;font-size:25px;font-weight:900}.fastmoney-word{display:flex;flex-direction:column;font-size:21px;line-height:1.05;font-weight:850;letter-spacing:-.7px}.fastmoney-word b{color:#087b8c}.fastmoney-word small{margin-top:4px;font-size:8px;letter-spacing:1.35px;color:#718096;font-weight:800}.fastmoney-legal-links{display:flex;justify-content:center;gap:12px 22px;flex-wrap:wrap;padding:16px 18px;border-top:1px solid #e5edf2;background:#fff;font:600 13px/1.5 system-ui,sans-serif}.fastmoney-legal-links a{color:#426174;text-decoration:none}</style>
@@ -238,10 +261,10 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
   </section>
   <button class="dash-btn secondary" id="logoutBtn" type="button" hidden>Log Out</button>
   <nav class="dashboard-bottom-nav" aria-label="Quick service navigation">
-    <a class="bottom-nav-item active" href="/member-exchange.html#exchange"><i class="fa-solid fa-right-left"></i><span>Convert</span></a>
-    <a class="bottom-nav-item" href="/member-exchange.html#exchange"><i class="fa-solid fa-arrow-down-to-line"></i><span>Pay-in</span></a>
-    <a class="bottom-nav-item" href="/member-exchange.html#exchange"><i class="fa-solid fa-arrow-up-from-line"></i><span>Pay-out</span></a>
-    <a class="bottom-nav-item" href="/member-exchange.html#exchange"><i class="fa-solid fa-cart-shopping"></i><span>Buy/Sell</span></a>
+    <a class="bottom-nav-item bottom-nav-convert active" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></span><span class="bottom-nav-label">Convert</span></a>
+    <a class="bottom-nav-item bottom-nav-payin" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-circle-arrow-down" aria-hidden="true"></i></span><span class="bottom-nav-label">Pay-in</span></a>
+    <a class="bottom-nav-item bottom-nav-payout" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-circle-arrow-up" aria-hidden="true"></i></span><span class="bottom-nav-label">Pay-out</span></a>
+    <a class="bottom-nav-item bottom-nav-buysell" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i></span><span class="bottom-nav-label">Buy/Sell</span></a>
   </nav>
 </main>
 <script type="module">
