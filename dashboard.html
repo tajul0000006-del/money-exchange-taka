@@ -28,6 +28,66 @@
 .dash-note{margin-top:18px;padding:15px 17px;border-left:4px solid #0d9488;background:#ecfdf5;color:#285b53;border-radius:10px;font-size:13px;line-height:1.65}
 #loading{padding:70px 20px;text-align:center;color:#64748b}
 @media(max-width:760px){.dash-grid{grid-template-columns:1fr}.dash-wrap{margin-top:22px}.welcome{padding:20px}}
+
+/* Dashboard-only premium responsive header */
+.dashboard-header{position:sticky;top:0;z-index:1100;width:100%;min-height:76px;margin:0 0 28px;padding:10px 18px;display:flex;align-items:center;justify-content:space-between;gap:18px;border:1px solid #e4eaf2;border-radius:0 0 18px 18px;background:rgba(255,255,255,.94);box-shadow:0 8px 28px rgba(18,42,72,.08);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.dashboard-brand{display:inline-flex;align-items:center;gap:10px;min-width:0;text-decoration:none;color:#122b49}
+.dashboard-brand-mark{width:43px;height:43px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(145deg,#087f91,#07536d);color:#fff;font:900 18px/1 Arial,sans-serif;letter-spacing:-2px;box-shadow:0 5px 14px rgba(8,127,145,.2)}
+.dashboard-brand-mark span{color:#75f0d0}
+.dashboard-brand-name{display:flex;flex-direction:column;font:800 19px/1 Arial,sans-serif;letter-spacing:-.7px;white-space:nowrap}
+.dashboard-brand-name>span{display:inline;color:#087f91}
+.dashboard-brand-name small{margin-top:5px;color:#8292a7;font:700 8px/1.2 Arial,sans-serif;letter-spacing:1.2px}
+.dashboard-header-actions{display:flex;align-items:center;gap:13px}
+.dashboard-header .desktop-nav{display:flex;align-items:center;gap:13px}
+.dashboard-icon-btn{position:relative;width:42px;height:42px;display:grid;place-items:center;border:1px solid #e2e9f1;border-radius:13px;background:#f7f9fc;color:#28415e;font-size:17px;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
+.dashboard-icon-btn:hover{background:#eaf5f8;border-color:#b8dce2;transform:translateY(-1px)}
+.dashboard-icon-btn:focus-visible,.dashboard-menu-popover a:focus-visible,.dashboard-menu-popover button:focus-visible{outline:3px solid #39a9bb;outline-offset:3px}
+.notification-dot{position:absolute;top:8px;right:8px;width:7px;height:7px;border:1.5px solid #fff;border-radius:50%;background:#0d9b83}
+.dashboard-header .fm-language-control{height:42px;min-width:48px;display:flex;align-items:center;justify-content:center;gap:7px;padding:0 10px;border:1px solid #e2e9f1;border-radius:13px;background:#f7f9fc;color:#28415e}
+.dashboard-header .fm-language-control>i:first-child{color:#087f91;font-size:16px}
+.dashboard-header select.fm-language-select{width:26px;max-width:26px;padding:0;border:0;outline:0;background:transparent;color:#28415e;font:700 12px Arial,sans-serif;cursor:pointer;appearance:none}
+.dashboard-header .fm-language-chevron{display:none}
+.dashboard-header .dashboard-menu-toggle{border-color:transparent;background:transparent;font-size:20px}
+.dashboard-popover{position:absolute;top:calc(100% - 8px);right:16px;width:min(310px,calc(100vw - 36px));padding:16px;border:1px solid #e1e8f0;border-radius:16px;background:#fff;color:#233b57;box-shadow:0 18px 45px rgba(17,39,67,.16);z-index:1200}
+.dashboard-popover[hidden]{display:none!important}
+.dashboard-popover-title{display:flex;align-items:center;gap:9px;font-weight:800;font-size:15px}
+.dashboard-popover-title i{color:#087f91}
+.notification-popover p{margin:12px 0 2px;color:#64748b;font-size:13px;line-height:1.6}
+.dashboard-menu-popover{display:grid;gap:5px}
+.dashboard-menu-popover a,.dashboard-menu-popover button{display:flex;align-items:center;gap:12px;min-height:43px;padding:10px 11px;border:0;border-radius:10px;background:transparent;color:#304760;text-decoration:none;text-align:left;font:600 13px 'Hind Siliguri',Arial,sans-serif;cursor:pointer}
+.dashboard-menu-popover a:hover,.dashboard-menu-popover button:hover{background:#eef7f9;color:#087487}
+.dashboard-menu-popover i{width:18px;color:#078397;text-align:center}
+@media(prefers-color-scheme:dark){
+ body{background:#0b1422;color:#e5edf7}
+ .dashboard-header{background:rgba(13,27,44,.96);border-color:#263b52;box-shadow:0 8px 28px rgba(0,0,0,.3)}
+ .dashboard-brand{color:#edf5ff}
+ .dashboard-brand-mark{background:linear-gradient(145deg,#0d7184,#123d5c);box-shadow:0 5px 16px rgba(0,0,0,.28)}
+ .dashboard-brand-name>span{color:#64d6d0}
+ .dashboard-brand-name small{color:#91a8bd}
+ .dashboard-icon-btn,.dashboard-header .fm-language-control{background:#14283e;border-color:#30465e;color:#e3eefb}
+ .dashboard-icon-btn:hover{background:#1b3852;border-color:#42617d}
+ .dashboard-header .fm-language-control>i:first-child{color:#78d6dc}
+ .dashboard-header select.fm-language-select{color:#edf5ff;color-scheme:dark}
+ .dashboard-popover{background:#12263c;border-color:#30465e;color:#edf5ff;box-shadow:0 18px 45px rgba(0,0,0,.45)}
+ .notification-popover p{color:#a9bdd1}
+ .dashboard-menu-popover a,.dashboard-menu-popover button{color:#e0ebf8}
+ .dashboard-menu-popover a:hover,.dashboard-menu-popover button:hover{background:#1b3852;color:#8fe0df}
+ .dashboard-menu-popover i,.dashboard-popover-title i{color:#75d5d8}
+}
+@media(max-width:520px){
+ .dashboard-header{min-height:66px;margin-bottom:20px;padding:9px 12px;gap:8px;border-radius:0 0 14px 14px}
+ .dashboard-brand{gap:8px}
+ .dashboard-brand-mark{width:38px;height:38px;border-radius:11px;font-size:16px}
+ .dashboard-brand-name{font-size:16px}
+ .dashboard-brand-name small{font-size:7px;letter-spacing:.9px}
+ .dashboard-header-actions{gap:7px}
+ .dashboard-header .desktop-nav{gap:7px}
+ .dashboard-icon-btn{width:38px;height:38px;border-radius:11px}
+ .dashboard-header .fm-language-control{height:38px;min-width:40px;padding:0 7px;gap:4px;border-radius:11px}
+ .dashboard-header select.fm-language-select{width:23px;max-width:23px;font-size:11px}
+ .dashboard-popover{right:10px}
+}
+
 </style>
   <link rel="stylesheet" href="./responsive.css">
 <style id="fastmoney-brand-style">.fastmoney-brand{display:flex!important;align-items:center;gap:9px;flex:0 0 auto;text-decoration:none!important;color:#102a43!important;white-space:nowrap}.fastmoney-mark{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:linear-gradient(145deg,#087b8c,#075b68);color:#fff;font-size:25px;font-weight:900}.fastmoney-word{display:flex;flex-direction:column;font-size:21px;line-height:1.05;font-weight:850;letter-spacing:-.7px}.fastmoney-word b{color:#087b8c}.fastmoney-word small{margin-top:4px;font-size:8px;letter-spacing:1.35px;color:#718096;font-weight:800}.fastmoney-legal-links{display:flex;justify-content:center;gap:12px 22px;flex-wrap:wrap;padding:16px 18px;border-top:1px solid #e5edf2;background:#fff;font:600 13px/1.5 system-ui,sans-serif}.fastmoney-legal-links a{color:#426174;text-decoration:none}</style>
@@ -36,6 +96,33 @@
 <body>
 <div id="loading"><i class="fa-solid fa-spinner fa-spin"></i> Checking your account...</div>
 <main class="dash-wrap" id="dashboard" hidden>
+  <header class="dashboard-header" id="dashboardHeader">
+    <a class="dashboard-brand" href="/dashboard.html" aria-label="FastMoney Dashboard">
+      <span class="dashboard-brand-mark">F<span>M</span></span>
+      <span class="dashboard-brand-name">Fast<span>Money</span><small>YOUR FINANCIAL SPACE</small></span>
+    </a>
+    <div class="dashboard-header-actions">
+      <div class="desktop-nav">
+        <button class="dashboard-icon-btn notification-trigger" id="notificationToggle" type="button" aria-label="Notifications" aria-expanded="false">
+          <i class="fa-regular fa-bell"></i><span class="notification-dot" aria-hidden="true"></span>
+        </button>
+      </div>
+      <button class="dashboard-icon-btn dashboard-menu-toggle" id="dashboardMenuToggle" type="button" aria-label="Open navigation menu" aria-expanded="false">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+    <div class="dashboard-popover notification-popover" id="notificationPopover" hidden>
+      <div class="dashboard-popover-title"><i class="fa-regular fa-bell"></i> Notifications</div>
+      <p>You’re all caught up. New account updates will appear here.</p>
+    </div>
+    <nav class="dashboard-popover dashboard-menu-popover" id="dashboardMenu" aria-label="Dashboard navigation" hidden>
+      <a href="#dashboard"><i class="fa-solid fa-house"></i> Dashboard Home</a>
+      <a href="#memberExchange"><i class="fa-solid fa-arrow-right-arrow-left"></i> New Exchange</a>
+      <a href="/history.html"><i class="fa-solid fa-clock-rotate-left"></i> My Requests</a>
+      <a href="/chat.html"><i class="fa-solid fa-headset"></i> Customer Support</a>
+      <button type="button" id="headerLogoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
+    </nav>
+  </header>
   <div class="dash-top">
     <div><h1>My Dashboard</h1><p>Manage your FastMoney account.</p></div>
     <div class="user-chip"><i class="fa-solid fa-circle-user"></i><span id="userEmail">Verified user</span></div>
@@ -75,5 +162,18 @@ document.getElementById("logoutBtn").addEventListener("click",async()=>{
   catch(error){button.disabled=false;button.textContent="Log Out";alert("Could not log out. Please try again.");}
 });
 </script>
-<nav class="fastmoney-legal-links" aria-label="Legal and company information"><a href="/about.html">About FastMoney</a><a href="/terms-and-conditions.html">Terms &amp; Conditions</a><a href="/privacy-policy.html">Privacy Policy</a><a href="/index.html">Home</a></nav><script src="./language.js?v=1" defer></script>
+<nav class="fastmoney-legal-links" aria-label="Legal and company information"><a href="/about.html">About FastMoney</a><a href="/terms-and-conditions.html">Terms &amp; Conditions</a><a href="/privacy-policy.html">Privacy Policy</a><a href="/index.html">Home</a></nav><script>
+(function(){
+ const menuBtn=document.getElementById("dashboardMenuToggle");
+ const menu=document.getElementById("dashboardMenu");
+ const noticeBtn=document.getElementById("notificationToggle");
+ const notice=document.getElementById("notificationPopover");
+ function closePanels(){menu.hidden=true;notice.hidden=true;menuBtn.setAttribute("aria-expanded","false");noticeBtn.setAttribute("aria-expanded","false");}
+ menuBtn.addEventListener("click",function(){const opening=menu.hidden;closePanels();menu.hidden=!opening;menuBtn.setAttribute("aria-expanded",String(opening));});
+ noticeBtn.addEventListener("click",function(){const opening=notice.hidden;closePanels();notice.hidden=!opening;noticeBtn.setAttribute("aria-expanded",String(opening));});
+ document.addEventListener("click",function(e){if(!e.target.closest("#dashboardHeader"))closePanels();});
+ document.getElementById("headerLogoutBtn").addEventListener("click",function(){document.getElementById("logoutBtn").click();});
+})();
+</script>
+<script src="./language.js?v=1" defer></script>
 </body></html>
