@@ -1317,3 +1317,9 @@ main.container>.fm-hero-visual-section{
   .fm-pay-out-art .fm-art-payout-card div{gap:5px!important}
   .fm-pay-out-art .fm-art-payout-card b{padding:6px 3px!important;font-size:8px!important}
 }
+
+
+/* Move the Global Pay-out labels box down by exactly 5px. */
+.fm-pay-out-art .fm-art-payout-card{
+  transform:translateY(5px)!important;
+}
