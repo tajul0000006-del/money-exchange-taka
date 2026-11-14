@@ -444,3 +444,33 @@ body.fm-menu-open::before{z-index:999!important}
     transform:none!important;
   }
 }
+
+
+/* Desktop menu open: prevent any shadow or dim layer from washing over the header. */
+@media(min-width:901px){
+  body.fm-menu-open .main-header,
+  body.fm-menu-open .main-header.scrolled{
+    box-shadow:none!important;
+    filter:none!important;
+    opacity:1!important;
+    background:#fff!important;
+  }
+  body.fm-menu-open .main-header::before,
+  body.fm-menu-open .main-header::after{
+    filter:none!important;
+    opacity:0!important;
+    box-shadow:none!important;
+  }
+  .main-header .mobile-nav,
+  .main-header .mobile-nav.open{
+    box-shadow:none!important;
+    filter:none!important;
+    border-top:0!important;
+    background:#fff!important;
+  }
+  body.fm-menu-open::before{
+    top:64px!important;
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+  }
+}
