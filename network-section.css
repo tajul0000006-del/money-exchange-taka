@@ -490,3 +490,17 @@
   height:100%!important;
   min-height:0!important;
 }
+
+
+/* Exact directory sizing: outer panel 280px, inner horizontal scroller 270px. */
+.fm-network-v2 .fm-network-showcase>.fm-network-group{box-sizing:border-box!important;width:100%!important;height:280px!important;min-height:280px!important;max-height:280px!important;aspect-ratio:auto!important;padding:8px 12px!important;display:flex!important;flex-direction:column!important;justify-content:flex-start!important;overflow:hidden!important}
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-network-label{flex:0 0 auto!important;margin:0 0 4px!important}
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-grid,
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-grid{box-sizing:border-box!important;flex:0 0 270px!important;height:270px!important;min-height:270px!important;max-height:270px!important;width:100%!important;overflow-x:auto!important;overflow-y:auto!important;align-items:stretch!important}
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-card,
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-card{box-sizing:border-box!important;height:100%!important;min-height:100%!important}
+@media(max-width:700px){
+.fm-network-v2 .fm-network-showcase>.fm-network-group{height:280px!important;min-height:280px!important;max-height:280px!important;padding:6px 9px!important}
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-currency-code-grid,
+.fm-network-v2 .fm-network-showcase>.fm-network-group .fm-crypto-code-grid{height:270px!important;min-height:270px!important;max-height:270px!important;flex-basis:270px!important}
+}
