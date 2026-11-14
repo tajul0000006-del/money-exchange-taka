@@ -110,6 +110,30 @@
     @media(max-width:380px){.fm-banner-control{width:32px!important;height:32px!important}}
     html,body{max-width:100%;overflow-x:hidden!important}</style>
 
+
+  <style id="fm-home-nav-icon-no-box">
+    /* Public homepage: keep the navigation icon floating with no button frame or fill. */
+    .main-header .header-container > .menu-toggle,
+    .main-header .header-container > .menu-toggle:hover,
+    .main-header .header-container > .menu-toggle:focus,
+    .main-header .header-container > .menu-toggle:focus-visible,
+    .main-header .header-container > .menu-toggle:active {
+      border: 0 !important;
+      outline: 0 !important;
+      background: transparent !important;
+      background-color: transparent !important;
+      background-image: none !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+    }
+    .main-header .header-container > .menu-toggle::before,
+    .main-header .header-container > .menu-toggle::after {
+      content: none !important;
+      display: none !important;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+  </style>
 </head>
 <body>
     <header class="main-header" id="mainHeader">
