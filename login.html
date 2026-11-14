@@ -5,6 +5,37 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./style.css?v=3"><link rel="stylesheet" href="./header.css?v=20261114-darknav3"><link rel="stylesheet" href="./theme.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"><style>
 *{box-sizing:border-box}body{min-height:100vh;margin:0;font-family:'Hind Siliguri',Arial,sans-serif}.auth-wrap{width:min(100% - 28px,430px);margin:42px auto;padding:0 10px}.auth-card{height:auto;min-height:0;max-height:none;overflow:visible;background:linear-gradient(145deg,#102b4d,#0a203d);border:1px solid rgba(116,207,235,.25);border-radius:20px;padding:20px 24px;box-shadow:0 18px 48px #0005}.auth-icon{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:#103b50;color:#39f5a5;font-size:20px;margin-bottom:9px}.auth-card h1{margin:0 0 4px;font-size:25px;color:#eefaff}.auth-card>p{color:#aac3d9;margin:0 0 12px;font-size:14px}.auth-field{display:block;margin:8px 0;color:#d9effb;font-size:14px;font-weight:600}.auth-field input{width:100%;margin-top:5px;padding:9px 12px;border-radius:10px;border:1px solid rgba(116,207,235,.3);background:#071b34;color:#eefaff;font-size:15px;outline:none}.auth-field input:focus{border-color:#35e6f2;box-shadow:0 0 0 3px #35e6f225}.auth-submit{width:100%;padding:10px;border:0;border-radius:11px;margin-top:7px;background:linear-gradient(110deg,#35e6f2,#39f5a5);color:#06152d;font-size:15px;font-weight:800;cursor:pointer}.auth-message{min-height:18px;margin:7px 0 0;color:#fca5a5;font-size:13px}.forgot-link{display:block;text-align:right;margin:2px 0 8px;color:#39f5a5;font-size:13px;font-weight:700;text-decoration:none}.forgot-link:hover{text-decoration:underline}.auth-switch{text-align:center;color:#aac3d9;margin:8px 0 0;font-size:13px}.auth-switch a,.back-home{color:#39f5a5;font-weight:700;text-decoration:none}.back-home{display:inline-block;margin-top:8px;font-size:13px}@media(max-width:600px){.auth-wrap{margin:18px auto}.auth-card{padding:18px 20px}}
+
+/* Premium auth form theme: elegant in light mode, coordinated in dark mode. */
+html,body{background:#f4f8fc!important;color:#18324b!important}
+.auth-wrap{width:min(100% - 28px,460px)!important;margin:clamp(26px,6vh,64px) auto!important;padding:0 10px!important}
+.auth-card{background:linear-gradient(145deg,#fff 0%,#f4f9ff 100%)!important;color:#18324b!important;border:1px solid #dce8f2!important;border-radius:22px!important;padding:clamp(22px,5vw,32px)!important;box-shadow:0 18px 48px rgba(25,65,105,.12),0 3px 10px rgba(25,65,105,.05)!important}
+.auth-icon{width:52px!important;height:52px!important;border-radius:16px!important;background:linear-gradient(145deg,#e3f7ff,#e5fff4)!important;color:#087f8c!important;box-shadow:inset 0 0 0 1px #cce9e9!important}
+.auth-card h1{color:#102a43!important;font-size:clamp(24px,5vw,29px)!important;letter-spacing:-.5px!important}
+.auth-card>p,.auth-switch{color:#60758a!important}
+.auth-field{color:#28445d!important;font-weight:700!important}
+.auth-field input{min-height:46px!important;border:1px solid #cbd9e6!important;border-radius:12px!important;background:#fff!important;color:#102a43!important;box-shadow:0 2px 5px rgba(20,50,80,.035)!important}
+.auth-field input::placeholder{color:#93a4b5!important}
+.auth-field input:focus{border-color:#078b9a!important;box-shadow:0 0 0 4px rgba(8,139,154,.12)!important;outline:0!important}
+.auth-submit{min-height:47px!important;border-radius:12px!important;background:linear-gradient(105deg,#087f9b,#08a98b)!important;color:#fff!important;box-shadow:0 8px 18px rgba(8,127,155,.2)!important;transition:transform .18s ease,box-shadow .18s ease!important}
+.auth-submit:hover{transform:translateY(-1px)!important;box-shadow:0 11px 22px rgba(8,127,155,.25)!important}
+.auth-submit:focus-visible,.forgot-link:focus-visible,.auth-switch a:focus-visible,.back-home:focus-visible{outline:3px solid rgba(8,139,154,.3)!important;outline-offset:3px!important}
+.forgot-link,.auth-switch a,.back-home{color:#087f8c!important}
+@media(prefers-color-scheme:dark){
+ html,body{background:#0b1424!important;color:#e8f0fa!important}
+ .auth-card{background:linear-gradient(145deg,#14243a 0%,#101d30 100%)!important;color:#e8f0fa!important;border-color:#30445e!important;box-shadow:0 20px 55px rgba(0,0,0,.34)!important}
+ .auth-icon{background:linear-gradient(145deg,#173a50,#163b36)!important;color:#72e4d0!important;box-shadow:inset 0 0 0 1px #31596a!important}
+ .auth-card h1{color:#edf4ff!important}
+ .auth-card>p,.auth-switch{color:#a9bad0!important}
+ .auth-field{color:#dce8f8!important}
+ .auth-field input{background:#0c192b!important;color:#edf4ff!important;border-color:#38516e!important;box-shadow:none!important}
+ .auth-field input::placeholder{color:#8298b2!important}
+ .auth-field input:focus{border-color:#63cbd3!important;box-shadow:0 0 0 4px rgba(99,203,211,.13)!important}
+ .auth-submit{background:linear-gradient(105deg,#35c8df,#39d9a5)!important;color:#062035!important;box-shadow:0 8px 22px rgba(0,0,0,.24)!important}
+ .forgot-link,.auth-switch a,.back-home{color:#70dfd2!important}
+}
+@media(max-width:600px){.auth-wrap{margin:24px auto!important}.auth-card{padding:22px 19px!important}}
+@media(prefers-reduced-motion:reduce){.auth-submit{transition:none!important}}
 </style><script src="./header.js" defer></script><script>document.documentElement.classList.add("met-header-styles-ready");</script>  <link rel="stylesheet" href="./responsive.css?v=20261104-public-white1">
 <link rel="stylesheet" href="./account-responsive.css?v=1"><link rel="stylesheet" href="./footer.css?v=20261114-layout3"><link rel="stylesheet" href="./fastmoney-header-lock.css?v=4"><link rel="stylesheet" href="./public-dark-mode.css?v=20261114-2">
 
