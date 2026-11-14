@@ -2424,3 +2424,68 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
     background:rgba(2,8,18,.68)!important;
   }
 }
+
+
+/* HIGH-SPECIFICITY DARK NAV FIX — overrides legacy white header/menu rules. */
+@media (prefers-color-scheme: dark) {
+  html body header.main-header#mainHeader,
+  html body header.main-header#mainHeader.scrolled,
+  html body header.main-header#mainHeader > .header-container {
+    background:linear-gradient(112deg,#091525 0%,#10243b 58%,#0b1b30 100%)!important;
+    color:#edf5ff!important;
+  }
+  html body header.main-header#mainHeader .desktop-nav {
+    background:transparent!important;
+    color:#edf5ff!important;
+  }
+  html body header.main-header#mainHeader .desktop-nav .nav-link,
+  html body header.main-header#mainHeader .desktop-nav .nav-support>summary {
+    color:#e2edfb!important;
+    background:transparent!important;
+  }
+  html body header.main-header#mainHeader .desktop-nav .nav-link.active,
+  html body header.main-header#mainHeader .desktop-nav .nav-link:hover,
+  html body header.main-header#mainHeader .desktop-nav .nav-support[open]>summary {
+    color:#b8e0ff!important;
+    background:#19324d!important;
+    border-color:#355674!important;
+  }
+  html body header.main-header#mainHeader #mobileMenu,
+  html body header.main-header#mainHeader #mobileMenu.open {
+    color:#edf5ff!important;
+    background:linear-gradient(155deg,#0c192b 0%,#122740 58%,#0c1b2e 100%)!important;
+    background-color:#0c192b!important;
+    border-color:#304a66!important;
+    box-shadow:0 22px 52px rgba(0,0,0,.55)!important;
+  }
+  html body header.main-header#mainHeader #mobileMenu .mobile-nav-link,
+  html body header.main-header#mainHeader #mobileMenu .mobile-support>summary {
+    color:#e5eefb!important;
+    background:#162a41!important;
+    background-color:#162a41!important;
+    border:1px solid #2b4059!important;
+  }
+  html body header.main-header#mainHeader #mobileMenu .mobile-nav-link.active,
+  html body header.main-header#mainHeader #mobileMenu .mobile-nav-link:hover {
+    color:#b8e0ff!important;
+    background:#1d3855!important;
+    background-color:#1d3855!important;
+  }
+  html body header.main-header#mainHeader .menu-toggle,
+  html body header.main-header#mainHeader .menu-toggle:hover,
+  html body header.main-header#mainHeader .menu-toggle:focus,
+  html body header.main-header#mainHeader .menu-toggle:active {
+    background:transparent!important;
+    background-color:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+  }
+  html body header.main-header#mainHeader .menu-toggle span {
+    background:linear-gradient(90deg,#8fc7ff,#70ddd2)!important;
+  }
+  html body header.main-header#mainHeader .support-panel {
+    color:#edf5ff!important;
+    background:#12263d!important;
+    border-color:#304a66!important;
+  }
+}
