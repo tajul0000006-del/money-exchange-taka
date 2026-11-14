@@ -2270,3 +2270,157 @@ main,section,article,form,header,footer,nav,aside{min-width:0}
 .main-header .fastmoney-header-logo{
   transform:translateX(-50px)!important;
 }
+
+
+/* ==================================================
+   UNIVERSAL SYSTEM DARK MODE — HEADER + NAVIGATION
+   Shared by every page that loads header.css.
+================================================== */
+@media (prefers-color-scheme: dark) {
+  .main-header,
+  .main-header.scrolled,
+  #mainHeader {
+    background:linear-gradient(112deg,#091525 0%,#10243b 58%,#0b1b30 100%)!important;
+    color:#edf5ff!important;
+    border-bottom:1px solid rgba(125,190,225,.22)!important;
+    box-shadow:0 8px 26px rgba(0,0,0,.34)!important;
+    -webkit-backdrop-filter:blur(16px)!important;
+    backdrop-filter:blur(16px)!important;
+  }
+  .main-header::after {
+    background:linear-gradient(90deg,transparent,#55b8ff,#58d6c6,transparent)!important;
+    opacity:.72!important;
+  }
+  .main-header .desktop-nav .nav-link,
+  .main-header .desktop-nav .nav-support>summary {
+    color:#e2edfb!important;
+    background:transparent!important;
+    border-color:transparent!important;
+  }
+  .main-header .desktop-nav .nav-link i,
+  .main-header .desktop-nav .nav-support>summary i {
+    color:#8bd5e8!important;
+  }
+  .main-header .desktop-nav .nav-link:hover,
+  .main-header .desktop-nav .nav-link.active,
+  .main-header .desktop-nav .nav-support>summary:hover,
+  .main-header .desktop-nav .nav-support[open]>summary {
+    color:#9bd2ff!important;
+    background:#19324d!important;
+    border-color:#2b4b69!important;
+  }
+  .main-header .desktop-nav .nav-auth-login {
+    color:#e2edfb!important;
+    border-color:#38516d!important;
+    background:#14283f!important;
+  }
+  .main-header .desktop-nav .nav-auth-signup {
+    color:#062034!important;
+    background:linear-gradient(110deg,#65c7ff,#61dfcf)!important;
+  }
+  .main-header .menu-toggle,
+  .main-header .menu-toggle:hover,
+  .main-header .menu-toggle:focus,
+  .main-header .menu-toggle:focus-visible,
+  .main-header .menu-toggle:active {
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:5px!important;
+    border:0!important;
+    outline:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    background-color:transparent!important;
+    box-shadow:none!important;
+  }
+  .main-header .menu-toggle span {
+    width:21px!important;
+    height:2.5px!important;
+    border:0!important;
+    border-radius:5px!important;
+    background:linear-gradient(90deg,#8bcaff,#62d9d0)!important;
+    box-shadow:0 0 9px rgba(91,190,235,.28)!important;
+  }
+  .main-header .mobile-nav,
+  .main-header .mobile-nav.open {
+    color:#edf5ff!important;
+    background:linear-gradient(155deg,#0c192b 0%,#122740 58%,#0c1b2e 100%)!important;
+    border-color:rgba(125,190,225,.2)!important;
+    box-shadow:0 22px 52px rgba(0,0,0,.48)!important;
+  }
+  .main-header .mobile-menu-heading {
+    border-color:#2b4058!important;
+  }
+  .main-header .mobile-menu-heading span {
+    color:#f1f7ff!important;
+  }
+  .main-header .mobile-menu-heading small {
+    color:#9eb4cc!important;
+  }
+  .main-header .mobile-nav-link,
+  .main-header .mobile-support>summary {
+    color:#e5eefb!important;
+    background:#162a41!important;
+    border:1px solid #2b4059!important;
+  }
+  .main-header .mobile-nav-link>i:first-child,
+  .main-header .mobile-nav-link .nav-arrow,
+  .main-header .mobile-support>summary i {
+    color:#83cde0!important;
+  }
+  .main-header .mobile-nav-link:hover,
+  .main-header .mobile-nav-link.active,
+  .main-header .mobile-support[open]>summary {
+    color:#b8e0ff!important;
+    background:#1d3855!important;
+    border-color:#41698b!important;
+  }
+  .main-header .mobile-auth-group .mobile-auth-login {
+    color:#e5eefb!important;
+    background:#162a41!important;
+    border-color:#38516d!important;
+  }
+  .main-header .mobile-auth-group .mobile-auth-signup {
+    color:#062034!important;
+    background:linear-gradient(110deg,#65c7ff,#61dfcf)!important;
+    border-color:transparent!important;
+  }
+  .main-header .mobile-auth-group .mobile-auth-signup i {
+    color:#062034!important;
+  }
+  .main-header .support-panel {
+    color:#e5eefb!important;
+    background:#12263d!important;
+    border-color:#304a66!important;
+    box-shadow:0 18px 42px rgba(0,0,0,.42)!important;
+  }
+  .main-header .support-panel-title strong,
+  .main-header .support-option b {
+    color:#edf5ff!important;
+  }
+  .main-header .support-panel-title small,
+  .main-header .support-option small {
+    color:#a8bdd2!important;
+  }
+  .main-header .support-option {
+    color:#e5eefb!important;
+    border-color:#2b4058!important;
+  }
+  .main-header .support-option:hover {
+    background:#1a3550!important;
+  }
+  .main-header .fm-mobile-language,
+  .main-header .fm-language-control {
+    color:#c9d9ec!important;
+  }
+  .main-header .fm-mobile-language select,
+  .main-header .fm-language-select {
+    color:#edf5ff!important;
+    background:#162a41!important;
+    border-color:#38516d!important;
+  }
+  body.fm-menu-open::before {
+    background:rgba(2,8,18,.68)!important;
+  }
+}
