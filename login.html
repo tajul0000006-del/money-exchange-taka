@@ -3,11 +3,11 @@
 <meta name="theme-color" content="#082f49"><meta name="description" content="Login to your FastMoney account.">
 <title>Login | FastMoney</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./header.css?v=20261114-darknav3"><link rel="stylesheet" href="./theme.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"><style>
+<link rel="stylesheet" href="./style.css?v=3"><link rel="stylesheet" href="./header.css?v=20261114-darknav3"><link rel="stylesheet" href="./theme.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"><style>
 *{box-sizing:border-box}body{min-height:100vh;margin:0;font-family:'Hind Siliguri',Arial,sans-serif}.auth-wrap{width:min(100% - 28px,430px);margin:42px auto;padding:0 10px}.auth-card{height:auto;min-height:0;max-height:none;overflow:visible;background:linear-gradient(145deg,#102b4d,#0a203d);border:1px solid rgba(116,207,235,.25);border-radius:20px;padding:20px 24px;box-shadow:0 18px 48px #0005}.auth-icon{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:#103b50;color:#39f5a5;font-size:20px;margin-bottom:9px}.auth-card h1{margin:0 0 4px;font-size:25px;color:#eefaff}.auth-card>p{color:#aac3d9;margin:0 0 12px;font-size:14px}.auth-field{display:block;margin:8px 0;color:#d9effb;font-size:14px;font-weight:600}.auth-field input{width:100%;margin-top:5px;padding:9px 12px;border-radius:10px;border:1px solid rgba(116,207,235,.3);background:#071b34;color:#eefaff;font-size:15px;outline:none}.auth-field input:focus{border-color:#35e6f2;box-shadow:0 0 0 3px #35e6f225}.auth-submit{width:100%;padding:10px;border:0;border-radius:11px;margin-top:7px;background:linear-gradient(110deg,#35e6f2,#39f5a5);color:#06152d;font-size:15px;font-weight:800;cursor:pointer}.auth-message{min-height:18px;margin:7px 0 0;color:#fca5a5;font-size:13px}.forgot-link{display:block;text-align:right;margin:2px 0 8px;color:#39f5a5;font-size:13px;font-weight:700;text-decoration:none}.forgot-link:hover{text-decoration:underline}.auth-switch{text-align:center;color:#aac3d9;margin:8px 0 0;font-size:13px}.auth-switch a,.back-home{color:#39f5a5;font-weight:700;text-decoration:none}.back-home{display:inline-block;margin-top:8px;font-size:13px}@media(max-width:600px){.auth-wrap{margin:18px auto}.auth-card{padding:18px 20px}}
-</style><script src="./header.js" defer></script>  <link rel="stylesheet" href="./responsive.css?v=20261104-public-white1">
-<link rel="stylesheet" href="./account-responsive.css?v=1">
-<style id="fastmoney-brand-style">.fastmoney-brand{display:flex!important;align-items:center;gap:9px;flex:0 0 auto;text-decoration:none!important;color:#102a43!important;white-space:nowrap}.fastmoney-mark{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:linear-gradient(145deg,#087b8c,#075b68);color:#fff;font-size:25px;font-weight:900;box-shadow:0 5px 14px #087b8c25}.fastmoney-word{display:flex;flex-direction:column;font-size:21px;line-height:1.05;font-weight:850;letter-spacing:-.7px}.fastmoney-word b{color:#087b8c}.fastmoney-word small{margin-top:4px;font-size:8px;letter-spacing:1.35px;color:#718096;font-weight:800}.fastmoney-legal-links{display:flex;justify-content:center;gap:12px 22px;flex-wrap:wrap;padding:16px 18px;border-top:1px solid #e5edf2;background:#fff;font:600 13px/1.5 system-ui,sans-serif}.fastmoney-legal-links a{color:#426174;text-decoration:none}.fastmoney-legal-links a:hover{color:#087b8c;text-decoration:underline}@media(max-width:480px){.fastmoney-mark{width:36px;height:36px}.fastmoney-word{font-size:19px}}</style>
+</style><script src="./header.js" defer></script><script>document.documentElement.classList.add("met-header-styles-ready");</script>  <link rel="stylesheet" href="./responsive.css?v=20261104-public-white1">
+<link rel="stylesheet" href="./account-responsive.css?v=1"><link rel="stylesheet" href="./footer.css?v=20261114-layout3"><link rel="stylesheet" href="./fastmoney-header-lock.css?v=4"><link rel="stylesheet" href="./public-dark-mode.css?v=20261114-2">
+
 <link rel="stylesheet" href="./language.css?v=1">
 </head><body>
 <header class="main-header" id="mainHeader">
@@ -15,42 +15,36 @@
     <div class="header-container">
 
       <!-- FastMoney brand wordmark -->
-      <a href="/index.html" class="brand-logo fastmoney-brand" aria-label="FastMoney Home"><span class="fastmoney-mark">F</span><span class="fastmoney-word">Fast<b>Money</b><small>YOUR MONEY. YOUR WORLD.</small></span></a>
+      <a href="/index.html" class="brand-logo fastmoney-brand" aria-label="FastMoney Home"><img class="fastmoney-header-logo" src="./assets/fastmoneylogo.png" alt="FastMoney" width="250" height="74" loading="eager" decoding="sync" fetchpriority="high"></a>
+      
       <!-- DESKTOP NAVIGATION -->
-      <nav class="desktop-nav" aria-label="প্রধান নেভিগেশন">
-        <a href="#home" class="nav-link active"><i class="fa-solid fa-house"></i> Home</a>
-        <a href="#rates" class="nav-link"><i class="fa-solid fa-chart-line"></i> Exchange Rates</a>
-        <a href="#exchange" class="nav-link"><i class="fa-solid fa-right-left"></i> Exchange</a>
-        <a href="./about.html" class="nav-link"><i class="fa-solid fa-circle-info"></i> About Us</a>
-        <a href="/history.html" class="nav-link"><i class="fa-solid fa-magnifying-glass"></i> Track Request</a>
-        <a href="#faq" class="nav-link"><i class="fa-regular fa-circle-question"></i> FAQ</a>
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <a href="/index.html#services" class="nav-link"><i class="fa-solid fa-layer-group"></i> Services</a>
+        <a href="/login.html?next=%2Fdashboard.html" class="nav-link"><i class="fa-solid fa-right-left"></i> Exchange</a>
+        <a href="/help.html" class="nav-link"><i class="fa-regular fa-circle-question"></i> Help &amp; FAQ</a>
         <details class="header-support nav-support">
           <summary><i class="fa-solid fa-headset"></i><span>Support</span><i class="fa-solid fa-chevron-down support-chevron"></i></summary>
           <div class="support-panel">
-            <div class="support-panel-title"><strong>২৪/৭ Support</strong><small>Choose how to contact us</small></div>
+            <div class="support-panel-title"><strong>Customer Support</strong><small>Choose how to contact us</small></div>
             <a class="support-option whatsapp-option" href="https://wa.me/8801806338018" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp"></i><span><b>WhatsApp</b><small>01806338018</small></span><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
             <a class="support-option telegram-option" href="https://t.me/+8801806338018" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-telegram"></i><span><b>Telegram</b><small>01806338018</small></span><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-            <a class="support-option livechat-option" href="/chat.html"><i class="fa-solid fa-comments"></i><span><b>24/7 Chat</b><small>Help Center & FAQs</small></span><i class="fa-solid fa-arrow-right"></i></a>
+            <a class="support-option livechat-option" href="/chat.html"><i class="fa-solid fa-comments"></i><span><b>Live Chat</b><small>Help Center & FAQs</small></span><i class="fa-solid fa-arrow-right"></i></a>
           </div>
         </details>
-        <div class="nav-auth-group">
-          <a class="nav-link nav-auth-login" href="/login.html">Login</a>
-          <a class="nav-link nav-auth-signup" href="/signup.html">Sign Up</a>
-        </div>
+
+      
+        <label class="fm-language-control" aria-label="Select website language"><i class="fa-solid fa-globe"></i><select class="fm-language-select" id="fmLanguageDesktop" aria-label="Website language"><option value="en">English</option><option value="bn">বাংলা</option><option value="ar">العربية</option><option value="zh-CN">中文（简体）</option><option value="zh-TW">中文（繁體）</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="hi">हिन्दी</option><option value="id">Bahasa Indonesia</option><option value="it">Italiano</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="ms">Bahasa Melayu</option><option value="ne">नेपाली</option><option value="fa">فارسی</option><option value="pt">Português</option><option value="ru">Русский</option><option value="si">සිංහල</option><option value="es">Español</option><option value="sw">Kiswahili</option><option value="th">ไทย</option><option value="tr">Türkçe</option><option value="ur">اردو</option><option value="vi">Tiếng Việt</option><option value="fil">Filipino</option><option value="nl">Nederlands</option><option value="pl">Polski</option></select><i class="fa-solid fa-chevron-down fm-language-chevron"></i></label>
       </nav>
       <!-- MOBILE MENU BUTTON -->
-      <button class="menu-toggle" id="menuToggle" type="button" aria-label="Menu খুলুন" aria-expanded="false" aria-controls="mobileMenu">
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
         <span></span><span></span><span></span>
       </button>
       <!-- MOBILE NAVIGATION -->
-      <nav class="mobile-nav" id="mobileMenu" aria-label="মোবাইল নেভিগেশন" aria-hidden="true">
-      <div class="mobile-menu-heading"><span>Menu</span><small>Choose a service</small></div>
-      <a href="#home" class="mobile-nav-link active"><i class="fa-solid fa-house"></i><span>Home</span><i class="fa-solid fa-chevron-right nav-arrow"></i></a>
-      <a href="#rates" class="mobile-nav-link"><i class="fa-solid fa-chart-line"></i><span>Exchange Rates</span><i class="fa-solid fa-chevron-right nav-arrow"></i></a>
-      <a href="#exchange" class="mobile-nav-link"><i class="fa-solid fa-right-left"></i><span>Start Exchange</span><i class="fa-solid fa-chevron-right nav-arrow"></i></a>
-      <a href="./about.html" class="mobile-nav-link"><i class="fa-solid fa-circle-info"></i><span>About Us</span><i class="fa-solid fa-chevron-right nav-arrow"></i></a>
-      <a href="/history.html" class="mobile-nav-link"><i class="fa-solid fa-magnifying-glass"></i><span>Track Request</span><i class="fa-solid fa-chevron-right nav-arrow"></i></a>
-      <a href="#faq" class="mobile-nav-link"><i class="fa-regular fa-circle-question"></i><span>FAQ</span><i class="fa-solid fa-chevron-right nav-arrow"></i></a>
+      <nav class="mobile-nav" id="mobileMenu" aria-label="Mobile navigation" aria-hidden="true">
+      <div class="mobile-menu-heading"><span>Menu</span><small>Choose a service</small><button class="mobile-menu-close" id="mobileMenuClose" type="button" aria-label="Close menu"><i class="fa-solid fa-xmark"></i></button></div>
+      <a href="/index.html#services" class="mobile-nav-link"><i class="fa-solid fa-layer-group"></i><span>Our Services</span><i class="fa-solid fa-chevron-right nav-arrow"></i></a>
+      <a href="/login.html?next=%2Fdashboard.html" class="mobile-nav-link"><i class="fa-solid fa-right-left"></i><span>Start Exchange</span><i class="fa-solid fa-chevron-right nav-arrow"></i></a>
+      <a href="/help.html" class="mobile-nav-link"><i class="fa-regular fa-circle-question"></i><span>Help &amp; FAQ</span><i class="fa-solid fa-chevron-right nav-arrow"></i></a>
       <details class="header-support mobile-support">
         <summary><i class="fa-solid fa-headset"></i><span>Support</span><i class="fa-solid fa-chevron-down support-chevron"></i></summary>
         <div class="support-panel">
@@ -59,10 +53,8 @@
           <a class="support-option livechat-option" href="/chat.html"><i class="fa-solid fa-comments"></i><span><b>24/7 Chat</b><small>Help Center & FAQs</small></span><i class="fa-solid fa-arrow-right"></i></a>
         </div>
       </details>
-      <div class="mobile-auth-group">
-        <a class="mobile-nav-link mobile-auth-login" href="/login.html"><i class="fa-solid fa-right-to-bracket"></i><span>Login</span><i class="fa-solid fa-chevron-right nav-arrow"></i></a>
-        <a class="mobile-nav-link mobile-auth-signup" href="/signup.html"><i class="fa-solid fa-user-plus"></i><span>Create Account</span><i class="fa-solid fa-chevron-right nav-arrow"></i></a>
-      </div>
+      
+      <div class="fm-mobile-language"><label for="fmLanguageMobile"><i class="fa-solid fa-globe"></i><span>Website language</span></label><select class="fm-language-select" id="fmLanguageMobile" aria-label="Website language"><option value="en">English</option><option value="bn">বাংলা</option><option value="ar">العربية</option><option value="zh-CN">中文（简体）</option><option value="zh-TW">中文（繁體）</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="hi">हिन्दी</option><option value="id">Bahasa Indonesia</option><option value="it">Italiano</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="ms">Bahasa Melayu</option><option value="ne">नेपाली</option><option value="fa">فارسی</option><option value="pt">Português</option><option value="ru">Русский</option><option value="si">සිංහල</option><option value="es">Español</option><option value="sw">Kiswahili</option><option value="th">ไทย</option><option value="tr">Türkçe</option><option value="ur">اردو</option><option value="vi">Tiếng Việt</option><option value="fil">Filipino</option><option value="nl">Nederlands</option><option value="pl">Polski</option></select></div>
     </nav>
     <!-- MOBILE NAVIGATION END -->
   </header>
@@ -83,6 +75,6 @@ const credential=await signInWithEmailAndPassword(auth,email,password);if(!crede
 setTimeout(()=>location.href="/dashboard.html",500);
 }catch(err){const errors={"auth/invalid-credential":"Incorrect email or password.","auth/email-already-in-use":"This email is already registered.","auth/weak-password":"Use a password with at least 6 characters.","auth/invalid-email":"Enter a valid email address.","auth/network-request-failed":"Network error. Please try again."};message.style.color='#fca5a5';message.textContent=errors[err.code]||err.message||"Something went wrong.";}
 finally{submit.disabled=false;submit.textContent="Login";}});
-</script><nav class="fastmoney-legal-links" aria-label="Legal and company information"><a href="/about.html">About FastMoney</a><a href="/terms-and-conditions.html">Terms &amp; Conditions</a><a href="/privacy-policy.html">Privacy Policy</a><a href="/index.html#faq">FAQ</a><a href="/history.html">Track Request</a></nav>
+</script><footer class="met-footer" aria-label="FastMoney footer"><div class="met-footer-inner"><a href="./index.html" class="met-footer-logo" aria-label="FastMoney home"><img src="./assets/fastmoneylogo.png" alt="FastMoney" width="210" height="62" loading="lazy"></a><nav class="met-footer-links" aria-label="Footer navigation"><a href="./about.html">About</a><a href="./affiliate.html">Affiliate</a><a href="./terms-and-conditions.html">Terms</a><a href="./privacy-policy.html">Privacy</a><a href="./guidelines.html">Guidelines</a><a href="./licence.html">Licence</a><a href="./help.html">Help &amp; FAQ</a></nav><div class="met-footer-bottom"><span>© <span id="footerYear">2026</span> FastMoney</span><span>Digital exchange, made clear.</span></div></div></footer><script>document.getElementById("footerYear").textContent=new Date().getFullYear();</script>
 <script src="./language.js?v=1" defer></script>
 </body></html>
