@@ -1319,7 +1319,7 @@ main.container>.fm-hero-visual-section{
 }
 
 
-/* Move the Global Pay-out labels box down by exactly 5px. */
+/* Move the Global Pay-out labels box 20px further down (25px total). */
 .fm-pay-out-art .fm-art-payout-card{
-  transform:translateY(5px)!important;
+  transform:translateY(25px)!important;
 }
