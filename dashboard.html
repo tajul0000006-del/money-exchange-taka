@@ -469,9 +469,6 @@ onAuthStateChanged(auth,async user=>{
     const code=p.currencyCode||"BDT",symbol=p.currencySymbol||currencySymbols[code]||code+" ";
     document.getElementById("localCurrencyLabel").textContent=code;document.getElementById("localCurrencyBalance").textContent=symbol+"0.000";
     document.getElementById("localWalletName").textContent=code;document.getElementById("localWalletDescription").textContent=currencyNames[code]||p.country||"Local Currency";
-    document.getElementById("editDob").value=p.dateOfBirth||"";document.getElementById("editGender").value=p.gender||"";
-    document.getElementById("editAddress").value=p.address||"";document.getElementById("editCity").value=p.city||"";
-    document.getElementById("editState").value=p.state||"";document.getElementById("editPostal").value=p.postalCode||"";
   }catch(error){console.error("Could not load account information:",error);document.getElementById("navAccountName").textContent="ID unavailable";document.getElementById("navAccountEmail").textContent=user.email||"";}
   document.body.classList.add("fm-auth-ready");
 });
