@@ -379,32 +379,16 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
       <a class="dashboard-notification-link" href="/history.html"><i class="fa-solid fa-clock-rotate-left"></i> View all transactions <i class="fa-solid fa-arrow-right"></i></a>
     </div>
     <nav class="dashboard-popover dashboard-menu-popover" id="dashboardMenu" aria-label="Dashboard navigation" hidden>
-      <div class="nav-account-summary">
-        <div class="nav-account-avatar" id="navAccountAvatar"><i class="fa-solid fa-user"></i></div>
+      <a class="nav-account-summary" href="/profile.html" aria-label="Open My Account">
+        <div class="nav-account-avatar"><i class="fa-solid fa-user"></i></div>
         <div class="nav-account-copy">
           <div class="nav-account-id-line"><strong id="navAccountName">Loading ID…</strong><i class="fa-solid fa-circle-check nav-account-verified" aria-label="Verified account" title="Verified account"></i></div>
-          <button type="button" class="nav-account-email" id="navAccountEmail">Loading account…</button>
+          <span class="nav-account-email" id="navAccountEmail">Loading account…</span>
         </div>
-        <button type="button" class="nav-profile-open" id="navProfileToggle" aria-label="Open personal information" title="Personal information"><i class="fa-solid fa-chevron-right"></i></button>
-      </div>
-      <div class="nav-profile-panel" id="navProfilePanel" hidden><section class="personal-profile" id="personal-details" aria-label="Personal information">
-    <div class="profile-top"><div class="profile-avatar" id="profileAvatar"><i class="fa-solid fa-user"></i></div><div class="profile-heading"><h2 id="profileFullName">Your Profile</h2><p id="profileEmail">Loading account details…</p><div class="profile-badges"><span class="profile-status" id="emailStatus"><i class="fa-solid fa-circle-check"></i> Gmail verified</span><span class="profile-status" id="phoneStatusBadge"><i class="fa-solid fa-circle-check"></i> Mobile verified</span></div></div></div>
-    <div class="profile-grid">
-      <div class="profile-detail"><span>First Name</span><strong id="profileFirstName">—</strong></div><div class="profile-detail"><span>Last Name</span><strong id="profileLastName">—</strong></div>
-      <div class="profile-detail"><span>Registration Email</span><strong id="profileEmailDetail">—</strong></div><div class="profile-detail"><span>Registration Mobile</span><strong id="profilePhone">—</strong></div>
-      <div class="profile-detail"><span>Mobile Number Status</span><strong id="profilePhoneStatus">Verified</strong></div><div class="profile-detail"><span>Registered Country</span><strong id="profileCountry">—</strong></div>
-      <div class="profile-detail"><span>Local Currency</span><strong id="profileCurrency">—</strong></div><div class="profile-detail"><span>Account ID</span><strong id="profileUid">—</strong></div>
-    </div>
-    <details class="profile-edit"><summary><i class="fa-solid fa-pen-to-square"></i> Add / Update Personal Information</summary>
-      <div class="profile-edit-grid">
-        <label>Date of Birth<input id="editDob" type="date"></label><label>Gender<select id="editGender"><option value="">Select</option><option>Female</option><option>Male</option><option>Other</option><option>Prefer not to say</option></select></label>
-        <label>Address<input id="editAddress" maxlength="180" placeholder="Street / house address"></label><label>City<input id="editCity" maxlength="80" placeholder="City"></label>
-        <label>State / Province<input id="editState" maxlength="80" placeholder="State or province"></label><label>Postal Code<input id="editPostal" maxlength="20" placeholder="Postal code"></label>
-      </div><button class="profile-save" id="saveProfile" type="button">Save Personal Information</button><p id="profileSaveStatus" role="status"></p>
-    </details>
-  </section></div>
+        <span class="nav-profile-open" aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+      </a>
 
-      <a href="#dashboard"><i class="fa-solid fa-house"></i> Dashboard Home</a>
+      <a href="/dashboard.html"><i class="fa-solid fa-house"></i> Dashboard Home</a>
       <a href="/member-exchange.html"><i class="fa-solid fa-arrow-right-arrow-left"></i> New Exchange</a>
       <a href="/history.html"><i class="fa-solid fa-clock-rotate-left"></i> My Requests</a>
       <a href="/chat.html"><i class="fa-solid fa-headset"></i> Customer Support</a>
@@ -495,15 +479,8 @@ document.getElementById("logoutBtn").addEventListener("click",async()=>{
  const menu=document.getElementById("dashboardMenu");
  const noticeBtn=document.getElementById("notificationToggle");
  const notice=document.getElementById("notificationPopover");
- const profilePanel=document.getElementById("navProfilePanel");
- const profileToggle=document.getElementById("navProfileToggle");
- const emailToggle=document.getElementById("navAccountEmail");
  function closePanels(){menu.hidden=true;notice.hidden=true;menuBtn.setAttribute("aria-expanded","false");noticeBtn.setAttribute("aria-expanded","false");}
- function openMenu(showProfile){closePanels();menu.hidden=false;menuBtn.setAttribute("aria-expanded","true");if(showProfile)profilePanel.hidden=false;}
- function toggleProfile(){const opening=profilePanel.hidden;openMenu(opening);profilePanel.hidden=!opening;}
  menuBtn.addEventListener("click",function(){const opening=menu.hidden;closePanels();menu.hidden=!opening;menuBtn.setAttribute("aria-expanded",String(opening));});
- profileToggle.addEventListener("click",toggleProfile);
- emailToggle.addEventListener("click",toggleProfile);
  noticeBtn.addEventListener("click",function(){const opening=notice.hidden;closePanels();notice.hidden=!opening;noticeBtn.setAttribute("aria-expanded",String(opening));});
  document.addEventListener("click",function(e){if(!e.target.closest("#dashboardHeader"))closePanels();});
  document.getElementById("headerLogoutBtn").addEventListener("click",function(){document.getElementById("logoutBtn").click();});
