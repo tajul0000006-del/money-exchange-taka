@@ -300,6 +300,30 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
  .nav-profile-open{background:#17394a;border-color:#36566c;color:#82dfdc}
 }
 
+
+/* Account identity row at the top of the dashboard menu */
+.nav-account-summary{align-items:center!important;gap:13px!important;padding:10px 5px 16px!important;margin:0 0 9px!important;border-bottom:1px solid #e5edf3!important}
+.nav-account-avatar{width:56px!important;height:56px!important;flex:0 0 56px!important;border-radius:50%!important;background:#0b376e!important;font-size:23px!important}
+.nav-account-copy{gap:5px!important}
+.nav-account-id-line{display:flex;align-items:center;gap:9px;min-width:0}
+.nav-account-copy strong{font:500 23px/1.15 Arial,sans-serif!important;letter-spacing:.1px!important;color:#10284b!important}
+.nav-account-verified{flex:0 0 auto;color:#20bd4b;font-size:20px}
+.nav-account-email{font:500 15px/1.3 Arial,sans-serif!important;color:#818da5!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.nav-profile-open{width:38px!important;height:44px!important;flex:0 0 38px!important;border:0!important;background:transparent!important;color:#8994ad!important;font-size:20px!important}
+.nav-profile-open:hover{background:#f0f5fa!important;color:#087f91!important}
+@media(prefers-color-scheme:dark){
+ .nav-account-summary{border-bottom-color:#30465e!important}
+ .nav-account-copy strong{color:#edf5ff!important}
+ .nav-account-email{color:#a8b8ca!important}
+ .nav-profile-open{color:#a8b8ca!important}
+ .nav-profile-open:hover{background:#1b3852!important;color:#82dfdc!important}
+}
+@media(max-width:420px){
+ .nav-account-avatar{width:50px!important;height:50px!important;flex-basis:50px!important}
+ .nav-account-copy strong{font-size:20px!important}
+ .nav-account-email{font-size:13px!important}
+}
+
 </style>
   <link rel="stylesheet" href="./responsive.css">
 <style id="fastmoney-brand-style">.fastmoney-brand{display:flex!important;align-items:center;gap:9px;flex:0 0 auto;text-decoration:none!important;color:#102a43!important;white-space:nowrap}.fastmoney-mark{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:linear-gradient(145deg,#087b8c,#075b68);color:#fff;font-size:25px;font-weight:900}.fastmoney-word{display:flex;flex-direction:column;font-size:21px;line-height:1.05;font-weight:850;letter-spacing:-.7px}.fastmoney-word b{color:#087b8c}.fastmoney-word small{margin-top:4px;font-size:8px;letter-spacing:1.35px;color:#718096;font-weight:800}.fastmoney-legal-links{display:flex;justify-content:center;gap:12px 22px;flex-wrap:wrap;padding:16px 18px;border-top:1px solid #e5edf2;background:#fff;font:600 13px/1.5 system-ui,sans-serif}.fastmoney-legal-links a{color:#426174;text-decoration:none}
@@ -357,8 +381,11 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
     <nav class="dashboard-popover dashboard-menu-popover" id="dashboardMenu" aria-label="Dashboard navigation" hidden>
       <div class="nav-account-summary">
         <div class="nav-account-avatar" id="navAccountAvatar"><i class="fa-solid fa-user"></i></div>
-        <div class="nav-account-copy"><strong id="navAccountName">Your Account</strong><button type="button" class="nav-account-email" id="navAccountEmail">Loading account…</button></div>
-        <button type="button" class="nav-profile-open" id="navProfileToggle" aria-label="Open personal information" title="Personal information"><i class="fa-solid fa-user-pen"></i></button>
+        <div class="nav-account-copy">
+          <div class="nav-account-id-line"><strong id="navAccountName">Loading ID…</strong><i class="fa-solid fa-circle-check nav-account-verified" aria-label="Verified account" title="Verified account"></i></div>
+          <button type="button" class="nav-account-email" id="navAccountEmail">Loading account…</button>
+        </div>
+        <button type="button" class="nav-profile-open" id="navProfileToggle" aria-label="Open personal information" title="Personal information"><i class="fa-solid fa-chevron-right"></i></button>
       </div>
       <div class="nav-profile-panel" id="navProfilePanel" hidden><section class="personal-profile" id="personal-details" aria-label="Personal information">
     <div class="profile-top"><div class="profile-avatar" id="profileAvatar"><i class="fa-solid fa-user"></i></div><div class="profile-heading"><h2 id="profileFullName">Your Profile</h2><p id="profileEmail">Loading account details…</p><div class="profile-badges"><span class="profile-status" id="emailStatus"><i class="fa-solid fa-circle-check"></i> Gmail verified</span><span class="profile-status" id="phoneStatusBadge"><i class="fa-solid fa-circle-check"></i> Mobile verified</span></div></div></div>
@@ -433,13 +460,13 @@ onAuthStateChanged(auth,async user=>{
     activeProfileRef=doc(db,"userProfiles",user.uid);const snap=await getDoc(activeProfileRef);const p=snap.exists()?snap.data():{};
     const first=p.firstName||user.displayName?.split(" ")[0]||"User",last=p.lastName||user.displayName?.split(" ").slice(1).join(" ")||"";
     const full=p.fullName||user.displayName||[first,last].filter(Boolean).join(" ");
-    document.getElementById("profileFullName").textContent=full;document.getElementById("profileEmail").textContent=user.email||"";document.getElementById("navAccountName").textContent=full;document.getElementById("navAccountEmail").textContent=user.email||"";document.getElementById("navAccountAvatar").textContent=(first[0]||"U").toUpperCase();
+    document.getElementById("profileFullName").textContent=full;document.getElementById("profileEmail").textContent=user.email||"";document.getElementById("navAccountName").textContent=p.accountId||user.uid.slice(0,12).toUpperCase();document.getElementById("navAccountEmail").textContent=user.email||"";document.getElementById("navAccountAvatar").textContent=(first[0]||"U").toUpperCase();
     document.getElementById("profileAvatar").textContent=(first[0]||"U").toUpperCase();
     document.getElementById("profileFirstName").textContent=first;document.getElementById("profileLastName").textContent=last||"—";
     document.getElementById("profileEmailDetail").textContent=user.email||"—";document.getElementById("profilePhone").textContent=user.phoneNumber||p.phone||"—";
     document.getElementById("profilePhoneStatus").textContent=user.phoneNumber?"Verified":"Unverified";
     document.getElementById("profileCountry").textContent=p.country||"—";document.getElementById("profileCurrency").textContent=p.currencyCode||"USD";
-    document.getElementById("profileUid").textContent=user.uid.slice(0,12)+"…";
+    document.getElementById("profileUid").textContent=p.accountId||user.uid.slice(0,12)+"…";
     setVerification(document.getElementById("emailStatus"),user.emailVerified,"Gmail");setVerification(document.getElementById("phoneStatusBadge"),!!user.phoneNumber,"Mobile");
     const code=p.currencyCode||"BDT",symbol=p.currencySymbol||currencySymbols[code]||code+" ";
     document.getElementById("localCurrencyLabel").textContent=code;document.getElementById("localCurrencyBalance").textContent=symbol+"0.000";
