@@ -176,10 +176,10 @@ const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
 const form=document.getElementById("authForm"),message=document.getElementById("authMessage"),submit=document.getElementById("createAccount");
 const countrySelect=document.getElementById("countrySelect");
 async function createUniqueFastMoneyId(uid){
- const alphabet="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
- for(let attempt=0;attempt<12;attempt++){
-  const bytes=crypto.getRandomValues(new Uint8Array(12));
-  const code="FM-"+Array.from(bytes,b=>alphabet[b%alphabet.length]).join("");
+ for(let attempt=0;attempt<20;attempt++){
+  const bytes=crypto.getRandomValues(new Uint8Array(15));
+  let code=String((bytes[0]%9)+1);
+  for(let i=1;i<15;i++)code+=String(bytes[i]%10);
   const ref=doc(db,"fastMoneyAccountIds",code);
   const reserved=await runTransaction(db,async tx=>{
    const existing=await tx.get(ref);
@@ -189,7 +189,7 @@ async function createUniqueFastMoneyId(uid){
   });
   if(reserved)return code;
  }
- throw new Error("Could not generate a unique FastMoney ID. Please try again.");
+ throw new Error("Could not generate a unique 15-digit FastMoney ID. Please try again.");
 }
 const successModal=document.getElementById("successModal"),successModalEmail=document.getElementById("successModalEmail");
 document.getElementById("closeSuccessModal").addEventListener("click",()=>successModal.classList.remove("is-open"));
