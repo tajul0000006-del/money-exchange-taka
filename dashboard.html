@@ -1338,4 +1338,28 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
 }
 @media(prefers-reduced-motion:reduce){.wallet-item{transition:none!important}}
 
+
+/* Match each wallet card's width to the full USD/BDT balance panel. */
+.wallet-scroller{
+  box-sizing:border-box!important;
+  width:100%!important;
+  padding-left:0!important;
+  padding-right:0!important;
+}
+.wallet-scroller>.wallet-item{
+  box-sizing:border-box!important;
+  flex:0 0 100%!important;
+  width:100%!important;
+  min-width:100%!important;
+  max-width:100%!important;
+}
+@media(max-width:520px){
+  .wallet-scroller>.wallet-item{
+    flex-basis:100%!important;
+    width:100%!important;
+    min-width:100%!important;
+    max-width:100%!important;
+  }
+}
+
 </style>
