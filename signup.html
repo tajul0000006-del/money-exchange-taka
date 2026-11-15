@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#082f49"><meta name="description" content="Register with your email address to get started.">
+<meta name="theme-color" content="#082f49"><meta name="description" content="Create your secure FastMoney account. Verify your mobile number and confirm your Gmail address.">
 <title>Create Account | FastMoney</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./style.css?v=3"><link rel="stylesheet" href="./header.css?v=20261114-global-align1"><link rel="stylesheet" href="./theme.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"><style>
@@ -64,6 +64,19 @@ html,body{background:#f4f8fc!important;color:#18324b!important}
  .auth-submit{box-shadow:0 10px 22px rgba(8,127,155,.22),inset 0 1px 0 rgba(255,255,255,.2)!important}
 }
 
+
+.auth-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.auth-field select{width:100%;min-height:46px;margin-top:4px;padding:9px 10px;border:1px solid #cbd9e6;border-radius:12px;background:#fff;color:#18324b;font:inherit}
+.phone-row,.password-row{display:flex;gap:8px;align-items:center;margin-top:4px}
+.phone-row input,.password-row input{flex:1;min-width:0;margin-top:0!important}
+.auth-mini-btn{flex:0 0 auto;min-height:44px;padding:0 12px;border:1px solid #b9d9dc;border-radius:11px;background:#e9f8f7;color:#087f8c;font:700 12px Arial,sans-serif;cursor:pointer}
+.auth-mini-btn:disabled{opacity:.55;cursor:not-allowed}
+.auth-note{display:block;margin:5px 0 0;color:#71869a;font-size:12px;font-weight:400}
+#otpArea{padding:10px 12px;border:1px dashed #9ccfd0;border-radius:13px;background:#f0fbfa}
+#otpArea[hidden]{display:none}
+.auth-submit:disabled{opacity:.55;cursor:not-allowed;transform:none!important}
+@media(max-width:420px){.auth-grid{grid-template-columns:1fr;gap:0}.phone-row{gap:6px}.auth-mini-btn{padding:0 9px}}
+@media(prefers-color-scheme:dark){.auth-field select{background:#0c192b;color:#edf4ff;border-color:#38516e}#otpArea{background:#122d36;border-color:#386b70}.auth-note{color:#9bb2c9}.auth-mini-btn{background:#173d43;border-color:#37656b;color:#8be5d7}}
 </style><script src="./header.js" defer></script><script>document.documentElement.classList.add("met-header-styles-ready");</script>  <link rel="stylesheet" href="./responsive.css?v=20261104-public-white1"><link rel="stylesheet" href="./footer.css?v=20261114-layout3"><link rel="stylesheet" href="./fastmoney-header-lock.css?v=20261114-align1"><link rel="stylesheet" href="./public-dark-mode.css?v=20261114-2">
 
 <link rel="stylesheet" href="./language.css?v=1">
@@ -117,21 +130,86 @@ html,body{background:#f4f8fc!important;color:#18324b!important}
     <!-- MOBILE NAVIGATION END -->
   </header>
 <main class="auth-wrap"><section class="auth-card"><div class="auth-icon"><i class="fa-solid fa-user-plus"></i></div>
-<h1>Create Your Account</h1><p>Register with your email address to get started.</p><form id="authForm"><label class="auth-field">Email Address<input name="email" type="email" autocomplete="email" placeholder="you@example.com" required></label><label class="auth-field">Password<input name="password" type="password" autocomplete="new-password" minlength="6" placeholder="At least 6 characters" required></label><label class="auth-field">Confirm Password<input name="confirmPassword" type="password" autocomplete="new-password" minlength="6" placeholder="Enter password again" required></label><button class="auth-submit" type="submit">Create Account</button></form>
+<h1>Create Your Account</h1><p>Register with your email address to get started.</p><form id="authForm" novalidate>
+<div class="auth-grid">
+<label class="auth-field">First Name<input name="firstName" type="text" autocomplete="given-name" maxlength="60" placeholder="First name" required></label>
+<label class="auth-field">Last Name<input name="lastName" type="text" autocomplete="family-name" maxlength="60" placeholder="Last name" required></label>
+</div>
+<label class="auth-field">Gmail Address<input name="email" type="email" autocomplete="email" placeholder="you@gmail.com" required></label>
+<div class="auth-grid">
+<label class="auth-field">Your Country<select name="country" id="countrySelect" required><option value="">Select your country</option></select></label>
+<label class="auth-field">Country Calling Code<select name="dialCode" id="dialCode" required></select></label>
+</div>
+<label class="auth-field">Mobile Number<div class="phone-row"><input name="phone" id="phoneNumber" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="Mobile number" maxlength="18" required><button class="auth-mini-btn" id="sendOtp" type="button">Send OTP</button></div></label>
+<div id="otpArea" hidden><label class="auth-field">SMS Verification Code<div class="phone-row"><input id="phoneOtp" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="6-digit OTP"><button class="auth-mini-btn" id="verifyOtp" type="button">Verify OTP</button></div></label><p id="phoneStatus" class="auth-note" aria-live="polite"></p></div>
+<label class="auth-field">Create Password<div class="password-row"><input name="password" id="password" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" required><button class="auth-mini-btn" id="generatePassword" type="button">Generate</button></div><small class="auth-note">Use 8+ characters with uppercase, lowercase, number and symbol.</small></label>
+<label class="auth-field">Confirm Password<input name="confirmPassword" type="password" autocomplete="new-password" minlength="8" placeholder="Re-enter password" required></label>
+<div id="recaptcha-container"></div>
+<button class="auth-submit" id="createAccount" type="submit" disabled>Verify details &amp; create account</button>
+</form>
 <p class="auth-message" id="authMessage" role="status" aria-live="polite"></p>
 <p class="auth-switch">Already registered? <a href="/login.html">Login</a></p>
 <a class="back-home" href="/index.html"><i class="fa-solid fa-arrow-left"></i> Back to Home</a></section></main>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, signOut } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, signOut, RecaptchaVerifier, linkWithPhoneNumber, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
-const auth=getAuth(initializeApp(firebaseConfig));
-const form=document.getElementById("authForm"), message=document.getElementById("authMessage"), submit=form.querySelector("button");
-form.addEventListener("submit",async e=>{e.preventDefault();message.textContent="";submit.disabled=true;submit.textContent="Please wait...";
-try{const email=form.email.value.trim(),password=form.password.value;
-if(password!==form.confirmPassword.value)throw new Error('Passwords do not match.');const credential=await createUserWithEmailAndPassword(auth,email,password);await sendEmailVerification(credential.user);await signOut(auth);message.style.color='#39f5a5';message.textContent='Verification email sent. Please open your Gmail and click the verification link before logging in.';form.reset();
-}catch(err){const errors={"auth/invalid-credential":"Incorrect email or password.","auth/email-already-in-use":"This email is already registered.","auth/weak-password":"Use a password with at least 6 characters.","auth/invalid-email":"Enter a valid email address.","auth/network-request-failed":"Network error. Please try again."};message.style.color='#fca5a5';message.textContent=errors[err.code]||err.message||"Something went wrong.";}
-finally{submit.disabled=false;submit.textContent="Create Account";}});
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+const form=document.getElementById("authForm"),message=document.getElementById("authMessage"),submit=document.getElementById("createAccount");
+const countrySelect=document.getElementById("countrySelect"),dialSelect=document.getElementById("dialCode");
+const countries=[
+["Bangladesh","BD","+880","BDT","৳"],["United States","US","+1","USD","$"],["United Kingdom","GB","+44","GBP","£"],["India","IN","+91","INR","₹"],["Pakistan","PK","+92","PKR","₨"],["United Arab Emirates","AE","+971","AED","د.إ"],["Saudi Arabia","SA","+966","SAR","﷼"],["Canada","CA","+1","CAD","$"],["Australia","AU","+61","AUD","$"],["Germany","DE","+49","EUR","€"],["France","FR","+33","EUR","€"],["Italy","IT","+39","EUR","€"],["Spain","ES","+34","EUR","€"],["Netherlands","NL","+31","EUR","€"],["Ireland","IE","+353","EUR","€"],["Portugal","PT","+351","EUR","€"],["Switzerland","CH","+41","CHF","Fr"],["Japan","JP","+81","JPY","¥"],["China","CN","+86","CNY","¥"],["South Korea","KR","+82","KRW","₩"],["Singapore","SG","+65","SGD","$"],["Malaysia","MY","+60","MYR","RM"],["Indonesia","ID","+62","IDR","Rp"],["Thailand","TH","+66","THB","฿"],["Philippines","PH","+63","PHP","₱"],["Nepal","NP","+977","NPR","रु"],["Sri Lanka","LK","+94","LKR","Rs"],["Turkey","TR","+90","TRY","₺"],["South Africa","ZA","+27","ZAR","R"],["Nigeria","NG","+234","NGN","₦"],["Kenya","KE","+254","KES","KSh"],["Egypt","EG","+20","EGP","E£"],["New Zealand","NZ","+64","NZD","$"],["Mexico","MX","+52","MXN","$"],["Brazil","BR","+55","BRL","R$"],["Sweden","SE","+46","SEK","kr"],["Norway","NO","+47","NOK","kr"],["Denmark","DK","+45","DKK","kr"],["Russia","RU","+7","RUB","₽"],["Afghanistan","AF","+93","AFN","؋"],["Qatar","QA","+974","QAR","ر.ق"],["Kuwait","KW","+965","KWD","د.ك"],["Oman","OM","+968","OMR","ر.ع."],["Bahrain","BH","+973","BHD","د.ب"],["Jordan","JO","+962","JOD","د.ا"],["Ghana","GH","+233","GHS","₵"],["Uganda","UG","+256","UGX","USh"],["Tanzania","TZ","+255","TZS","TSh"],["Morocco","MA","+212","MAD","د.م."],["Argentina","AR","+54","ARS","$"],["Chile","CL","+56","CLP","$"],["Colombia","CO","+57","COP","$"],["Poland","PL","+48","PLN","zł"],["Ukraine","UA","+380","UAH","₴"],["Israel","IL","+972","ILS","₪"],["Hong Kong","HK","+852","HKD","$"],["Taiwan","TW","+886","TWD","$"],["Vietnam","VN","+84","VND","₫"],["Cambodia","KH","+855","KHR","៛"],["Myanmar","MM","+95","MMK","K"],["Ethiopia","ET","+251","ETB","Br"]];
+countries.forEach(c=>{const o=document.createElement("option");o.value=c[1];o.textContent=c[0];o.dataset.currency=c[3];o.dataset.symbol=c[4];o.dataset.dial=c[2];countrySelect.append(o);});
+const dialCodes=[...new Map(countries.map(c=>[c[2],c[2]])).values()];dialCodes.forEach(code=>{const o=document.createElement("option");o.value=code;o.textContent=code;dialSelect.append(o);});
+countrySelect.value="BD";dialSelect.value="+880";
+countrySelect.addEventListener("change",()=>{const c=countries.find(x=>x[1]===countrySelect.value);if(c)dialSelect.value=c[2];});
+let confirmation=null,credential=null,verifiedPhone=false,recaptcha=null;
+const status=document.getElementById("phoneStatus"),otpArea=document.getElementById("otpArea");
+function setStatus(t,ok=false){status.textContent=t;status.style.color=ok?"#15966f":"#d97706";}
+document.getElementById("generatePassword").addEventListener("click",()=>{const chars="ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%";let p="";for(let i=0;i<16;i++)p+=chars[crypto.getRandomValues(new Uint32Array(1))[0]%chars.length];form.password.value=p;form.confirmPassword.value=p;form.password.type="text";});
+document.getElementById("sendOtp").addEventListener("click",async()=>{
+ message.textContent="";const email=form.email.value.trim(),password=form.password.value,first=form.firstName.value.trim(),last=form.lastName.value,phone=form.phone.value.replace(/[^0-9]/g,"");
+ if(!first||!last||!email||!password||password.length<8||password!==form.confirmPassword.value||!countrySelect.value||phone.length<6){message.textContent="Complete all required fields and enter a valid mobile number first.";return;}
+ const strong=/[A-Z]/.test(password)&&/[a-z]/.test(password)&&/[0-9]/.test(password)&&/[^A-Za-z0-9]/.test(password);
+ if(!strong){message.textContent="Password must include uppercase, lowercase, number and symbol.";return;}
+ const c=countries.find(x=>x[1]===countrySelect.value),e164=dialSelect.value+phone.replace(/^0+/,"");
+ const btn=document.getElementById("sendOtp");btn.disabled=true;btn.textContent="Sending...";
+ try{
+ credential=await createUserWithEmailAndPassword(auth,email,password);
+ await updateProfile(credential.user,{displayName:first+" "+last});
+ recaptcha=new RecaptchaVerifier(auth,"recaptcha-container",{size:"invisible"});
+ await recaptcha.render();
+ confirmation=await linkWithPhoneNumber(credential.user,e164,recaptcha);
+ otpArea.hidden=false;setStatus("OTP sent to "+e164+". Enter the code and verify.",true);btn.textContent="OTP Sent";
+ }catch(err){
+ const errors={"auth/email-already-in-use":"This Gmail is already registered. Use a new Gmail address.","auth/phone-number-already-exists":"This mobile number is already registered. Use another number.","auth/invalid-phone-number":"Enter a valid mobile number.","auth/too-many-requests":"Too many attempts. Please try again later.","auth/operation-not-allowed":"Enable Email/Password and Phone sign-in in Firebase Authentication."};
+ message.textContent=errors[err.code]||err.message||"Could not send OTP.";
+ if(credential?.user){try{await credential.user.delete();}catch(_){}credential=null;}
+ if(recaptcha){try{recaptcha.clear();}catch(_){}recaptcha=null;}
+ btn.disabled=false;btn.textContent="Send OTP";
+ }
+});
+document.getElementById("verifyOtp").addEventListener("click",async()=>{
+ const code=document.getElementById("phoneOtp").value.trim();if(!confirmation||!/^\d{6}$/.test(code)){setStatus("Enter the 6-digit SMS code.");return;}
+ const btn=document.getElementById("verifyOtp");btn.disabled=true;btn.textContent="Verifying...";
+ try{const result=await confirmation.confirm(code);credential=result;verifiedPhone=true;setStatus("Mobile number verified successfully.",true);document.getElementById("sendOtp").disabled=true;submit.disabled=false;btn.textContent="Verified";}
+ catch(err){setStatus(err.code==="auth/invalid-verification-code"?"Incorrect OTP. Please try again.":err.message);btn.disabled=false;btn.textContent="Verify OTP";}
+});
+form.addEventListener("submit",async e=>{
+ e.preventDefault();message.textContent="";
+ if(!verifiedPhone||!credential){message.textContent="Verify your mobile number with OTP first.";return;}
+ if(form.password.value!==form.confirmPassword.value){message.textContent="Passwords do not match.";return;}
+ submit.disabled=true;submit.textContent="Creating account...";
+ try{
+ const c=countries.find(x=>x[1]===countrySelect.value),fullName=form.firstName.value.trim()+" "+form.lastName.value.trim();
+ await updateProfile(credential.user,{displayName:fullName});
+ await setDoc(doc(db,"userProfiles",credential.user.uid),{uid:credential.user.uid,firstName:form.firstName.value.trim(),lastName:form.lastName.value.trim(),fullName,email:credential.user.email,phone:credential.user.phoneNumber,country:c[0],countryCode:c[1],dialCode:dialSelect.value,currencyCode:c[3],currencySymbol:c[4],emailVerified:false,phoneVerified:true,createdAt:serverTimestamp()});
+ await sendEmailVerification(credential.user);
+ message.style.color="#15966f";message.textContent="Mobile verified! A Gmail verification link has been sent. Open your inbox and click the link to complete registration.";
+ await signOut(auth);form.reset();otpArea.hidden=true;submit.disabled=true;submit.textContent="Verify details & create account";
+ }catch(err){message.style.color="#dc6262";message.textContent=err.code==="permission-denied"?"Profile storage is not configured yet. Publish the Firestore security rules for userProfiles, then retry.":err.message||"Could not complete registration.";submit.disabled=false;submit.textContent="Verify details & create account";}
+});
 </script><footer class="met-footer" aria-label="FastMoney footer"><div class="met-footer-inner"><a href="./index.html" class="met-footer-logo" aria-label="FastMoney home"><img src="./assets/fastmoneylogo.png" alt="FastMoney" width="210" height="62" loading="lazy"></a><nav class="met-footer-links" aria-label="Footer navigation"><a href="./about.html">About</a><a href="./affiliate.html">Affiliate</a><a href="./terms-and-conditions.html">Terms</a><a href="./privacy-policy.html">Privacy</a><a href="./guidelines.html">Guidelines</a><a href="./licence.html">Licence</a><a href="./help.html">Help &amp; FAQ</a></nav><div class="met-footer-bottom"><span>© <span id="footerYear">2026</span> FastMoney</span><span>Digital exchange, made clear.</span></div></div></footer><script>document.getElementById("footerYear").textContent=new Date().getFullYear();</script>
 <script src="./language.js?v=1" defer></script>
 </body></html>
