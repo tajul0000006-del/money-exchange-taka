@@ -798,4 +798,12 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
  .wallet-total-item strong{font-size:clamp(15px,4.2vw,18px)!important}
  .wallet-total-divider{height:21px!important}
 }
+
+/* Slightly larger, balanced currency labels and amounts */
+.wallet-total-item>span{font-size:13px!important;font-weight:750!important}
+.wallet-total-item strong{font-size:21px!important;letter-spacing:-.25px!important}
+@media(max-width:480px){
+ .wallet-total-item>span{font-size:12px!important}
+ .wallet-total-item strong{font-size:clamp(17px,4.7vw,20px)!important}
+}
 </style>
