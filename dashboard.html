@@ -972,16 +972,17 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
   height:44px!important;
   min-width:44px!important;
   padding:0!important;
-  border:1px solid #e2e9f1!important;
-  border-radius:13px!important;
-  background:#f7f9fc!important;
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+  background:transparent!important;
   display:grid!important;
   place-items:center!important;
 }
 .dashboard-header .notification-trigger.has-unread:after{
-  inset:0!important;
-  border:1px solid rgba(239,68,68,.22)!important;
-  border-radius:13px!important;
+  content:none!important;
+  display:none!important;
 }
 .dashboard-header .notification-dot{
   top:6px!important;
@@ -993,8 +994,8 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
 }
 @media(prefers-color-scheme:dark){
   .dashboard-header .notification-trigger{
-    background:#14283e!important;
-    border-color:#30465e!important;
+    background:transparent!important;
+    border:0!important;
   }
   .dashboard-header .notification-dot{border-color:#14283e!important}
 }
@@ -1003,9 +1004,10 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
     width:39px!important;
     height:39px!important;
     min-width:39px!important;
-    border-radius:11px!important;
+    border-radius:0!important;
+    border:0!important;
   }
-  .dashboard-header .notification-trigger.has-unread:after{border-radius:11px!important}
+  .dashboard-header .notification-trigger.has-unread:after{content:none!important;display:none!important}
   .dashboard-header .notification-dot{top:5px!important;right:5px!important}
 }
 </style>
