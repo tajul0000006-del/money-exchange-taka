@@ -69,8 +69,8 @@ html,body{background:#f4f8fc!important;color:#18324b!important}
 .auth-field select{width:100%;min-height:46px;margin-top:4px;padding:9px 10px;border:1px solid #cbd9e6;border-radius:12px;background:#fff;color:#18324b;font:inherit}
 .auth-field select{display:block;position:relative;z-index:2;cursor:pointer;appearance:auto;-webkit-appearance:menulist;touch-action:manipulation}
 .auth-mini-btn{min-height:38px;padding:0 9px;font-size:11px;white-space:nowrap;letter-spacing:.01em}
-.phone-row,.password-row{display:flex;gap:8px;align-items:center;margin-top:4px}
-.phone-row input,.password-row input{flex:1;min-width:0;margin-top:0!important}
+.phone-row{display:flex;gap:8px;align-items:center;margin-top:4px}.password-row{display:block;margin-top:4px}
+.phone-row input{flex:1;min-width:0;margin-top:0!important}.password-row input{width:100%;min-width:0;margin-top:0!important}
 .auth-mini-btn{flex:0 0 auto;min-height:44px;padding:0 12px;border:1px solid #b9d9dc;border-radius:11px;background:#e9f8f7;color:#087f8c;font:700 12px Arial,sans-serif;cursor:pointer}
 .auth-mini-btn:disabled{opacity:.55;cursor:not-allowed}
 .auth-note{display:block;margin:5px 0 0;color:#71869a;font-size:12px;font-weight:400}
@@ -152,7 +152,7 @@ html,body{background:#f4f8fc!important;color:#18324b!important}
 </div>
 <label class="auth-field">Gmail Address<input name="email" type="email" autocomplete="email" placeholder="you@gmail.com" required></label>
 <label class="auth-field">Your Country<select name="country" id="countrySelect" required><option value="">Select your country</option></select></label>
-<label class="auth-field">Create Password<div class="password-row"><input name="password" id="password" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" required><button class="auth-mini-btn" id="generatePassword" type="button">Generate</button></div><small class="auth-note">Use 8+ characters with uppercase, lowercase, number and symbol.</small></label>
+<label class="auth-field">Create Password<div class="password-row"><input name="password" id="password" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" required></div><small class="auth-note">Use 8+ characters with uppercase, lowercase, number and symbol.</small></label>
 <label class="auth-field">Confirm Password<input name="confirmPassword" type="password" autocomplete="new-password" minlength="8" placeholder="Re-enter password" required></label>
 <button class="auth-submit" id="createAccount" type="submit" >Create Account &amp; Verify Gmail</button>
 </form>
@@ -198,21 +198,7 @@ const countries=[
 ["Bangladesh","BD","+880","BDT","৳"],["United States","US","+1","USD","$"],["United Kingdom","GB","+44","GBP","£"],["India","IN","+91","INR","₹"],["Pakistan","PK","+92","PKR","₨"],["United Arab Emirates","AE","+971","AED","د.إ"],["Saudi Arabia","SA","+966","SAR","﷼"],["Canada","CA","+1","CAD","$"],["Australia","AU","+61","AUD","$"],["Germany","DE","+49","EUR","€"],["France","FR","+33","EUR","€"],["Italy","IT","+39","EUR","€"],["Spain","ES","+34","EUR","€"],["Netherlands","NL","+31","EUR","€"],["Ireland","IE","+353","EUR","€"],["Portugal","PT","+351","EUR","€"],["Switzerland","CH","+41","CHF","Fr"],["Japan","JP","+81","JPY","¥"],["China","CN","+86","CNY","¥"],["South Korea","KR","+82","KRW","₩"],["Singapore","SG","+65","SGD","$"],["Malaysia","MY","+60","MYR","RM"],["Indonesia","ID","+62","IDR","Rp"],["Thailand","TH","+66","THB","฿"],["Philippines","PH","+63","PHP","₱"],["Nepal","NP","+977","NPR","रु"],["Sri Lanka","LK","+94","LKR","Rs"],["Turkey","TR","+90","TRY","₺"],["South Africa","ZA","+27","ZAR","R"],["Nigeria","NG","+234","NGN","₦"],["Kenya","KE","+254","KES","KSh"],["Egypt","EG","+20","EGP","E£"],["New Zealand","NZ","+64","NZD","$"],["Mexico","MX","+52","MXN","$"],["Brazil","BR","+55","BRL","R$"],["Sweden","SE","+46","SEK","kr"],["Norway","NO","+47","NOK","kr"],["Denmark","DK","+45","DKK","kr"],["Russia","RU","+7","RUB","₽"],["Afghanistan","AF","+93","AFN","؋"],["Qatar","QA","+974","QAR","ر.ق"],["Kuwait","KW","+965","KWD","د.ك"],["Oman","OM","+968","OMR","ر.ع."],["Bahrain","BH","+973","BHD","د.ب"],["Jordan","JO","+962","JOD","د.ا"],["Ghana","GH","+233","GHS","₵"],["Uganda","UG","+256","UGX","USh"],["Tanzania","TZ","+255","TZS","TSh"],["Morocco","MA","+212","MAD","د.م."],["Argentina","AR","+54","ARS","$"],["Chile","CL","+56","CLP","$"],["Colombia","CO","+57","COP","$"],["Poland","PL","+48","PLN","zł"],["Ukraine","UA","+380","UAH","₴"],["Israel","IL","+972","ILS","₪"],["Hong Kong","HK","+852","HKD","$"],["Taiwan","TW","+886","TWD","$"],["Vietnam","VN","+84","VND","₫"],["Cambodia","KH","+855","KHR","៛"],["Myanmar","MM","+95","MMK","K"],["Ethiopia","ET","+251","ETB","Br"]];
 countries.forEach(c=>{const o=document.createElement("option");o.value=c[1];o.textContent=c[0];o.dataset.currency=c[3];o.dataset.symbol=c[4];o.dataset.dial=c[2];countrySelect.append(o);});
 countrySelect.value="BD";
-document.getElementById("generatePassword").addEventListener("click",()=>{
- const pick=chars=>chars[crypto.getRandomValues(new Uint32Array(1))[0]%chars.length];
- const groups=["ABCDEFGHJKLMNPQRSTUVWXYZ","abcdefghijkmnopqrstuvwxyz","23456789","!@#$%&*"];
- let chars=groups.map(pick);
- const all=groups.join("");
- while(chars.length<16)chars.push(pick(all));
- for(let i=chars.length-1;i>0;i--){const j=crypto.getRandomValues(new Uint32Array(1))[0]%(i+1);[chars[i],chars[j]]=[chars[j],chars[i]];}
- const password=chars.join("");
- form.password.value=password;
- form.confirmPassword.value=password;
- form.password.type="text";
- form.confirmPassword.type="text";
- message.style.color="#087f8c";
- message.textContent="A strong password has been generated. Save it somewhere safe.";
-});
+
 form.addEventListener("submit",async e=>{
  e.preventDefault();message.textContent="";
  if(!form.email.value.trim().toLowerCase().endsWith("@gmail.com")){message.textContent="Please register with a Gmail address ending in @gmail.com.";return;}
