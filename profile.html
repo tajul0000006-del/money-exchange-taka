@@ -21,7 +21,7 @@
 .profile-heading h2{margin:0;color:#173b59;font-size:21px}.profile-heading p{margin:4px 0;color:#64788b;font-size:13px;overflow-wrap:anywhere}
 .profile-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .profile-status{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:20px;background:#eaf8f1;color:#168052;font-size:11px;font-weight:700}
-.profile-status.unverified{background:#fff5e8;color:#b66b13}
+.profile-status.unverified{background:#fff0f0;color:#c62828;border:1px solid #ffd0d0}
 .profile-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:20px}
 .profile-detail{padding:13px 14px;border:1px solid #e7edf2;border-radius:11px;min-width:0}
 .profile-detail span{display:block;color:#788b9e;font-size:11px;font-weight:600;margin-bottom:5px}
@@ -33,7 +33,14 @@
 .profile-edit-grid input,.profile-edit-grid select{width:100%;min-height:42px;padding:9px 11px;border:1px solid #dce5ec;border-radius:9px;background:#fff;color:#18344e;font:inherit}
 .profile-save{margin-top:15px;padding:11px 16px;border:0;border-radius:10px;background:#087f91;color:#fff;font:700 13px inherit;cursor:pointer}
 #profileSaveStatus{font-size:13px;color:#168052}
-@media(prefers-color-scheme:dark){body{background:#0b1422;color:#e5edf7}.profile-page-header h1{color:#edf5ff}.profile-page-header p{color:#9bb0c4}.back-link{background:#17394a;color:#8fe0df}.personal-profile{background:#12263c;border-color:#30465e;box-shadow:0 8px 24px rgba(0,0,0,.2)}.profile-top{border-color:#30465e}.profile-avatar{background:#173d43;color:#82dfdc}.profile-heading h2,.profile-detail strong{color:#e6f1fb}.profile-heading p,.profile-detail span{color:#9bb0c4}.profile-status{background:#173d30;color:#8fe0b0}.profile-status.unverified{background:#49351e;color:#f2bd73}.profile-detail{border-color:#30465e}.profile-edit{border-color:#30465e}.profile-edit-grid label{color:#a9bdd1}.profile-edit-grid input,.profile-edit-grid select{background:#14283e;border-color:#30465e;color:#edf5ff}}
+.email-verification-panel{margin-top:18px;padding:16px;border:1px solid #ffd0d0;border-radius:13px;background:#fff7f7}
+.email-verification-panel h3{margin:0 0 6px;color:#a82020;font-size:16px}
+.email-verification-panel p{margin:0 0 12px;color:#704b4b;font-size:13px;line-height:1.6}
+.verify-email-btn{min-height:43px;padding:10px 16px;border:0;border-radius:10px;background:#c62828;color:#fff;font:700 13px Arial,sans-serif;cursor:pointer}
+.verify-email-btn:disabled{opacity:.65;cursor:wait}
+#verificationMessage{margin:9px 0 0;color:#a82020;font-size:13px}
+.email-verification-panel[hidden]{display:none!important}
+@media(prefers-color-scheme:dark){body{background:#0b1422;color:#e5edf7}.profile-page-header h1{color:#edf5ff}.profile-page-header p{color:#9bb0c4}.back-link{background:#17394a;color:#8fe0df}.personal-profile{background:#12263c;border-color:#30465e;box-shadow:0 8px 24px rgba(0,0,0,.2)}.profile-top{border-color:#30465e}.profile-avatar{background:#173d43;color:#82dfdc}.profile-heading h2,.profile-detail strong{color:#e6f1fb}.profile-heading p,.profile-detail span{color:#9bb0c4}.profile-status{background:#173d30;color:#8fe0b0}.profile-status.unverified{background:#482326;color:#ff9a9a;border-color:#71373c}.email-verification-panel{background:#321f27;border-color:#71373c}.email-verification-panel h3{color:#ffaaaa}.email-verification-panel p,#verificationMessage{color:#e2a9ae}.verify-email-btn{background:#d94a52;color:#fff}.profile-detail{border-color:#30465e}.profile-edit{border-color:#30465e}.profile-edit-grid label{color:#a9bdd1}.profile-edit-grid input,.profile-edit-grid select{background:#14283e;border-color:#30465e;color:#edf5ff}}
 @media(max-width:600px){.profile-page{margin-top:22px}.personal-profile{padding:17px}.profile-grid,.profile-edit-grid{grid-template-columns:1fr}.profile-page-header{align-items:flex-start;flex-direction:column}}
 </style>
 </head>
@@ -42,6 +49,7 @@
 <header class="profile-page-header"><div><h1>My Account</h1><p>View and update your personal account information.</p></div><a class="back-link" href="/dashboard.html"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</a></header>
 <section class="personal-profile" id="personal-details" aria-label="Personal information">
 <div class="profile-top"><div class="profile-avatar" id="profileAvatar"><i class="fa-solid fa-user"></i></div><div class="profile-heading"><h2 id="profileFullName">Your Profile</h2><p id="profileEmail">Loading account details…</p><div class="profile-badges"><span class="profile-status" id="emailStatus">Email pending</span><span class="profile-status" id="phoneStatusBadge">Mobile pending</span></div></div></div>
+<div class="email-verification-panel" id="emailVerificationPanel" hidden><h3><i class="fa-solid fa-circle-exclamation"></i> Gmail Not Verified</h3><p>Your account is currently unverified. Verify your Gmail address to confirm that you own this email account. Open the verification link sent to your inbox.</p><button class="verify-email-btn" id="verifyEmailNow" type="button"><i class="fa-solid fa-envelope"></i> VERIFY NOW</button><p id="verificationMessage" role="status" aria-live="polite"></p></div>
 <div class="profile-grid">
 <div class="profile-detail"><span>First Name</span><strong id="profileFirstName">—</strong></div><div class="profile-detail"><span>Last Name</span><strong id="profileLastName">—</strong></div>
 <div class="profile-detail"><span>Registration Email</span><strong id="profileEmailDetail">—</strong></div><div class="profile-detail"><span>Registration Mobile</span><strong id="profilePhone">—</strong></div>
@@ -67,7 +75,7 @@ let profileRef=null;
 function setVerification(el,verified,label){el.classList.toggle("unverified",!verified);el.innerHTML='<i class="fa-solid '+(verified?"fa-circle-check":"fa-circle-exclamation")+'"></i> '+label+' '+(verified?"verified":"unverified");}
 onAuthStateChanged(auth,async user=>{
  if(!user){location.replace("/login.html?next=%2Fprofile.html");return;}
- 
+ await user.reload();
  profileRef=doc(db,"userProfiles",user.uid);
  try{
   const snap=await getDoc(profileRef),p=snap.exists()?snap.data():{};
@@ -85,6 +93,7 @@ onAuthStateChanged(auth,async user=>{
   document.getElementById("profileCurrency").textContent=p.currencyCode||"USD";
   document.getElementById("profileUid").textContent=p.accountId||"ID pending";
   setVerification(document.getElementById("emailStatus"),user.emailVerified,"Gmail");
+  document.getElementById("emailVerificationPanel").hidden=!!user.emailVerified;
   setVerification(document.getElementById("phoneStatusBadge"),!!user.phoneNumber,"Mobile");
   document.getElementById("editDob").value=p.dateOfBirth||"";
   document.getElementById("editGender").value=p.gender||"";
@@ -95,6 +104,15 @@ onAuthStateChanged(auth,async user=>{
  }catch(e){console.error(e);document.getElementById("profileSaveStatus").textContent="Could not load profile information.";}
  document.body.classList.add("fm-auth-ready");
 });
+document.getElementById("verifyEmailNow").addEventListener("click",async()=>{
+ const btn=document.getElementById("verifyEmailNow"),message=document.getElementById("verificationMessage"),user=auth.currentUser;
+ if(!user){message.textContent="Please log in again.";return;}
+ btn.disabled=true;btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> SENDING…';message.textContent="";
+ try{await sendEmailVerification(user);btn.innerHTML='<i class="fa-solid fa-check"></i> EMAIL SENT';message.textContent="A new verification link has been sent to "+(user.email||"your Gmail")+". Check your inbox and spam folder, then open the link. Refresh this page after verification.";}
+ catch(error){message.textContent=error.code==="auth/too-many-requests"?"Please wait a little before requesting another email.":"Could not send the verification email. Please try again.";}
+ finally{btn.disabled=false;if(btn.textContent.includes("SENDING"))btn.innerHTML='<i class="fa-solid fa-envelope"></i> VERIFY NOW';}
+});
+
 document.getElementById("saveProfile").addEventListener("click",async()=>{
  const btn=document.getElementById("saveProfile"),status=document.getElementById("profileSaveStatus");
  btn.disabled=true;status.textContent="Saving…";
