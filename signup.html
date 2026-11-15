@@ -260,6 +260,11 @@ form.addEventListener("submit", async event => {
       countryCode: country[1],
       currencyCode: country[3],
       currencySymbol: country[4],
+      // Immutable signup snapshot: dashboard always uses this original selection.
+      signupCountry: country[0],
+      signupCountryCode: country[1],
+      signupCurrencyCode: country[3],
+      signupCurrencySymbol: country[4],
       emailVerified: false,
       phoneVerified: false,
       notifications: [{
