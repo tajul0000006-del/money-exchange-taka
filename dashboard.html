@@ -351,6 +351,72 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 
 </style>
 <link rel="stylesheet" href="./language.css?v=1">
+<style id="fastmoney-wallet-modern">
+/* Clean, responsive account overview */
+.wallet-overview{margin:22px 0 30px!important;padding:0!important}
+.wallet-balance-panel{position:relative!important;overflow:hidden!important;padding:clamp(18px,3vw,28px)!important;border:0!important;border-radius:20px!important;background:linear-gradient(115deg,#102f50 0%,#124b65 62%,#087f78 100%)!important;box-shadow:0 12px 28px rgba(15,48,75,.13)!important;color:#fff!important}
+.wallet-balance-panel:after{content:"";position:absolute;width:210px;height:210px;right:-85px;top:-115px;border:1px solid rgba(255,255,255,.13);border-radius:50%;box-shadow:0 0 0 25px rgba(255,255,255,.035),0 0 0 50px rgba(255,255,255,.025);pointer-events:none}
+.wallet-balance-heading{position:relative;z-index:1;display:flex!important;align-items:center;justify-content:space-between;gap:12px}
+.wallet-eyebrow{color:#d7eef1!important;font-size:11px!important;font-weight:700!important;letter-spacing:1.15px!important}
+.wallet-live-label{color:#d7eef1!important;font-size:11px!important}
+.wallet-balance-panel h2{position:relative;z-index:1;margin:13px 0 10px!important;color:#fff!important;font-size:clamp(19px,3vw,23px)!important;font-weight:700!important}
+.wallet-total-values{position:relative;z-index:1;display:flex!important;align-items:center!important;gap:clamp(18px,4vw,36px)!important;flex-wrap:wrap}
+.wallet-total-item{min-width:0}
+.wallet-total-item span{display:block;color:#c7e2e9!important;font-size:12px!important;font-weight:600!important}
+.wallet-total-item strong{display:block;margin-top:4px;color:#fff!important;font-size:clamp(23px,4vw,31px)!important;font-weight:800!important;letter-spacing:-.7px!important;overflow-wrap:anywhere}
+.wallet-total-divider{width:1px!important;height:38px!important;background:rgba(255,255,255,.24)!important}
+.wallet-list-heading{display:flex!important;align-items:center!important;justify-content:space-between!important;margin:25px 2px 13px!important}
+.wallet-list-heading h3{margin:0!important;color:#17334e!important;font-size:18px!important;font-weight:800!important}
+.wallet-scroll-hint{display:none!important}
+.wallet-scroller{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important;padding:0!important;overflow:visible!important;scroll-snap-type:none!important}
+.wallet-item{position:relative!important;isolation:auto!important;overflow:hidden!important;display:grid!important;grid-template-columns:42px minmax(0,1fr)!important;grid-template-rows:auto auto!important;align-content:center!important;align-items:center!important;column-gap:12px!important;row-gap:5px!important;width:auto!important;min-width:0!important;max-width:none!important;flex:none!important;height:auto!important;min-height:104px!important;padding:16px!important;border:1px solid #e4ebf2!important;border-radius:15px!important;background:#fff!important;box-shadow:0 4px 14px rgba(18,48,75,.045)!important;scroll-snap-align:none!important;transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease!important}
+.wallet-item:before,.wallet-item:after{display:none!important;content:none!important}
+.wallet-symbol{grid-column:1!important;grid-row:1/3!important;width:42px!important;height:42px!important;border:0!important;border-radius:13px!important;background:#edf5fa!important;color:#12617a!important;font-size:21px!important;box-shadow:none!important}
+.wallet-name{grid-column:2!important;grid-row:1!important;align-self:end!important;color:#5d7185!important;font:700 12px/1.25 Arial,sans-serif!important;letter-spacing:.15px!important;overflow-wrap:anywhere}
+.wallet-item strong{grid-column:2!important;grid-row:2!important;align-self:start!important;margin:0!important;color:#17334e!important;font:800 clamp(16px,2vw,20px)/1.2 Arial,sans-serif!important;letter-spacing:-.35px!important;overflow-wrap:anywhere}
+.wallet-item small{display:none!important}
+.wallet-fastmoney-usd .wallet-symbol{background:#e7f4f4!important;color:#087f78!important}
+.wallet-usdt .wallet-symbol{background:#e6f7f0!important;color:#15966f!important}
+.wallet-usd .wallet-symbol{background:#eaf1ff!important;color:#3471c8!important}
+.wallet-bdt .wallet-symbol{background:#e8f7ef!important;color:#168452!important}
+.wallet-epay .wallet-symbol{background:#fff3e3!important;color:#c47718!important}
+.wallet-btc .wallet-symbol{background:#fff1e4!important;color:#c66b19!important}
+.wallet-eth .wallet-symbol{background:#efedff!important;color:#625ac2!important}
+.wallet-paypal .wallet-symbol{background:#eaf2ff!important;color:#1769b0!important}
+.wallet-item:hover{transform:translateY(-2px)!important;border-color:#c7dce8!important;box-shadow:0 9px 20px rgba(18,48,75,.08)!important}
+@media(max-width:900px){.wallet-scroller{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:480px){
+ .wallet-overview{margin:15px 0 24px!important}
+ .wallet-balance-panel{padding:17px!important;border-radius:16px!important}
+ .wallet-balance-heading{align-items:flex-start!important}
+ .wallet-live-label{font-size:10px!important}
+ .wallet-total-values{gap:14px!important}
+ .wallet-total-item strong{font-size:22px!important}
+ .wallet-total-divider{height:30px!important}
+ .wallet-list-heading{margin:19px 1px 10px!important}
+ .wallet-list-heading h3{font-size:16px!important}
+ .wallet-scroller{gap:9px!important}
+ .wallet-item{min-height:88px!important;padding:11px!important;grid-template-columns:34px minmax(0,1fr)!important;column-gap:8px!important;border-radius:12px!important}
+ .wallet-symbol{width:34px!important;height:34px!important;border-radius:10px!important;font-size:17px!important}
+ .wallet-name{font-size:10px!important}
+ .wallet-item strong{font-size:15px!important}
+}
+@media(prefers-color-scheme:dark){
+ .wallet-list-heading h3{color:#e5eef8!important}
+ .wallet-item{background:#12283d!important;border-color:#2b435a!important;box-shadow:none!important}
+ .wallet-name{color:#a9bfd1!important}
+ .wallet-item strong{color:#f0f6fc!important}
+ .wallet-item:hover{border-color:#4b718c!important;box-shadow:0 8px 18px rgba(0,0,0,.2)!important}
+ .wallet-fastmoney-usd .wallet-symbol{background:#16434a!important;color:#8ee4d7!important}
+ .wallet-usdt .wallet-symbol{background:#17463d!important;color:#85e1bd!important}
+ .wallet-usd .wallet-symbol{background:#1a365b!important;color:#a9c8ff!important}
+ .wallet-bdt .wallet-symbol{background:#174633!important;color:#91e2b5!important}
+ .wallet-epay .wallet-symbol,.wallet-btc .wallet-symbol{background:#50371f!important;color:#ffd39c!important}
+ .wallet-eth .wallet-symbol{background:#332f62!important;color:#c6c0ff!important}
+ .wallet-paypal .wallet-symbol{background:#183d61!important;color:#a6d0ff!important}
+}
+@media(prefers-reduced-motion:reduce){.wallet-item{transition:none!important}}
+</style>
 </head>
 <body>
 <main class="dash-wrap" id="dashboard">
