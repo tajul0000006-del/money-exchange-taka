@@ -52,6 +52,36 @@ service cloud.firestore {
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
+    // User-scoped financial data. A signed-in user can read only their own
+    // account document and child records. All balance/ledger writes are server-only.
+    match /wallets/{userId} {
+      allow get: if request.auth != null && request.auth.uid == userId;
+      allow list, create, update, delete: if false;
+    }
+    match /wallets/{userId}/{subcollection}/{documentId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if false;
+    }
+    match /ledger/{userId}/entries/{entryId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if false;
+    }
+    match /transactions/{userId}/items/{transactionId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if false;
+    }
+    match /depositRequests/{userId}/items/{requestId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if false;
+    }
+    match /withdrawalRequests/{userId}/items/{requestId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if false;
+    }
+    match /notifications/{userId}/items/{notificationId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if false;
+    }
     match /wallets/{document=**} { allow read, write: if false; }
     match /ledger/{document=**} { allow read, write: if false; }
     match /rates/{document=**} { allow read, write: if false; }
