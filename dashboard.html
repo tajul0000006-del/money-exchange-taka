@@ -341,6 +341,17 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
  .wallet-total-divider{height:26px!important}
  .wallet-total-item strong{font-size:clamp(18px,5vw,22px)!important}
 }
+
+/* Compact inline currency format: USD: 0.000 | BDT: 0.000 */
+.wallet-total-item{display:flex!important;align-items:baseline!important;justify-content:flex-start!important;gap:6px!important;white-space:nowrap!important}
+.wallet-total-item>span{font-size:13px!important;letter-spacing:0!important;font-weight:700!important}
+.wallet-total-item strong{margin:0!important;font-size:clamp(18px,3vw,25px)!important}
+.wallet-total-local{justify-content:flex-end!important}
+@media(max-width:480px){
+ .wallet-total-item{gap:4px!important}
+ .wallet-total-item>span{font-size:11px!important}
+ .wallet-total-item strong{font-size:clamp(16px,4.5vw,20px)!important}
+}
 </style>
   <link rel="stylesheet" href="./responsive.css">
 <style id="fastmoney-brand-style">.fastmoney-brand{display:flex!important;align-items:center;gap:9px;flex:0 0 auto;text-decoration:none!important;color:#102a43!important;white-space:nowrap}.fastmoney-mark{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:linear-gradient(145deg,#087b8c,#075b68);color:#fff;font-size:25px;font-weight:900}.fastmoney-word{display:flex;flex-direction:column;font-size:21px;line-height:1.05;font-weight:850;letter-spacing:-.7px}.fastmoney-word b{color:#087b8c}.fastmoney-word small{margin-top:4px;font-size:8px;letter-spacing:1.35px;color:#718096;font-weight:800}.fastmoney-legal-links{display:flex;justify-content:center;gap:12px 22px;flex-wrap:wrap;padding:16px 18px;border-top:1px solid #e5edf2;background:#fff;font:600 13px/1.5 system-ui,sans-serif}.fastmoney-legal-links a{color:#426174;text-decoration:none}
@@ -482,9 +493,9 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
     <div class="wallet-balance-panel">
       <h2 class="wallet-total-title"><span class="wallet-total-title-icon"><i class="fa-solid fa-wallet" aria-hidden="true"></i></span><span>Total Balance</span></h2>
       <div class="wallet-total-values">
-        <div class="wallet-total-item wallet-total-usd"><span>USD</span><strong>$0.000</strong></div>
+        <div class="wallet-total-item wallet-total-usd"><span>USD:</span><strong>0.000</strong></div>
         <div class="wallet-total-divider" aria-hidden="true"></div>
-        <div class="wallet-total-item wallet-total-local"><span id="localCurrencyLabel">BDT</span><strong id="localCurrencyBalance">৳0.000</strong></div>
+        <div class="wallet-total-item wallet-total-local"><span id="localCurrencyLabel">BDT:</span><strong id="localCurrencyBalance">0.000</strong></div>
       </div>
     </div>
     <div class="wallet-list-heading"><div><h3>Wallets</h3></div><span class="wallet-scroll-hint"><i class="fa-solid fa-arrows-left-right"></i> Scroll</span></div>
@@ -594,8 +605,8 @@ function renderWallet(wallet, profile) {
   const local = Number(balances[localCode] || 0);
 
   document.getElementById("localCurrencyLabel").textContent = localCode;
-  document.getElementById("localCurrencyBalance").textContent = localSymbol + formatBalance(local);
-  document.querySelector(".wallet-total-item strong").textContent = "$" + formatBalance(usd);
+  document.getElementById("localCurrencyBalance").textContent = formatBalance(local);
+  document.querySelector(".wallet-total-usd strong").textContent = formatBalance(usd);
   document.getElementById("localWalletName").textContent = localCode;
   document.getElementById("localWalletDescription").textContent = currencyNames[localCode] || profile.country || "Local Currency";
 
