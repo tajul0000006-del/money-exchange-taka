@@ -234,7 +234,7 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 .wallet-usd{background:linear-gradient(120deg,#174f9b,#287fe0)!important}
 .wallet-usd:after{content:"US DOLLAR"}
 .wallet-bdt{background:linear-gradient(120deg,#08734e,#16a36e)!important}
-.wallet-bdt:after{content:"BANGLADESH"}
+/* Local wallet label is populated only from the signed-up country. */
 .wallet-epay{background:linear-gradient(120deg,#a34d0b,#ed9b28)!important}
 .wallet-epay:after{content:"ePAY"}
 .wallet-fastmoney{background:linear-gradient(120deg,#07566d,#0b9da5)!important}
@@ -496,7 +496,7 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
       <div class="wallet-total-values">
         <div class="wallet-total-item wallet-total-usd"><span>USD</span><strong>0.000</strong></div>
         <div class="wallet-total-divider" aria-hidden="true"></div>
-        <div class="wallet-total-item wallet-total-local"><span id="localCurrencyLabel">BDT</span><strong id="localCurrencyBalance">0.000</strong></div>
+        <div class="wallet-total-item wallet-total-local"><span id="localCurrencyLabel">—</span><strong id="localCurrencyBalance">—</strong></div>
       </div>
     </div>
     <div class="wallet-list-heading"><div><h3>Wallets</h3></div><span class="wallet-scroll-hint"><i class="fa-solid fa-arrows-left-right"></i> Scroll</span></div>
@@ -504,7 +504,7 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
       <article class="wallet-item wallet-fastmoney-usd" role="listitem"><span class="wallet-symbol"><i class="fa-solid fa-dollar-sign"></i></span><span class="wallet-name">FastMoney USD</span><strong>$0.000</strong><small>US Dollar</small></article>
       <article class="wallet-item wallet-usdt" role="listitem"><span class="wallet-symbol">₮</span><span class="wallet-name">USDT</span><strong>0.000</strong><small>Tether Wallet</small></article>
       <article class="wallet-item wallet-usd" role="listitem"><span class="wallet-symbol">$</span><span class="wallet-name">USD</span><strong>0.000</strong><small>US Dollar</small></article>
-      <article class="wallet-item wallet-bdt" role="listitem"><span class="wallet-symbol">৳</span><span class="wallet-name" id="localWalletName">BDT</span><strong>0.000</strong><small id="localWalletDescription">Bangladeshi Taka</small></article>
+      <article class="wallet-item wallet-bdt" role="listitem"><span class="wallet-symbol" id="localWalletSymbol">—</span><span class="wallet-name" id="localWalletName">—</span><strong>—</strong><small id="localWalletDescription">Your signup currency</small></article>
       <article class="wallet-item wallet-epay" role="listitem"><span class="wallet-symbol"><i class="fa-solid fa-bolt"></i></span><span class="wallet-name">ePay</span><strong>0.000</strong><small>ePay Wallet</small></article>
       
       <article class="wallet-item wallet-btc" role="listitem"><span class="wallet-symbol">₿</span><span class="wallet-name">BTC</span><strong>0.000</strong><small>Bitcoin Wallet</small></article>
@@ -600,16 +600,34 @@ function setVerification(verified) {
 }
 function renderWallet(wallet, profile) {
   const balances = wallet?.balances || {};
-  const localCode = String(profile.currencyCode || "BDT").toUpperCase();
-  const localSymbol = profile.currencySymbol || currencySymbols[localCode] || (localCode + " ");
+  const localCode = String(profile?.currencyCode || "").trim().toUpperCase();
+  const localSymbol = profile?.currencySymbol || currencySymbols[localCode] || localCode;
   const usd = Number(balances.USD || 0);
-  const local = Number(balances[localCode] || 0);
-
-  document.getElementById("localCurrencyLabel").textContent = localCode;
-  document.getElementById("localCurrencyBalance").textContent = formatBalance(local);
   document.querySelector(".wallet-total-usd strong").textContent = formatBalance(usd);
-  document.getElementById("localWalletName").textContent = localCode;
-  document.getElementById("localWalletDescription").textContent = currencyNames[localCode] || profile.country || "Local Currency";
+
+  const localLabel = document.getElementById("localCurrencyLabel");
+  const localBalance = document.getElementById("localCurrencyBalance");
+  const localName = document.getElementById("localWalletName");
+  const localDescription = document.getElementById("localWalletDescription");
+  const localSymbolEl = document.getElementById("localWalletSymbol");
+  const localCard = document.querySelector(".wallet-bdt");
+  if (!localCode) {
+    localLabel.textContent = "—";
+    localBalance.textContent = "—";
+    localName.textContent = "—";
+    localDescription.textContent = "Signup currency unavailable";
+    localSymbolEl.textContent = "—";
+    const localAmount = localCard?.querySelector("strong");
+    if (localAmount) localAmount.textContent = "—";
+    return;
+  }
+
+  const local = Number(balances[localCode] || 0);
+  localLabel.textContent = localCode;
+  localBalance.textContent = formatBalance(local);
+  localName.textContent = localCode;
+  localDescription.textContent = currencyNames[localCode] || profile.country || "Local Currency";
+  localSymbolEl.textContent = localSymbol;
 
   document.querySelectorAll(".wallet-item").forEach(card => {
     const name = card.querySelector(".wallet-name")?.textContent.trim();
