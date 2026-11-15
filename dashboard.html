@@ -1496,4 +1496,61 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
 @media(prefers-color-scheme:dark){.pay-id-card{border-color:#34536a;box-shadow:0 9px 23px rgba(0,0,0,.24)}}
 @media(max-width:520px){.pay-id-card{padding:15px;border-radius:15px}.pay-id-value-wrap strong{font-size:11px}.pay-id-copy{padding:8px 10px}}
 
+
+/* Wallet carousel: clean full-width rail; cards slide fully into view on swipe. */
+.wallet-overview{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+}
+.wallet-scroller{
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:100%!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  outline:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  gap:12px!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  scroll-snap-type:x mandatory!important;
+  scroll-snap-stop:always!important;
+  scroll-padding-inline:0!important;
+  scroll-behavior:smooth!important;
+  -webkit-overflow-scrolling:touch!important;
+  overscroll-behavior-x:contain!important;
+  scrollbar-width:none!important;
+}
+.wallet-scroller::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
+.wallet-scroller>.wallet-item,
+.wallet-scroller>.pay-id-card{
+  box-sizing:border-box!important;
+  flex:0 0 min(300px, calc(100vw - 32px))!important;
+  width:min(300px, calc(100vw - 32px))!important;
+  min-width:min(300px, calc(100vw - 32px))!important;
+  max-width:min(300px, calc(100vw - 32px))!important;
+  scroll-snap-align:start!important;
+  scroll-snap-stop:always!important;
+  margin:0!important;
+}
+.wallet-scroller>.wallet-item{
+  height:166px!important;
+  min-height:166px!important;
+  max-height:166px!important;
+}
+.wallet-scroller>.pay-id-card{
+  height:166px!important;
+  min-height:166px!important;
+  max-height:166px!important;
+}
+@media(prefers-reduced-motion:reduce){
+  .wallet-scroller{scroll-behavior:auto!important}
+}
+
 </style>
