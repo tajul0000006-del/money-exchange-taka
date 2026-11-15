@@ -458,7 +458,7 @@ onAuthStateChanged(auth,async user=>{
 
   try{
     await user.reload();
-    activeProfileRef=doc(db,"userProfiles",user.uid);const snap=await getDoc(activeProfileRef);const p=snap.exists()?snap.data():{};if(!/^\\d{15}$/.test(String(p.accountId||""))){p.accountId=await createUniqueFastMoneyId(user.uid);await setDoc(activeProfileRef,{uid:user.uid,accountId:p.accountId,email:user.email||""},{merge:true});}
+    activeProfileRef=doc(db,"userProfiles",user.uid);const snap=await getDoc(activeProfileRef);const p=snap.exists()?snap.data():{};if(!/^\d{15}$/.test(String(p.accountId||""))){p.accountId=await createUniqueFastMoneyId(user.uid);await setDoc(activeProfileRef,{uid:user.uid,accountId:p.accountId,email:user.email||""},{merge:true});}
     const first=p.firstName||user.displayName?.split(" ")[0]||"User",last=p.lastName||user.displayName?.split(" ").slice(1).join(" ")||"";
     document.getElementById("navAccountName").textContent=p.accountId||"ID pending";
     document.getElementById("navAccountEmail").textContent=user.email||"";
