@@ -544,7 +544,7 @@ onAuthStateChanged(auth, async user => {
     const firstName = profile.firstName || user.displayName?.split(" ")[0] || "User";
 
     document.getElementById("navAccountName").textContent =
-      /^(?:FM-[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{6}|\d{15})$/.test(String(profile.accountId || "")) ? profile.accountId : "Setting up ID…";
+      /^\d{10}$/.test(String(profile.accountId || "")) ? profile.accountId : "Setting up ID…";
     document.getElementById("navAccountEmail").textContent = user.email || "";
     document.getElementById("navAccountAvatar").textContent = (firstName[0] || "U").toUpperCase();
     setVerification(user.emailVerified === true);
@@ -552,7 +552,7 @@ onAuthStateChanged(auth, async user => {
     // Email confirmation is temporarily disabled while the owner tests the website.
     const token = await user.getIdToken(true);
     const bootstrap = await coreRequest("/api/account/bootstrap", token, "POST");
-    if (!/^(?:FM-[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{6}|\d{15})$/.test(String(bootstrap.accountId || ""))) {
+    if (!/^\d{10}$/.test(String(bootstrap.accountId || ""))) {
       throw new Error("The server did not return a valid FastMoney Account ID.");
     }
 
