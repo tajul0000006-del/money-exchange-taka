@@ -522,7 +522,6 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
     <div class="wallet-list-heading"><div><h3>Wallets</h3></div><span class="wallet-scroll-hint"><i class="fa-solid fa-arrows-left-right"></i> Scroll</span></div>
     <div class="wallet-scroller" role="list" aria-label="Available wallets">
       <article class="wallet-item wallet-fastmoney-usd" role="listitem"><span class="wallet-symbol wallet-logo">FM</span><span class="wallet-name">FastMoney USD</span><strong>$0.00</strong><small>FastMoney Dollar Wallet</small></article>
-      <article class="wallet-item wallet-bdt" role="listitem"><span class="wallet-symbol" id="localWalletSymbol">—</span><span class="wallet-name" id="localWalletName">—</span><strong>—</strong><small id="localWalletDescription">Your signup currency</small></article>
   <section class="pay-id-card" aria-label="Your payment ID">
   <div class="pay-id-top"><span class="pay-id-mark">FM</span><div class="pay-id-title"><strong id="payIdCurrency">— PAY ID</strong><small>Personal payment ID</small></div><span class="pay-id-country" id="payIdCurrencyBadge">—</span></div>
   <div class="pay-id-value-row"><div class="pay-id-value-wrap"><small>PAY ID</small><strong id="payIdValue">Loading…</strong></div><button type="button" class="pay-id-copy" id="copyPayId" aria-label="Copy Pay ID" title="Copy Pay ID"><i class="fa-regular fa-copy"></i><span>Copy</span></button></div>
@@ -713,49 +712,31 @@ function setVerification(verified) {
   el.title = verified ? "Email verified" : "Email confirmation is temporarily disabled during testing";
 }
 function renderWallet(wallet, profile) {
-  // Keep exactly one signup-country currency wallet in the swipe slider.
-  const localWalletCards = document.querySelectorAll(".wallet-scroller > .wallet-item.wallet-bdt");
-  localWalletCards.forEach((card, index) => { if (index > 0) card.remove(); });
   const balances = wallet?.balances || {};
-  const localCode = String(profile?.currencyCode || "").trim().toUpperCase();
-  const localSymbol = profile?.currencySymbol || currencySymbols[localCode] || localCode;
+  const localCode = String(profile?.signupCurrencyCode || profile?.currencyCode || "").trim().toUpperCase();
   const usd = Number(balances.USD || 0);
   document.querySelector(".wallet-total-usd strong").textContent = formatBalance(usd);
 
+  // The signup-country currency is shown in the Pay ID card, not as a second wallet card.
   const localLabel = document.getElementById("localCurrencyLabel");
   const localBalance = document.getElementById("localCurrencyBalance");
-  const localName = document.getElementById("localWalletName");
-  const localDescription = document.getElementById("localWalletDescription");
-  const localSymbolEl = document.getElementById("localWalletSymbol");
-  const localCard = document.querySelector(".wallet-bdt");
   if (!localCode) {
     localLabel.textContent = "—";
     localBalance.textContent = "—";
-    localName.textContent = "—";
-    localDescription.textContent = "Signup currency unavailable";
-    localSymbolEl.textContent = "—";
-    const localAmount = localCard?.querySelector("strong");
-    if (localAmount) localAmount.textContent = "—";
-    return;
+  } else {
+    localLabel.textContent = localCode;
+    localBalance.textContent = formatBalance(Number(balances[localCode] || 0));
   }
 
-  const local = Number(balances[localCode] || 0);
-  localLabel.textContent = localCode;
-  localBalance.textContent = formatBalance(local);
-  localName.textContent = localCode;
-  localDescription.textContent = currencyNames[localCode] || profile.country || "Local Currency";
-  localSymbolEl.textContent = localSymbol;
-
-  document.querySelectorAll(".wallet-item").forEach(card => {
-    const name = card.querySelector(".wallet-name")?.textContent.trim();
+  document.querySelectorAll(".wallet-scroller > .wallet-item").forEach(card => {
+    const name = card.querySelector(".wallet-name")?.textContent.trim() || "";
     const amount = card.querySelector("strong");
     if (!amount) return;
-    let code = "";
-    if (name === "USDT") code = "USDT";
-    else if (name === localCode || card.classList.contains("wallet-bdt")) code = localCode;
-    else if (name.endsWith(" USD")) code = "USD";
-    amount.textContent = formatBalance(balances[code] || 0);
-    if (name.endsWith(" USD")) amount.textContent = "$" + formatBalance(balances.USD || 0);
+    if (name === "USDT") {
+      amount.textContent = formatBalance(balances.USDT || 0);
+    } else if (name.endsWith(" USD")) {
+      amount.textContent = "$" + formatBalance(balances.USD || 0);
+    }
   });
 }
 
@@ -809,7 +790,7 @@ onAuthStateChanged(auth, async user => {
     };
     const savedCountryCode = String(serverProfile.signupCountryCode || serverProfile.countryCode || previousProfile.signupCountryCode || previousProfile.countryCode || "").toUpperCase();
     const countryCurrency = signupCurrencyByCountry[savedCountryCode] || [];
-    const fixedCurrencyCode = String(serverProfile.signupCurrencyCode || serverProfile.currencyCode || previousProfile.signupCurrencyCode || previousProfile.currencyCode || countryCurrency[0] || "").toUpperCase();
+    const fixedCurrencyCode = String(serverProfile.signupCurrencyCode || previousProfile.signupCurrencyCode || countryCurrency[0] || serverProfile.currencyCode || previousProfile.currencyCode || "").toUpperCase();
     const fixedCurrencySymbol = serverProfile.signupCurrencySymbol || serverProfile.currencySymbol || previousProfile.signupCurrencySymbol || previousProfile.currencySymbol || countryCurrency[1] || fixedCurrencyCode;
     const profile = {
       ...previousProfile,
