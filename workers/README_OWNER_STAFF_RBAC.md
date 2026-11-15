@@ -46,3 +46,13 @@ Firestore Security Rules can continue denying client writes to these collections
 - The Owner must copy the staff member's Firebase Authentication UID from Firebase Console. Creating a staff record does not create a Firebase account.
 - Do not delete the old Worker, change its secrets, or deploy this code over it.
 - Do not enable deposits, withdrawals, wallet balance edits, or money transfers as part of this RBAC stage.
+
+## Admin Panel connection
+
+The Admin Panel branch now contains an Owner-only Staff Management screen and calls:
+
+- `https://fastmoney-admin-rbac.taijulsheikh60.workers.dev/api/admin/me`
+- `GET/POST /api/admin/staff`
+- `PATCH /api/admin/staff/{uid}`
+
+Create the Cloudflare Worker with the exact name `fastmoney-admin-rbac` under the same Cloudflare account so the configured workers.dev hostname matches. Set `ALLOWED_ORIGINS` to the exact origin serving the Admin Panel (for the current public Worker deployment, this is `https://money-exchange-taka.taijulsheikh60.workers.dev`; add any other actual admin-panel origin only if it is used). Then deploy and test the health endpoint, followed by Owner `/api/admin/me` and staff list/create/update tests. Do not merge this branch into production until these tests pass.
