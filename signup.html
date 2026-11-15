@@ -170,53 +170,113 @@ html,body{background:#f4f8fc!important;color:#18324b!important}
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
-const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
-const form=document.getElementById("authForm"),message=document.getElementById("authMessage"),submit=document.getElementById("createAccount");
-const countrySelect=document.getElementById("countrySelect");
-async function createUniqueFastMoneyId(uid){
- for(let attempt=0;attempt<20;attempt++){
-  const bytes=crypto.getRandomValues(new Uint8Array(15));
-  let code=String((bytes[0]%9)+1);
-  for(let i=1;i<15;i++)code+=String(bytes[i]%10);
-  const ref=doc(db,"fastMoneyAccountIds",code);
-  const reserved=await runTransaction(db,async tx=>{
-   const existing=await tx.get(ref);
-   if(existing.exists())return false;
-   tx.set(ref,{createdAt:serverTimestamp()});
-   return true;
-  });
-  if(reserved)return code;
- }
- throw new Error("Could not generate a unique 15-digit FastMoney ID. Please try again.");
-}
-const successModal=document.getElementById("successModal"),successModalEmail=document.getElementById("successModalEmail");
-document.getElementById("closeSuccessModal").addEventListener("click",()=>successModal.classList.remove("is-open"));
-successModal.addEventListener("click",e=>{if(e.target===successModal)successModal.classList.remove("is-open")});
-const countries=[
-["Bangladesh","BD","+880","BDT","৳"],["United States","US","+1","USD","$"],["United Kingdom","GB","+44","GBP","£"],["India","IN","+91","INR","₹"],["Pakistan","PK","+92","PKR","₨"],["United Arab Emirates","AE","+971","AED","د.إ"],["Saudi Arabia","SA","+966","SAR","﷼"],["Canada","CA","+1","CAD","$"],["Australia","AU","+61","AUD","$"],["Germany","DE","+49","EUR","€"],["France","FR","+33","EUR","€"],["Italy","IT","+39","EUR","€"],["Spain","ES","+34","EUR","€"],["Netherlands","NL","+31","EUR","€"],["Ireland","IE","+353","EUR","€"],["Portugal","PT","+351","EUR","€"],["Switzerland","CH","+41","CHF","Fr"],["Japan","JP","+81","JPY","¥"],["China","CN","+86","CNY","¥"],["South Korea","KR","+82","KRW","₩"],["Singapore","SG","+65","SGD","$"],["Malaysia","MY","+60","MYR","RM"],["Indonesia","ID","+62","IDR","Rp"],["Thailand","TH","+66","THB","฿"],["Philippines","PH","+63","PHP","₱"],["Nepal","NP","+977","NPR","रु"],["Sri Lanka","LK","+94","LKR","Rs"],["Turkey","TR","+90","TRY","₺"],["South Africa","ZA","+27","ZAR","R"],["Nigeria","NG","+234","NGN","₦"],["Kenya","KE","+254","KES","KSh"],["Egypt","EG","+20","EGP","E£"],["New Zealand","NZ","+64","NZD","$"],["Mexico","MX","+52","MXN","$"],["Brazil","BR","+55","BRL","R$"],["Sweden","SE","+46","SEK","kr"],["Norway","NO","+47","NOK","kr"],["Denmark","DK","+45","DKK","kr"],["Russia","RU","+7","RUB","₽"],["Afghanistan","AF","+93","AFN","؋"],["Qatar","QA","+974","QAR","ر.ق"],["Kuwait","KW","+965","KWD","د.ك"],["Oman","OM","+968","OMR","ر.ع."],["Bahrain","BH","+973","BHD","د.ب"],["Jordan","JO","+962","JOD","د.ا"],["Ghana","GH","+233","GHS","₵"],["Uganda","UG","+256","UGX","USh"],["Tanzania","TZ","+255","TZS","TSh"],["Morocco","MA","+212","MAD","د.م."],["Argentina","AR","+54","ARS","$"],["Chile","CL","+56","CLP","$"],["Colombia","CO","+57","COP","$"],["Poland","PL","+48","PLN","zł"],["Ukraine","UA","+380","UAH","₴"],["Israel","IL","+972","ILS","₪"],["Hong Kong","HK","+852","HKD","$"],["Taiwan","TW","+886","TWD","$"],["Vietnam","VN","+84","VND","₫"],["Cambodia","KH","+855","KHR","៛"],["Myanmar","MM","+95","MMK","K"],["Ethiopia","ET","+251","ETB","Br"]];
-countries.forEach(c=>{const o=document.createElement("option");o.value=c[1];o.textContent=c[0];o.dataset.currency=c[3];o.dataset.symbol=c[4];o.dataset.dial=c[2];countrySelect.append(o);});
-countrySelect.value="BD";
 
-form.addEventListener("submit",async e=>{
- e.preventDefault();message.textContent="";
- if(!form.email.value.trim().toLowerCase().endsWith("@gmail.com")){message.textContent="Please register with a Gmail address ending in @gmail.com.";return;}
- if(form.password.value!==form.confirmPassword.value){message.textContent="Passwords do not match.";return;}
- const strong=/[A-Z]/.test(form.password.value)&&/[a-z]/.test(form.password.value)&&/[0-9]/.test(form.password.value)&&/[^A-Za-z0-9]/.test(form.password.value);
- if(form.password.value.length<8||!strong){message.textContent="Password must have 8+ characters with uppercase, lowercase, number and symbol.";return;}
- submit.disabled=true;submit.textContent="Creating account...";
- try{
- const c=countries.find(x=>x[1]===countrySelect.value),fullName=form.firstName.value.trim()+" "+form.lastName.value.trim();
- const credential=await createUserWithEmailAndPassword(auth,form.email.value.trim(),form.password.value);
- await updateProfile(credential.user,{displayName:fullName});
- const fastMoneyId=await createUniqueFastMoneyId(credential.user.uid);
- await setDoc(doc(db,"userProfiles",credential.user.uid),{uid:credential.user.uid,accountId:fastMoneyId,firstName:form.firstName.value.trim(),lastName:form.lastName.value.trim(),fullName,email:credential.user.email,phone:null,country:c[0],countryCode:c[1],currencyCode:c[3],currencySymbol:c[4],emailVerified:false,phoneVerified:false,createdAt:serverTimestamp()});
- const registeredEmail=credential.user.email;
- await sendEmailVerification(credential.user);
- await signOut(auth);form.reset();countrySelect.value="BD";submit.disabled=false;submit.textContent="Create Account & Verify Gmail";
- successModalEmail.textContent=registeredEmail;successModal.classList.add("is-open");document.getElementById("closeSuccessModal").focus();
- }catch(err){message.style.color="#dc6262";const friendlyMessages={"auth/email-already-in-use":"This Gmail is already registered. Please log in or use another Gmail address.","auth/invalid-email":"Please enter a valid Gmail address.","auth/weak-password":"Please choose a stronger password.","auth/too-many-requests":"Too many attempts. Please wait a moment and try again.","auth/network-request-failed":"Connection problem. Please check your internet and try again.","permission-denied":"We couldn't save your account details. Please try again later.","unavailable":"Connection problem. Please try again in a moment."};message.textContent=friendlyMessages[err.code]||"We couldn't complete your registration. Please try again.";submit.disabled=false;submit.textContent="Create Account & Verify Gmail";}
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const form = document.getElementById("authForm");
+const message = document.getElementById("authMessage");
+const submit = document.getElementById("createAccount");
+const countrySelect = document.getElementById("countrySelect");
+const successModal = document.getElementById("successModal");
+const successModalEmail = document.getElementById("successModalEmail");
+
+document.getElementById("closeSuccessModal").addEventListener("click", () => successModal.classList.remove("is-open"));
+successModal.addEventListener("click", event => {
+  if (event.target === successModal) successModal.classList.remove("is-open");
+});
+
+const countries = [
+["Bangladesh","BD","+880","BDT","৳"],["United States","US","+1","USD","$"],["United Kingdom","GB","+44","GBP","£"],["India","IN","+91","INR","₹"],["Pakistan","PK","+92","PKR","₨"],["United Arab Emirates","AE","+971","AED","د.إ"],["Saudi Arabia","SA","+966","SAR","﷼"],["Canada","CA","+1","CAD","$"],["Australia","AU","+61","AUD","$"],["Germany","DE","+49","EUR","€"],["France","FR","+33","EUR","€"],["Italy","IT","+39","EUR","€"],["Spain","ES","+34","EUR","€"],["Netherlands","NL","+31","EUR","€"],["Ireland","IE","+353","EUR","€"],["Portugal","PT","+351","EUR","€"],["Switzerland","CH","+41","CHF","Fr"],["Japan","JP","+81","JPY","¥"],["China","CN","+86","CNY","¥"],["South Korea","KR","+82","KRW","₩"],["Singapore","SG","+65","SGD","$"],["Malaysia","MY","+60","MYR","RM"],["Indonesia","ID","+62","IDR","Rp"],["Thailand","TH","+66","THB","฿"],["Philippines","PH","+63","PHP","₱"],["Nepal","NP","+977","NPR","रु"],["Sri Lanka","LK","+94","LKR","Rs"],["Turkey","TR","+90","TRY","₺"],["South Africa","ZA","+27","ZAR","R"],["Nigeria","NG","+234","NGN","₦"],["Kenya","KE","+254","KES","KSh"],["Egypt","EG","+20","EGP","E£"],["New Zealand","NZ","+64","NZD","$"],["Mexico","MX","+52","MXN","$"],["Brazil","BR","+55","BRL","R$"],["Sweden","SE","+46","SEK","kr"],["Norway","NO","+47","NOK","kr"],["Denmark","DK","+45","DKK","kr"],["Russia","RU","+7","RUB","₽"],["Afghanistan","AF","+93","AFN","؋"],["Qatar","QA","+974","QAR","ر.ق"],["Kuwait","KW","+965","KWD","د.ك"],["Oman","OM","+968","OMR","ر.ع."],["Bahrain","BH","+973","BHD","د.ب"],["Jordan","JO","+962","JOD","د.ا"],["Ghana","GH","+233","GHS","₵"],["Uganda","UG","+256","UGX","USh"],["Tanzania","TZ","+255","TZS","TSh"],["Morocco","MA","+212","MAD","د.م."],["Argentina","AR","+54","ARS","$"],["Chile","CL","+56","CLP","$"],["Colombia","CO","+57","COP","$"],["Poland","PL","+48","PLN","zł"],["Ukraine","UA","+380","UAH","₴"],["Israel","IL","+972","ILS","₪"],["Hong Kong","HK","+852","HKD","$"],["Taiwan","TW","+886","TWD","$"],["Vietnam","VN","+84","VND","₫"],["Cambodia","KH","+855","KHR","៛"],["Myanmar","MM","+95","MMK","K"],["Ethiopia","ET","+251","ETB","Br"]
+];
+countries.forEach(country => {
+  const option = document.createElement("option");
+  option.value = country[1];
+  option.textContent = country[0];
+  option.dataset.currency = country[3];
+  option.dataset.symbol = country[4];
+  option.dataset.dial = country[2];
+  countrySelect.append(option);
+});
+countrySelect.value = "BD";
+
+form.addEventListener("submit", async event => {
+  event.preventDefault();
+  message.textContent = "";
+  message.style.color = "";
+
+  const email = form.email.value.trim().toLowerCase();
+  const firstName = form.firstName.value.trim();
+  const lastName = form.lastName.value.trim();
+  const password = form.password.value;
+  if (!email.endsWith("@gmail.com")) {
+    message.textContent = "Please register with a Gmail address ending in @gmail.com.";
+    return;
+  }
+  if (password !== form.confirmPassword.value) {
+    message.textContent = "Passwords do not match.";
+    return;
+  }
+  const strong = /[A-Z]/.test(password) && /[a-z]/.test(password) && /[0-9]/.test(password) && /[^A-Za-z0-9]/.test(password);
+  if (password.length < 8 || !strong) {
+    message.textContent = "Password must have 8+ characters with uppercase, lowercase, number and symbol.";
+    return;
+  }
+
+  submit.disabled = true;
+  submit.textContent = "Creating account...";
+  try {
+    const country = countries.find(item => item[1] === countrySelect.value);
+    if (!country) throw new Error("Please select your country.");
+    const fullName = firstName + " " + lastName;
+    const credential = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(credential.user, { displayName: fullName });
+
+    // Store only basic registration details. The server creates the Account ID and wallet.
+    await setDoc(doc(db, "userProfiles", credential.user.uid), {
+      uid: credential.user.uid,
+      firstName,
+      lastName,
+      fullName,
+      email: credential.user.email,
+      phone: null,
+      country: country[0],
+      countryCode: country[1],
+      currencyCode: country[3],
+      currencySymbol: country[4],
+      emailVerified: false,
+      phoneVerified: false,
+      createdAt: serverTimestamp()
+    });
+
+    await sendEmailVerification(credential.user);
+    const registeredEmail = credential.user.email;
+    await signOut(auth);
+    form.reset();
+    countrySelect.value = "BD";
+    submit.disabled = false;
+    submit.textContent = "Create Account & Verify Gmail";
+    successModalEmail.textContent = registeredEmail;
+    successModal.classList.add("is-open");
+    document.getElementById("closeSuccessModal").focus();
+  } catch (error) {
+    console.error("FastMoney signup failed:", error);
+    const friendlyMessages = {
+      "auth/email-already-in-use": "This Gmail is already registered. Please log in or use another Gmail address.",
+      "auth/invalid-email": "Please enter a valid Gmail address.",
+      "auth/weak-password": "Please choose a stronger password.",
+      "auth/too-many-requests": "Too many attempts. Please wait a moment and try again.",
+      "auth/network-request-failed": "Connection problem. Please check your internet and try again.",
+      "permission-denied": "We couldn't save your registration details. Please try again later.",
+      "unavailable": "Connection problem. Please try again in a moment."
+    };
+    message.style.color = "#dc6262";
+    message.textContent = friendlyMessages[error.code] || error.message || "We couldn't complete your registration. Please try again.";
+    submit.disabled = false;
+    submit.textContent = "Create Account & Verify Gmail";
+  }
 });
 </script><footer class="met-footer" aria-label="FastMoney footer"><div class="met-footer-inner"><a href="./index.html" class="met-footer-logo" aria-label="FastMoney home"><img src="./assets/fastmoneylogo.png" alt="FastMoney" width="210" height="62" loading="lazy"></a><nav class="met-footer-links" aria-label="Footer navigation"><a href="./about.html">About</a><a href="./affiliate.html">Affiliate</a><a href="./terms-and-conditions.html">Terms</a><a href="./privacy-policy.html">Privacy</a><a href="./guidelines.html">Guidelines</a><a href="./licence.html">Licence</a><a href="./help.html">Help &amp; FAQ</a></nav><div class="met-footer-bottom"><span>© <span id="footerYear">2026</span> FastMoney</span><span>Digital exchange, made clear.</span></div></div></footer><script>document.getElementById("footerYear").textContent=new Date().getFullYear();</script>
 <script src="./language.js?v=1" defer></script>
