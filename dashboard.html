@@ -1437,6 +1437,32 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
   }
 }
 
+/* Full-width wallet slider rail: no outer frame, margin, or padding. */
+.wallet-scroller{
+  display:flex!important;
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:100%!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  gap:12px!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+}
+.wallet-scroller>.wallet-item,
+.wallet-scroller>.pay-id-card{
+  box-sizing:border-box!important;
+  flex:0 0 100%!important;
+  width:100%!important;
+  min-width:100%!important;
+  max-width:100%!important;
+}
+.wallet-scroller>.pay-id-card{margin:0!important}
+
 /* Automatic local-currency Pay ID card. */
 .pay-id-card{margin:0 0 18px;padding:17px 18px;border:1px solid #d9e6ee;border-radius:18px;background:linear-gradient(120deg,#102b50,#176b83 62%,#159d91);color:#fff;box-shadow:0 9px 23px rgba(14,39,65,.13);overflow:hidden}
 .pay-id-top{display:flex;align-items:center;gap:11px}
