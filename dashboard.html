@@ -429,54 +429,165 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, updateDoc, setDoc, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
-const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
-const dashboard=document.getElementById("dashboard");
-const currencyNames={BDT:"Bangladeshi Taka",USD:"US Dollar",GBP:"British Pound",INR:"Indian Rupee",PKR:"Pakistani Rupee",AED:"UAE Dirham",SAR:"Saudi Riyal",CAD:"Canadian Dollar",AUD:"Australian Dollar",EUR:"Euro",CHF:"Swiss Franc",JPY:"Japanese Yen",CNY:"Chinese Yuan",KRW:"South Korean Won",SGD:"Singapore Dollar",MYR:"Malaysian Ringgit",IDR:"Indonesian Rupiah",THB:"Thai Baht",PHP:"Philippine Peso",NPR:"Nepalese Rupee",LKR:"Sri Lankan Rupee",TRY:"Turkish Lira",ZAR:"South African Rand",NGN:"Nigerian Naira",KES:"Kenyan Shilling",EGP:"Egyptian Pound",NZD:"New Zealand Dollar",MXN:"Mexican Peso",BRL:"Brazilian Real",SEK:"Swedish Krona",NOK:"Norwegian Krone",DKK:"Danish Krone",RUB:"Russian Ruble",AFN:"Afghan Afghani",QAR:"Qatari Riyal",KWD:"Kuwaiti Dinar",OMR:"Omani Rial",BHD:"Bahraini Dinar",JOD:"Jordanian Dinar",GHS:"Ghanaian Cedi",UGX:"Ugandan Shilling",TZS:"Tanzanian Shilling",MAD:"Moroccan Dirham",ARS:"Argentine Peso",CLP:"Chilean Peso",COP:"Colombian Peso",PLN:"Polish Zloty",UAH:"Ukrainian Hryvnia",ILS:"Israeli Shekel",HKD:"Hong Kong Dollar",TWD:"New Taiwan Dollar",VND:"Vietnamese Dong",KHR:"Cambodian Riel",MMK:"Myanmar Kyat",ETB:"Ethiopian Birr"};
-const currencySymbols={BDT:"৳",USD:"$",GBP:"£",INR:"₹",PKR:"₨",AED:"د.إ",SAR:"﷼",EUR:"€",CHF:"Fr",JPY:"¥",CNY:"¥",KRW:"₩",THB:"฿",PHP:"₱",TRY:"₺",ZAR:"R",NGN:"₦",EGP:"E£",BRL:"R$",RUB:"₽",GHS:"₵",VND:"₫",ILS:"₪"};
-let activeProfileRef=null;
-async function createUniqueFastMoneyId(uid){
- for(let attempt=0;attempt<20;attempt++){
-  const bytes=crypto.getRandomValues(new Uint8Array(15));
-  let code=String((bytes[0]%9)+1);
-  for(let i=1;i<15;i++)code+=String(bytes[i]%10);
-  const ref=doc(db,"fastMoneyAccountIds",code);
-  const reserved=await runTransaction(db,async tx=>{
-   const existing=await tx.get(ref);
-   if(existing.exists())return false;
-   tx.set(ref,{createdAt:serverTimestamp()});
-   return true;
-  });
-  if(reserved)return code;
- }
- throw new Error("Could not generate a unique 15-digit FastMoney ID. Please try again.");
-}
-function setVerification(el,verified,label){el.classList.toggle("unverified",!verified);el.innerHTML='<i class="fa-solid '+(verified?"fa-circle-check":"fa-circle-exclamation")+'"></i> '+label+' '+(verified?"verified":"unverified");}
-onAuthStateChanged(auth,async user=>{
-  if(!user){location.replace("/login.html?next=%2Fdashboard.html");return;}
 
-  try{
+const CORE_API = "https://fastmoney-core-api.taijulsheikh60.workers.dev";
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const currencyNames = {
+  BDT:"Bangladeshi Taka", USD:"US Dollar", GBP:"British Pound", INR:"Indian Rupee",
+  PKR:"Pakistani Rupee", AED:"UAE Dirham", SAR:"Saudi Riyal", CAD:"Canadian Dollar",
+  AUD:"Australian Dollar", EUR:"Euro", CHF:"Swiss Franc", JPY:"Japanese Yen",
+  CNY:"Chinese Yuan", KRW:"South Korean Won", SGD:"Singapore Dollar", MYR:"Malaysian Ringgit",
+  IDR:"Indonesian Rupiah", THB:"Thai Baht", PHP:"Philippine Peso", NPR:"Nepalese Rupee",
+  LKR:"Sri Lankan Rupee", TRY:"Turkish Lira", ZAR:"South African Rand", NGN:"Nigerian Naira",
+  KES:"Kenyan Shilling", EGP:"Egyptian Pound", NZD:"New Zealand Dollar", MXN:"Mexican Peso",
+  BRL:"Brazilian Real", SEK:"Swedish Krona", NOK:"Norwegian Krone", DKK:"Danish Krone",
+  RUB:"Russian Ruble", AFN:"Afghan Afghani", QAR:"Qatari Riyal", KWD:"Kuwaiti Dinar",
+  OMR:"Omani Rial", BHD:"Bahraini Dinar", JOD:"Jordanian Dinar", GHS:"Ghanaian Cedi",
+  UGX:"Ugandan Shilling", TZS:"Tanzanian Shilling", MAD:"Moroccan Dirham", ARS:"Argentine Peso",
+  CLP:"Chilean Peso", COP:"Colombian Peso", PLN:"Polish Zloty", UAH:"Ukrainian Hryvnia",
+  ILS:"Israeli Shekel", HKD:"Hong Kong Dollar", TWD:"New Taiwan Dollar", VND:"Vietnamese Dong",
+  KHR:"Cambodian Riel", MMK:"Myanmar Kyat", ETB:"Ethiopian Birr"
+};
+const currencySymbols = {
+  BDT:"৳", USD:"$", GBP:"£", INR:"₹", PKR:"₨", AED:"د.إ", SAR:"﷼", EUR:"€",
+  CHF:"Fr", JPY:"¥", CNY:"¥", KRW:"₩", THB:"฿", PHP:"₱", TRY:"₺", ZAR:"R",
+  NGN:"₦", EGP:"E£", BRL:"R$", RUB:"₽", GHS:"₵", VND:"₫", ILS:"₪"
+};
+
+function formatBalance(value) {
+  const number = Number(value);
+  return (Number.isFinite(number) ? number : 0).toLocaleString("en-US", {
+    minimumFractionDigits: 3,
+    maximumFractionDigits: 3
+  });
+}
+function showAccountMessage(message, isError = false) {
+  let notice = document.getElementById("fastMoneyAccountNotice");
+  if (!notice) {
+    notice = document.createElement("div");
+    notice.id = "fastMoneyAccountNotice";
+    notice.style.cssText = "margin:14px 0;padding:12px 15px;border-radius:11px;font-size:13px;line-height:1.6;border:1px solid;";
+    const wallet = document.querySelector(".wallet-overview");
+    if (wallet) wallet.insertAdjacentElement("beforebegin", notice);
+    else document.getElementById("dashboard")?.prepend(notice);
+  }
+  notice.style.background = isError ? "#fff1f2" : "#ecfdf5";
+  notice.style.borderColor = isError ? "#fecdd3" : "#a7f3d0";
+  notice.style.color = isError ? "#9f1239" : "#065f46";
+  notice.textContent = message;
+}
+async function coreRequest(path, token, method = "GET") {
+  const response = await fetch(CORE_API + path, {
+    method,
+    headers: {
+      Authorization: "Bearer " + token,
+      ...(method === "POST" ? { "Content-Type": "application/json" } : {})
+    },
+    ...(method === "POST" ? { body: "{}" } : {})
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || data.success !== true) {
+    throw new Error(data.error || "FastMoney server request failed. Please try again.");
+  }
+  return data;
+}
+function setVerification(verified) {
+  const el = document.getElementById("navAccountVerify");
+  el.classList.toggle("unverified", !verified);
+  el.innerHTML = verified
+    ? '<i class="fa-solid fa-circle-check"></i> VERIFIED'
+    : '<i class="fa-solid fa-circle-exclamation"></i> UNVERIFIED';
+  el.title = verified ? "Email verified" : "Open your profile to verify your email";
+}
+function renderWallet(wallet, profile) {
+  const balances = wallet?.balances || {};
+  const localCode = String(profile.currencyCode || "BDT").toUpperCase();
+  const localSymbol = profile.currencySymbol || currencySymbols[localCode] || (localCode + " ");
+  const usd = Number(balances.USD || 0);
+  const local = Number(balances[localCode] || 0);
+
+  document.getElementById("localCurrencyLabel").textContent = localCode;
+  document.getElementById("localCurrencyBalance").textContent = localSymbol + formatBalance(local);
+  document.querySelector(".wallet-total-item strong").textContent = "$" + formatBalance(usd);
+  document.getElementById("localWalletName").textContent = localCode;
+  document.getElementById("localWalletDescription").textContent = currencyNames[localCode] || profile.country || "Local Currency";
+
+  document.querySelectorAll(".wallet-item").forEach(card => {
+    const name = card.querySelector(".wallet-name")?.textContent.trim();
+    const amount = card.querySelector("strong");
+    if (!amount) return;
+    let code = "";
+    if (name === "FastMoney USD" || name === "USD") code = "USD";
+    else if (name === "USDT") code = "USDT";
+    else if (name === localCode || card.classList.contains("wallet-bdt")) code = localCode;
+    amount.textContent = formatBalance(balances[code] || 0);
+    if (name === "FastMoney USD") amount.textContent = "$" + formatBalance(balances.USD || 0);
+  });
+}
+
+onAuthStateChanged(auth, async user => {
+  if (!user) {
+    location.replace("/login.html?next=%2Fdashboard.html");
+    return;
+  }
+
+  try {
     await user.reload();
-    activeProfileRef=doc(db,"userProfiles",user.uid);const snap=await getDoc(activeProfileRef);const p=snap.exists()?snap.data():{};if(!/^\d{15}$/.test(String(p.accountId||""))){p.accountId=await createUniqueFastMoneyId(user.uid);await setDoc(activeProfileRef,{uid:user.uid,accountId:p.accountId,email:user.email||""},{merge:true});}
-    const first=p.firstName||user.displayName?.split(" ")[0]||"User",last=p.lastName||user.displayName?.split(" ").slice(1).join(" ")||"";
-    document.getElementById("navAccountName").textContent=p.accountId||"ID pending";
-    document.getElementById("navAccountEmail").textContent=user.email||"";
-    document.getElementById("navAccountAvatar").textContent=(first[0]||"U").toUpperCase();
-    const verifyBtn=document.getElementById("navAccountVerify");
-    verifyBtn.classList.toggle("unverified",!user.emailVerified);
-    verifyBtn.innerHTML=user.emailVerified?'<i class="fa-solid fa-circle-check"></i> VERIFIED':'<i class="fa-solid fa-circle-exclamation"></i> UNVERIFIED';
-    verifyBtn.title=user.emailVerified?"Gmail verified":"Open your profile to verify Gmail";
-    const code=p.currencyCode||"BDT",symbol=p.currencySymbol||currencySymbols[code]||code+" ";
-    document.getElementById("localCurrencyLabel").textContent=code;document.getElementById("localCurrencyBalance").textContent=symbol+"0.000";
-    document.getElementById("localWalletName").textContent=code;document.getElementById("localWalletDescription").textContent=currencyNames[code]||p.country||"Local Currency";
-  }catch(error){console.error("Could not load account information:",error);document.getElementById("navAccountName").textContent="ID unavailable";document.getElementById("navAccountEmail").textContent=user.email||"";}
-  document.body.classList.add("fm-auth-ready");
+    const profileRef = doc(db, "userProfiles", user.uid);
+    const profileSnap = await getDoc(profileRef);
+    const profile = profileSnap.exists() ? profileSnap.data() : {};
+    const firstName = profile.firstName || user.displayName?.split(" ")[0] || "User";
+
+    document.getElementById("navAccountName").textContent =
+      /^\d{15}$/.test(String(profile.accountId || "")) ? profile.accountId : "Account setup pending";
+    document.getElementById("navAccountEmail").textContent = user.email || "";
+    document.getElementById("navAccountAvatar").textContent = (firstName[0] || "U").toUpperCase();
+    setVerification(user.emailVerified === true);
+
+    if (user.emailVerified !== true) {
+      showAccountMessage("Please verify your email address first. After verification, sign in again to activate your FastMoney account and load your wallet.", true);
+      document.body.classList.add("fm-auth-ready");
+      return;
+    }
+
+    const token = await user.getIdToken(true);
+    const bootstrap = await coreRequest("/api/account/bootstrap", token, "POST");
+    if (!/^\d{15}$/.test(String(bootstrap.accountId || ""))) {
+      throw new Error("The server did not return a valid FastMoney Account ID.");
+    }
+
+    document.getElementById("navAccountName").textContent = bootstrap.accountId;
+    const walletResult = await coreRequest("/api/wallet/me", token);
+    renderWallet(walletResult.wallet, profile);
+    showAccountMessage("Your FastMoney account and wallet have been loaded securely.");
+  } catch (error) {
+    console.error("FastMoney dashboard initialization failed:", error);
+    showAccountMessage(error.message || "Could not load your account. Please refresh and try again.", true);
+    if (document.getElementById("navAccountName").textContent === "Loading ID…") {
+      document.getElementById("navAccountName").textContent = "Account unavailable";
+    }
+  } finally {
+    document.body.classList.add("fm-auth-ready");
+  }
 });
-document.getElementById("logoutBtn").addEventListener("click",async()=>{
-  const button=document.getElementById("logoutBtn");button.disabled=true;button.textContent="Logging out...";
-  try{await signOut(auth);location.replace("/login.html");}
-  catch(error){button.disabled=false;button.textContent="Log Out";alert("Could not log out. Please try again.");}
+
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+  const button = document.getElementById("logoutBtn");
+  button.disabled = true;
+  button.textContent = "Logging out...";
+  try {
+    await signOut(auth);
+    location.replace("/login.html");
+  } catch (error) {
+    button.disabled = false;
+    button.textContent = "Log Out";
+    alert("Could not log out. Please try again.");
+  }
 });
 </script>
 <script>
