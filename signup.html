@@ -154,7 +154,7 @@ html,body{background:#f4f8fc!important;color:#18324b!important}
 <label class="auth-field">Your Country<select name="country" id="countrySelect" required><option value="">Select your country</option></select></label>
 <label class="auth-field">Create Password<div class="password-row"><input name="password" id="password" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" required></div><small class="auth-note">Use 8+ characters with uppercase, lowercase, number and symbol.</small></label>
 <label class="auth-field">Confirm Password<input name="confirmPassword" type="password" autocomplete="new-password" minlength="8" placeholder="Re-enter password" required></label>
-<button class="auth-submit" id="createAccount" type="submit" >Create Account &amp; Verify Gmail</button>
+<button class="auth-submit" id="createAccount" type="submit" >Create Account</button>
 </form>
 <p class="auth-message" id="authMessage" role="status" aria-live="polite"></p>
 <p class="auth-switch">Already registered? <a href="/login.html">Login</a></p>
@@ -162,14 +162,14 @@ html,body{background:#f4f8fc!important;color:#18324b!important}
 
 <div class="success-modal" id="successModal" role="dialog" aria-modal="true" aria-labelledby="successModalTitle" aria-describedby="successModalText">
  <div class="success-modal-card"><div class="success-modal-icon"><i class="fa-solid fa-envelope-circle-check"></i></div>
- <h2 id="successModalTitle">Check Your Gmail!</h2>
- <p id="successModalText">Your account was created successfully. We have sent a verification link to this Gmail address. Open your inbox and click the link to complete registration.</p>
+ <h2 id="successModalTitle">Account Created Successfully</h2>
+ <p id="successModalText">Your FastMoney account has been created successfully. You can now log in without email confirmation during the testing period.</p>
  <span class="success-modal-email" id="successModalEmail"></span>
  <div class="success-modal-actions"><a class="success-modal-login" href="/login.html">Go to Login</a><button class="success-modal-close" id="closeSuccessModal" type="button">Got it</button></div></div>
 </div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 
@@ -251,13 +251,11 @@ form.addEventListener("submit", async event => {
       createdAt: serverTimestamp()
     });
 
-    await sendEmailVerification(credential.user);
     const registeredEmail = credential.user.email;
-    await signOut(auth);
     form.reset();
     countrySelect.value = "BD";
     submit.disabled = false;
-    submit.textContent = "Create Account & Verify Gmail";
+    submit.textContent = "Create Account";
     successModalEmail.textContent = registeredEmail;
     successModal.classList.add("is-open");
     document.getElementById("closeSuccessModal").focus();
