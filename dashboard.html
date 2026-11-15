@@ -713,6 +713,9 @@ function setVerification(verified) {
   el.title = verified ? "Email verified" : "Email confirmation is temporarily disabled during testing";
 }
 function renderWallet(wallet, profile) {
+  // Keep exactly one signup-country currency wallet in the swipe slider.
+  const localWalletCards = document.querySelectorAll(".wallet-scroller > .wallet-item.wallet-bdt");
+  localWalletCards.forEach((card, index) => { if (index > 0) card.remove(); });
   const balances = wallet?.balances || {};
   const localCode = String(profile?.currencyCode || "").trim().toUpperCase();
   const localSymbol = profile?.currencySymbol || currencySymbols[localCode] || localCode;
