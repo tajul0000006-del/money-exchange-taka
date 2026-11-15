@@ -275,7 +275,7 @@ form.addEventListener("submit", async event => {
         body: "{}"
       });
       const bootstrap = await response.json().catch(() => ({}));
-      if (response.ok && bootstrap.success === true && /^(?:FM-[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{6}|\d{15})$/.test(String(bootstrap.accountId || ""))) {
+      if (response.ok && bootstrap.success === true && /^\d{10}$/.test(String(bootstrap.accountId || ""))) {
         accountId = bootstrap.accountId;
       }
     } catch (bootstrapError) {
