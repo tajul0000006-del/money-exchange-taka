@@ -45,7 +45,8 @@ service cloud.firestore {
                     && request.resource.data.keys().hasOnly([
                       'uid','firstName','lastName','fullName','email','phone',
                       'country','countryCode','currencyCode','currencySymbol',
-                      'emailVerified','phoneVerified','createdAt'
+                      'signupCountry','signupCountryCode','signupCurrencyCode','signupCurrencySymbol',
+                      'emailVerified','phoneVerified','notifications','createdAt'
                     ])
                     && request.resource.data.keys().hasAll([
                       'uid','firstName','lastName','fullName','email','country',
@@ -57,7 +58,8 @@ service cloud.firestore {
       allow update: if request.auth != null
                     && request.auth.uid == userId
                     && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
-                      'dateOfBirth','gender','address','city','state','postalCode'
+                      'dateOfBirth','gender','address','city','state','postalCode',
+                      'notifications'
                     ]);
       allow delete: if false;
     }
