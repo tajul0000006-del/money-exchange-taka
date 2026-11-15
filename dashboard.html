@@ -27,6 +27,11 @@
 .dash-btn.secondary{background:#eff6ff;color:#1d4ed8}
 .dash-note{margin-top:18px;padding:15px 17px;border-left:4px solid #0d9488;background:#ecfdf5;color:#285b53;border-radius:10px;font-size:13px;line-height:1.65}
 #loading{padding:70px 20px;text-align:center;color:#64748b}
+.refresh-indicator{position:fixed;top:10px;left:50%;z-index:99999;width:30px;height:30px;padding:5px;display:grid;place-items:center;transform:translateX(-50%);border-radius:50%;background:rgba(255,255,255,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.refresh-spinner{display:block;width:20px;height:20px;border:2.5px solid rgba(8,127,145,.18);border-top-color:#087f91;border-right-color:#16a38a;border-radius:50%;animation:fmRefreshSpin .72s linear infinite}
+@keyframes fmRefreshSpin{to{transform:rotate(360deg)}}
+body:not(.fm-auth-ready) .dashboard-language-control{visibility:hidden!important;pointer-events:none!important}
+@media(prefers-color-scheme:dark){.refresh-indicator{background:rgba(11,25,42,.82)}.refresh-spinner{border-color:rgba(120,214,220,.2);border-top-color:#78d6dc;border-right-color:#39d6b0}}
 @media(max-width:760px){.dash-grid{grid-template-columns:1fr}.dash-wrap{margin-top:22px}.welcome{padding:20px}}
 
 /* Dashboard-only premium responsive header */
@@ -329,8 +334,8 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 <link rel="stylesheet" href="./language.css?v=1">
 </head>
 <body>
-<div id="loading"><i class="fa-solid fa-spinner fa-spin"></i> Checking your account...</div>
-<main class="dash-wrap" id="dashboard" hidden>
+<div id="loading" class="refresh-indicator" role="status" aria-label="Refreshing page"><span class="refresh-spinner"></span></div>
+<main class="dash-wrap" id="dashboard">
   <header class="dashboard-header" id="dashboardHeader">
     <a class="dashboard-brand" href="/dashboard.html" aria-label="FastMoney Dashboard">
       <img src="./assets/fastmoneylogo.png" alt="FastMoney" width="204" height="54">
@@ -449,7 +454,7 @@ onAuthStateChanged(auth,async user=>{
     document.getElementById("editAddress").value=p.address||"";document.getElementById("editCity").value=p.city||"";
     document.getElementById("editState").value=p.state||"";document.getElementById("editPostal").value=p.postalCode||"";
   }catch(error){console.error("Could not load profile:",error);document.getElementById("profileEmail").textContent=user.email||"";}
-  loading.hidden=true;dashboard.hidden=false;
+  loading.hidden=true;document.body.classList.add("fm-auth-ready");
 });
 document.getElementById("saveProfile").addEventListener("click",async()=>{
  const btn=document.getElementById("saveProfile"),status=document.getElementById("profileSaveStatus");btn.disabled=true;status.textContent="Saving…";
