@@ -382,7 +382,7 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
       <a class="nav-account-summary" href="/profile.html" aria-label="Open My Account">
         <div class="nav-account-avatar" id="navAccountAvatar"><i class="fa-solid fa-user"></i></div>
         <div class="nav-account-copy">
-          <div class="nav-account-id-line"><strong id="navAccountName">Loading ID…</strong><span class="nav-account-verified unverified" id="navAccountVerify"><i class="fa-solid fa-circle-exclamation"></i> UNVERIFIED</span></div>
+          <div class="nav-account-id-line"><strong id="navAccountName">Loading ID…</strong><button class="nav-account-copy" id="copyAccountId" type="button" aria-label="Copy FastMoney ID" title="Copy FastMoney ID"><i class="fa-regular fa-copy"></i></button><span class="nav-account-verified unverified" id="navAccountVerify"><i class="fa-solid fa-circle-exclamation"></i> UNVERIFIED</span></div>
           <span class="nav-account-email" id="navAccountEmail">Loading account…</span>
         </div>
         <span class="nav-profile-open" aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
@@ -544,7 +544,7 @@ onAuthStateChanged(auth, async user => {
     const firstName = profile.firstName || user.displayName?.split(" ")[0] || "User";
 
     document.getElementById("navAccountName").textContent =
-      /^\d{15}$/.test(String(profile.accountId || "")) ? profile.accountId : "Account setup pending";
+      /^(?:FM-[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{6}|\d{15})$/.test(String(profile.accountId || "")) ? profile.accountId : "Setting up ID…";
     document.getElementById("navAccountEmail").textContent = user.email || "";
     document.getElementById("navAccountAvatar").textContent = (firstName[0] || "U").toUpperCase();
     setVerification(user.emailVerified === true);
@@ -552,11 +552,12 @@ onAuthStateChanged(auth, async user => {
     // Email confirmation is temporarily disabled while the owner tests the website.
     const token = await user.getIdToken(true);
     const bootstrap = await coreRequest("/api/account/bootstrap", token, "POST");
-    if (!/^\d{15}$/.test(String(bootstrap.accountId || ""))) {
+    if (!/^(?:FM-[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{6}|\d{15})$/.test(String(bootstrap.accountId || ""))) {
       throw new Error("The server did not return a valid FastMoney Account ID.");
     }
 
     document.getElementById("navAccountName").textContent = bootstrap.accountId;
+    document.getElementById("copyAccountId")?.setAttribute("data-copy-value", bootstrap.accountId);
     const walletResult = await coreRequest("/api/wallet/me", token);
     renderWallet(walletResult.wallet, profile);
     showAccountMessage("Your FastMoney account and wallet have been loaded securely.");
@@ -568,6 +569,20 @@ onAuthStateChanged(auth, async user => {
     }
   } finally {
     document.body.classList.add("fm-auth-ready");
+  }
+});
+
+document.getElementById("copyAccountId")?.addEventListener("click", async () => {
+  const value = document.getElementById("navAccountName")?.textContent?.trim();
+  if (!value || value === "Loading ID…" || value === "Setting up ID…" || value === "Account unavailable") return;
+  try {
+    await navigator.clipboard.writeText(value);
+    const button = document.getElementById("copyAccountId");
+    button.innerHTML = '<i class="fa-solid fa-check"></i>';
+    button.title = "Copied";
+    setTimeout(() => { button.innerHTML = '<i class="fa-regular fa-copy"></i>'; button.title = "Copy FastMoney ID"; }, 1500);
+  } catch {
+    showAccountMessage("Could not copy the ID. Please select and copy it manually.", true);
   }
 });
 
@@ -600,4 +615,4 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
 </script>
 <script src="./language.js?v=1" defer></script>
 </body></html>
-<style id="fastmoney-verification-status">.nav-account-verified{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:20px;background:#e7f8ef;color:#168052;font:800 10px Arial,sans-serif;white-space:nowrap}.nav-account-verified.unverified{background:#fff0f0!important;color:#c62828!important;border:1px solid #ffd0d0}@media(prefers-color-scheme:dark){.nav-account-verified.unverified{background:#482326!important;color:#ff9a9a!important;border-color:#71373c!important}}</style>
+<style id="fastmoney-verification-status">.nav-account-copy{width:27px;height:27px;display:inline-grid;place-items:center;flex:0 0 auto;border:1px solid #d8e5ee;border-radius:8px;background:#f3f8fb;color:#087f91;font-size:12px;cursor:pointer}.nav-account-copy:hover{background:#e4f5f5}.nav-account-id-line{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.nav-account-verified{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:20px;background:#e7f8ef;color:#168052;font:800 10px Arial,sans-serif;white-space:nowrap}.nav-account-verified.unverified{background:#fff0f0!important;color:#c62828!important;border:1px solid #ffd0d0}@media(prefers-color-scheme:dark){.nav-account-verified.unverified{background:#482326!important;color:#ff9a9a!important;border-color:#71373c!important}}</style>
