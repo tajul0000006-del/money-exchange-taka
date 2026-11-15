@@ -176,6 +176,9 @@ document.getElementById("sendOtp").addEventListener("click",async()=>{
  if(!strong){message.textContent="Password must include uppercase, lowercase, number and symbol.";return;}
  const c=countries.find(x=>x[1]===countrySelect.value),e164=dialSelect.value+phone.replace(/^0+/,"");
  const btn=document.getElementById("sendOtp");btn.disabled=true;btn.textContent="Sending...";
+ otpArea.hidden=false;
+ document.getElementById("phoneOtp").value="";
+ setStatus("Preparing SMS verification. The code entry box is ready below.");
  try{
  credential=await createUserWithEmailAndPassword(auth,email,password);
  await updateProfile(credential.user,{displayName:first+" "+last});
@@ -184,8 +187,10 @@ document.getElementById("sendOtp").addEventListener("click",async()=>{
  confirmation=await linkWithPhoneNumber(credential.user,e164,recaptcha);
  otpArea.hidden=false;setStatus("OTP sent to "+e164+". Enter the code and verify.",true);btn.textContent="OTP Sent";
  }catch(err){
- const errors={"auth/email-already-in-use":"This Gmail is already registered. Use a new Gmail address.","auth/phone-number-already-exists":"This mobile number is already registered. Use another number.","auth/invalid-phone-number":"Enter a valid mobile number.","auth/too-many-requests":"Too many attempts. Please try again later.","auth/operation-not-allowed":"Enable Email/Password and Phone sign-in in Firebase Authentication."};
- message.textContent=errors[err.code]||err.message||"Could not send OTP.";
+ const errors={"auth/email-already-in-use":"This Gmail is already registered. Use a new Gmail address.","auth/phone-number-already-exists":"This mobile number is already registered. Use another number.","auth/invalid-phone-number":"Enter a valid mobile number with country code.","auth/too-many-requests":"Firebase temporarily blocked requests. Wait before trying again.","auth/operation-not-allowed":"Enable Phone and Email/Password providers in Firebase Authentication.","auth/captcha-check-failed":"reCAPTCHA failed. Reload the page and try again.","auth/app-not-authorized":"Add this website domain to Firebase Authentication Authorized domains.","auth/quota-exceeded":"Firebase SMS quota exceeded. Check Firebase SMS limits.","auth/billing-not-enabled":"Enable billing for this Firebase project to send SMS.","auth/unauthorized-domain":"Add money-exchange-taka.taijulsheikh60.workers.dev to Firebase Authorized domains.","auth/invalid-app-credential":"Phone authentication/reCAPTCHA configuration failed. Check Firebase settings."};
+ const detail=errors[err.code]||err.message||"Could not send OTP.";
+ setStatus("SMS was not sent: "+detail);
+ message.textContent="OTP send failed ("+(err.code||"unknown")+"). "+detail;
  if(credential?.user){try{await credential.user.delete();}catch(_){}credential=null;}
  if(recaptcha){try{recaptcha.clear();}catch(_){}recaptcha=null;}
  btn.disabled=false;btn.textContent="Send OTP";
