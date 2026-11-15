@@ -437,10 +437,10 @@ const currencyNames={BDT:"Bangladeshi Taka",USD:"US Dollar",GBP:"British Pound",
 const currencySymbols={BDT:"৳",USD:"$",GBP:"£",INR:"₹",PKR:"₨",AED:"د.إ",SAR:"﷼",EUR:"€",CHF:"Fr",JPY:"¥",CNY:"¥",KRW:"₩",THB:"฿",PHP:"₱",TRY:"₺",ZAR:"R",NGN:"₦",EGP:"E£",BRL:"R$",RUB:"₽",GHS:"₵",VND:"₫",ILS:"₪"};
 let activeProfileRef=null;
 async function createUniqueFastMoneyId(uid){
- const alphabet="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
- for(let attempt=0;attempt<12;attempt++){
-  const bytes=crypto.getRandomValues(new Uint8Array(12));
-  const code="FM-"+Array.from(bytes,b=>alphabet[b%alphabet.length]).join("");
+ for(let attempt=0;attempt<20;attempt++){
+  const bytes=crypto.getRandomValues(new Uint8Array(15));
+  let code=String((bytes[0]%9)+1);
+  for(let i=1;i<15;i++)code+=String(bytes[i]%10);
   const ref=doc(db,"fastMoneyAccountIds",code);
   const reserved=await runTransaction(db,async tx=>{
    const existing=await tx.get(ref);
@@ -450,7 +450,7 @@ async function createUniqueFastMoneyId(uid){
   });
   if(reserved)return code;
  }
- throw new Error("Could not generate a unique FastMoney ID.");
+ throw new Error("Could not generate a unique 15-digit FastMoney ID. Please try again.");
 }
 function setVerification(el,verified,label){el.classList.toggle("unverified",!verified);el.innerHTML='<i class="fa-solid '+(verified?"fa-circle-check":"fa-circle-exclamation")+'"></i> '+label+' '+(verified?"verified":"unverified");}
 onAuthStateChanged(auth,async user=>{
@@ -458,7 +458,7 @@ onAuthStateChanged(auth,async user=>{
 
   try{
     await user.reload();
-    activeProfileRef=doc(db,"userProfiles",user.uid);const snap=await getDoc(activeProfileRef);const p=snap.exists()?snap.data():{};if(!p.accountId){p.accountId=await createUniqueFastMoneyId(user.uid);await setDoc(activeProfileRef,{uid:user.uid,accountId:p.accountId,email:user.email||""},{merge:true});}
+    activeProfileRef=doc(db,"userProfiles",user.uid);const snap=await getDoc(activeProfileRef);const p=snap.exists()?snap.data():{};if(!/^\\d{15}$/.test(String(p.accountId||""))){p.accountId=await createUniqueFastMoneyId(user.uid);await setDoc(activeProfileRef,{uid:user.uid,accountId:p.accountId,email:user.email||""},{merge:true});}
     const first=p.firstName||user.displayName?.split(" ")[0]||"User",last=p.lastName||user.displayName?.split(" ").slice(1).join(" ")||"";
     document.getElementById("navAccountName").textContent=p.accountId||"ID pending";
     document.getElementById("navAccountEmail").textContent=user.email||"";
