@@ -516,16 +516,21 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
   // Restore the signed-in user's last confirmed currency and balance before first paint.
   (function(){
     try {
-      let authUser = null;
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith("firebase:authUser:")) {
-          const value = JSON.parse(localStorage.getItem(key) || "null");
-          if (value && value.uid) { authUser = value; break; }
+      // Firebase may keep its auth session in IndexedDB, not localStorage.
+      // Remember the last successfully loaded UID separately so the wallet
+      // cache can be restored synchronously before Firebase finishes loading.
+      let cachedUid = localStorage.getItem("fastmoney-last-wallet-user") || "";
+      if (!cachedUid) {
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key && key.startsWith("firebase:authUser:")) {
+            const value = JSON.parse(localStorage.getItem(key) || "null");
+            if (value && value.uid) { cachedUid = value.uid; break; }
+          }
         }
       }
-      if (!authUser) return;
-      const saved = JSON.parse(localStorage.getItem("fastmoney-wallet-cache-" + authUser.uid) || "null");
+      if (!cachedUid) return;
+      const saved = JSON.parse(localStorage.getItem("fastmoney-wallet-cache-" + cachedUid) || "null");
       const profile = saved && saved.profile;
       const wallet = saved && saved.wallet;
       const code = String(profile && profile.currencyCode || "").trim().toUpperCase();
@@ -701,7 +706,18 @@ onAuthStateChanged(auth, async user => {
     await user.reload();
     const profileRef = doc(db, "userProfiles", user.uid);
     const profileSnap = await getDoc(profileRef);
-    const profile = profileSnap.exists() ? profileSnap.data() : {};
+    const serverProfile = profileSnap.exists() ? profileSnap.data() : {};
+    const previousCache = JSON.parse(localStorage.getItem(walletCacheKey) || "null");
+    const previousProfile = previousCache?.profile || {};
+    // Never let a temporarily incomplete profile response erase the saved
+    // signup currency while the dashboard is refreshing.
+    const profile = {
+      ...previousProfile,
+      ...serverProfile,
+      currencyCode: serverProfile.currencyCode || previousProfile.currencyCode || "",
+      currencySymbol: serverProfile.currencySymbol || previousProfile.currencySymbol || "",
+      country: serverProfile.country || previousProfile.country || ""
+    };
     const firstName = profile.firstName || user.displayName?.split(" ")[0] || "User";
 
     document.getElementById("navAccountName").textContent =
@@ -731,6 +747,7 @@ onAuthStateChanged(auth, async user => {
         },
         wallet: walletResult.wallet
       }));
+      localStorage.setItem("fastmoney-last-wallet-user", user.uid);
     } catch (cacheError) {
       console.warn("FastMoney wallet cache could not be saved.", cacheError);
     }
