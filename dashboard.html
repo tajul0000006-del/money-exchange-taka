@@ -648,6 +648,18 @@ onAuthStateChanged(auth, async user => {
     return;
   }
 
+  // Paint the last confirmed wallet immediately on refresh, then replace it
+  // with the latest server balance once the secure requests finish.
+  const walletCacheKey = "fastmoney-wallet-cache-" + user.uid;
+  try {
+    const cached = JSON.parse(localStorage.getItem(walletCacheKey) || "null");
+    if (cached?.profile?.currencyCode && cached?.wallet) {
+      renderWallet(cached.wallet, cached.profile);
+    }
+  } catch (cacheError) {
+    console.warn("FastMoney wallet cache could not be read.", cacheError);
+  }
+
   try {
     await user.reload();
     const profileRef = doc(db, "userProfiles", user.uid);
@@ -672,6 +684,19 @@ onAuthStateChanged(auth, async user => {
     document.getElementById("copyAccountId")?.setAttribute("data-copy-value", bootstrap.accountId);
     const walletResult = await coreRequest("/api/wallet/me", token);
     renderWallet(walletResult.wallet, profile);
+    // Keep the last successful currency code and balances visible during refresh.
+    try {
+      localStorage.setItem(walletCacheKey, JSON.stringify({
+        profile: {
+          currencyCode: String(profile.currencyCode || "").toUpperCase(),
+          currencySymbol: profile.currencySymbol || "",
+          country: profile.country || ""
+        },
+        wallet: walletResult.wallet
+      }));
+    } catch (cacheError) {
+      console.warn("FastMoney wallet cache could not be saved.", cacheError);
+    }
     // Successful account loading stays silent; only errors are shown.
   } catch (error) {
     console.error("FastMoney dashboard initialization failed:", error);
