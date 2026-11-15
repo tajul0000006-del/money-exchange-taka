@@ -299,7 +299,30 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 
 </style>
   <link rel="stylesheet" href="./responsive.css">
-<style id="fastmoney-brand-style">.fastmoney-brand{display:flex!important;align-items:center;gap:9px;flex:0 0 auto;text-decoration:none!important;color:#102a43!important;white-space:nowrap}.fastmoney-mark{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:linear-gradient(145deg,#087b8c,#075b68);color:#fff;font-size:25px;font-weight:900}.fastmoney-word{display:flex;flex-direction:column;font-size:21px;line-height:1.05;font-weight:850;letter-spacing:-.7px}.fastmoney-word b{color:#087b8c}.fastmoney-word small{margin-top:4px;font-size:8px;letter-spacing:1.35px;color:#718096;font-weight:800}.fastmoney-legal-links{display:flex;justify-content:center;gap:12px 22px;flex-wrap:wrap;padding:16px 18px;border-top:1px solid #e5edf2;background:#fff;font:600 13px/1.5 system-ui,sans-serif}.fastmoney-legal-links a{color:#426174;text-decoration:none}</style>
+<style id="fastmoney-brand-style">.fastmoney-brand{display:flex!important;align-items:center;gap:9px;flex:0 0 auto;text-decoration:none!important;color:#102a43!important;white-space:nowrap}.fastmoney-mark{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:linear-gradient(145deg,#087b8c,#075b68);color:#fff;font-size:25px;font-weight:900}.fastmoney-word{display:flex;flex-direction:column;font-size:21px;line-height:1.05;font-weight:850;letter-spacing:-.7px}.fastmoney-word b{color:#087b8c}.fastmoney-word small{margin-top:4px;font-size:8px;letter-spacing:1.35px;color:#718096;font-weight:800}.fastmoney-legal-links{display:flex;justify-content:center;gap:12px 22px;flex-wrap:wrap;padding:16px 18px;border-top:1px solid #e5edf2;background:#fff;font:600 13px/1.5 system-ui,sans-serif}.fastmoney-legal-links a{color:#426174;text-decoration:none}
+/* Header profile icon removed; language picker is a clean icon-only control */
+.dashboard-header .dashboard-language-control{
+ position:relative!important;width:42px!important;min-width:42px!important;height:42px!important;
+ display:grid!important;place-items:center!important;gap:0!important;padding:0!important;
+ border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;
+ color:inherit!important;cursor:pointer!important;
+}
+.dashboard-header .dashboard-language-control>i:first-child{
+ display:block!important;margin:0!important;font-size:20px!important;color:#087f91!important;pointer-events:none!important;
+}
+.dashboard-header .dashboard-language-control .fm-language-chevron{display:none!important}
+.dashboard-header .dashboard-language-control select.fm-language-select{
+ position:absolute!important;inset:0!important;width:100%!important;max-width:none!important;height:100%!important;
+ margin:0!important;padding:0!important;border:0!important;border-radius:0!important;outline:0!important;
+ background:transparent!important;color:transparent!important;font-size:16px!important;opacity:0!important;
+ cursor:pointer!important;appearance:none!important;-webkit-appearance:none!important;
+}
+@media(prefers-color-scheme:dark){
+ .dashboard-header .dashboard-language-control{background:transparent!important;border:0!important;box-shadow:none!important}
+ .dashboard-header .dashboard-language-control>i:first-child{color:#82dfdc!important}
+}
+
+</style>
 <link rel="stylesheet" href="./language.css?v=1">
 </head>
 <body>
@@ -310,7 +333,6 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
       <img src="./assets/fastmoneylogo.png" alt="FastMoney" width="204" height="54">
     </a>
     <div class="dashboard-header-actions">
-      <button class="dashboard-icon-btn profile-nav-trigger" id="headerProfileToggle" type="button" aria-label="Open profile in navigation" title="My profile"><i class="fa-solid fa-user" aria-hidden="true"></i></button>
       <button class="dashboard-icon-btn notification-trigger" id="notificationToggle" type="button" aria-label="Transaction notifications" aria-expanded="false" title="Transaction notifications">
         <i class="fa-solid fa-bell" aria-hidden="true"></i><span class="notification-dot" aria-hidden="true"></span>
       </button>
@@ -444,7 +466,6 @@ document.getElementById("logoutBtn").addEventListener("click",async()=>{
  const menu=document.getElementById("dashboardMenu");
  const noticeBtn=document.getElementById("notificationToggle");
  const notice=document.getElementById("notificationPopover");
- const headerProfileBtn=document.getElementById("headerProfileToggle");
  const profilePanel=document.getElementById("navProfilePanel");
  const profileToggle=document.getElementById("navProfileToggle");
  const emailToggle=document.getElementById("navAccountEmail");
@@ -452,7 +473,6 @@ document.getElementById("logoutBtn").addEventListener("click",async()=>{
  function openMenu(showProfile){closePanels();menu.hidden=false;menuBtn.setAttribute("aria-expanded","true");if(showProfile)profilePanel.hidden=false;}
  function toggleProfile(){const opening=profilePanel.hidden;openMenu(opening);profilePanel.hidden=!opening;}
  menuBtn.addEventListener("click",function(){const opening=menu.hidden;closePanels();menu.hidden=!opening;menuBtn.setAttribute("aria-expanded",String(opening));});
- headerProfileBtn.addEventListener("click",toggleProfile);
  profileToggle.addEventListener("click",toggleProfile);
  emailToggle.addEventListener("click",toggleProfile);
  noticeBtn.addEventListener("click",function(){const opening=notice.hidden;closePanels();notice.hidden=!opening;noticeBtn.setAttribute("aria-expanded",String(opening));});
