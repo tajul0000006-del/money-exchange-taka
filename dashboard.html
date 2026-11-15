@@ -1167,3 +1167,56 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
   }
 }
 </style>
+
+
+<style id="fastmoney-header-equal-element-height">
+/* Logo, notification, language and header navigation controls share one exact height. */
+.dashboard-header{align-items:center!important}
+.dashboard-header .dashboard-brand,
+.dashboard-header .dashboard-header-actions,
+.dashboard-header .desktop-nav{height:44px!important;min-height:44px!important;align-items:center!important}
+.dashboard-header .dashboard-brand img{
+  display:block!important;
+  width:auto!important;
+  height:44px!important;
+  max-height:44px!important;
+  object-fit:contain!important;
+}
+.dashboard-header .dashboard-header-actions .dashboard-icon-btn,
+.dashboard-header .dashboard-header-actions .notification-trigger,
+.dashboard-header .dashboard-header-actions .dashboard-language-control,
+.dashboard-header .dashboard-header-actions .fm-language-control,
+.dashboard-header .desktop-nav .dashboard-icon-btn,
+.dashboard-header .desktop-nav .notification-trigger,
+.dashboard-header .desktop-nav .dashboard-language-control,
+.dashboard-header .desktop-nav .fm-language-control{
+  height:44px!important;
+  min-height:44px!important;
+  max-height:44px!important;
+  box-sizing:border-box!important;
+  align-self:center!important;
+}
+.dashboard-header .dashboard-menu-toggle{height:44px!important;min-height:44px!important;max-height:44px!important}
+@media(max-width:760px){
+  .dashboard-header .dashboard-brand,
+  .dashboard-header .dashboard-header-actions,
+  .dashboard-header .desktop-nav{height:39px!important;min-height:39px!important}
+  .dashboard-header .dashboard-brand img{
+    height:39px!important;
+    max-height:39px!important;
+  }
+  .dashboard-header .dashboard-header-actions .dashboard-icon-btn,
+  .dashboard-header .dashboard-header-actions .notification-trigger,
+  .dashboard-header .dashboard-header-actions .dashboard-language-control,
+  .dashboard-header .dashboard-header-actions .fm-language-control,
+  .dashboard-header .desktop-nav .dashboard-icon-btn,
+  .dashboard-header .desktop-nav .notification-trigger,
+  .dashboard-header .desktop-nav .dashboard-language-control,
+  .dashboard-header .desktop-nav .fm-language-control,
+  .dashboard-header .dashboard-menu-toggle{
+    height:39px!important;
+    min-height:39px!important;
+    max-height:39px!important;
+  }
+}
+</style>
