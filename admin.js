@@ -472,17 +472,18 @@ import { firebaseConfig } from "./firebase-config.js";
   async function verifyWithApi(user) {
     if (!user.emailVerified) throw new Error("আপনার ইমেইল এখনো Verified নয়। Gmail থেকে Verification Link-এ চাপ দিন।");
     const token = await user.getIdToken(true);
-    const response = await fetch(`${API_BASE}/api/admin/me`, {
+    const response = await fetch(`${RBAC_API_BASE}/api/admin/me`, {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
       cache: "no-store"
     });
     let result = {};
     try { result = await response.json(); } catch (_) {}
-    if (!response.ok || result.ok !== true) throw new Error(result.error || `API verification failed (${response.status})`);
-    if (result.emailVerified !== true) throw new Error("আপনার Firebase ইমেইল এখনো Verified নয়। আগে ইমেইল Verify করুন।");
-    if (result.uid !== user.uid || !["owner", "admin"].includes(result.role)) throw new Error("এই অ্যাকাউন্টের Admin অনুমতি নেই।");
-    return result;
+    if (!response.ok || result.success !== true) {
+      throw new Error(result.error || `RBAC verification failed (${response.status})`);
+    }
+    if (result.uid !== user.uid || !result.role) throw new Error("এই অ্যাকাউন্টের Admin অনুমতি নেই।");
+    return { ...result, emailVerified: true };
   }
 
   form?.addEventListener("submit", async event => {
