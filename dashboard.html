@@ -429,7 +429,7 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut, sendEmailVerification } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, updateDoc, setDoc, runTransaction } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, updateDoc, setDoc, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
 const dashboard=document.getElementById("dashboard");
@@ -445,7 +445,7 @@ async function createUniqueFastMoneyId(uid){
   const reserved=await runTransaction(db,async tx=>{
    const existing=await tx.get(ref);
    if(existing.exists())return false;
-   tx.set(ref,{uid,createdAt:new Date()});
+   tx.set(ref,{uid,createdAt:serverTimestamp()});
    return true;
   });
   if(reserved)return code;
