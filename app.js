@@ -237,7 +237,7 @@ function effectiveFeePercent(from,to){
   async function saveRequestToFirestore(item){
     const fb=await getFirebaseServices();
     const signedInUser=fb.auth.currentUser;
-    if(!signedInUser || !signedInUser.emailVerified) throw new Error("Please sign in with a verified account before submitting an exchange request.");
+    if(!signedInUser) throw new Error("Please sign in before submitting an exchange request.");
     const from=walletById(item.fromId),to=walletById(item.toId);
     const isDigitalWallet=wallet=>wallet?.type==="usd"||wallet?.type==="crypto";
     const isUsdSell=isDigitalWallet(from) && to?.type==="bdt";
