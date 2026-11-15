@@ -848,7 +848,16 @@ import { firebaseConfig } from "./firebase-config.js";
         if (fiatJson) settings.publicCurrencyCodes = JSON.parse(fiatJson); else delete settings.publicCurrencyCodes;
         if (cryptoJson) settings.popularCryptocurrencies = JSON.parse(cryptoJson); else delete settings.popularCryptocurrencies;
       } catch (_) { throw new Error("Currency Directory JSON সঠিক নয়। JSON ঠিক করে আবার Save করুন।"); }
-        if (list !== undefined && (!Array.isArray(list) || list.some(item => !item || typeof item !== "object" || !/^[A-Z0-9]{2,12}$/.test(String(item.code || "")) || !String(item.name || "").trim())) {
+      const directoryLists = [
+        ["Fiat Currency", settings.publicCurrencyCodes],
+        ["Popular Crypto", settings.popularCryptocurrencies]
+      ];
+      for (const [key, list] of directoryLists) {
+        if (list !== undefined && (!Array.isArray(list) || list.some(item =>
+          !item || typeof item !== "object" ||
+          !/^[A-Z0-9]{2,12}$/.test(String(item.code || "")) ||
+          !String(item.name || "").trim()
+        ))) {
           throw new Error(key + " list-এ প্রতিটি item-এর সঠিক code ও name থাকতে হবে।");
         }
       }
