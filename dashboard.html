@@ -502,7 +502,7 @@ function setVerification(verified) {
   el.innerHTML = verified
     ? '<i class="fa-solid fa-circle-check"></i> VERIFIED'
     : '<i class="fa-solid fa-circle-exclamation"></i> UNVERIFIED';
-  el.title = verified ? "Email verified" : "Open your profile to verify your email";
+  el.title = verified ? "Email verified" : "Email confirmation is temporarily disabled during testing";
 }
 function renderWallet(wallet, profile) {
   const balances = wallet?.balances || {};
@@ -549,12 +549,7 @@ onAuthStateChanged(auth, async user => {
     document.getElementById("navAccountAvatar").textContent = (firstName[0] || "U").toUpperCase();
     setVerification(user.emailVerified === true);
 
-    if (user.emailVerified !== true) {
-      showAccountMessage("Please verify your email address first. After verification, sign in again to activate your FastMoney account and load your wallet.", true);
-      document.body.classList.add("fm-auth-ready");
-      return;
-    }
-
+    // Email confirmation is temporarily disabled while the owner tests the website.
     const token = await user.getIdToken(true);
     const bootstrap = await coreRequest("/api/account/bootstrap", token, "POST");
     if (!/^\d{15}$/.test(String(bootstrap.accountId || ""))) {
