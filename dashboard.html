@@ -552,7 +552,7 @@ onAuthStateChanged(auth, async user => {
     // Email confirmation is temporarily disabled while the owner tests the website.
     const token = await user.getIdToken(true);
     const bootstrap = await coreRequest("/api/account/bootstrap", token, "POST");
-    if (!/^FM-[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{6}$/.test(String(bootstrap.accountId || "")) && !/^\d{15}$/.test(String(bootstrap.accountId || ""))) {
+    if (!/^\d{10}$/.test(String(bootstrap.accountId || "")) && !/^FM-[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{6}$/.test(String(bootstrap.accountId || "")) && !/^\d{15}$/.test(String(bootstrap.accountId || ""))) {
       throw new Error("The server did not return a valid FastMoney Account ID.");
     }
 
