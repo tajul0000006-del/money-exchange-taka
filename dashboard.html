@@ -1456,12 +1456,20 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
 .wallet-scroller>.wallet-item,
 .wallet-scroller>.pay-id-card{
   box-sizing:border-box!important;
-  flex:0 0 100%!important;
-  width:100%!important;
-  min-width:100%!important;
-  max-width:100%!important;
+  flex:0 0 300px!important;
+  width:300px!important;
+  min-width:300px!important;
+  max-width:300px!important;
+  height:166px!important;
+  min-height:166px!important;
+  max-height:166px!important;
 }
-.wallet-scroller>.pay-id-card{margin:0!important}
+.wallet-scroller>.pay-id-card{
+  margin:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:space-between!important;
+}
 
 /* Automatic local-currency Pay ID card. */
 .pay-id-card{margin:0 0 18px;padding:17px 18px;border:1px solid #d9e6ee;border-radius:18px;background:linear-gradient(120deg,#102b50,#176b83 62%,#159d91);color:#fff;box-shadow:0 9px 23px rgba(14,39,65,.13);overflow:hidden}
