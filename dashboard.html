@@ -207,6 +207,38 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 .wallet-total-item strong{font-size:23px!important;line-height:1.1!important}
 .wallet-total-divider{height:28px!important}
 @media(max-width:760px){.wallet-balance-panel{padding:10px 14px!important}.wallet-balance-panel h2{margin:5px 0 4px!important;font-size:16px!important}.wallet-total-values{gap:14px!important}.wallet-total-item strong{font-size:21px!important}.wallet-total-divider{height:25px!important}}
+
+/* Premium 300px wallet cards with branded colors and left-side logos */
+.wallet-scroller{gap:14px!important;padding:4px 3px 14px!important;scroll-padding-left:3px}
+.wallet-item{position:relative;isolation:isolate;overflow:hidden;flex:0 0 300px!important;width:300px!important;min-width:300px!important;height:166px!important;min-height:166px!important;padding:20px!important;border:0!important;border-radius:19px!important;display:grid!important;grid-template-columns:62px 1fr!important;grid-template-rows:auto auto auto!important;column-gap:15px!important;align-content:center!important;align-items:center!important;box-shadow:0 10px 24px rgba(16,38,64,.15)!important;scroll-snap-align:start}
+.wallet-item:before{content:"";position:absolute;z-index:-1;width:170px;height:170px;right:-48px;top:-78px;border:22px solid rgba(255,255,255,.13);border-radius:50%}
+.wallet-item:after{position:absolute;right:17px;bottom:14px;color:rgba(255,255,255,.72);font:800 10px Arial,sans-serif;letter-spacing:1.5px}
+.wallet-symbol{grid-column:1;grid-row:1/4;width:62px!important;height:62px!important;border:1px solid rgba(255,255,255,.32)!important;border-radius:18px!important;background:rgba(255,255,255,.18)!important;color:#fff!important;font-size:30px!important;box-shadow:0 5px 15px rgba(0,0,0,.10)}
+.wallet-name{grid-column:2!important;grid-row:1!important;color:#fff!important;font:800 17px Arial,sans-serif!important;letter-spacing:.6px}
+.wallet-item strong{grid-column:2!important;grid-row:2!important;margin:7px 0 2px!important;color:#fff!important;font:800 25px Arial,sans-serif!important;letter-spacing:-.5px}
+.wallet-item small{grid-column:2!important;grid-row:3!important;margin:0!important;color:rgba(255,255,255,.8)!important;font:600 11px Arial,sans-serif!important}
+.wallet-usdt{background:linear-gradient(120deg,#0b806c,#18aa88)!important}
+.wallet-usdt:after{content:"TETHER"}
+.wallet-usd{background:linear-gradient(120deg,#174f9b,#287fe0)!important}
+.wallet-usd:after{content:"US DOLLAR"}
+.wallet-bdt{background:linear-gradient(120deg,#08734e,#16a36e)!important}
+.wallet-bdt:after{content:"BANGLADESH"}
+.wallet-epay{background:linear-gradient(120deg,#a34d0b,#ed9b28)!important}
+.wallet-epay:after{content:"ePAY"}
+.wallet-fastmoney{background:linear-gradient(120deg,#07566d,#0b9da5)!important}
+.wallet-fastmoney:after{content:"FASTMONEY"}
+.wallet-btc{background:linear-gradient(120deg,#a94c0b,#ed922c)!important}
+.wallet-btc:after{content:"BITCOIN"}
+.wallet-eth{background:linear-gradient(120deg,#403b91,#7771dc)!important}
+.wallet-eth:after{content:"ETHEREUM"}
+.wallet-paypal{background:linear-gradient(120deg,#063b83,#1477c9)!important}
+.wallet-paypal:after{content:"PAYPAL"}
+.wallet-item .wallet-symbol i{font-size:27px}
+@media(prefers-color-scheme:dark){
+ .wallet-item{box-shadow:0 10px 26px rgba(0,0,0,.32)!important}
+ .wallet-symbol{background:rgba(255,255,255,.17)!important;color:#fff!important}
+}
+@media(max-width:520px){.wallet-item{flex-basis:300px!important;width:300px!important;min-width:300px!important;height:166px!important;min-height:166px!important;padding:20px!important}}
 </style>
   <link rel="stylesheet" href="./responsive.css">
 <style id="fastmoney-brand-style">.fastmoney-brand{display:flex!important;align-items:center;gap:9px;flex:0 0 auto;text-decoration:none!important;color:#102a43!important;white-space:nowrap}.fastmoney-mark{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:linear-gradient(145deg,#087b8c,#075b68);color:#fff;font-size:25px;font-weight:900}.fastmoney-word{display:flex;flex-direction:column;font-size:21px;line-height:1.05;font-weight:850;letter-spacing:-.7px}.fastmoney-word b{color:#087b8c}.fastmoney-word small{margin-top:4px;font-size:8px;letter-spacing:1.35px;color:#718096;font-weight:800}.fastmoney-legal-links{display:flex;justify-content:center;gap:12px 22px;flex-wrap:wrap;padding:16px 18px;border-top:1px solid #e5edf2;background:#fff;font:600 13px/1.5 system-ui,sans-serif}.fastmoney-legal-links a{color:#426174;text-decoration:none}</style>
