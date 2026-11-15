@@ -487,11 +487,11 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
         <i class="fa-solid fa-bars"></i>
       </button>
     </div>
-    <div class="dashboard-popover notification-popover" id="notificationPopover" hidden>
-      <div class="dashboard-popover-title"><i class="fa-regular fa-bell"></i> Transaction Notifications</div>
-      <p>Check the latest status and updates for all your exchange requests from your transaction history.</p>
-      <a class="dashboard-notification-link" href="/history.html"><i class="fa-solid fa-clock-rotate-left"></i> View all transactions <i class="fa-solid fa-arrow-right"></i></a>
-    </div>
+    <section class="notification-screen" id="notificationPopover" aria-label="Notifications" hidden>
+      <div class="notification-screen-head"><div><span class="notification-kicker">FASTMONEY UPDATES</span><h2><i class="fa-regular fa-bell"></i> Notifications</h2><p>Stay up to date with your account.</p></div><button class="notification-close" id="notificationClose" type="button" aria-label="Close notifications"><i class="fa-solid fa-xmark"></i></button></div>
+      <div class="notification-screen-list" id="notificationList"><div class="notification-empty">Loading notifications…</div></div>
+      <a class="dashboard-notification-link" href="/history.html"><i class="fa-solid fa-clock-rotate-left"></i> View transaction history <i class="fa-solid fa-arrow-right"></i></a>
+    </section>
     <nav class="dashboard-popover dashboard-menu-popover" id="dashboardMenu" aria-label="Dashboard navigation" hidden>
       <a class="nav-account-summary" href="/profile.html" aria-label="Open My Account">
         <div class="nav-account-avatar" id="navAccountAvatar"><i class="fa-solid fa-user"></i></div>
@@ -509,6 +509,11 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
       <button type="button" id="headerLogoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
     </nav>
   </header>
+  <div class="notification-detail-backdrop" id="notificationDetailBackdrop" hidden><section class="notification-detail-dialog" role="dialog" aria-modal="true" aria-labelledby="notificationDetailTitle">
+    <div class="notification-detail-head"><span><i class="fa-regular fa-bell"></i> FASTMONEY NOTIFICATION</span><button type="button" id="notificationDetailClose" aria-label="Close notification"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="notification-detail-content"><h2 id="notificationDetailTitle">Notification</h2><time id="notificationDetailTime"></time><p id="notificationDetailMessage"></p></div>
+    <button type="button" class="notification-detail-done" id="notificationDetailDone">Done</button>
+  </section></div>
   <section class="wallet-overview" aria-label="Total balance and wallets">
     <div class="wallet-balance-panel">
       <h2 class="wallet-total-title"><span class="wallet-total-title-icon"><i class="fa-solid fa-wallet" aria-hidden="true"></i></span><span>Total Balance</span></h2>
@@ -628,50 +633,38 @@ function renderNotifications(items) {
     const bv = b.createdAt?.toMillis ? b.createdAt.toMillis() : Number(b.createdAt) || 0;
     return bv-av;
   }) : [];
-  const unread = currentNotifications.some(item => item.read !== true);
-  const button = document.getElementById("notificationToggle");
-  button?.classList.toggle("has-unread", unread);
-  button?.setAttribute("aria-label", unread ? "Notifications, unread updates" : "Notifications");
-  const list = document.getElementById("notificationList");
-  if (!list) return;
+  const unread=currentNotifications.some(item=>item.read!==true);
+  const button=document.getElementById("notificationToggle");
+  button?.classList.toggle("has-unread",unread);
+  button?.setAttribute("aria-label",unread?"Notifications, unread updates":"Notifications");
+  const list=document.getElementById("notificationList"); if(!list)return;
   list.replaceChildren();
-  if (!currentNotifications.length) {
-    const empty=document.createElement("div");
-    empty.className="notification-empty";
-    empty.textContent="You’re all caught up. New updates will appear here.";
-    list.append(empty);
-    return;
-  }
-  currentNotifications.slice(0,30).forEach(item => {
-    const card=document.createElement("article");
-    card.className="notification-item"+(item.read===true?"":" unread");
-    const title=document.createElement("strong");
-    title.textContent=String(item.title || "FastMoney Update");
-    const message=document.createElement("p");
-    message.textContent=String(item.message || "");
-    card.append(title,message);
-    const when=notificationDate(item.createdAt);
-    if(when){const time=document.createElement("time");time.textContent=when;card.append(time);}
-    list.append(card);
+  if(!currentNotifications.length){const empty=document.createElement("div");empty.className="notification-empty";empty.textContent="You’re all caught up. New updates will appear here.";list.append(empty);return;}
+  currentNotifications.slice(0,50).forEach((item,index)=>{
+    const card=document.createElement("button");card.type="button";card.className="notification-item"+(item.read===true?"":" unread");card.dataset.notificationIndex=String(index);
+    const title=document.createElement("strong");title.textContent=String(item.title||"FastMoney Update");
+    const message=document.createElement("p");message.textContent=String(item.message||"");card.append(title,message);
+    const when=notificationDate(item.createdAt);if(when){const time=document.createElement("time");time.textContent=when;card.append(time);}list.append(card);
   });
 }
-async function markNotificationsRead() {
-  const unread = currentNotifications.filter(item => item.read !== true);
-  if (!unread.length || !activeProfileRef) return;
-  const readAt = Date.now();
-  const updated = currentNotifications.map(item => item.read === true ? item : {...item,read:true,readAt});
-  renderNotifications(updated);
-  try {
-    await updateDoc(activeProfileRef,{notifications:updated});
-  } catch(error) {
-    console.error("Could not save notification read state:",error);
-    renderNotifications(currentNotifications.map(item => item.readAt===readAt ? {...item,read:false,readAt:null} : item));
-  }
+async function markNotificationRead(index){
+  const item=currentNotifications[index];if(!item||item.read===true||!activeProfileRef)return;
+  const updated=currentNotifications.map((entry,i)=>i===index?{...entry,read:true,readAt:Date.now()}:entry);renderNotifications(updated);
+  try{await updateDoc(activeProfileRef,{notifications:updated});}catch(error){console.error("Could not save notification read state:",error);}
 }
-document.getElementById("notificationToggle")?.addEventListener("click", () => {
-  const popover=document.getElementById("notificationPopover");
-  if (popover && !popover.hidden) markNotificationsRead();
-});
+function openNotificationDetail(index){
+  const item=currentNotifications[index];if(!item)return;
+  document.getElementById("notificationDetailTitle").textContent=String(item.title||"FastMoney Update");
+  document.getElementById("notificationDetailMessage").textContent=String(item.message||"");
+  document.getElementById("notificationDetailTime").textContent=notificationDate(item.createdAt);
+  document.getElementById("notificationDetailBackdrop").hidden=false;markNotificationRead(index);
+}
+document.getElementById("notificationList")?.addEventListener("click",event=>{const card=event.target.closest("[data-notification-index]");if(card)openNotificationDetail(Number(card.dataset.notificationIndex));});
+function closeNotificationDetail(){document.getElementById("notificationDetailBackdrop").hidden=true;}
+document.getElementById("notificationDetailClose")?.addEventListener("click",closeNotificationDetail);
+document.getElementById("notificationDetailDone")?.addEventListener("click",closeNotificationDetail);
+document.getElementById("notificationDetailBackdrop")?.addEventListener("click",event=>{if(event.target.id==="notificationDetailBackdrop")closeNotificationDetail();});
+document.addEventListener("keydown",event=>{if(event.key==="Escape"){closeNotificationDetail();const panel=document.getElementById("notificationPopover");if(panel&&!panel.hidden){panel.hidden=true;document.getElementById("notificationToggle")?.setAttribute("aria-expanded","false");}}});
 function formatBalance(value) {
   const number = Number(value);
   return (Number.isFinite(number) ? number : 0).toLocaleString("en-US", {
@@ -878,14 +871,45 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
  const menu=document.getElementById("dashboardMenu");
  const noticeBtn=document.getElementById("notificationToggle");
  const notice=document.getElementById("notificationPopover");
+ const closeNotice=document.getElementById("notificationClose");
+ function positionNotice(){const rect=document.getElementById("dashboardHeader").getBoundingClientRect();notice.style.setProperty("--notification-top",Math.max(0,rect.bottom)+"px");}
  function closePanels(){menu.hidden=true;notice.hidden=true;menuBtn.setAttribute("aria-expanded","false");noticeBtn.setAttribute("aria-expanded","false");}
  menuBtn.addEventListener("click",function(){const opening=menu.hidden;closePanels();menu.hidden=!opening;menuBtn.setAttribute("aria-expanded",String(opening));});
- noticeBtn.addEventListener("click",function(){const opening=notice.hidden;closePanels();notice.hidden=!opening;noticeBtn.setAttribute("aria-expanded",String(opening));});
- document.addEventListener("click",function(e){if(!e.target.closest("#dashboardHeader"))closePanels();});
+ noticeBtn.addEventListener("click",function(){const opening=notice.hidden;closePanels();if(opening){positionNotice();notice.hidden=false;noticeBtn.setAttribute("aria-expanded","true");}else{notice.hidden=true;noticeBtn.setAttribute("aria-expanded","false");}});
+ closeNotice.addEventListener("click",function(){notice.hidden=true;noticeBtn.setAttribute("aria-expanded","false");});
+ window.addEventListener("resize",function(){if(!notice.hidden)positionNotice();});
+ document.addEventListener("click",function(e){if(!e.target.closest("#dashboardHeader")&&!e.target.closest("#notificationPopover")){menu.hidden=true;menuBtn.setAttribute("aria-expanded","false");}});
  document.getElementById("headerLogoutBtn").addEventListener("click",function(){document.getElementById("logoutBtn").click();});
 })();
 </script>
 <script src="./language.js?v=1" defer></script>
+<style id="fastmoney-notification-screen-style">
+.notification-screen[hidden],.notification-detail-backdrop[hidden]{display:none!important}
+.notification-screen{position:fixed;left:0;right:0;top:var(--notification-top,70px);height:calc(100dvh - var(--notification-top,70px));width:100vw;z-index:1300;display:flex;flex-direction:column;gap:14px;padding:clamp(16px,3vw,28px);background:#f5f8fc;color:#20364e;overflow:hidden;border-top:1px solid #e4ebf2;box-shadow:0 18px 40px rgba(16,39,65,.16)}
+.notification-screen-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex:0 0 auto;max-width:1000px;width:100%;margin:0 auto}
+.notification-kicker{font:800 10px Arial,sans-serif;letter-spacing:1.6px;color:#078397}
+.notification-screen-head h2{display:flex;align-items:center;gap:10px;margin:6px 0 3px;font-size:clamp(21px,4vw,27px);font-weight:800}
+.notification-screen-head h2 i{color:#078397}.notification-screen-head p{margin:0;color:#6b7f94;font-size:13px}
+.notification-close,.notification-detail-head button{width:40px;height:40px;display:grid;place-items:center;flex:0 0 auto;border:1px solid #dce6ef;border-radius:12px;background:#fff;color:#304b65;font-size:17px;cursor:pointer}
+.notification-screen-list{width:100%;max-width:1000px;margin:0 auto;flex:1;min-height:0;overflow:auto;display:grid;align-content:start;gap:10px;padding:2px 2px 12px}
+.notification-item{width:100%;display:block;text-align:left;padding:14px 16px;border:1px solid #e0e9f1;border-radius:14px;background:#fff;color:#233b53;cursor:pointer;overflow:hidden}
+.notification-item.unread{border-left:3px solid #e5484d;background:#fffdfd}
+.notification-item strong{display:block;color:#243b53;font-size:14px;line-height:1.4;font-weight:800}
+.notification-item p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:5px 0 0;color:#61748a;font-size:12px;line-height:1.55}
+.notification-item time{display:block;margin-top:8px;color:#8293a6;font-size:10px}
+.notification-empty{padding:34px 12px;text-align:center;color:#71839a;font-size:13px}
+.notification-screen>.dashboard-notification-link{width:100%;max-width:1000px;margin:0 auto;flex:0 0 auto}
+.notification-detail-backdrop{position:fixed;inset:0;z-index:1500;display:grid;place-items:center;padding:18px;background:rgba(10,24,40,.58);backdrop-filter:blur(5px)}
+.notification-detail-dialog{width:min(560px,100%);max-height:min(82dvh,700px);overflow:auto;padding:20px;border:1px solid #e0e9f1;border-radius:20px;background:#fff;color:#20364e;box-shadow:0 24px 70px rgba(0,0,0,.24)}
+.notification-detail-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid #e9eef3}
+.notification-detail-head>span{font:800 10px Arial,sans-serif;letter-spacing:1.2px;color:#078397}.notification-detail-head>span i{margin-right:7px}
+.notification-detail-content{padding:20px 2px}.notification-detail-content h2{margin:0 0 8px;font-size:21px;line-height:1.35;font-weight:800;color:#20364e}
+.notification-detail-content time{display:block;margin-bottom:18px;color:#8393a5;font-size:11px}
+.notification-detail-content p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;color:#536a80;font-size:14px;line-height:1.8}
+.notification-detail-done{width:100%;min-height:44px;border:0;border-radius:12px;background:#087f91;color:#fff;font-size:13px;font-weight:800;cursor:pointer}
+@media(max-width:520px){.notification-screen{padding:16px 13px 14px;gap:12px}.notification-item{padding:13px;border-radius:12px}.notification-item strong{font-size:13px}.notification-detail-backdrop{padding:12px}.notification-detail-dialog{padding:16px;border-radius:17px}.notification-detail-content h2{font-size:19px}}
+@media(prefers-color-scheme:dark){.notification-screen{background:#0d1b2b;color:#e8f0f8;border-color:#263c52;box-shadow:0 18px 45px rgba(0,0,0,.4)}.notification-kicker,.notification-screen-head h2 i{color:#78d3d7}.notification-screen-head p{color:#a8bbcf}.notification-close,.notification-detail-head button{background:#172c42;border-color:#344b62;color:#eaf2fa}.notification-item{background:#14283d;border-color:#30465d;color:#e7eff8}.notification-item.unread{background:#30232c;border-color:#7d4148;border-left-color:#ff686d}.notification-item strong{color:#f0f6fc}.notification-item p{color:#b3c4d6}.notification-item time,.notification-empty{color:#92a9bf}.notification-detail-dialog{background:#14283d;border-color:#344b62;color:#eaf2fa}.notification-detail-head{border-color:#344b62}.notification-detail-head>span{color:#80d8dc}.notification-detail-content h2{color:#f0f6fc}.notification-detail-content time{color:#91a8bd}.notification-detail-content p{color:#c0cede}}
+</style>
 </body></html>
 <style id="fastmoney-verification-status">.nav-account-copy{width:27px;height:27px;display:inline-grid;place-items:center;flex:0 0 auto;border:1px solid #d8e5ee;border-radius:8px;background:#f3f8fb;color:#087f91;font-size:12px;cursor:pointer}.nav-account-copy:hover{background:#e4f5f5}.nav-account-id-line{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.nav-account-verified{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:20px;background:#e7f8ef;color:#168052;font:800 10px Arial,sans-serif;white-space:nowrap}.nav-account-verified.unverified{background:#fff0f0!important;color:#c62828!important;border:1px solid #ffd0d0}@media(prefers-color-scheme:dark){.nav-account-verified.unverified{background:#482326!important;color:#ff9a9a!important;border-color:#71373c!important}}
 /* Refined compact wallet cards: approximately one-third shorter */
