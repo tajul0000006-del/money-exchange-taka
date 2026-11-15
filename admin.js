@@ -10,6 +10,7 @@ import { firebaseConfig } from "./firebase-config.js";
   "use strict";
   const API_BASE = "https://bold-surf-9356.taijulsheikh60.workers.dev";
   const REQUEST_API_BASE = "https://moneyexchange-admin.taijulsheikh60.workers.dev";
+  const RBAC_API_BASE = "https://fastmoney-admin-rbac.taijulsheikh60.workers.dev";
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const $ = id => document.getElementById(id);
@@ -33,6 +34,7 @@ import { firebaseConfig } from "./firebase-config.js";
     setupWebsiteContentEditor();
     setupImpactStatsEditor();
     setupExchangeSettingsEditor();
+    setupStaffManagement();
     let identity = $("adminIdentity");
     if (!identity) {
       identity = document.createElement("p");
@@ -342,20 +344,146 @@ import { firebaseConfig } from "./firebase-config.js";
     area.append(button, result);
     overview.querySelector(".module-head")?.insertAdjacentElement("afterend", area);
   }
+
+  // Owner-only staff registry. This talks only to the isolated RBAC Worker.
+  function setupStaffManagement() {
+    const section = $("panel-staff");
+    if (!section || $("staffAddButton")?.dataset.ready === "1") return;
+    const badge = $("staffApiBadge");
+    const status = $("staffManagerStatus");
+    const addButton = $("staffAddButton");
+    const reloadButton = $("staffReloadButton");
+    const tableBody = $("staffTableBody");
+    const roleLabels = {
+      exchange_manager: "Exchange Manager",
+      payment_reviewer: "Payment Reviewer",
+      support_staff: "Support Staff",
+      finance_viewer: "Finance Viewer"
+    };
+    const roleOptions = Object.entries(roleLabels).map(([value,label]) => ({value,label}));
+    const setMessage = (message, error = false) => {
+      status.textContent = message;
+      status.style.color = error ? "#b42318" : "";
+    };
+    async function call(path, method = "GET", body) {
+      const user = auth.currentUser;
+      if (!user) throw new Error("Login session পাওয়া যায়নি। আবার login করুন।");
+      const token = await user.getIdToken(true);
+      const response = await fetch(RBAC_API_BASE + path, {
+        method,
+        headers: { Authorization: "Bearer " + token, ...(body ? {"content-type":"application/json"} : {}) },
+        body: body ? JSON.stringify(body) : undefined,
+        cache: "no-store"
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || data.success !== true) throw new Error(data.error || "RBAC API error (" + response.status + ")");
+      return data;
+    }
+    function makeCell(text) {
+      const td = document.createElement("td");
+      td.textContent = text == null || text === "" ? "—" : String(text);
+      return td;
+    }
+    function renderStaff(items) {
+      tableBody.replaceChildren();
+      if (!items.length) {
+        const tr = document.createElement("tr");
+        const td = makeCell("এখনো কোনো Staff যোগ করা হয়নি।");
+        td.colSpan = 5; tr.appendChild(td); tableBody.appendChild(tr); return;
+      }
+      items.forEach(item => {
+        const tr = document.createElement("tr");
+        tr.append(makeCell(item.uid), makeCell(item.email));
+        const roleCell = document.createElement("td");
+        const roleSelect = document.createElement("select");
+        roleSelect.setAttribute("aria-label", "Staff role");
+        roleOptions.forEach(option => {
+          const opt = document.createElement("option");
+          opt.value = option.value; opt.textContent = option.label;
+          opt.selected = item.role === option.value; roleSelect.appendChild(opt);
+        });
+        roleCell.appendChild(roleSelect);
+        const statusCell = document.createElement("td");
+        const activeLabel = document.createElement("label");
+        const active = document.createElement("input");
+        active.type = "checkbox"; active.checked = item.active === true;
+        activeLabel.append(active, document.createTextNode(" Active"));
+        statusCell.appendChild(activeLabel);
+        const actionCell = document.createElement("td");
+        const save = document.createElement("button");
+        save.type = "button"; save.textContent = "Save"; save.className = "outline";
+        save.addEventListener("click", async () => {
+          save.disabled = true; setMessage("Staff permission update হচ্ছে...");
+          try {
+            await call("/api/admin/staff/" + encodeURIComponent(item.uid), "PATCH", { role: roleSelect.value, active: active.checked });
+            setMessage("সফল! Staff access update হয়েছে।");
+            await loadStaff();
+          } catch (error) { setMessage("Update হয়নি: " + error.message, true); save.disabled = false; }
+        });
+        actionCell.appendChild(save);
+        tr.append(roleCell, statusCell, actionCell);
+        tableBody.appendChild(tr);
+      });
+    }
+    async function loadStaff() {
+      reloadButton.disabled = true;
+      try {
+        const data = await call("/api/admin/staff");
+        renderStaff(data.staff || []);
+        setMessage("সফল! " + (data.staff || []).length + " জন Staff পাওয়া গেছে।");
+      } catch (error) {
+        setMessage("Staff তালিকা লোড হয়নি: " + error.message, true);
+      } finally { reloadButton.disabled = false; }
+    }
+    addButton.addEventListener("click", async () => {
+      const uid = $("staffNewUid").value.trim();
+      const email = $("staffNewEmail").value.trim();
+      const role = $("staffNewRole").value;
+      if (!uid) return setMessage("Staff-এর Firebase UID লিখুন।", true);
+      addButton.disabled = true; setMessage("নতুন Staff access তৈরি হচ্ছে...");
+      try {
+        await call("/api/admin/staff", "POST", { uid, email, role });
+        $("staffNewUid").value = ""; $("staffNewEmail").value = "";
+        setMessage("সফল! Staff access দেওয়া হয়েছে।");
+        await loadStaff();
+      } catch (error) { setMessage("Staff যোগ হয়নি: " + error.message, true); }
+      finally { addButton.disabled = false; }
+    });
+    reloadButton.addEventListener("click", loadStaff);
+    addButton.dataset.ready = "1";
+    (async () => {
+      try {
+        const me = await call("/api/admin/me");
+        if (me.role !== "owner") {
+          badge.textContent = "Owner only";
+          setMessage("এই অংশটি শুধু Owner ব্যবহার করতে পারবেন।", true);
+          return;
+        }
+        badge.textContent = "Owner verified · RBAC connected";
+        addButton.disabled = false; reloadButton.disabled = false;
+        await loadStaff();
+      } catch (error) {
+        badge.textContent = "RBAC API not connected";
+        setMessage("Staff management চালু হয়নি: " + error.message + " · নতুন RBAC Worker deploy ও ALLOWED_ORIGINS সেট করতে হবে।", true);
+      }
+    })();
+  }
+
   async function verifyWithApi(user) {
     if (!user.emailVerified) throw new Error("আপনার ইমেইল এখনো Verified নয়। Gmail থেকে Verification Link-এ চাপ দিন।");
     const token = await user.getIdToken(true);
-    const response = await fetch(`${API_BASE}/api/admin/me`, {
+    const response = await fetch(`${RBAC_API_BASE}/api/admin/me`, {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
       cache: "no-store"
     });
     let result = {};
     try { result = await response.json(); } catch (_) {}
-    if (!response.ok || result.ok !== true) throw new Error(result.error || `API verification failed (${response.status})`);
-    if (result.emailVerified !== true) throw new Error("আপনার Firebase ইমেইল এখনো Verified নয়। আগে ইমেইল Verify করুন।");
-    if (result.uid !== user.uid || !["owner", "admin"].includes(result.role)) throw new Error("এই অ্যাকাউন্টের Admin অনুমতি নেই।");
-    return result;
+    if (!response.ok || result.success !== true) {
+      throw new Error(result.error || `RBAC verification failed (${response.status})`);
+    }
+    if (result.uid !== user.uid || !result.role) throw new Error("এই অ্যাকাউন্টের Admin অনুমতি নেই।");
+    return { ...result, emailVerified: true };
   }
 
   form?.addEventListener("submit", async event => {
