@@ -521,15 +521,17 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
     </div>
     <div class="wallet-list-heading"><div><h3>Wallets</h3></div><span class="wallet-scroll-hint"><i class="fa-solid fa-arrows-left-right"></i> Scroll</span></div>
     <div class="wallet-scroller" role="list" aria-label="Available wallets">
-      <article class="wallet-item wallet-fastmoney-usd" role="listitem"><span class="wallet-symbol"><i class="fa-solid fa-dollar-sign"></i></span><span class="wallet-name">FastMoney USD</span><strong>$0.000</strong><small>US Dollar</small></article>
-      <article class="wallet-item wallet-usdt" role="listitem"><span class="wallet-symbol">₮</span><span class="wallet-name">USDT</span><strong>0.000</strong><small>Tether Wallet</small></article>
-      <article class="wallet-item wallet-usd" role="listitem"><span class="wallet-symbol">$</span><span class="wallet-name">USD</span><strong>0.000</strong><small>US Dollar</small></article>
+      <article class="wallet-item wallet-fastmoney-usd" role="listitem"><span class="wallet-symbol wallet-logo">FM</span><span class="wallet-name">FastMoney USD</span><strong>$0.00</strong><small>FastMoney Dollar Wallet</small></article>
+      <article class="wallet-item wallet-redotpay" role="listitem"><span class="wallet-symbol wallet-logo">R</span><span class="wallet-name">RedotPay USD</span><strong>$0.00</strong><small>RedotPay Dollar Wallet</small></article>
+      <article class="wallet-item wallet-volet" role="listitem"><span class="wallet-symbol wallet-logo">V</span><span class="wallet-name">Volet USD</span><strong>$0.00</strong><small>Volet Dollar Wallet</small></article>
+      <article class="wallet-item wallet-epay" role="listitem"><span class="wallet-symbol wallet-logo">e</span><span class="wallet-name">ePay USD</span><strong>$0.00</strong><small>ePay Dollar Wallet</small></article>
+      <article class="wallet-item wallet-webmoney" role="listitem"><span class="wallet-symbol wallet-logo">W</span><span class="wallet-name">WebMoney USD</span><strong>$0.00</strong><small>WebMoney Dollar Wallet</small></article>
+      <article class="wallet-item wallet-tunepay" role="listitem"><span class="wallet-symbol wallet-logo">T</span><span class="wallet-name">TunePay USD</span><strong>$0.00</strong><small>TunePay Dollar Wallet</small></article>
+      <article class="wallet-item wallet-perfectmoney" role="listitem"><span class="wallet-symbol wallet-logo">PM</span><span class="wallet-name">Perfect Money USD</span><strong>$0.00</strong><small>Perfect Money Dollar Wallet</small></article>
+      <article class="wallet-item wallet-winiti" role="listitem"><span class="wallet-symbol wallet-logo">W</span><span class="wallet-name">Winiti USD</span><strong>$0.00</strong><small>Winiti Dollar Wallet</small></article>
+      <article class="wallet-item wallet-usdt" role="listitem"><span class="wallet-symbol wallet-logo">₮</span><span class="wallet-name">USDT</span><strong>0.00</strong><small>Tether Wallet</small></article>
+      <article class="wallet-item wallet-rizon" role="listitem"><span class="wallet-symbol wallet-logo">RZ</span><span class="wallet-name">Rizon USD</span><strong>$0.00</strong><small>Rizon Dollar Wallet</small></article>
       <article class="wallet-item wallet-bdt" role="listitem"><span class="wallet-symbol" id="localWalletSymbol">—</span><span class="wallet-name" id="localWalletName">—</span><strong>—</strong><small id="localWalletDescription">Your signup currency</small></article>
-      <article class="wallet-item wallet-epay" role="listitem"><span class="wallet-symbol"><i class="fa-solid fa-bolt"></i></span><span class="wallet-name">ePay</span><strong>0.000</strong><small>ePay Wallet</small></article>
-      
-      <article class="wallet-item wallet-btc" role="listitem"><span class="wallet-symbol">₿</span><span class="wallet-name">BTC</span><strong>0.000</strong><small>Bitcoin Wallet</small></article>
-      <article class="wallet-item wallet-eth" role="listitem"><span class="wallet-symbol">Ξ</span><span class="wallet-name">ETH</span><strong>0.000</strong><small>Ethereum Wallet</small></article>
-      <article class="wallet-item wallet-paypal" role="listitem"><span class="wallet-symbol"><i class="fa-brands fa-paypal"></i></span><span class="wallet-name">PayPal</span><strong>0.000</strong><small>PayPal Wallet</small></article>
     </div>
   </section>
   <script>
@@ -742,11 +744,11 @@ function renderWallet(wallet, profile) {
     const amount = card.querySelector("strong");
     if (!amount) return;
     let code = "";
-    if (name === "FastMoney USD" || name === "USD") code = "USD";
-    else if (name === "USDT") code = "USDT";
+    if (name === "USDT") code = "USDT";
     else if (name === localCode || card.classList.contains("wallet-bdt")) code = localCode;
+    else if (name.endsWith(" USD")) code = "USD";
     amount.textContent = formatBalance(balances[code] || 0);
-    if (name === "FastMoney USD") amount.textContent = "$" + formatBalance(balances.USD || 0);
+    if (name.endsWith(" USD")) amount.textContent = "$" + formatBalance(balances.USD || 0);
   });
 }
 
@@ -1338,6 +1340,31 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
 }
 @media(prefers-reduced-motion:reduce){.wallet-item{transition:none!important}}
 
+
+/* Distinct modern identity and editable text-mark logos for every payment wallet. */
+.wallet-logo{
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  width:42px!important;height:32px!important;border-radius:9px!important;
+  font:900 13px/1 Arial,sans-serif!important;letter-spacing:-.4px!important;
+  border:1px solid rgba(255,255,255,.38)!important;
+  background:rgba(255,255,255,.18)!important;color:#fff!important;
+  text-shadow:0 1px 2px rgba(0,0,0,.12)!important;
+}
+.wallet-fastmoney-usd{background:linear-gradient(125deg,#102b50,#176b83 62%,#159d91)!important}
+.wallet-redotpay{background:linear-gradient(125deg,#781c34,#e14c62)!important}
+.wallet-volet{background:linear-gradient(125deg,#352477,#8060d8)!important}
+.wallet-epay{background:linear-gradient(125deg,#81400c,#e99425)!important}
+.wallet-webmoney{background:linear-gradient(125deg,#164b35,#37a66b)!important}
+.wallet-tunepay{background:linear-gradient(125deg,#073d73,#169bd0)!important}
+.wallet-perfectmoney{background:linear-gradient(125deg,#65320c,#c98524)!important}
+.wallet-winiti{background:linear-gradient(125deg,#263b50,#5f829f)!important}
+.wallet-usdt{background:linear-gradient(125deg,#075b4d,#12a27d)!important}
+.wallet-rizon{background:linear-gradient(125deg,#49205e,#a04cbb)!important}
+.wallet-redotpay .wallet-logo{background:rgba(255,255,255,.2)!important}
+.wallet-volet .wallet-logo{background:rgba(255,255,255,.2)!important}
+.wallet-epay .wallet-logo{font-style:italic!important;font-size:19px!important}
+.wallet-perfectmoney .wallet-logo{font-size:11px!important}
+.wallet-item .wallet-name{letter-spacing:.35px!important}
 
 /* Match each wallet card's width to the full USD/BDT balance panel. */
 .wallet-scroller{
