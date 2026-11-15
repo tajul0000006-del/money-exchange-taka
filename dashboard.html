@@ -510,7 +510,12 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
   <div class="notification-detail-backdrop" id="notificationDetailBackdrop" hidden><section class="notification-detail-dialog" role="dialog" aria-modal="true" aria-labelledby="notificationDetailTitle">
     <div class="notification-detail-content"><h2 id="notificationDetailTitle">Notification</h2><time id="notificationDetailTime"></time><p id="notificationDetailMessage"></p></div>
   </section></div>
-  <section class="wallet-overview" aria-label="Total balance and wallets">
+  <section class="pay-id-card" aria-label="Your payment ID">
+  <div class="pay-id-top"><span class="pay-id-mark">FM</span><div class="pay-id-title"><strong id="payIdCurrency">— PAY ID</strong><small>Personal payment ID</small></div><span class="pay-id-country" id="payIdCurrencyBadge">—</span></div>
+  <div class="pay-id-value-row"><div class="pay-id-value-wrap"><small>PAY ID</small><strong id="payIdValue">Loading…</strong></div><button type="button" class="pay-id-copy" id="copyPayId" aria-label="Copy Pay ID" title="Copy Pay ID"><i class="fa-regular fa-copy"></i><span>Copy</span></button></div>
+</section>
+
+<section class="wallet-overview" aria-label="Total balance and wallets">
     <div class="wallet-balance-panel">
       <h2 class="wallet-total-title"><span class="wallet-total-title-icon"><i class="fa-solid fa-wallet" aria-hidden="true"></i></span><span>Total Balance</span></h2>
       <div class="wallet-total-values">
@@ -832,6 +837,11 @@ onAuthStateChanged(auth, async user => {
     }
     const firstName = profile.firstName || user.displayName?.split(" ")[0] || "User";
 
+    const payCurrencyCode = String(profile.signupCurrencyCode || profile.currencyCode || "").trim().toUpperCase();
+    document.getElementById("payIdCurrency").textContent = (payCurrencyCode || "LOCAL") + " PAY ID";
+    document.getElementById("payIdCurrencyBadge").textContent = payCurrencyCode || "—";
+    document.getElementById("payIdValue").textContent = user.uid;
+    document.getElementById("copyPayId")?.setAttribute("data-copy-value", user.uid);
     document.getElementById("navAccountName").textContent =
       /^\d{10}$/.test(String(profile.accountId || "")) ? profile.accountId : "Setting up ID…";
     document.getElementById("navAccountEmail").textContent = user.email || "";
@@ -875,6 +885,19 @@ onAuthStateChanged(auth, async user => {
     }
   } finally {
     document.body.classList.add("fm-auth-ready");
+  }
+});
+
+document.getElementById("copyPayId")?.addEventListener("click", async () => {
+  const value = document.getElementById("payIdValue")?.textContent?.trim();
+  if (!value || value === "Loading…") return;
+  const button = document.getElementById("copyPayId");
+  try {
+    await navigator.clipboard.writeText(value);
+    button.innerHTML = '<i class="fa-solid fa-check"></i><span>Copied</span>';
+    setTimeout(() => { button.innerHTML = '<i class="fa-regular fa-copy"></i><span>Copy</span>'; }, 1500);
+  } catch {
+    showAccountMessage("Could not copy the Pay ID. Please select and copy it manually.", true);
   }
 });
 
@@ -1388,5 +1411,22 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
     max-width:100%!important;
   }
 }
+
+/* Automatic local-currency Pay ID card. */
+.pay-id-card{margin:0 0 18px;padding:17px 18px;border:1px solid #d9e6ee;border-radius:18px;background:linear-gradient(120deg,#102b50,#176b83 62%,#159d91);color:#fff;box-shadow:0 9px 23px rgba(14,39,65,.13);overflow:hidden}
+.pay-id-top{display:flex;align-items:center;gap:11px}
+.pay-id-mark{width:39px;height:31px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.42);border-radius:8px;background:rgba(255,255,255,.17);font-size:13px;font-weight:900;letter-spacing:-.5px}
+.pay-id-title{display:grid;gap:3px;min-width:0}
+.pay-id-title strong{font-size:14px;letter-spacing:.55px}
+.pay-id-title small{font-size:10px;color:rgba(255,255,255,.76)}
+.pay-id-country{margin-left:auto;padding:6px 9px;border:1px solid rgba(255,255,255,.35);border-radius:8px;background:rgba(255,255,255,.13);font-size:11px;font-weight:800}
+.pay-id-value-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px;padding-top:13px;border-top:1px solid rgba(255,255,255,.2)}
+.pay-id-value-wrap{display:grid;gap:5px;min-width:0}
+.pay-id-value-wrap small{font-size:9px;letter-spacing:1.3px;color:rgba(255,255,255,.74);font-weight:800}
+.pay-id-value-wrap strong{font-size:13px;line-height:1.4;letter-spacing:.3px;overflow-wrap:anywhere;user-select:text}
+.pay-id-copy{flex:0 0 auto;display:flex;align-items:center;gap:7px;padding:9px 12px;border:1px solid rgba(255,255,255,.42);border-radius:10px;background:rgba(255,255,255,.16);color:#fff;font:700 12px Arial,sans-serif;cursor:pointer}
+.pay-id-copy:active{transform:scale(.97)}
+@media(prefers-color-scheme:dark){.pay-id-card{border-color:#34536a;box-shadow:0 9px 23px rgba(0,0,0,.24)}}
+@media(max-width:520px){.pay-id-card{padding:15px;border-radius:15px}.pay-id-value-wrap strong{font-size:11px}.pay-id-copy{padding:8px 10px}}
 
 </style>
