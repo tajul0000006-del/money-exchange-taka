@@ -342,7 +342,7 @@ export default {
         }, 200, cors);
       }
       if (request.method === "GET" && url.pathname === "/api/firestore/check") {
-        await firestoreRequest(env, "?pageSize=1");
+        await firestoreRequest(env, "/userProfiles?pageSize=1");
         return json({ success: true, firestore: "connected", message: "Firestore access verified" }, 200, cors);
       }
       if (request.method === "GET" && url.pathname === "/api/auth/check") {
