@@ -429,19 +429,35 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut, sendEmailVerification } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, updateDoc, setDoc, runTransaction } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
 const dashboard=document.getElementById("dashboard");
 const currencyNames={BDT:"Bangladeshi Taka",USD:"US Dollar",GBP:"British Pound",INR:"Indian Rupee",PKR:"Pakistani Rupee",AED:"UAE Dirham",SAR:"Saudi Riyal",CAD:"Canadian Dollar",AUD:"Australian Dollar",EUR:"Euro",CHF:"Swiss Franc",JPY:"Japanese Yen",CNY:"Chinese Yuan",KRW:"South Korean Won",SGD:"Singapore Dollar",MYR:"Malaysian Ringgit",IDR:"Indonesian Rupiah",THB:"Thai Baht",PHP:"Philippine Peso",NPR:"Nepalese Rupee",LKR:"Sri Lankan Rupee",TRY:"Turkish Lira",ZAR:"South African Rand",NGN:"Nigerian Naira",KES:"Kenyan Shilling",EGP:"Egyptian Pound",NZD:"New Zealand Dollar",MXN:"Mexican Peso",BRL:"Brazilian Real",SEK:"Swedish Krona",NOK:"Norwegian Krone",DKK:"Danish Krone",RUB:"Russian Ruble",AFN:"Afghan Afghani",QAR:"Qatari Riyal",KWD:"Kuwaiti Dinar",OMR:"Omani Rial",BHD:"Bahraini Dinar",JOD:"Jordanian Dinar",GHS:"Ghanaian Cedi",UGX:"Ugandan Shilling",TZS:"Tanzanian Shilling",MAD:"Moroccan Dirham",ARS:"Argentine Peso",CLP:"Chilean Peso",COP:"Colombian Peso",PLN:"Polish Zloty",UAH:"Ukrainian Hryvnia",ILS:"Israeli Shekel",HKD:"Hong Kong Dollar",TWD:"New Taiwan Dollar",VND:"Vietnamese Dong",KHR:"Cambodian Riel",MMK:"Myanmar Kyat",ETB:"Ethiopian Birr"};
 const currencySymbols={BDT:"৳",USD:"$",GBP:"£",INR:"₹",PKR:"₨",AED:"د.إ",SAR:"﷼",EUR:"€",CHF:"Fr",JPY:"¥",CNY:"¥",KRW:"₩",THB:"฿",PHP:"₱",TRY:"₺",ZAR:"R",NGN:"₦",EGP:"E£",BRL:"R$",RUB:"₽",GHS:"₵",VND:"₫",ILS:"₪"};
 let activeProfileRef=null;
+async function createUniqueFastMoneyId(uid){
+ const alphabet="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+ for(let attempt=0;attempt<12;attempt++){
+  const bytes=crypto.getRandomValues(new Uint8Array(12));
+  const code="FM-"+Array.from(bytes,b=>alphabet[b%alphabet.length]).join("");
+  const ref=doc(db,"fastMoneyAccountIds",code);
+  const reserved=await runTransaction(db,async tx=>{
+   const existing=await tx.get(ref);
+   if(existing.exists())return false;
+   tx.set(ref,{uid,createdAt:new Date()});
+   return true;
+  });
+  if(reserved)return code;
+ }
+ throw new Error("Could not generate a unique FastMoney ID.");
+}
 function setVerification(el,verified,label){el.classList.toggle("unverified",!verified);el.innerHTML='<i class="fa-solid '+(verified?"fa-circle-check":"fa-circle-exclamation")+'"></i> '+label+' '+(verified?"verified":"unverified");}
 onAuthStateChanged(auth,async user=>{
   if(!user){location.replace("/login.html?next=%2Fdashboard.html");return;}
 
   try{
-    activeProfileRef=doc(db,"userProfiles",user.uid);const snap=await getDoc(activeProfileRef);const p=snap.exists()?snap.data():{};
+    activeProfileRef=doc(db,"userProfiles",user.uid);const snap=await getDoc(activeProfileRef);const p=snap.exists()?snap.data():{};if(!p.accountId){p.accountId=await createUniqueFastMoneyId(user.uid);await setDoc(activeProfileRef,{uid:user.uid,accountId:p.accountId,email:user.email||""},{merge:true});}
     const first=p.firstName||user.displayName?.split(" ")[0]||"User",last=p.lastName||user.displayName?.split(" ").slice(1).join(" ")||"";
     document.getElementById("navAccountName").textContent=p.accountId||"ID pending";
     document.getElementById("navAccountEmail").textContent=user.email||"";
