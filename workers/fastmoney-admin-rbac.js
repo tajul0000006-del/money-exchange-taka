@@ -187,7 +187,7 @@ async function assignStaff(env, actor, body) {
   const existing = await fs(env, docPath("adminRoles", uid));
   if (existing.response.status !== 404) throw Object.assign(new Error("This UID already has a staff record. Use update instead."), { status: 409 });
   const fields = { email: str(String(body.email || "").slice(0, 160)), role: str(role), active: bool(true), createdBy: str(actor.uid), createdAt: stamp(), updatedAt: stamp() };
-  await fs(env, docPath("adminRoles", uid), { method: "PATCH", body: JSON.stringify({ fields, currentDocument: { exists: false } }) });
+  await fs(env, docPath("adminRoles", uid) + "?currentDocument.exists=false", { method: "PATCH", body: JSON.stringify({ fields }) });
   await audit(env, actor, "staff.assigned", uid, { role });
   return { uid, role, active: true };
 }
@@ -200,8 +200,8 @@ async function updateStaff(env, actor, uid, body) {
   const nextActive = body.active === undefined ? old.active === true : body.active;
   if (!validRole(nextRole) || typeof nextActive !== "boolean") throw Object.assign(new Error("Invalid role or status"), { status: 400 });
   const fields = { role: str(nextRole), active: bool(nextActive), updatedAt: stamp() };
-  await fs(env, docPath("adminRoles", uid) + "?updateMask.fieldPaths=role&updateMask.fieldPaths=active&updateMask.fieldPaths=updatedAt", {
-    method: "PATCH", body: JSON.stringify({ fields, currentDocument: { updateTime: current.data.updateTime } })
+  await fs(env, docPath("adminRoles", uid) + "?updateMask.fieldPaths=role&updateMask.fieldPaths=active&updateMask.fieldPaths=updatedAt&currentDocument.updateTime=" + encodeURIComponent(current.data.updateTime), {
+    method: "PATCH", body: JSON.stringify({ fields })
   });
   await audit(env, actor, nextActive ? "staff.updated" : "staff.disabled", uid, { previousRole: old.role, role: nextRole, active: nextActive });
   return { uid, role: nextRole, active: nextActive };
