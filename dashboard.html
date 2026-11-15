@@ -278,7 +278,7 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 .nav-account-summary{display:flex;align-items:center;gap:11px;padding:5px 3px 14px;margin-bottom:8px;border-bottom:1px solid #e5edf3;min-width:0}
 .nav-account-avatar{width:43px;height:43px;flex:0 0 43px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(145deg,#087f9b,#12b78d);color:#fff;font-size:18px;font-weight:800}
 .nav-account-copy{display:grid;gap:3px;min-width:0;flex:1}
-.nav-account-copy strong{color:#183b58;font-size:15px;font-weight:800;overflow-wrap:anywhere}
+.nav-account-verified{padding:5px 9px;border:0;border-radius:20px;background:#e7f8ef;color:#168052;font:800 11px Arial,sans-serif;cursor:pointer;white-space:nowrap}.nav-account-verified.unverified{background:#fff2dc;color:#ad6812}.nav-account-verified:disabled{opacity:.7;cursor:wait}\n.nav-account-copy strong{color:#183b58;font-size:15px;font-weight:800;overflow-wrap:anywhere}
 .nav-account-email{padding:0;border:0;background:none;color:#087f91;text-align:left;font:600 12px 'Hind Siliguri',Arial,sans-serif;overflow-wrap:anywhere;cursor:pointer}
 .nav-profile-open{width:39px;height:39px;flex:0 0 39px;display:grid;place-items:center;border:1px solid #dce8ef;border-radius:11px;background:#edf7f8;color:#087f91;font-size:16px;cursor:pointer}
 .nav-profile-panel[hidden]{display:none!important}
@@ -380,9 +380,9 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
     </div>
     <nav class="dashboard-popover dashboard-menu-popover" id="dashboardMenu" aria-label="Dashboard navigation" hidden>
       <a class="nav-account-summary" href="/profile.html" aria-label="Open My Account">
-        <div class="nav-account-avatar"><i class="fa-solid fa-user"></i></div>
+        <div class="nav-account-avatar" id="navAccountAvatar"><i class="fa-solid fa-user"></i></div>
         <div class="nav-account-copy">
-          <div class="nav-account-id-line"><strong id="navAccountName">Loading ID…</strong><i class="fa-solid fa-circle-check nav-account-verified" aria-label="Verified account" title="Verified account"></i></div>
+          <div class="nav-account-id-line"><strong id="navAccountName">Loading ID…</strong><button class="nav-account-verified unverified" id="navAccountVerify" type="button">VERIFY</button></div>
           <span class="nav-account-email" id="navAccountEmail">Loading account…</span>
         </div>
         <span class="nav-profile-open" aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
@@ -428,7 +428,7 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 </main>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signOut, sendEmailVerification } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
@@ -439,12 +439,12 @@ let activeProfileRef=null;
 function setVerification(el,verified,label){el.classList.toggle("unverified",!verified);el.innerHTML='<i class="fa-solid '+(verified?"fa-circle-check":"fa-circle-exclamation")+'"></i> '+label+' '+(verified?"verified":"unverified");}
 onAuthStateChanged(auth,async user=>{
   if(!user){location.replace("/login.html?next=%2Fdashboard.html");return;}
-  if(!user.emailVerified){await signOut(auth);location.replace("/login.html");return;}
+
   try{
     activeProfileRef=doc(db,"userProfiles",user.uid);const snap=await getDoc(activeProfileRef);const p=snap.exists()?snap.data():{};
     const first=p.firstName||user.displayName?.split(" ")[0]||"User",last=p.lastName||user.displayName?.split(" ").slice(1).join(" ")||"";
     const full=p.fullName||user.displayName||[first,last].filter(Boolean).join(" ");
-    document.getElementById("profileFullName").textContent=full;document.getElementById("profileEmail").textContent=user.email||"";document.getElementById("navAccountName").textContent=p.accountId||user.uid.slice(0,12).toUpperCase();document.getElementById("navAccountEmail").textContent=user.email||"";document.getElementById("navAccountAvatar").textContent=(first[0]||"U").toUpperCase();
+    document.getElementById("profileFullName").textContent=full;document.getElementById("profileEmail").textContent=user.email||"";document.getElementById("navAccountName").textContent=p.accountId||"ID pending";document.getElementById("navAccountEmail").textContent=user.email||"";document.getElementById("navAccountAvatar").textContent=(first[0]||"U").toUpperCase();const verifyBtn=document.getElementById("navAccountVerify");verifyBtn.textContent=user.emailVerified?"VERIFIED":"VERIFY";verifyBtn.classList.toggle("unverified",!user.emailVerified);verifyBtn.title=user.emailVerified?"Gmail verified":"Click to resend Gmail verification";
     document.getElementById("profileAvatar").textContent=(first[0]||"U").toUpperCase();
     document.getElementById("profileFirstName").textContent=first;document.getElementById("profileLastName").textContent=last||"—";
     document.getElementById("profileEmailDetail").textContent=user.email||"—";document.getElementById("profilePhone").textContent=user.phoneNumber||p.phone||"—";
@@ -465,6 +465,13 @@ document.getElementById("saveProfile").addEventListener("click",async()=>{
  const btn=document.getElementById("saveProfile"),status=document.getElementById("profileSaveStatus");btn.disabled=true;status.textContent="Saving…";
  try{if(!activeProfileRef)throw new Error("Profile is not ready.");await updateDoc(activeProfileRef,{dateOfBirth:document.getElementById("editDob").value,gender:document.getElementById("editGender").value,address:document.getElementById("editAddress").value.trim(),city:document.getElementById("editCity").value.trim(),state:document.getElementById("editState").value.trim(),postalCode:document.getElementById("editPostal").value.trim()});status.textContent="Personal information saved successfully.";}
  catch(e){status.textContent=e.code==="permission-denied"?"Firestore security rules need to be published first.":e.message||"Could not save details.";}
+ finally{btn.disabled=false;}
+});
+document.getElementById("navAccountVerify").addEventListener("click",async e=>{
+ const user=auth.currentUser;if(!user||user.emailVerified)return;
+ const btn=e.currentTarget;btn.disabled=true;btn.textContent="SENDING…";
+ try{await sendEmailVerification(user);btn.textContent="SENT";alert("A new Gmail verification link has been sent. Please check your inbox.");}
+ catch(error){btn.textContent="VERIFY";alert("Could not send the verification email. Please try again.");}
  finally{btn.disabled=false;}
 });
 document.getElementById("logoutBtn").addEventListener("click",async()=>{
