@@ -262,8 +262,8 @@ async function bootstrapAccount(env, claims) {
         profileFields.accountId = fieldString(accountId);
         fieldPaths.push("accountId");
       }
-      if (!readBoolean(profile, "emailVerified")) {
-        profileFields.emailVerified = { booleanValue: true };
+      if (readBoolean(profile, "emailVerified") !== (claims.email_verified === true)) {
+        profileFields.emailVerified = { booleanValue: claims.email_verified === true };
         fieldPaths.push("emailVerified");
       }
       if (fieldPaths.length) {
@@ -370,9 +370,6 @@ export default {
       }
       if (request.method === "POST" && url.pathname === "/api/account/bootstrap") {
         const claims = await requireUser(request);
-        if (claims.email_verified !== true) {
-          return json({ success: false, error: "Please verify your email before activating your FastMoney account." }, 403, cors);
-        }
         const result = await bootstrapAccount(env, claims);
         return json({ success: true, message: "FastMoney account is ready", ...result }, 200, cors);
       }
