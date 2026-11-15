@@ -165,10 +165,11 @@ async function readDocument(env, collection, id) {
   return result.response.status === 404 ? null : result.data;
 }
 function newAccountId() {
-  const bytes = crypto.getRandomValues(new Uint8Array(15));
-  let value = String((bytes[0] % 9) + 1);
-  for (let i = 1; i < 15; i++) value += String(bytes[i] % 10);
-  return value;
+  const alphabet = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
+  const bytes = crypto.getRandomValues(new Uint8Array(6));
+  let suffix = "";
+  for (const byte of bytes) suffix += alphabet[byte % alphabet.length];
+  return "FM-" + suffix;
 }
 function documentName(collection, id) {
   return "projects/" + PROJECT_ID + "/databases/(default)/documents/" + collection + "/" + id;
@@ -231,7 +232,7 @@ async function bootstrapAccount(env, claims) {
     const writes = [];
     let newIdReserved = false;
 
-    if (!/^\d{15}$/.test(accountId)) {
+    if (!/^FM-[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{6}$/.test(accountId) && !/^\d{15}$/.test(accountId)) {
       accountId = newAccountId();
       const registry = await readDocument(env, "fastMoneyAccountIds", accountId);
       if (registry) continue;
