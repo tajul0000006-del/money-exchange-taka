@@ -171,6 +171,7 @@ document.getElementById("generatePassword").addEventListener("click",()=>{const 
 document.getElementById("sendOtp").addEventListener("click",async()=>{
  message.textContent="";const email=form.email.value.trim(),password=form.password.value,first=form.firstName.value.trim(),last=form.lastName.value,phone=form.phone.value.replace(/[^0-9]/g,"");
  if(!first||!last||!email||!password||password.length<8||password!==form.confirmPassword.value||!countrySelect.value||phone.length<6){message.textContent="Complete all required fields and enter a valid mobile number first.";return;}
+ if(!email.toLowerCase().endsWith("@gmail.com")){message.textContent="Please register with a Gmail address ending in @gmail.com.";return;}
  const strong=/[A-Z]/.test(password)&&/[a-z]/.test(password)&&/[0-9]/.test(password)&&/[^A-Za-z0-9]/.test(password);
  if(!strong){message.textContent="Password must include uppercase, lowercase, number and symbol.";return;}
  const c=countries.find(x=>x[1]===countrySelect.value),e164=dialSelect.value+phone.replace(/^0+/,"");
