@@ -157,6 +157,7 @@ function fieldNumber(value) { return { integerValue: String(value) }; }
 function fieldMap(fields) { return { mapValue: { fields } }; }
 function fieldTimestamp(value) { return { timestampValue: value }; }
 function readString(document, field) { return document?.fields?.[field]?.stringValue || ""; }
+function readBoolean(document, field) { return document?.fields?.[field]?.booleanValue === true; }
 function docPath(collection, id) { return "/" + collection + "/" + encodeURIComponent(id); }
 
 async function readDocument(env, collection, id) {
@@ -254,16 +255,29 @@ async function bootstrapAccount(env, claims) {
         update: makeNewProfileDocument(uid, claims, accountId, now),
         currentDocument: { exists: false }
       });
-    } else if (!readString(profile, "accountId")) {
-      const updated = {
-        name: documentName("userProfiles", uid),
-        fields: { accountId: fieldString(accountId), updatedAt: fieldTimestamp(now) }
-      };
-      writes.push({
-        update: updated,
-        updateMask: { fieldPaths: ["accountId", "updatedAt"] },
-        currentDocument: { updateTime: profile.updateTime }
-      });
+    } else if (profile) {
+      const profileFields = {};
+      const fieldPaths = [];
+      if (!readString(profile, "accountId")) {
+        profileFields.accountId = fieldString(accountId);
+        fieldPaths.push("accountId");
+      }
+      if (!readBoolean(profile, "emailVerified")) {
+        profileFields.emailVerified = { booleanValue: true };
+        fieldPaths.push("emailVerified");
+      }
+      if (fieldPaths.length) {
+        profileFields.updatedAt = fieldTimestamp(now);
+        fieldPaths.push("updatedAt");
+        writes.push({
+          update: {
+            name: documentName("userProfiles", uid),
+            fields: profileFields
+          },
+          updateMask: { fieldPaths },
+          currentDocument: { updateTime: profile.updateTime }
+        });
+      }
     }
 
     if (!wallet) {
