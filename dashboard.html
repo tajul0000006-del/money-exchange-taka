@@ -278,7 +278,7 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 .nav-account-summary{display:flex;align-items:center;gap:11px;padding:5px 3px 14px;margin-bottom:8px;border-bottom:1px solid #e5edf3;min-width:0}
 .nav-account-avatar{width:43px;height:43px;flex:0 0 43px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(145deg,#087f9b,#12b78d);color:#fff;font-size:18px;font-weight:800}
 .nav-account-copy{display:grid;gap:3px;min-width:0;flex:1}
-.nav-account-verified{padding:5px 9px;border:0;border-radius:20px;background:#e7f8ef;color:#168052;font:800 11px Arial,sans-serif;cursor:pointer;white-space:nowrap}.nav-account-verified.unverified{background:#fff2dc;color:#ad6812}.nav-account-verified:disabled{opacity:.7;cursor:wait}\n.nav-account-copy strong{color:#183b58;font-size:15px;font-weight:800;overflow-wrap:anywhere}
+.nav-account-verified{padding:5px 9px;border:0;border-radius:20px;background:#e7f8ef;color:#168052;font:800 11px Arial,sans-serif;cursor:pointer;white-space:nowrap}.nav-account-verified.unverified{background:#fff0f0;color:#c62828}.nav-account-verified:disabled{opacity:.7;cursor:wait}\n.nav-account-copy strong{color:#183b58;font-size:15px;font-weight:800;overflow-wrap:anywhere}
 .nav-account-email{padding:0;border:0;background:none;color:#087f91;text-align:left;font:600 12px 'Hind Siliguri',Arial,sans-serif;overflow-wrap:anywhere;cursor:pointer}
 .nav-profile-open{width:39px;height:39px;flex:0 0 39px;display:grid;place-items:center;border:1px solid #dce8ef;border-radius:11px;background:#edf7f8;color:#087f91;font-size:16px;cursor:pointer}
 .nav-profile-panel[hidden]{display:none!important}
@@ -382,7 +382,7 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
       <a class="nav-account-summary" href="/profile.html" aria-label="Open My Account">
         <div class="nav-account-avatar" id="navAccountAvatar"><i class="fa-solid fa-user"></i></div>
         <div class="nav-account-copy">
-          <div class="nav-account-id-line"><strong id="navAccountName">Loading ID…</strong><button class="nav-account-verified unverified" id="navAccountVerify" type="button">VERIFY</button></div>
+          <div class="nav-account-id-line"><strong id="navAccountName">Loading ID…</strong><span class="nav-account-verified unverified" id="navAccountVerify"><i class="fa-solid fa-circle-exclamation"></i> UNVERIFIED</span></div>
           <span class="nav-account-email" id="navAccountEmail">Loading account…</span>
         </div>
         <span class="nav-profile-open" aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
@@ -428,7 +428,7 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 </main>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut, sendEmailVerification } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, updateDoc, setDoc, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
@@ -457,27 +457,21 @@ onAuthStateChanged(auth,async user=>{
   if(!user){location.replace("/login.html?next=%2Fdashboard.html");return;}
 
   try{
+    await user.reload();
     activeProfileRef=doc(db,"userProfiles",user.uid);const snap=await getDoc(activeProfileRef);const p=snap.exists()?snap.data():{};if(!p.accountId){p.accountId=await createUniqueFastMoneyId(user.uid);await setDoc(activeProfileRef,{uid:user.uid,accountId:p.accountId,email:user.email||""},{merge:true});}
     const first=p.firstName||user.displayName?.split(" ")[0]||"User",last=p.lastName||user.displayName?.split(" ").slice(1).join(" ")||"";
     document.getElementById("navAccountName").textContent=p.accountId||"ID pending";
     document.getElementById("navAccountEmail").textContent=user.email||"";
     document.getElementById("navAccountAvatar").textContent=(first[0]||"U").toUpperCase();
     const verifyBtn=document.getElementById("navAccountVerify");
-    verifyBtn.textContent=user.emailVerified?"VERIFIED":"VERIFY";
     verifyBtn.classList.toggle("unverified",!user.emailVerified);
-    verifyBtn.title=user.emailVerified?"Gmail verified":"Click to resend Gmail verification";
+    verifyBtn.innerHTML=user.emailVerified?'<i class="fa-solid fa-circle-check"></i> VERIFIED':'<i class="fa-solid fa-circle-exclamation"></i> UNVERIFIED';
+    verifyBtn.title=user.emailVerified?"Gmail verified":"Open your profile to verify Gmail";
     const code=p.currencyCode||"BDT",symbol=p.currencySymbol||currencySymbols[code]||code+" ";
     document.getElementById("localCurrencyLabel").textContent=code;document.getElementById("localCurrencyBalance").textContent=symbol+"0.000";
     document.getElementById("localWalletName").textContent=code;document.getElementById("localWalletDescription").textContent=currencyNames[code]||p.country||"Local Currency";
   }catch(error){console.error("Could not load account information:",error);document.getElementById("navAccountName").textContent="ID unavailable";document.getElementById("navAccountEmail").textContent=user.email||"";}
   document.body.classList.add("fm-auth-ready");
-});
-document.getElementById("navAccountVerify").addEventListener("click",async e=>{
- const user=auth.currentUser;if(!user||user.emailVerified)return;
- const btn=e.currentTarget;btn.disabled=true;btn.textContent="SENDING…";
- try{await sendEmailVerification(user);btn.textContent="SENT";alert("A new Gmail verification link has been sent. Please check your inbox.");}
- catch(error){btn.textContent="VERIFY";alert("Could not send the verification email. Please try again.");}
- finally{btn.disabled=false;}
 });
 document.getElementById("logoutBtn").addEventListener("click",async()=>{
   const button=document.getElementById("logoutBtn");button.disabled=true;button.textContent="Logging out...";
@@ -500,3 +494,4 @@ document.getElementById("logoutBtn").addEventListener("click",async()=>{
 </script>
 <script src="./language.js?v=1" defer></script>
 </body></html>
+<style id="fastmoney-verification-status">.nav-account-verified{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:20px;background:#e7f8ef;color:#168052;font:800 10px Arial,sans-serif;white-space:nowrap}.nav-account-verified.unverified{background:#fff0f0!important;color:#c62828!important;border:1px solid #ffd0d0}@media(prefers-color-scheme:dark){.nav-account-verified.unverified{background:#482326!important;color:#ff9a9a!important;border-color:#71373c!important}}</style>
