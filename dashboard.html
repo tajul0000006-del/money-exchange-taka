@@ -209,6 +209,14 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 @media(max-width:760px){.wallet-balance-panel{padding:10px 14px!important}.wallet-balance-panel h2{margin:5px 0 4px!important;font-size:16px!important}.wallet-total-values{gap:14px!important}.wallet-total-item strong{font-size:21px!important}.wallet-total-divider{height:25px!important}}
 
 /* Premium 300px wallet cards with branded colors and left-side logos */
+.wallet-fastmoney-usd{background:linear-gradient(120deg,#071d3b 0%,#0b4770 48%,#10a6a0 100%)!important;border:1px solid rgba(255,255,255,.28)!important;box-shadow:0 14px 30px rgba(4,63,91,.28),inset 0 1px 0 rgba(255,255,255,.24)!important}
+.wallet-fastmoney-usd:before{width:205px;height:205px;right:-42px;top:-110px;border:25px solid rgba(255,255,255,.16);box-shadow:0 0 0 14px rgba(255,255,255,.035)}
+.wallet-fastmoney-usd:after{content:"FASTMONEY  •  PREMIUM USD";color:#c9fff5;letter-spacing:1.1px}
+.wallet-fastmoney-usd .wallet-symbol{width:66px!important;height:66px!important;border-radius:20px!important;background:linear-gradient(145deg,#ffffff,#b8f5e8)!important;color:#075b69!important;border:1px solid rgba(255,255,255,.75)!important;font-size:30px!important;box-shadow:0 8px 20px rgba(0,0,0,.2),inset 0 1px 0 #fff!important}
+.wallet-fastmoney-usd .wallet-name{font-size:18px!important;letter-spacing:.35px!important}
+.wallet-fastmoney-usd strong{font-size:27px!important;letter-spacing:-.7px!important}
+.wallet-fastmoney-usd small{color:#d7fff6!important}
+.wallet-fastmoney-usd:after{font-size:9px!important;font-weight:900!important}
 .wallet-scroller{gap:14px!important;padding:4px 3px 14px!important;scroll-padding-left:3px}
 .wallet-item{position:relative;isolation:isolate;overflow:hidden;flex:0 0 300px!important;width:300px!important;min-width:300px!important;height:166px!important;min-height:166px!important;padding:20px!important;border:0!important;border-radius:19px!important;display:grid!important;grid-template-columns:62px 1fr!important;grid-template-rows:auto auto auto!important;column-gap:15px!important;align-content:center!important;align-items:center!important;box-shadow:0 10px 24px rgba(16,38,64,.15)!important;scroll-snap-align:start}
 .wallet-item:before{content:"";position:absolute;z-index:-1;width:170px;height:170px;right:-48px;top:-78px;border:22px solid rgba(255,255,255,.13);border-radius:50%}
@@ -291,11 +299,12 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
     </div>
     <div class="wallet-list-heading"><div><h3>My Wallets</h3></div><span class="wallet-scroll-hint"><i class="fa-solid fa-arrows-left-right"></i> Scroll</span></div>
     <div class="wallet-scroller" role="list" aria-label="Available wallets">
+      <article class="wallet-item wallet-fastmoney-usd" role="listitem"><span class="wallet-symbol"><i class="fa-solid fa-dollar-sign"></i></span><span class="wallet-name">FastMoney USD</span><strong>$0.000</strong><small>Premium USD Wallet</small></article>
       <article class="wallet-item wallet-usdt" role="listitem"><span class="wallet-symbol">₮</span><span class="wallet-name">USDT</span><strong>0.000</strong><small>Tether Wallet</small></article>
       <article class="wallet-item wallet-usd" role="listitem"><span class="wallet-symbol">$</span><span class="wallet-name">USD</span><strong>0.000</strong><small>US Dollar</small></article>
       <article class="wallet-item wallet-bdt" role="listitem"><span class="wallet-symbol">৳</span><span class="wallet-name">BDT</span><strong>0.000</strong><small>Bangladeshi Taka</small></article>
       <article class="wallet-item wallet-epay" role="listitem"><span class="wallet-symbol"><i class="fa-solid fa-bolt"></i></span><span class="wallet-name">ePay</span><strong>0.000</strong><small>ePay Wallet</small></article>
-      <article class="wallet-item wallet-fastmoney" role="listitem"><span class="wallet-symbol"><i class="fa-solid fa-bolt"></i></span><span class="wallet-name">FastMoney</span><strong>0.000</strong><small>FastMoney Wallet</small></article>
+      
       <article class="wallet-item wallet-btc" role="listitem"><span class="wallet-symbol">₿</span><span class="wallet-name">BTC</span><strong>0.000</strong><small>Bitcoin Wallet</small></article>
       <article class="wallet-item wallet-eth" role="listitem"><span class="wallet-symbol">Ξ</span><span class="wallet-name">ETH</span><strong>0.000</strong><small>Ethereum Wallet</small></article>
       <article class="wallet-item wallet-paypal" role="listitem"><span class="wallet-symbol"><i class="fa-brands fa-paypal"></i></span><span class="wallet-name">PayPal</span><strong>0.000</strong><small>PayPal Wallet</small></article>
