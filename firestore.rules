@@ -36,7 +36,6 @@ service cloud.firestore {
     match /userProfiles/{userId} {
       allow create: if request.auth != null
                     && request.auth.uid == userId
-                    && request.auth.token.phone_number != null
                     && request.resource.data.uid == userId;
       allow read, update, delete: if request.auth != null
                                   && request.auth.uid == userId;
