@@ -512,6 +512,43 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
       <article class="wallet-item wallet-paypal" role="listitem"><span class="wallet-symbol"><i class="fa-brands fa-paypal"></i></span><span class="wallet-name">PayPal</span><strong>0.000</strong><small>PayPal Wallet</small></article>
     </div>
   </section>
+  <script>
+  // Restore the signed-in user's last confirmed currency and balance before first paint.
+  (function(){
+    try {
+      let authUser = null;
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith("firebase:authUser:")) {
+          const value = JSON.parse(localStorage.getItem(key) || "null");
+          if (value && value.uid) { authUser = value; break; }
+        }
+      }
+      if (!authUser) return;
+      const saved = JSON.parse(localStorage.getItem("fastmoney-wallet-cache-" + authUser.uid) || "null");
+      const profile = saved && saved.profile;
+      const wallet = saved && saved.wallet;
+      const code = String(profile && profile.currencyCode || "").trim().toUpperCase();
+      if (!code || !wallet) return;
+      const balances = wallet.balances || {};
+      const amount = Number(balances[code] || 0);
+      const format = value => (Number.isFinite(Number(value)) ? Number(value) : 0).toLocaleString("en-US",{minimumFractionDigits:3,maximumFractionDigits:3});
+      const set = (id,value) => { const el=document.getElementById(id); if(el) el.textContent=value; };
+      set("localCurrencyLabel",code);
+      set("localCurrencyBalance",format(amount));
+      set("localWalletName",code);
+      set("localWalletDescription",profile.country || "Local Currency");
+      set("localWalletSymbol",profile.currencySymbol || code);
+      const localCard=document.querySelector(".wallet-bdt");
+      const localAmount=localCard && localCard.querySelector("strong");
+      if(localAmount) localAmount.textContent=format(amount);
+      const usdAmount=document.querySelector(".wallet-total-usd strong");
+      if(usdAmount) usdAmount.textContent=format(balances.USD || 0);
+    } catch (error) {
+      console.warn("FastMoney instant wallet restore skipped.",error);
+    }
+  })();
+  </script>
   <button class="dash-btn secondary" id="logoutBtn" type="button" hidden>Log Out</button>
   <nav class="dashboard-bottom-nav" aria-label="Quick service navigation">
     <a class="bottom-nav-item bottom-nav-convert active" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></span><span class="bottom-nav-label">Convert</span></a>
