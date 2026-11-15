@@ -463,8 +463,7 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
   </header>
   <section class="wallet-overview" aria-label="Total balance and wallets">
     <div class="wallet-balance-panel">
-      <div class="wallet-balance-heading"><span class="wallet-eyebrow"><i class="fa-solid fa-wallet"></i> BALANCE</span></div>
-      <h2>Total Balance</h2>
+      <h2 class="wallet-total-title"><span class="wallet-total-title-icon"><i class="fa-solid fa-wallet" aria-hidden="true"></i></span><span>Total Balance</span></h2>
       <div class="wallet-total-values">
         <div class="wallet-total-item"><span>USD</span><strong>$0.000</strong></div>
         <div class="wallet-total-divider"></div>
@@ -716,6 +715,38 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
   .wallet-name{font-size:14px!important}
   .wallet-item strong{font-size:20px!important}
   .wallet-fastmoney-usd .wallet-symbol{width:46px!important;height:46px!important}
+}
+
+
+/* Place the wallet icon directly beside the Total Balance title */
+.wallet-total-title{
+  display:flex!important;
+  align-items:center!important;
+  gap:9px!important;
+  margin:0 0 9px!important;
+  color:#183b58!important;
+  font-size:18px!important;
+  line-height:1.25!important;
+}
+.wallet-total-title-icon{
+  width:30px;
+  height:30px;
+  flex:0 0 30px;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  background:linear-gradient(145deg,#d8f4ef,#c5e9f3);
+  color:#087f91;
+  font-size:15px;
+  box-shadow:0 3px 9px rgba(8,127,145,.10);
+}
+@media(prefers-color-scheme:dark){
+  .wallet-total-title{color:#edf7ff!important}
+  .wallet-total-title-icon{background:linear-gradient(145deg,#174b4b,#1b4660);color:#82e0d7}
+}
+@media(max-width:760px){
+  .wallet-total-title{font-size:16px!important;margin-bottom:7px!important;gap:8px!important}
+  .wallet-total-title-icon{width:28px;height:28px;flex-basis:28px;border-radius:9px;font-size:14px}
 }
 
 </style>
