@@ -59,7 +59,7 @@
 </main>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getAuth, onAuthStateChanged, sendEmailVerification } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
@@ -67,7 +67,7 @@ let profileRef=null;
 function setVerification(el,verified,label){el.classList.toggle("unverified",!verified);el.innerHTML='<i class="fa-solid '+(verified?"fa-circle-check":"fa-circle-exclamation")+'"></i> '+label+' '+(verified?"verified":"unverified");}
 onAuthStateChanged(auth,async user=>{
  if(!user){location.replace("/login.html?next=%2Fprofile.html");return;}
- if(!user.emailVerified){location.replace("/login.html");return;}
+ 
  profileRef=doc(db,"userProfiles",user.uid);
  try{
   const snap=await getDoc(profileRef),p=snap.exists()?snap.data():{};
@@ -83,8 +83,8 @@ onAuthStateChanged(auth,async user=>{
   document.getElementById("profilePhoneStatus").textContent=user.phoneNumber?"Verified":"Unverified";
   document.getElementById("profileCountry").textContent=p.country||"—";
   document.getElementById("profileCurrency").textContent=p.currencyCode||"USD";
-  document.getElementById("profileUid").textContent=p.accountId||user.uid.slice(0,12)+"…";
-  setVerification(document.getElementById("emailStatus"),user.emailVerified,"Email");
+  document.getElementById("profileUid").textContent=p.accountId||"ID pending";
+  setVerification(document.getElementById("emailStatus"),user.emailVerified,"Gmail");
   setVerification(document.getElementById("phoneStatusBadge"),!!user.phoneNumber,"Mobile");
   document.getElementById("editDob").value=p.dateOfBirth||"";
   document.getElementById("editGender").value=p.gender||"";
