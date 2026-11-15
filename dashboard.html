@@ -781,13 +781,53 @@ onAuthStateChanged(auth, async user => {
     const previousProfile = previousCache?.profile || {};
     // Never let a temporarily incomplete profile response erase the saved
     // signup currency while the dashboard is refreshing.
+    // Signup currency is the permanent local-currency choice.
+    // Never replace it with a later editable country/currency field.
+    const signupCurrencyByCountry = {
+      BD:["BDT","৳"],US:["USD","$"],GB:["GBP","£"],IN:["INR","₹"],PK:["PKR","₨"],
+      AE:["AED","د.إ"],SA:["SAR","﷼"],CA:["CAD","$"],AU:["AUD","$"],
+      DE:["EUR","€"],FR:["EUR","€"],IT:["EUR","€"],ES:["EUR","€"],NL:["EUR","€"],
+      IE:["EUR","€"],PT:["EUR","€"],CH:["CHF","Fr"],JP:["JPY","¥"],CN:["CNY","¥"],
+      KR:["KRW","₩"],SG:["SGD","$"],MY:["MYR","RM"],ID:["IDR","Rp"],TH:["THB","฿"],
+      PH:["PHP","₱"],NP:["NPR","रु"],LK:["LKR","Rs"],TR:["TRY","₺"],ZA:["ZAR","R"],
+      NG:["NGN","₦"],KE:["KES","KSh"],EG:["EGP","E£"],NZ:["NZD","$"],MX:["MXN","$"],
+      BR:["BRL","R$"],SE:["SEK","kr"],NO:["NOK","kr"],DK:["DKK","kr"],RU:["RUB","₽"],
+      AF:["AFN","؋"],QA:["QAR","ر.ق"],KW:["KWD","د.ك"],OM:["OMR","ر.ع."],
+      BH:["BHD","د.ب"],JO:["JOD","د.ا"],GH:["GHS","₵"],UG:["UGX","USh"],
+      TZ:["TZS","TSh"],MA:["MAD","د.م."],AR:["ARS","$"],CL:["CLP","$"],
+      CO:["COP","$"],PL:["PLN","zł"],UA:["UAH","₴"],IL:["ILS","₪"],HK:["HKD","$"],
+      TW:["TWD","$"],VN:["VND","₫"],KH:["KHR","៛"],MM:["MMK","K"],ET:["ETB","Br"]
+    };
+    const savedCountryCode = String(serverProfile.signupCountryCode || serverProfile.countryCode || previousProfile.signupCountryCode || previousProfile.countryCode || "").toUpperCase();
+    const countryCurrency = signupCurrencyByCountry[savedCountryCode] || [];
+    const fixedCurrencyCode = String(serverProfile.signupCurrencyCode || serverProfile.currencyCode || previousProfile.signupCurrencyCode || previousProfile.currencyCode || countryCurrency[0] || "").toUpperCase();
+    const fixedCurrencySymbol = serverProfile.signupCurrencySymbol || serverProfile.currencySymbol || previousProfile.signupCurrencySymbol || previousProfile.currencySymbol || countryCurrency[1] || fixedCurrencyCode;
     const profile = {
       ...previousProfile,
       ...serverProfile,
-      currencyCode: serverProfile.currencyCode || previousProfile.currencyCode || "",
-      currencySymbol: serverProfile.currencySymbol || previousProfile.currencySymbol || "",
-      country: serverProfile.country || previousProfile.country || ""
+      country: serverProfile.signupCountry || serverProfile.country || previousProfile.signupCountry || previousProfile.country || "",
+      countryCode: savedCountryCode,
+      signupCountryCode: savedCountryCode,
+      currencyCode: fixedCurrencyCode,
+      signupCurrencyCode: fixedCurrencyCode,
+      currencySymbol: fixedCurrencySymbol,
+      signupCurrencySymbol: fixedCurrencySymbol
     };
+    if (!Array.isArray(serverProfile.notifications) || serverProfile.notifications.length === 0) {
+      const welcomeNotification = {
+        id: "welcome-" + user.uid,
+        type: "welcome",
+        title: "Welcome to FastMoney!",
+        message: "Your account has been created successfully. Welcome aboard! You can now explore your FastMoney dashboard and services.",
+        read: false,
+        createdAt: Date.now()
+      };
+      try {
+        await updateDoc(profileRef, { notifications: [welcomeNotification] });
+      } catch (notificationError) {
+        console.error("Could not create the account welcome notification:", notificationError);
+      }
+    }
     const firstName = profile.firstName || user.displayName?.split(" ")[0] || "User";
 
     document.getElementById("navAccountName").textContent =
@@ -811,9 +851,12 @@ onAuthStateChanged(auth, async user => {
     try {
       localStorage.setItem(walletCacheKey, JSON.stringify({
         profile: {
-          currencyCode: String(profile.currencyCode || "").toUpperCase(),
-          currencySymbol: profile.currencySymbol || "",
-          country: profile.country || ""
+          currencyCode: String(profile.signupCurrencyCode || profile.currencyCode || "").toUpperCase(),
+          signupCurrencyCode: String(profile.signupCurrencyCode || profile.currencyCode || "").toUpperCase(),
+          currencySymbol: profile.signupCurrencySymbol || profile.currencySymbol || "",
+          signupCurrencySymbol: profile.signupCurrencySymbol || profile.currencySymbol || "",
+          country: profile.signupCountry || profile.country || "",
+          signupCountryCode: profile.signupCountryCode || profile.countryCode || ""
         },
         wallet: walletResult.wallet
       }));
