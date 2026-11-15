@@ -269,6 +269,34 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 #profileSaveStatus{margin:8px 0 0;font-size:12px;color:#13804e}
 @media(prefers-color-scheme:dark){.personal-profile{background:linear-gradient(135deg,#142b40,#12253a);border-color:#2d465e}.profile-heading h2,.profile-detail strong{color:#e8f2fc}.profile-heading p,.profile-detail span{color:#9bb0c5}.profile-detail{background:#172e44;border-color:#304a62}.profile-edit{background:#102238;border-color:#2e475f}.profile-edit summary{color:#75d9d3}.profile-edit label{color:#c0d0e0}.profile-edit input,.profile-edit select{background:#0c1b2d;border-color:#3b536c;color:#eef5ff}}
 @media(max-width:520px){.personal-profile{padding:15px}.profile-grid,.profile-edit-grid{grid-template-columns:1fr 1fr}.profile-avatar{width:50px;height:50px;flex-basis:50px}.profile-heading h2{font-size:18px}}
+
+/* Account identity and profile are available only inside the navigation menu */
+.dashboard-menu-popover{width:min(390px,calc(100vw - 20px))!important;max-height:calc(100vh - 92px);overflow-y:auto}
+.nav-account-summary{display:flex;align-items:center;gap:11px;padding:5px 3px 14px;margin-bottom:8px;border-bottom:1px solid #e5edf3;min-width:0}
+.nav-account-avatar{width:43px;height:43px;flex:0 0 43px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(145deg,#087f9b,#12b78d);color:#fff;font-size:18px;font-weight:800}
+.nav-account-copy{display:grid;gap:3px;min-width:0;flex:1}
+.nav-account-copy strong{color:#183b58;font-size:15px;font-weight:800;overflow-wrap:anywhere}
+.nav-account-email{padding:0;border:0;background:none;color:#087f91;text-align:left;font:600 12px 'Hind Siliguri',Arial,sans-serif;overflow-wrap:anywhere;cursor:pointer}
+.nav-profile-open{width:39px;height:39px;flex:0 0 39px;display:grid;place-items:center;border:1px solid #dce8ef;border-radius:11px;background:#edf7f8;color:#087f91;font-size:16px;cursor:pointer}
+.nav-profile-panel[hidden]{display:none!important}
+.nav-profile-panel .personal-profile{margin:0;padding:13px;border-radius:13px;box-shadow:none}
+.nav-profile-panel .profile-top{gap:10px;margin-bottom:12px}
+.nav-profile-panel .profile-avatar{width:46px;height:46px;flex-basis:46px;border-radius:14px;font-size:20px}
+.nav-profile-panel .profile-heading h2{font-size:17px}
+.nav-profile-panel .profile-grid{gap:7px}
+.nav-profile-panel .profile-detail{padding:8px}
+.nav-profile-panel .profile-detail span{font-size:9px}
+.nav-profile-panel .profile-detail strong{font-size:11px}
+.nav-profile-panel .profile-edit{margin-top:10px;padding:10px}
+.nav-profile-panel .profile-edit-grid{gap:8px}
+.nav-profile-panel .profile-edit label{font-size:10px}
+@media(prefers-color-scheme:dark){
+ .nav-account-summary{border-bottom-color:#30465e}
+ .nav-account-copy strong{color:#e8f2fc}
+ .nav-account-email{color:#75d9d3}
+ .nav-profile-open{background:#17394a;border-color:#36566c;color:#82dfdc}
+}
+
 </style>
   <link rel="stylesheet" href="./responsive.css">
 <style id="fastmoney-brand-style">.fastmoney-brand{display:flex!important;align-items:center;gap:9px;flex:0 0 auto;text-decoration:none!important;color:#102a43!important;white-space:nowrap}.fastmoney-mark{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:linear-gradient(145deg,#087b8c,#075b68);color:#fff;font-size:25px;font-weight:900}.fastmoney-word{display:flex;flex-direction:column;font-size:21px;line-height:1.05;font-weight:850;letter-spacing:-.7px}.fastmoney-word b{color:#087b8c}.fastmoney-word small{margin-top:4px;font-size:8px;letter-spacing:1.35px;color:#718096;font-weight:800}.fastmoney-legal-links{display:flex;justify-content:center;gap:12px 22px;flex-wrap:wrap;padding:16px 18px;border-top:1px solid #e5edf2;background:#fff;font:600 13px/1.5 system-ui,sans-serif}.fastmoney-legal-links a{color:#426174;text-decoration:none}</style>
@@ -282,7 +310,7 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
       <img src="./assets/fastmoneylogo.png" alt="FastMoney" width="204" height="54">
     </a>
     <div class="dashboard-header-actions">
-      <a class="dashboard-icon-btn profile-nav-trigger" href="#personal-details" aria-label="My profile" title="My profile"><i class="fa-solid fa-user" aria-hidden="true"></i></a>
+      <button class="dashboard-icon-btn profile-nav-trigger" id="headerProfileToggle" type="button" aria-label="Open profile in navigation" title="My profile"><i class="fa-solid fa-user" aria-hidden="true"></i></button>
       <button class="dashboard-icon-btn notification-trigger" id="notificationToggle" type="button" aria-label="Transaction notifications" aria-expanded="false" title="Transaction notifications">
         <i class="fa-solid fa-bell" aria-hidden="true"></i><span class="notification-dot" aria-hidden="true"></span>
       </button>
@@ -303,14 +331,12 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
       <a class="dashboard-notification-link" href="/history.html"><i class="fa-solid fa-clock-rotate-left"></i> View all transactions <i class="fa-solid fa-arrow-right"></i></a>
     </div>
     <nav class="dashboard-popover dashboard-menu-popover" id="dashboardMenu" aria-label="Dashboard navigation" hidden>
-      <a href="#dashboard"><i class="fa-solid fa-house"></i> Dashboard Home</a>
-      <a href="/member-exchange.html"><i class="fa-solid fa-arrow-right-arrow-left"></i> New Exchange</a>
-      <a href="/history.html"><i class="fa-solid fa-clock-rotate-left"></i> My Requests</a>
-      <a href="/chat.html"><i class="fa-solid fa-headset"></i> Customer Support</a>
-      <button type="button" id="headerLogoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
-    </nav>
-  </header>
-  <section class="personal-profile" id="personal-details" aria-label="Personal information">
+      <div class="nav-account-summary">
+        <div class="nav-account-avatar" id="navAccountAvatar"><i class="fa-solid fa-user"></i></div>
+        <div class="nav-account-copy"><strong id="navAccountName">Your Account</strong><button type="button" class="nav-account-email" id="navAccountEmail">Loading account…</button></div>
+        <button type="button" class="nav-profile-open" id="navProfileToggle" aria-label="Open personal information" title="Personal information"><i class="fa-solid fa-user-pen"></i></button>
+      </div>
+      <div class="nav-profile-panel" id="navProfilePanel" hidden><section class="personal-profile" id="personal-details" aria-label="Personal information" hidden>
     <div class="profile-top"><div class="profile-avatar" id="profileAvatar"><i class="fa-solid fa-user"></i></div><div class="profile-heading"><h2 id="profileFullName">Your Profile</h2><p id="profileEmail">Loading account details…</p><div class="profile-badges"><span class="profile-status" id="emailStatus"><i class="fa-solid fa-circle-check"></i> Gmail verified</span><span class="profile-status" id="phoneStatusBadge"><i class="fa-solid fa-circle-check"></i> Mobile verified</span></div></div></div>
     <div class="profile-grid">
       <div class="profile-detail"><span>First Name</span><strong id="profileFirstName">—</strong></div><div class="profile-detail"><span>Last Name</span><strong id="profileLastName">—</strong></div>
@@ -325,7 +351,15 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
         <label>State / Province<input id="editState" maxlength="80" placeholder="State or province"></label><label>Postal Code<input id="editPostal" maxlength="20" placeholder="Postal code"></label>
       </div><button class="profile-save" id="saveProfile" type="button">Save Personal Information</button><p id="profileSaveStatus" role="status"></p>
     </details>
-  </section>
+  </section></div>
+
+      <a href="#dashboard"><i class="fa-solid fa-house"></i> Dashboard Home</a>
+      <a href="/member-exchange.html"><i class="fa-solid fa-arrow-right-arrow-left"></i> New Exchange</a>
+      <a href="/history.html"><i class="fa-solid fa-clock-rotate-left"></i> My Requests</a>
+      <a href="/chat.html"><i class="fa-solid fa-headset"></i> Customer Support</a>
+      <button type="button" id="headerLogoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
+    </nav>
+  </header>
   <section class="wallet-overview" aria-label="Total balance and wallets">
     <div class="wallet-balance-panel">
       <div class="wallet-balance-heading"><span class="wallet-eyebrow"><i class="fa-solid fa-wallet"></i> ACCOUNT OVERVIEW</span><span class="wallet-live-label"><span></span> Wallet summary</span></div>
@@ -375,7 +409,7 @@ onAuthStateChanged(auth,async user=>{
     activeProfileRef=doc(db,"userProfiles",user.uid);const snap=await getDoc(activeProfileRef);const p=snap.exists()?snap.data():{};
     const first=p.firstName||user.displayName?.split(" ")[0]||"User",last=p.lastName||user.displayName?.split(" ").slice(1).join(" ")||"";
     const full=p.fullName||user.displayName||[first,last].filter(Boolean).join(" ");
-    document.getElementById("profileFullName").textContent=full;document.getElementById("profileEmail").textContent=user.email||"";
+    document.getElementById("profileFullName").textContent=full;document.getElementById("profileEmail").textContent=user.email||"";document.getElementById("navAccountName").textContent=full;document.getElementById("navAccountEmail").textContent=user.email||"";document.getElementById("navAccountAvatar").textContent=(first[0]||"U").toUpperCase();
     document.getElementById("profileAvatar").textContent=(first[0]||"U").toUpperCase();
     document.getElementById("profileFirstName").textContent=first;document.getElementById("profileLastName").textContent=last||"—";
     document.getElementById("profileEmailDetail").textContent=user.email||"—";document.getElementById("profilePhone").textContent=user.phoneNumber||p.phone||"—";
@@ -410,8 +444,17 @@ document.getElementById("logoutBtn").addEventListener("click",async()=>{
  const menu=document.getElementById("dashboardMenu");
  const noticeBtn=document.getElementById("notificationToggle");
  const notice=document.getElementById("notificationPopover");
+ const headerProfileBtn=document.getElementById("headerProfileToggle");
+ const profilePanel=document.getElementById("navProfilePanel");
+ const profileToggle=document.getElementById("navProfileToggle");
+ const emailToggle=document.getElementById("navAccountEmail");
  function closePanels(){menu.hidden=true;notice.hidden=true;menuBtn.setAttribute("aria-expanded","false");noticeBtn.setAttribute("aria-expanded","false");}
+ function openMenu(showProfile){closePanels();menu.hidden=false;menuBtn.setAttribute("aria-expanded","true");if(showProfile)profilePanel.hidden=false;}
+ function toggleProfile(){const opening=profilePanel.hidden;openMenu(opening);profilePanel.hidden=!opening;}
  menuBtn.addEventListener("click",function(){const opening=menu.hidden;closePanels();menu.hidden=!opening;menuBtn.setAttribute("aria-expanded",String(opening));});
+ headerProfileBtn.addEventListener("click",toggleProfile);
+ profileToggle.addEventListener("click",toggleProfile);
+ emailToggle.addEventListener("click",toggleProfile);
  noticeBtn.addEventListener("click",function(){const opening=notice.hidden;closePanels();notice.hidden=!opening;noticeBtn.setAttribute("aria-expanded",String(opening));});
  document.addEventListener("click",function(e){if(!e.target.closest("#dashboardHeader"))closePanels();});
  document.getElementById("headerLogoutBtn").addEventListener("click",function(){document.getElementById("logoutBtn").click();});
