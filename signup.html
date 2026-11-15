@@ -165,6 +165,8 @@ html,body{background:#f4f8fc!important;color:#18324b!important}
  <h2 id="successModalTitle">Account Created Successfully</h2>
  <p id="successModalText">Your FastMoney account has been created successfully. You can now log in without email confirmation during the testing period.</p>
  <span class="success-modal-email" id="successModalEmail"></span>
+ <div id="successModalAccountId" style="display:none;margin:0 auto 16px;padding:11px 13px;border:1px solid #cde8e2;border-radius:12px;background:#effaf6;color:#087e67;font:800 18px Arial,sans-serif;letter-spacing:1px;overflow-wrap:anywhere"></div>
+ <button id="copySignupAccountId" type="button" style="display:none;margin:-5px auto 16px;padding:9px 14px;border:1px solid #b9d9dc;border-radius:10px;background:#e9f8f7;color:#087f8c;font-weight:800;cursor:pointer"><i class="fa-regular fa-copy"></i> Copy FastMoney ID</button>
  <div class="success-modal-actions"><a class="success-modal-login" href="/login.html">Go to Login</a><button class="success-modal-close" id="closeSuccessModal" type="button">Got it</button></div></div>
 </div>
 <script type="module">
@@ -182,6 +184,18 @@ const submit = document.getElementById("createAccount");
 const countrySelect = document.getElementById("countrySelect");
 const successModal = document.getElementById("successModal");
 const successModalEmail = document.getElementById("successModalEmail");
+const successModalAccountId = document.getElementById("successModalAccountId");
+const copySignupAccountId = document.getElementById("copySignupAccountId");
+let createdFastMoneyId = ""; 
+copySignupAccountId.addEventListener("click", async () => {
+  if (!createdFastMoneyId) return;
+  try {
+    await navigator.clipboard.writeText(createdFastMoneyId);
+    copySignupAccountId.innerHTML = '<i class="fa-solid fa-check"></i> Copied';
+  } catch {
+    copySignupAccountId.textContent = createdFastMoneyId;
+  }
+});
 
 document.getElementById("closeSuccessModal").addEventListener("click", () => successModal.classList.remove("is-open"));
 successModal.addEventListener("click", event => {
@@ -252,6 +266,26 @@ form.addEventListener("submit", async event => {
     });
 
     const registeredEmail = credential.user.email;
+    let accountId = "";
+    try {
+      const token = await credential.user.getIdToken(true);
+      const response = await fetch("https://fastmoney-core-api.taijulsheikh60.workers.dev/api/account/bootstrap", {
+        method: "POST",
+        headers: { Authorization: "Bearer " + token, "Content-Type": "application/json" },
+        body: "{}"
+      });
+      const bootstrap = await response.json().catch(() => ({}));
+      if (response.ok && bootstrap.success === true && /^(?:FM-[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{6}|\d{15})$/.test(String(bootstrap.accountId || ""))) {
+        accountId = bootstrap.accountId;
+      }
+    } catch (bootstrapError) {
+      console.warn("FastMoney ID setup will retry at first login:", bootstrapError);
+    }
+    createdFastMoneyId = accountId;
+    successModalAccountId.style.display = accountId ? "block" : "none";
+    successModalAccountId.textContent = accountId ? "FastMoney ID: " + accountId : "";
+    copySignupAccountId.style.display = accountId ? "inline-block" : "none";
+    copySignupAccountId.innerHTML = '<i class="fa-regular fa-copy"></i> Copy FastMoney ID';
     form.reset();
     countrySelect.value = "BD";
     submit.disabled = false;
@@ -273,7 +307,7 @@ form.addEventListener("submit", async event => {
     message.style.color = "#dc6262";
     message.textContent = friendlyMessages[error.code] || error.message || "We couldn't complete your registration. Please try again.";
     submit.disabled = false;
-    submit.textContent = "Create Account & Verify Gmail";
+    submit.textContent = "Create Account";
   }
 });
 </script><footer class="met-footer" aria-label="FastMoney footer"><div class="met-footer-inner"><a href="./index.html" class="met-footer-logo" aria-label="FastMoney home"><img src="./assets/fastmoneylogo.png" alt="FastMoney" width="210" height="62" loading="lazy"></a><nav class="met-footer-links" aria-label="Footer navigation"><a href="./about.html">About</a><a href="./affiliate.html">Affiliate</a><a href="./terms-and-conditions.html">Terms</a><a href="./privacy-policy.html">Privacy</a><a href="./guidelines.html">Guidelines</a><a href="./licence.html">Licence</a><a href="./help.html">Help &amp; FAQ</a></nav><div class="met-footer-bottom"><span>© <span id="footerYear">2026</span> FastMoney</span><span>Digital exchange, made clear.</span></div></div></footer><script>document.getElementById("footerYear").textContent=new Date().getFullYear();</script>
