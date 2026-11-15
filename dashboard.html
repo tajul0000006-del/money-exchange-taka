@@ -777,4 +777,25 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
   .wallet-total-title-icon{width:28px;height:28px;flex-basis:28px;border-radius:9px;font-size:14px}
 }
 
+
+/* Equal-size USD and local-currency balance columns; reduce panel height */
+.wallet-balance-panel{padding:9px 16px!important}
+.wallet-total-title{font-size:16px!important;line-height:1.15!important;margin:0 0 4px!important;gap:7px!important}
+.wallet-total-title-icon{width:23px!important;height:23px!important;flex:0 0 23px!important;border-radius:7px!important;font-size:12px!important}
+.wallet-total-values{display:grid!important;grid-template-columns:minmax(0,1fr) 1px minmax(0,1fr)!important;align-items:center!important;gap:8px!important;width:100%!important}
+.wallet-total-item{width:100%!important;min-width:0!important;min-height:28px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:5px!important;white-space:nowrap!important}
+.wallet-total-item>span{font-size:12px!important;line-height:1!important}
+.wallet-total-item strong{font-size:19px!important;line-height:1!important;font-weight:800!important}
+.wallet-total-local{justify-content:center!important}
+.wallet-total-divider{width:1px!important;height:23px!important;justify-self:center!important}
+@media(max-width:480px){
+ .wallet-balance-panel{padding:8px 11px!important}
+ .wallet-total-title{font-size:15px!important;margin-bottom:3px!important}
+ .wallet-total-title-icon{width:21px!important;height:21px!important;flex-basis:21px!important}
+ .wallet-total-values{gap:5px!important}
+ .wallet-total-item{gap:4px!important;min-height:25px!important}
+ .wallet-total-item>span{font-size:11px!important}
+ .wallet-total-item strong{font-size:clamp(15px,4.2vw,18px)!important}
+ .wallet-total-divider{height:21px!important}
+}
 </style>
