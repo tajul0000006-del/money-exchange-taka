@@ -552,7 +552,7 @@ onAuthStateChanged(auth, async user => {
     // Email confirmation is temporarily disabled while the owner tests the website.
     const token = await user.getIdToken(true);
     const bootstrap = await coreRequest("/api/account/bootstrap", token, "POST");
-    if (!/^\d{10}$/.test(String(bootstrap.accountId || ""))) {
+    if (!/^FM-[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{6}$/.test(String(bootstrap.accountId || "")) && !/^\d{15}$/.test(String(bootstrap.accountId || ""))) {
       throw new Error("The server did not return a valid FastMoney Account ID.");
     }
 
@@ -560,7 +560,7 @@ onAuthStateChanged(auth, async user => {
     document.getElementById("copyAccountId")?.setAttribute("data-copy-value", bootstrap.accountId);
     const walletResult = await coreRequest("/api/wallet/me", token);
     renderWallet(walletResult.wallet, profile);
-    showAccountMessage("Your FastMoney account and wallet have been loaded securely.");
+    // Successful account loading stays silent; only errors are shown.
   } catch (error) {
     console.error("FastMoney dashboard initialization failed:", error);
     showAccountMessage(error.message || "Could not load your account. Please refresh and try again.", true);
