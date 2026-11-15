@@ -247,6 +247,28 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
  .wallet-symbol{background:rgba(255,255,255,.17)!important;color:#fff!important}
 }
 @media(max-width:520px){.wallet-item{flex-basis:300px!important;width:300px!important;min-width:300px!important;height:166px!important;min-height:166px!important;padding:20px!important}}
+
+.profile-nav-trigger{font-size:17px!important}
+.personal-profile{margin:0 0 20px;padding:20px;border:1px solid #dce7f0;border-radius:19px;background:linear-gradient(135deg,#fff,#f1f8fc);box-shadow:0 8px 24px rgba(19,55,82,.06)}
+.profile-top{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.profile-avatar{width:58px;height:58px;flex:0 0 58px;display:grid;place-items:center;border-radius:18px;background:linear-gradient(145deg,#087f9b,#12b78d);color:#fff;font-size:25px;font-weight:800}
+.profile-heading{min-width:0}.profile-heading h2{margin:0;color:#183b58;font-size:20px}.profile-heading p{margin:3px 0 0;color:#6b8195;font-size:12px;overflow-wrap:anywhere}
+.profile-badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px}
+.profile-status{display:inline-flex;align-items:center;gap:5px;padding:4px 8px;border-radius:99px;background:#e8f8ef;color:#13804e;font-size:10px;font-weight:800}
+.profile-status.unverified{background:#fff5df;color:#a86a0a}
+.profile-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.profile-detail{padding:10px 12px;border:1px solid #e3ebf2;border-radius:12px;background:rgba(255,255,255,.78);min-width:0}
+.profile-detail span{display:block;color:#7b8fa1;font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase}
+.profile-detail strong{display:block;margin-top:4px;color:#23425d;font-size:13px;overflow-wrap:anywhere}
+.profile-edit{margin-top:14px;padding:13px;border-radius:13px;background:#f5f9fc;border:1px solid #e1eaf1}
+.profile-edit summary{cursor:pointer;color:#087f91;font-size:13px;font-weight:800}
+.profile-edit-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.profile-edit label{display:grid;gap:4px;color:#4b647b;font-size:11px;font-weight:700}
+.profile-edit input,.profile-edit select{width:100%;min-width:0;padding:10px;border:1px solid #cedce8;border-radius:9px;background:#fff;color:#173b59;font:inherit}
+.profile-save{margin-top:11px;padding:10px 15px;border:0;border-radius:10px;background:linear-gradient(105deg,#087f9b,#08a98b);color:#fff;font-weight:800;cursor:pointer}
+#profileSaveStatus{margin:8px 0 0;font-size:12px;color:#13804e}
+@media(prefers-color-scheme:dark){.personal-profile{background:linear-gradient(135deg,#142b40,#12253a);border-color:#2d465e}.profile-heading h2,.profile-detail strong{color:#e8f2fc}.profile-heading p,.profile-detail span{color:#9bb0c5}.profile-detail{background:#172e44;border-color:#304a62}.profile-edit{background:#102238;border-color:#2e475f}.profile-edit summary{color:#75d9d3}.profile-edit label{color:#c0d0e0}.profile-edit input,.profile-edit select{background:#0c1b2d;border-color:#3b536c;color:#eef5ff}}
+@media(max-width:520px){.personal-profile{padding:15px}.profile-grid,.profile-edit-grid{grid-template-columns:1fr 1fr}.profile-avatar{width:50px;height:50px;flex-basis:50px}.profile-heading h2{font-size:18px}}
 </style>
   <link rel="stylesheet" href="./responsive.css">
 <style id="fastmoney-brand-style">.fastmoney-brand{display:flex!important;align-items:center;gap:9px;flex:0 0 auto;text-decoration:none!important;color:#102a43!important;white-space:nowrap}.fastmoney-mark{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:linear-gradient(145deg,#087b8c,#075b68);color:#fff;font-size:25px;font-weight:900}.fastmoney-word{display:flex;flex-direction:column;font-size:21px;line-height:1.05;font-weight:850;letter-spacing:-.7px}.fastmoney-word b{color:#087b8c}.fastmoney-word small{margin-top:4px;font-size:8px;letter-spacing:1.35px;color:#718096;font-weight:800}.fastmoney-legal-links{display:flex;justify-content:center;gap:12px 22px;flex-wrap:wrap;padding:16px 18px;border-top:1px solid #e5edf2;background:#fff;font:600 13px/1.5 system-ui,sans-serif}.fastmoney-legal-links a{color:#426174;text-decoration:none}</style>
@@ -260,6 +282,7 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
       <img src="./assets/fastmoneylogo.png" alt="FastMoney" width="204" height="54">
     </a>
     <div class="dashboard-header-actions">
+      <a class="dashboard-icon-btn profile-nav-trigger" href="#personal-details" aria-label="My profile" title="My profile"><i class="fa-solid fa-user" aria-hidden="true"></i></a>
       <button class="dashboard-icon-btn notification-trigger" id="notificationToggle" type="button" aria-label="Transaction notifications" aria-expanded="false" title="Transaction notifications">
         <i class="fa-solid fa-bell" aria-hidden="true"></i><span class="notification-dot" aria-hidden="true"></span>
       </button>
@@ -287,6 +310,22 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
       <button type="button" id="headerLogoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
     </nav>
   </header>
+  <section class="personal-profile" id="personal-details" aria-label="Personal information">
+    <div class="profile-top"><div class="profile-avatar" id="profileAvatar"><i class="fa-solid fa-user"></i></div><div class="profile-heading"><h2 id="profileFullName">Your Profile</h2><p id="profileEmail">Loading account details…</p><div class="profile-badges"><span class="profile-status" id="emailStatus"><i class="fa-solid fa-circle-check"></i> Gmail verified</span><span class="profile-status" id="phoneStatusBadge"><i class="fa-solid fa-circle-check"></i> Mobile verified</span></div></div></div>
+    <div class="profile-grid">
+      <div class="profile-detail"><span>First Name</span><strong id="profileFirstName">—</strong></div><div class="profile-detail"><span>Last Name</span><strong id="profileLastName">—</strong></div>
+      <div class="profile-detail"><span>Registration Email</span><strong id="profileEmailDetail">—</strong></div><div class="profile-detail"><span>Registration Mobile</span><strong id="profilePhone">—</strong></div>
+      <div class="profile-detail"><span>Mobile Number Status</span><strong id="profilePhoneStatus">Verified</strong></div><div class="profile-detail"><span>Registered Country</span><strong id="profileCountry">—</strong></div>
+      <div class="profile-detail"><span>Local Currency</span><strong id="profileCurrency">—</strong></div><div class="profile-detail"><span>Account ID</span><strong id="profileUid">—</strong></div>
+    </div>
+    <details class="profile-edit"><summary><i class="fa-solid fa-pen-to-square"></i> Add / Update Personal Information</summary>
+      <div class="profile-edit-grid">
+        <label>Date of Birth<input id="editDob" type="date"></label><label>Gender<select id="editGender"><option value="">Select</option><option>Female</option><option>Male</option><option>Other</option><option>Prefer not to say</option></select></label>
+        <label>Address<input id="editAddress" maxlength="180" placeholder="Street / house address"></label><label>City<input id="editCity" maxlength="80" placeholder="City"></label>
+        <label>State / Province<input id="editState" maxlength="80" placeholder="State or province"></label><label>Postal Code<input id="editPostal" maxlength="20" placeholder="Postal code"></label>
+      </div><button class="profile-save" id="saveProfile" type="button">Save Personal Information</button><p id="profileSaveStatus" role="status"></p>
+    </details>
+  </section>
   <section class="wallet-overview" aria-label="Total balance and wallets">
     <div class="wallet-balance-panel">
       <div class="wallet-balance-heading"><span class="wallet-eyebrow"><i class="fa-solid fa-wallet"></i> ACCOUNT OVERVIEW</span><span class="wallet-live-label"><span></span> Wallet summary</span></div>
@@ -294,7 +333,7 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
       <div class="wallet-total-values">
         <div class="wallet-total-item"><span>USD</span><strong>$0.000</strong></div>
         <div class="wallet-total-divider"></div>
-        <div class="wallet-total-item"><span>BDT</span><strong>৳0.000</strong></div>
+        <div class="wallet-total-item"><span id="localCurrencyLabel">BDT</span><strong id="localCurrencyBalance">৳0.000</strong></div>
       </div>
     </div>
     <div class="wallet-list-heading"><div><h3>My Wallets</h3></div><span class="wallet-scroll-hint"><i class="fa-solid fa-arrows-left-right"></i> Scroll</span></div>
@@ -302,7 +341,7 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
       <article class="wallet-item wallet-fastmoney-usd" role="listitem"><span class="wallet-symbol"><i class="fa-solid fa-dollar-sign"></i></span><span class="wallet-name">FastMoney USD</span><strong>$0.000</strong><small>US Dollar</small></article>
       <article class="wallet-item wallet-usdt" role="listitem"><span class="wallet-symbol">₮</span><span class="wallet-name">USDT</span><strong>0.000</strong><small>Tether Wallet</small></article>
       <article class="wallet-item wallet-usd" role="listitem"><span class="wallet-symbol">$</span><span class="wallet-name">USD</span><strong>0.000</strong><small>US Dollar</small></article>
-      <article class="wallet-item wallet-bdt" role="listitem"><span class="wallet-symbol">৳</span><span class="wallet-name">BDT</span><strong>0.000</strong><small>Bangladeshi Taka</small></article>
+      <article class="wallet-item wallet-bdt" role="listitem"><span class="wallet-symbol">৳</span><span class="wallet-name" id="localWalletName">BDT</span><strong>0.000</strong><small id="localWalletDescription">Bangladeshi Taka</small></article>
       <article class="wallet-item wallet-epay" role="listitem"><span class="wallet-symbol"><i class="fa-solid fa-bolt"></i></span><span class="wallet-name">ePay</span><strong>0.000</strong><small>ePay Wallet</small></article>
       
       <article class="wallet-item wallet-btc" role="listitem"><span class="wallet-symbol">₿</span><span class="wallet-name">BTC</span><strong>0.000</strong><small>Bitcoin Wallet</small></article>
@@ -321,13 +360,43 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
-const auth=getAuth(initializeApp(firebaseConfig));
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
 const loading=document.getElementById("loading"),dashboard=document.getElementById("dashboard");
+const currencyNames={BDT:"Bangladeshi Taka",USD:"US Dollar",GBP:"British Pound",INR:"Indian Rupee",PKR:"Pakistani Rupee",AED:"UAE Dirham",SAR:"Saudi Riyal",CAD:"Canadian Dollar",AUD:"Australian Dollar",EUR:"Euro",CHF:"Swiss Franc",JPY:"Japanese Yen",CNY:"Chinese Yuan",KRW:"South Korean Won",SGD:"Singapore Dollar",MYR:"Malaysian Ringgit",IDR:"Indonesian Rupiah",THB:"Thai Baht",PHP:"Philippine Peso",NPR:"Nepalese Rupee",LKR:"Sri Lankan Rupee",TRY:"Turkish Lira",ZAR:"South African Rand",NGN:"Nigerian Naira",KES:"Kenyan Shilling",EGP:"Egyptian Pound",NZD:"New Zealand Dollar",MXN:"Mexican Peso",BRL:"Brazilian Real",SEK:"Swedish Krona",NOK:"Norwegian Krone",DKK:"Danish Krone",RUB:"Russian Ruble",AFN:"Afghan Afghani",QAR:"Qatari Riyal",KWD:"Kuwaiti Dinar",OMR:"Omani Rial",BHD:"Bahraini Dinar",JOD:"Jordanian Dinar",GHS:"Ghanaian Cedi",UGX:"Ugandan Shilling",TZS:"Tanzanian Shilling",MAD:"Moroccan Dirham",ARS:"Argentine Peso",CLP:"Chilean Peso",COP:"Colombian Peso",PLN:"Polish Zloty",UAH:"Ukrainian Hryvnia",ILS:"Israeli Shekel",HKD:"Hong Kong Dollar",TWD:"New Taiwan Dollar",VND:"Vietnamese Dong",KHR:"Cambodian Riel",MMK:"Myanmar Kyat",ETB:"Ethiopian Birr"};
+const currencySymbols={BDT:"৳",USD:"$",GBP:"£",INR:"₹",PKR:"₨",AED:"د.إ",SAR:"﷼",EUR:"€",CHF:"Fr",JPY:"¥",CNY:"¥",KRW:"₩",THB:"฿",PHP:"₱",TRY:"₺",ZAR:"R",NGN:"₦",EGP:"E£",BRL:"R$",RUB:"₽",GHS:"₵",VND:"₫",ILS:"₪"};
+let activeProfileRef=null;
+function setVerification(el,verified,label){el.classList.toggle("unverified",!verified);el.innerHTML='<i class="fa-solid '+(verified?"fa-circle-check":"fa-circle-exclamation")+'"></i> '+label+' '+(verified?"verified":"unverified");}
 onAuthStateChanged(auth,async user=>{
   if(!user){location.replace("/login.html?next=%2Fdashboard.html");return;}
   if(!user.emailVerified){await signOut(auth);location.replace("/login.html");return;}
+  try{
+    activeProfileRef=doc(db,"userProfiles",user.uid);const snap=await getDoc(activeProfileRef);const p=snap.exists()?snap.data():{};
+    const first=p.firstName||user.displayName?.split(" ")[0]||"User",last=p.lastName||user.displayName?.split(" ").slice(1).join(" ")||"";
+    const full=p.fullName||user.displayName||[first,last].filter(Boolean).join(" ");
+    document.getElementById("profileFullName").textContent=full;document.getElementById("profileEmail").textContent=user.email||"";
+    document.getElementById("profileAvatar").textContent=(first[0]||"U").toUpperCase();
+    document.getElementById("profileFirstName").textContent=first;document.getElementById("profileLastName").textContent=last||"—";
+    document.getElementById("profileEmailDetail").textContent=user.email||"—";document.getElementById("profilePhone").textContent=user.phoneNumber||p.phone||"—";
+    document.getElementById("profilePhoneStatus").textContent=user.phoneNumber?"Verified":"Unverified";
+    document.getElementById("profileCountry").textContent=p.country||"—";document.getElementById("profileCurrency").textContent=p.currencyCode||"USD";
+    document.getElementById("profileUid").textContent=user.uid.slice(0,12)+"…";
+    setVerification(document.getElementById("emailStatus"),user.emailVerified,"Gmail");setVerification(document.getElementById("phoneStatusBadge"),!!user.phoneNumber,"Mobile");
+    const code=p.currencyCode||"BDT",symbol=p.currencySymbol||currencySymbols[code]||code+" ";
+    document.getElementById("localCurrencyLabel").textContent=code;document.getElementById("localCurrencyBalance").textContent=symbol+"0.000";
+    document.getElementById("localWalletName").textContent=code;document.getElementById("localWalletDescription").textContent=currencyNames[code]||p.country||"Local Currency";
+    document.getElementById("editDob").value=p.dateOfBirth||"";document.getElementById("editGender").value=p.gender||"";
+    document.getElementById("editAddress").value=p.address||"";document.getElementById("editCity").value=p.city||"";
+    document.getElementById("editState").value=p.state||"";document.getElementById("editPostal").value=p.postalCode||"";
+  }catch(error){console.error("Could not load profile:",error);document.getElementById("profileEmail").textContent=user.email||"";}
   loading.hidden=true;dashboard.hidden=false;
+});
+document.getElementById("saveProfile").addEventListener("click",async()=>{
+ const btn=document.getElementById("saveProfile"),status=document.getElementById("profileSaveStatus");btn.disabled=true;status.textContent="Saving…";
+ try{if(!activeProfileRef)throw new Error("Profile is not ready.");await updateDoc(activeProfileRef,{dateOfBirth:document.getElementById("editDob").value,gender:document.getElementById("editGender").value,address:document.getElementById("editAddress").value.trim(),city:document.getElementById("editCity").value.trim(),state:document.getElementById("editState").value.trim(),postalCode:document.getElementById("editPostal").value.trim()});status.textContent="Personal information saved successfully.";}
+ catch(e){status.textContent=e.code==="permission-denied"?"Firestore security rules need to be published first.":e.message||"Could not save details.";}
+ finally{btn.disabled=false;}
 });
 document.getElementById("logoutBtn").addEventListener("click",async()=>{
   const button=document.getElementById("logoutBtn");button.disabled=true;button.textContent="Logging out...";
