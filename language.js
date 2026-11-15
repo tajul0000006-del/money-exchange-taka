@@ -24,7 +24,7 @@
       row.innerHTML='<label><i class="fa-solid fa-globe" aria-hidden="true"></i><span>Website language</span></label><select class="fm-language-select" aria-label="Website language">'+optionsMarkup()+'</select>';
       mobile.appendChild(row);
     }
-    if(!desktop&&!mobile&&!document.querySelector(".fm-language-float")){
+    if(!desktop&&!mobile&&!document.querySelector(".fm-language-select")&&!document.querySelector(".fm-language-float")){
       var floating=document.createElement("label");floating.className="fm-language-float";floating.innerHTML='<i class="fa-solid fa-globe" aria-hidden="true"></i><select class="fm-language-select" aria-label="Website language">'+optionsMarkup()+'</select>';
       document.body.appendChild(floating);
     }
