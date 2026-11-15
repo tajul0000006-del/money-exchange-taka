@@ -262,6 +262,14 @@ form.addEventListener("submit", async event => {
       currencySymbol: country[4],
       emailVerified: false,
       phoneVerified: false,
+      notifications: [{
+        id: "welcome-" + credential.user.uid,
+        type: "welcome",
+        title: "Welcome to FastMoney!",
+        message: "Your account has been created successfully. Welcome aboard! You can now explore your FastMoney dashboard and services.",
+        read: false,
+        createdAt: Date.now()
+      }],
       createdAt: serverTimestamp()
     });
 
