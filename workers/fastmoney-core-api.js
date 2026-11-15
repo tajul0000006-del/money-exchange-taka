@@ -231,7 +231,7 @@ async function bootstrapAccount(env, claims) {
     const writes = [];
     let newIdReserved = false;
 
-    if (!accountId) {
+    if (!/^\\d{15}$/.test(accountId)) {
       accountId = newAccountId();
       const registry = await readDocument(env, "fastMoneyAccountIds", accountId);
       if (registry) continue;
@@ -258,7 +258,7 @@ async function bootstrapAccount(env, claims) {
     } else if (profile) {
       const profileFields = {};
       const fieldPaths = [];
-      if (!readString(profile, "accountId")) {
+      if (readString(profile, "accountId") !== accountId) {
         profileFields.accountId = fieldString(accountId);
         fieldPaths.push("accountId");
       }
