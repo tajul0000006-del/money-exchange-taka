@@ -194,10 +194,10 @@ function makeWalletDocument(uid, now) {
     }
   };
 }
-function makeRegistryDocument(accountId, now) {
+function makeRegistryDocument(accountId, uid, now) {
   return {
     name: documentName("fastMoneyAccountIds", accountId),
-    fields: { createdAt: fieldTimestamp(now) }
+    fields: { uid: fieldString(uid), accountId: fieldString(accountId), createdAt: fieldTimestamp(now) }
   };
 }
 function makePayIdRegistryDocument(payId, uid, now) {
@@ -251,7 +251,7 @@ async function bootstrapAccount(env, claims) {
       const registry = await readDocument(env, "fastMoneyAccountIds", accountId);
       if (registry) continue;
       writes.push({
-        update: makeRegistryDocument(accountId, now),
+        update: makeRegistryDocument(accountId, uid, now),
         currentDocument: { exists: false }
       });
     } else {
@@ -542,6 +542,316 @@ async function handlePayIn(request, env, url) {
   return null;
 }
 
+
+// ---------------------------------------------------------------------------
+// Internal user-to-user transfers. All financial writes are server-side and
+// a transfer remains pending until the Owner approves or rejects it.
+// ---------------------------------------------------------------------------
+const INTERNAL_WALLETS = Object.freeze({
+  FASTMONEY_USD: { balanceKey: "USD", currency: "USD", label: "FastMoney USD", dollar: true },
+  REDOTPAY_USD: { balanceKey: "REDOTPAY_USD", currency: "USD", label: "RedotPay USD", dollar: true },
+  VOLET_USD: { balanceKey: "VOLET_USD", currency: "USD", label: "Volet USD", dollar: true },
+  EPAY_USD: { balanceKey: "EPAY_USD", currency: "USD", label: "ePay USD", dollar: true },
+  WEBMONEY_USD: { balanceKey: "WEBMONEY_USD", currency: "USD", label: "WebMoney USD", dollar: true },
+  TUNEPAY_USD: { balanceKey: "TUNEPAY_USD", currency: "USD", label: "TunePay USD", dollar: true },
+  PERFECTMONEY_USD: { balanceKey: "PERFECTMONEY_USD", currency: "USD", label: "Perfect Money USD", dollar: true },
+  WINITY_USD: { balanceKey: "WINITY_USD", currency: "USD", label: "Winity USD", dollar: true },
+  RIZON_USD: { balanceKey: "RIZON_USD", currency: "USD", label: "Rizon USD", dollar: true },
+  USDT: { balanceKey: "USDT", currency: "USDT", label: "USDT", dollar: true }
+});
+function readCurrency(profile) {
+  const code = (readString(profile, "signupCurrencyCode") || readString(profile, "currencyCode") || "").toUpperCase();
+  return /^[A-Z]{3}$/.test(code) ? code : "";
+}
+function readDisplayName(profile) {
+  return readString(profile, "fullName") ||
+    [readString(profile, "firstName"), readString(profile, "lastName")].filter(Boolean).join(" ") ||
+    readString(profile, "email") || "FastMoney User";
+}
+function amountValue(fields, key) {
+  const raw = fields?.[key]?.doubleValue ?? fields?.[key]?.integerValue ?? "0";
+  const value = Number(raw);
+  return Number.isFinite(value) ? value : 0;
+}
+function roundMoney(value, digits = 2) {
+  const scale = 10 ** digits;
+  return Math.round((value + Number.EPSILON) * scale) / scale;
+}
+function randomTransferId(prefix) {
+  return prefix + "-" + crypto.randomUUID().replace(/-/g, "").slice(0, 18).toUpperCase();
+}
+function arrayField(values) {
+  return { arrayValue: { values } };
+}
+function notificationEntry(id, title, message, transfer, now) {
+  return fieldMap({
+    id: fieldString(id), title: fieldString(title), message: fieldString(message),
+    type: fieldString("internal_transfer"), transactionId: fieldString(transfer.transactionId),
+    referenceNumber: fieldString(transfer.referenceNumber), createdAt: fieldTimestamp(now),
+    read: { booleanValue: false }
+  });
+}
+function appendNotificationWrite(profile, uid, item, now) {
+  const old = profile.fields?.notifications?.arrayValue?.values || [];
+  const notifications = [...old, item].slice(-50);
+  return {
+    update: { name: profile.name, fields: { notifications: arrayField(notifications), updatedAt: fieldTimestamp(now) } },
+    updateMask: { fieldPaths: ["notifications", "updatedAt"] },
+    currentDocument: { updateTime: profile.updateTime }
+  };
+}
+function transactionMirrorFields(t, uid, direction, status, now, rejectionReason = "") {
+  const otherAccountId = direction === "sent" ? t.receiverAccountId : t.senderAccountId;
+  const otherName = direction === "sent" ? t.receiverName : t.senderName;
+  return {
+    transactionId: fieldString(t.transactionId), referenceNumber: fieldString(t.referenceNumber),
+    uid: fieldString(uid), direction: fieldString(direction), otherAccountId: fieldString(otherAccountId),
+    otherName: fieldString(otherName), walletKey: fieldString(t.walletKey), walletLabel: fieldString(t.walletLabel),
+    sendAmount: fieldDouble(t.sendAmount), sendCurrency: fieldString(t.sendCurrency),
+    receiveAmount: fieldDouble(t.receiveAmount), receiveCurrency: fieldString(t.receiveCurrency),
+    rate: fieldDouble(t.rate), status: fieldString(status), senderUid: fieldString(t.senderUid),
+    receiverUid: fieldString(t.receiverUid), senderAccountId: fieldString(t.senderAccountId),
+    receiverAccountId: fieldString(t.receiverAccountId), senderName: fieldString(t.senderName),
+    receiverName: fieldString(t.receiverName), createdAt: fieldTimestamp(t.createdAt),
+    updatedAt: fieldTimestamp(now), rejectionReason: fieldString(rejectionReason)
+  };
+}
+async function findProfileByAccountId(env, accountId) {
+  const registry = await readDocument(env, "fastMoneyAccountIds", accountId);
+  const uid = readString(registry, "uid");
+  if (uid) {
+    const profile = await readDocument(env, "userProfiles", uid);
+    if (profile && readString(profile, "accountId") === accountId) return { uid, profile, registry };
+  }
+  const query = {
+    structuredQuery: {
+      from: [{ collectionId: "userProfiles" }],
+      where: { fieldFilter: { field: { fieldPath: "accountId" }, op: "EQUAL", value: fieldString(accountId) } },
+      limit: 1
+    }
+  };
+  const result = await firestoreRequest(env, ":runQuery", { method: "POST", body: JSON.stringify(query) });
+  const row = Array.isArray(result.data) ? result.data.find(item => item.document) : null;
+  if (!row?.document) return null;
+  const foundUid = readString(row.document, "uid") || row.document.name.split("/").pop();
+  return { uid: foundUid, profile: row.document, registry };
+}
+async function getInternalTransferSettings(env) {
+  const doc = await readDocument(env, "internalTransferSettings", "global");
+  const raw = doc?.fields?.rates?.mapValue?.fields || {};
+  const rates = {};
+  for (const [pair, value] of Object.entries(raw)) rates[pair] = amountValue({ value }, "value");
+  return { rates };
+}
+function internalTransferSettingsDoc(rates) {
+  const map = {};
+  for (const [pair, rate] of Object.entries(rates)) map[pair] = fieldDouble(rate);
+  return { name: documentName("internalTransferSettings", "global"), fields: {
+    rates: fieldMap(map), updatedAt: fieldTimestamp(new Date().toISOString())
+  }};
+}
+function transferPublicShape(doc) {
+  const f = doc.fields || {};
+  const get = key => f[key]?.stringValue || "";
+  return {
+    requestId: get("requestId"), transactionId: get("transactionId"), referenceNumber: get("referenceNumber"),
+    senderUid: get("senderUid"), receiverUid: get("receiverUid"),
+    senderAccountId: get("senderAccountId"), receiverAccountId: get("receiverAccountId"),
+    senderName: get("senderName"), receiverName: get("receiverName"),
+    walletKey: get("walletKey"), walletLabel: get("walletLabel"),
+    sendAmount: amountValue(f, "sendAmount"), sendCurrency: get("sendCurrency"),
+    receiveAmount: amountValue(f, "receiveAmount"), receiveCurrency: get("receiveCurrency"),
+    rate: amountValue(f, "rate"), status: get("status"), rejectionReason: get("rejectionReason"),
+    createdAt: f.createdAt?.timestampValue || "", updatedAt: f.updatedAt?.timestampValue || ""
+  };
+}
+async function handleInternalTransfers(request, env, url) {
+  if (url.pathname === "/api/internal-transfer/settings" && request.method === "GET") {
+    const settings = await getInternalTransferSettings(env);
+    return { success: true, settings };
+  }
+  if (url.pathname === "/api/admin/internal-transfer/settings") {
+    const claims = await requireUser(request); adminOnly(claims, env);
+    if (request.method === "GET") return { success: true, settings: await getInternalTransferSettings(env) };
+    if (request.method === "PUT") {
+      const body = await request.json().catch(() => ({}));
+      const input = body?.settings?.rates;
+      if (!input || typeof input !== "object" || Array.isArray(input) || Object.keys(input).length > 300) throw new Error("Enter valid currency conversion rates");
+      const rates = {};
+      for (const [pair, raw] of Object.entries(input)) {
+        const key = safeText(pair, 16).toUpperCase();
+        const rate = Number(raw);
+        if (!/^[A-Z]{3}_[A-Z]{3}$/.test(key) || !Number.isFinite(rate) || rate <= 0 || rate > 1e12) throw new Error("Each rate must use FROM_TO format and a positive number");
+        rates[key] = rate;
+      }
+      const old = await readDocument(env, "internalTransferSettings", "global");
+      const write = { update: internalTransferSettingsDoc(rates) };
+      write.currentDocument = old ? { updateTime: old.updateTime } : { exists: false };
+      await commitWrites(env, [write]);
+      return { success: true, settings: { rates } };
+    }
+  }
+  if (url.pathname === "/api/internal-transfer/submit" && request.method === "POST") {
+    const claims = await requireUser(request);
+    const body = await request.json().catch(() => ({}));
+    const receiverAccountId = safeText(body.receiverAccountId, 10);
+    const walletKey = safeText(body.walletKey, 32).toUpperCase();
+    const sendAmount = Number(body.amount);
+    if (!/^[1-9]\d{9}$/.test(receiverAccountId)) throw new Error("Enter a valid 10-digit FastMoney Account ID");
+    if (!Number.isFinite(sendAmount) || sendAmount <= 0 || sendAmount > 100000000) throw new Error("Enter a valid transfer amount");
+    if (!Object.prototype.hasOwnProperty.call(INTERNAL_WALLETS, walletKey) && walletKey !== "LOCAL") throw new Error("Choose a supported wallet");
+    const senderUid = claims.sub;
+    const [senderProfile, senderWallet, receiver] = await Promise.all([
+      readDocument(env, "userProfiles", senderUid), readDocument(env, "wallets", senderUid),
+      findProfileByAccountId(env, receiverAccountId)
+    ]);
+    if (!senderProfile || !senderWallet || readString(senderWallet, "status") !== "active") throw new Error("Your wallet is unavailable");
+    if (!receiver || receiver.uid === senderUid) throw new Error("Receiver account not found or cannot be your own account");
+    const receiverWallet = await readDocument(env, "wallets", receiver.uid);
+    if (!receiverWallet || readString(receiverWallet, "status") !== "active") throw new Error("Receiver wallet is not ready");
+    const senderAccountId = readString(senderProfile, "accountId");
+    if (!/^[1-9]\d{9}$/.test(senderAccountId)) throw new Error("Your FastMoney Account ID is not ready. Refresh your dashboard.");
+    const senderName = readDisplayName(senderProfile), receiverName = readDisplayName(receiver.profile);
+    let sendCurrency, receiveCurrency, receiveAmount, rate, sourceBalanceKey, walletLabel;
+    if (walletKey === "LOCAL") {
+      sendCurrency = readCurrency(senderProfile);
+      receiveCurrency = readCurrency(receiver.profile);
+      if (!sendCurrency || !receiveCurrency) throw new Error("A local wallet currency is not configured for one of these accounts");
+      sourceBalanceKey = sendCurrency;
+      walletLabel = sendCurrency + " Local Balance";
+      if (sendCurrency === receiveCurrency) rate = 1;
+      else {
+        const settings = await getInternalTransferSettings(env);
+        rate = Number(settings.rates[sendCurrency + "_" + receiveCurrency] || 0);
+        if (!(rate > 0)) throw new Error("Admin has not configured the " + sendCurrency + " to " + receiveCurrency + " conversion rate");
+      }
+      receiveAmount = roundMoney(sendAmount * rate, 2);
+    } else {
+      const wallet = INTERNAL_WALLETS[walletKey];
+      sendCurrency = wallet.currency;
+      receiveCurrency = wallet.currency;
+      rate = 1;
+      sourceBalanceKey = wallet.balanceKey;
+      walletLabel = wallet.label;
+      receiveAmount = roundMoney(sendAmount, wallet.currency === "USDT" ? 6 : 2);
+    }
+    const senderBalances = readMap(senderWallet, "balances");
+    const available = amountValue(senderBalances, sourceBalanceKey);
+    if (available < sendAmount) throw new Error("Insufficient balance in your selected wallet");
+    const id = randomTransferId("FMTR");
+    const referenceNumber = randomTransferId("FMR");
+    const now = new Date().toISOString();
+    const transfer = {
+      requestId: id, transactionId: id, referenceNumber, senderUid, receiverUid: receiver.uid,
+      senderAccountId, receiverAccountId, senderName, receiverName, walletKey, walletLabel,
+      sourceBalanceKey, sendAmount: roundMoney(sendAmount, walletKey === "USDT" ? 6 : 2),
+      sendCurrency, receiveAmount, receiveCurrency, rate, status: "pending", createdAt: now
+    };
+    const queueFields = {
+      requestId: fieldString(id), transactionId: fieldString(id), referenceNumber: fieldString(referenceNumber),
+      senderUid: fieldString(senderUid), receiverUid: fieldString(receiver.uid),
+      senderAccountId: fieldString(senderAccountId), receiverAccountId: fieldString(receiverAccountId),
+      senderName: fieldString(senderName), receiverName: fieldString(receiverName),
+      walletKey: fieldString(walletKey), walletLabel: fieldString(walletLabel),
+      sourceBalanceKey: fieldString(sourceBalanceKey), sendAmount: fieldDouble(transfer.sendAmount),
+      sendCurrency: fieldString(sendCurrency), receiveAmount: fieldDouble(receiveAmount),
+      receiveCurrency: fieldString(receiveCurrency), rate: fieldDouble(rate),
+      status: fieldString("pending"), createdAt: fieldTimestamp(now)
+    };
+    const senderMirror = transactionMirrorFields(transfer, senderUid, "sent", "pending", now);
+    const receiverMirror = transactionMirrorFields(transfer, receiver.uid, "received", "pending", now);
+    await commitWrites(env, [
+      { update: { name: documentName("internalTransferQueue", id), fields: queueFields }, currentDocument: { exists: false } },
+      { update: { name: documentName("transactions/" + senderUid + "/items", id), fields: senderMirror }, currentDocument: { exists: false } },
+      { update: { name: documentName("transactions/" + receiver.uid + "/items", id), fields: receiverMirror }, currentDocument: { exists: false } }
+    ]);
+    return { success: true, transfer: transferPublicShape({ fields: queueFields }) };
+  }
+  if (url.pathname === "/api/transactions/me" && request.method === "GET") {
+    const claims = await requireUser(request);
+    const result = await firestoreRequest(env, "/transactions/" + encodeURIComponent(claims.sub) + "/items?pageSize=100");
+    const transactions = (result.data.documents || []).map(doc => transferPublicShape(doc))
+      .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+    return { success: true, transactions };
+  }
+  if (url.pathname === "/api/admin/internal-transfers" && request.method === "GET") {
+    const claims = await requireUser(request); adminOnly(claims, env);
+    const result = await firestoreRequest(env, "/internalTransferQueue?pageSize=100");
+    const transfers = (result.data.documents || []).map(doc => transferPublicShape(doc))
+      .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+    return { success: true, transfers };
+  }
+  if (url.pathname === "/api/admin/internal-transfer/decision" && request.method === "POST") {
+    const claims = await requireUser(request); adminOnly(claims, env);
+    const body = await request.json().catch(() => ({}));
+    const id = safeText(body.requestId, 80);
+    const decision = safeText(body.decision, 16);
+    const reason = safeText(body.reason, 500);
+    if (!id || !["approve", "reject"].includes(decision) || (decision === "reject" && reason.length < 3)) throw new Error("Choose approve or provide a rejection reason");
+    const queue = await readDocument(env, "internalTransferQueue", id);
+    if (!queue || readString(queue, "status") !== "pending") {
+      const error = new Error("Transfer not found or already reviewed"); error.status = 409; throw error;
+    }
+    const t = transferPublicShape(queue);
+    const sourceBalanceKey = readString(queue, "sourceBalanceKey");
+    const senderUid = readString(queue, "senderUid"), receiverUid = readString(queue, "receiverUid");
+    const [senderWallet, receiverWallet, senderProfile, receiverProfile, senderMirror, receiverMirror] = await Promise.all([
+      readDocument(env, "wallets", senderUid), readDocument(env, "wallets", receiverUid),
+      readDocument(env, "userProfiles", senderUid), readDocument(env, "userProfiles", receiverUid),
+      readDocument(env, "transactions/" + senderUid + "/items", id),
+      readDocument(env, "transactions/" + receiverUid + "/items", id)
+    ]);
+    if (!senderWallet || !receiverWallet || !senderProfile || !receiverProfile || !senderMirror || !receiverMirror) throw new Error("Transfer account records are incomplete");
+    const now = new Date().toISOString();
+    const status = decision === "approve" ? "successful" : "rejected";
+    const writes = [
+      { update: { name: queue.name, fields: { status: fieldString(status), reviewedAt: fieldTimestamp(now), reviewedBy: fieldString(claims.sub), rejectionReason: fieldString(reason) } },
+        updateMask: { fieldPaths: ["status", "reviewedAt", "reviewedBy", "rejectionReason"] }, currentDocument: { updateTime: queue.updateTime } },
+      { update: { name: senderMirror.name, fields: transactionMirrorFields(t, senderUid, "sent", status, now, reason) },
+        updateMask: { fieldPaths: Object.keys(transactionMirrorFields(t, senderUid, "sent", status, now, reason)) }, currentDocument: { updateTime: senderMirror.updateTime } },
+      { update: { name: receiverMirror.name, fields: transactionMirrorFields(t, receiverUid, "received", status, now, reason) },
+        updateMask: { fieldPaths: Object.keys(transactionMirrorFields(t, receiverUid, "received", status, now, reason)) }, currentDocument: { updateTime: receiverMirror.updateTime } }
+    ];
+    if (decision === "approve") {
+      if (readString(senderWallet, "status") !== "active" || readString(receiverWallet, "status") !== "active") throw new Error("One of the wallets is inactive");
+      const senderBalances = { ...readMap(senderWallet, "balances") };
+      const receiverBalances = { ...readMap(receiverWallet, "balances") };
+      const current = amountValue(senderBalances, sourceBalanceKey);
+      if (current < t.sendAmount) {
+        const error = new Error("Sender balance is no longer sufficient. Transfer cannot be approved."); error.status = 409; throw error;
+      }
+      const receiveKey = t.walletKey === "LOCAL" ? t.receiveCurrency : (INTERNAL_WALLETS[t.walletKey]?.balanceKey || "");
+      if (!receiveKey) throw new Error("Receiver wallet mapping is invalid");
+      senderBalances[sourceBalanceKey] = fieldDouble(roundMoney(current - t.sendAmount, t.sendCurrency === "USDT" ? 6 : 2));
+      const receivedCurrent = amountValue(receiverBalances, receiveKey);
+      receiverBalances[receiveKey] = fieldDouble(roundMoney(receivedCurrent + t.receiveAmount, t.receiveCurrency === "USDT" ? 6 : 2));
+      writes.push(
+        { update: { name: senderWallet.name, fields: { balances: fieldMap(senderBalances), updatedAt: fieldTimestamp(now) } },
+          updateMask: { fieldPaths: ["balances", "updatedAt"] }, currentDocument: { updateTime: senderWallet.updateTime } },
+        { update: { name: receiverWallet.name, fields: { balances: fieldMap(receiverBalances), updatedAt: fieldTimestamp(now) } },
+          updateMask: { fieldPaths: ["balances", "updatedAt"] }, currentDocument: { updateTime: receiverWallet.updateTime } },
+        { update: { name: documentName("ledger/" + senderUid + "/entries", randomTransferId("LED")),
+          fields: { transactionId: fieldString(t.transactionId), referenceNumber: fieldString(t.referenceNumber), uid: fieldString(senderUid), type: fieldString("internal_transfer"), direction: fieldString("debit"), currency: fieldString(t.sendCurrency), amount: fieldDouble(t.sendAmount), referenceId: fieldString(id), description: fieldString("Internal transfer sent"), createdAt: fieldTimestamp(now) } }, currentDocument: { exists: false } },
+        { update: { name: documentName("ledger/" + receiverUid + "/entries", randomTransferId("LED")),
+          fields: { transactionId: fieldString(t.transactionId), referenceNumber: fieldString(t.referenceNumber), uid: fieldString(receiverUid), type: fieldString("internal_transfer"), direction: fieldString("credit"), currency: fieldString(t.receiveCurrency), amount: fieldDouble(t.receiveAmount), referenceId: fieldString(id), description: fieldString("Internal transfer received"), createdAt: fieldTimestamp(now) } }, currentDocument: { exists: false } }
+      );
+    }
+    const senderMessage = decision === "approve"
+      ? "Your transfer of " + t.sendAmount + " " + t.sendCurrency + " to " + t.receiverAccountId + " was successful."
+      : "Your transfer to " + t.receiverAccountId + " was rejected. Reason: " + reason;
+    const receiverMessage = decision === "approve"
+      ? "You received " + t.receiveAmount + " " + t.receiveCurrency + " from " + t.senderAccountId + ". Transfer successful."
+      : "The transfer from " + t.senderAccountId + " was rejected. Reason: " + reason;
+    writes.push(
+      appendNotificationWrite(senderProfile, senderUid, notificationEntry(randomTransferId("NTF"), decision === "approve" ? "Transfer Successful" : "Transfer Rejected", senderMessage, t, now), now),
+      appendNotificationWrite(receiverProfile, receiverUid, notificationEntry(randomTransferId("NTF"), decision === "approve" ? "Money Received" : "Incoming Transfer Rejected", receiverMessage, t, now), now)
+    );
+    await commitWrites(env, writes);
+    return { success: true, requestId: id, transactionId: t.transactionId, referenceNumber: t.referenceNumber, status };
+  }
+  return null;
+}
+
 function corsHeaders(request) {
   const origin = request.headers.get("origin") || "";
   const headers = {
@@ -560,6 +870,8 @@ export default {
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
     const url = new URL(request.url);
     try {
+      const internalTransferResult = await handleInternalTransfers(request, env, url);
+      if (internalTransferResult) return json(internalTransferResult, 200, cors);
       const payInResult = await handlePayIn(request, env, url);
       if (payInResult) return json(payInResult, 200, cors);
       if (request.method === "GET" && url.pathname === "/api/health") {
