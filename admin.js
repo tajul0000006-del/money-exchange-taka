@@ -992,20 +992,7 @@ import { firebaseConfig } from "./firebase-config.js";
     internalTools.id="internalTransferAdminTools";
     internalTools.className="info-strip";
     internalTools.style.margin="18px 0";
-    internalTools.innerHTML=\
-      <h3 style="margin:0 0 8px">Internal Transfer Review</h3>
-      <p>Pending transfers remain unposted until Owner approval. Approval debits the sender and credits the receiver atomically. Rejection leaves both wallet balances unchanged and sends both users a notification.</p>
-      <button type="button" id="internalTransferReload">Refresh Transfer Queue</button>
-      <p id="internalTransferAdminStatus" role="status" aria-live="polite"></p>
-      <div class="table-wrap"><table><thead><tr><th>Transaction / Reference</th><th>Sender</th><th>Receiver</th><th>Sent</th><th>Received</th><th>Status / Decision</th></tr></thead><tbody id="internalTransferAdminRows"><tr><td colspan="6">Load transfers to begin.</td></tr></tbody></table></div>
-      <hr style="margin:18px 0;border:0;border-top:1px solid #dbe5ec">
-      <h3 style="margin:0 0 6px">Internal Transfer Currency Rates</h3>
-      <p>Set each conversion as FROM_TO. Example: EUR_BDT: 130 means 1 EUR = 130 BDT. Dollar-wallet transfers use 1:1 and do not use these rates.</p>
-      <label style="display:block;margin:8px 0">Currency Pair Rates (JSON)<textarea id="internalTransferRatesJson" rows="8" spellcheck="false" placeholder='{"EUR_BDT":130,"INR_BDT":1.4}' style="width:100%;box-sizing:border-box;font:12px monospace"></textarea></label>
-      <button type="button" id="internalTransferRatesLoad" class="outline">Load Rates</button>
-      <button type="button" id="internalTransferRatesSave">Save Rates</button>
-      <p id="internalTransferRatesStatus" role="status" aria-live="polite"></p>\
-    ;
+    internalTools.innerHTML="<h3 style=\"margin:0 0 8px\">Internal Transfer Review</h3><p>Pending transfers remain unposted until Owner approval. Approval debits the sender and credits the receiver atomically. Rejection leaves both wallet balances unchanged and sends both users a notification.</p><button type=\"button\" id=\"internalTransferReload\">Refresh Transfer Queue</button><p id=\"internalTransferAdminStatus\" role=\"status\" aria-live=\"polite\"></p><div class=\"table-wrap\"><table><thead><tr><th>Transaction / Reference</th><th>Sender</th><th>Receiver</th><th>Sent</th><th>Received</th><th>Status / Decision</th></tr></thead><tbody id=\"internalTransferAdminRows\"><tr><td colspan=\"6\">Load transfers to begin.</td></tr></tbody></table></div><hr style=\"margin:18px 0;border:0;border-top:1px solid #dbe5ec\"><h3 style=\"margin:0 0 6px\">Internal Transfer Currency Rates</h3><p>Set each conversion as FROM_TO. Example: EUR_BDT: 130 means 1 EUR = 130 BDT. Dollar-wallet transfers use 1:1 and do not use these rates.</p><label style=\"display:block;margin:8px 0\">Currency Pair Rates (JSON)<textarea id=\"internalTransferRatesJson\" rows=\"8\" spellcheck=\"false\" placeholder='{\"EUR_BDT\":130,\"INR_BDT\":1.4}' style=\"width:100%;box-sizing:border-box;font:12px monospace\"></textarea></label><button type=\"button\" id=\"internalTransferRatesLoad\" class=\"outline\">Load Rates</button><button type=\"button\" id=\"internalTransferRatesSave\">Save Rates</button><p id=\"internalTransferRatesStatus\" role=\"status\" aria-live=\"polite\"></p>";
     panel.appendChild(internalTools);
     const internalStatus=$("internalTransferAdminStatus");
     const internalRows=$("internalTransferAdminRows");
