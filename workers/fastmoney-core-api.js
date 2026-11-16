@@ -334,6 +334,10 @@ function readNumber(document, field) {
 }
 function readMap(document, field) { return document?.fields?.[field]?.mapValue?.fields || {}; }
 function safeText(value, max = 160) { return typeof value === "string" ? value.trim().slice(0, max) : ""; }
+async function referenceKey(methodId, reference) {
+  const digest = await crypto.subtle.digest("SHA-256", encodeText(methodId + ":" + reference.trim().toLowerCase()));
+  return Array.from(new Uint8Array(digest), b => b.toString(16).padStart(2,"0")).join("");
+}
 function randomId(prefix = "PIN") {
   return prefix + "-" + crypto.randomUUID().replace(/-/g, "").slice(0, 20).toUpperCase();
 }
@@ -422,10 +426,14 @@ async function handlePayIn(request, env, url) {
     if (!Number.isFinite(amount) || amount <= 0 || amount > 1000000 ||
         !["BDT","USD","USDT"].includes(currency) || !methodId ||
         transactionReference.length < 4 || !sender) throw new Error("Enter a valid amount, payment reference and sender details");
+    if (proofUrl && !/^https:\/\//i.test(proofUrl)) throw new Error("Payment proof must be an HTTPS image URL");
     const settings = await getPayInSettings(env);
     const method = settings.methods.find(m => m.id === methodId && m.enabled);
     if (!method || method.currency !== currency) throw new Error("This payment method is unavailable for the selected currency");
     const uid = claims.sub, id = randomId();
+    const refKey = await referenceKey(method.id, transactionReference);
+    const usedReference = await readDocument(env, "payInReferences", refKey);
+    if (usedReference) { const error = new Error("This transaction reference has already been submitted"); error.status = 409; throw error; }
     const now = new Date().toISOString();
     const fields = {
       requestId: fieldString(id), uid: fieldString(uid), methodId: fieldString(method.id),
@@ -436,7 +444,8 @@ async function handlePayIn(request, env, url) {
     };
     await commitWrites(env, [
       { update: { name: documentName("depositRequests/"+uid+"/items", id), fields }, currentDocument: { exists: false } },
-      { update: { name: documentName("payInQueue", id), fields }, currentDocument: { exists: false } }
+      { update: { name: documentName("payInQueue", id), fields }, currentDocument: { exists: false } },
+      { update: { name: documentName("payInReferences", refKey), fields: { uid: fieldString(uid), requestId: fieldString(id), methodId: fieldString(method.id), createdAt: fieldTimestamp(now) } }, currentDocument: { exists: false } }
     ]);
     return { success: true, request: { requestId:id, status:"pending", currency, amount, methodName:method.name, createdAt:now } };
   }
