@@ -986,6 +986,86 @@ import { firebaseConfig } from "./firebase-config.js";
         json.value=JSON.stringify(data.settings.methods,null,2);settingsStatus.textContent="Payment methods saved securely.";
       }catch(e){settingsStatus.textContent="Save failed: "+e.message;}
     });
+
+    // Internal user-to-user transfer review and owner-managed FX pairs.
+    const internalTools=document.createElement("section");
+    internalTools.id="internalTransferAdminTools";
+    internalTools.className="info-strip";
+    internalTools.style.margin="18px 0";
+    internalTools.innerHTML=\
+      <h3 style="margin:0 0 8px">Internal Transfer Review</h3>
+      <p>Pending transfers remain unposted until Owner approval. Approval debits the sender and credits the receiver atomically. Rejection leaves both wallet balances unchanged and sends both users a notification.</p>
+      <button type="button" id="internalTransferReload">Refresh Transfer Queue</button>
+      <p id="internalTransferAdminStatus" role="status" aria-live="polite"></p>
+      <div class="table-wrap"><table><thead><tr><th>Transaction / Reference</th><th>Sender</th><th>Receiver</th><th>Sent</th><th>Received</th><th>Status / Decision</th></tr></thead><tbody id="internalTransferAdminRows"><tr><td colspan="6">Load transfers to begin.</td></tr></tbody></table></div>
+      <hr style="margin:18px 0;border:0;border-top:1px solid #dbe5ec">
+      <h3 style="margin:0 0 6px">Internal Transfer Currency Rates</h3>
+      <p>Set each conversion as FROM_TO. Example: EUR_BDT: 130 means 1 EUR = 130 BDT. Dollar-wallet transfers use 1:1 and do not use these rates.</p>
+      <label style="display:block;margin:8px 0">Currency Pair Rates (JSON)<textarea id="internalTransferRatesJson" rows="8" spellcheck="false" placeholder='{"EUR_BDT":130,"INR_BDT":1.4}' style="width:100%;box-sizing:border-box;font:12px monospace"></textarea></label>
+      <button type="button" id="internalTransferRatesLoad" class="outline">Load Rates</button>
+      <button type="button" id="internalTransferRatesSave">Save Rates</button>
+      <p id="internalTransferRatesStatus" role="status" aria-live="polite"></p>\
+    ;
+    panel.appendChild(internalTools);
+    const internalStatus=$("internalTransferAdminStatus");
+    const internalRows=$("internalTransferAdminRows");
+    async function loadInternalTransfers(){
+      internalStatus.textContent="Loading internal transfer queue...";
+      try{
+        const data=await request("/api/admin/internal-transfers");
+        internalRows.replaceChildren();
+        if(!data.transfers.length){internalRows.innerHTML='<tr><td colspan="6">No internal transfers yet.</td></tr>';}
+        data.transfers.forEach(item=>{
+          const tr=document.createElement("tr");
+          const sent=String(item.sendAmount)+" "+item.sendCurrency;
+          const received=String(item.receiveAmount)+" "+item.receiveCurrency;
+          tr.innerHTML='<td style="word-break:break-word"><b>'+esc(item.transactionId)+'</b><br>Ref: '+esc(item.referenceNumber)+'</td>'+
+            '<td>'+esc(item.senderName)+'<br>'+esc(item.senderAccountId)+'</td>'+
+            '<td>'+esc(item.receiverName)+'<br>'+esc(item.receiverAccountId)+'</td>'+
+            '<td>'+esc(sent)+'<br><small>'+esc(item.walletLabel)+'</small></td>'+
+            '<td>'+esc(received)+(item.rate!==1?'<br><small>Rate: '+esc(item.rate)+'</small>':'')+'</td>'+
+            '<td>'+esc(item.status)+(item.status==="pending"?'<br><button type="button" data-transfer-decision="approve">Approve</button> <button type="button" class="danger" data-transfer-decision="reject">Reject</button>':'')+'</td>';
+          tr.dataset.requestId=item.requestId;
+          internalRows.appendChild(tr);
+        });
+        internalStatus.textContent="Loaded "+data.transfers.length+" transfer(s).";
+      }catch(error){internalStatus.textContent="Could not load transfers: "+error.message;}
+    }
+    internalRows.addEventListener("click",async event=>{
+      const button=event.target.closest("[data-transfer-decision]");
+      if(!button)return;
+      const row=button.closest("tr"), decision=button.dataset.transferDecision;
+      let reason="";
+      if(decision==="reject"){
+        reason=prompt("Enter the reason for rejecting this transfer:");
+        if(reason===null)return;
+        reason=reason.trim();
+        if(reason.length<3){internalStatus.textContent="A rejection reason of at least 3 characters is required.";return;}
+      }else if(!confirm("Approve this transfer? Sender will be debited and receiver credited."))return;
+      button.disabled=true;internalStatus.textContent="Processing "+decision+"...";
+      try{
+        const result=await request("/api/admin/internal-transfer/decision","POST",{requestId:row.dataset.requestId,decision,reason});
+        internalStatus.textContent="Transfer "+result.status+". The same Transaction ID and Reference Number were recorded for both users.";
+        await loadInternalTransfers();
+      }catch(error){internalStatus.textContent="Decision failed: "+error.message;button.disabled=false;}
+    });
+    $("internalTransferReload").addEventListener("click",loadInternalTransfers);
+    const ratesJson=$("internalTransferRatesJson"), ratesStatus=$("internalTransferRatesStatus");
+    async function loadInternalRates(){
+      ratesStatus.textContent="Loading rates...";
+      try{const data=await request("/api/admin/internal-transfer/settings");ratesJson.value=JSON.stringify(data.settings.rates||{},null,2);ratesStatus.textContent="Rates loaded.";}
+      catch(error){ratesStatus.textContent="Could not load rates: "+error.message;}
+    }
+    $("internalTransferRatesLoad").addEventListener("click",loadInternalRates);
+    $("internalTransferRatesSave").addEventListener("click",async()=>{
+      try{
+        const rates=JSON.parse(ratesJson.value||"{}");
+        const data=await request("/api/admin/internal-transfer/settings","PUT",{settings:{rates}});
+        ratesJson.value=JSON.stringify(data.settings.rates||{},null,2);
+        ratesStatus.textContent="Internal transfer conversion rates saved.";
+      }catch(error){ratesStatus.textContent="Rates not saved: "+error.message;}
+    });
+    loadInternalTransfers();loadInternalRates();
     loadQueue();loadSettings();
   }
 
