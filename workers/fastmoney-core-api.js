@@ -165,11 +165,18 @@ async function readDocument(env, collection, id) {
   return result.response.status === 404 ? null : result.data;
 }
 function newAccountId() {
-  // Generate a 10-digit numeric public FastMoney ID (first digit 1-9).
+  // Generate a 10-digit numeric public FastMoney account ID (first digit 1-9).
   const bytes = crypto.getRandomValues(new Uint8Array(10));
   let accountId = String((bytes[0] % 9) + 1);
   for (let i = 1; i < 10; i++) accountId += String(bytes[i] % 10);
   return accountId;
+}
+function newPayId() {
+  // Generate a 20-digit numeric Pay ID (first digit 1-9).
+  const bytes = crypto.getRandomValues(new Uint8Array(20));
+  let payId = String((bytes[0] % 9) + 1);
+  for (let i = 1; i < 20; i++) payId += String(bytes[i] % 10);
+  return payId;
 }
 function documentName(collection, id) {
   return "projects/" + PROJECT_ID + "/databases/(default)/documents/" + collection + "/" + id;
@@ -193,7 +200,13 @@ function makeRegistryDocument(accountId, now) {
     fields: { createdAt: fieldTimestamp(now) }
   };
 }
-function makeNewProfileDocument(uid, claims, accountId, now) {
+function makePayIdRegistryDocument(payId, uid, now) {
+  return {
+    name: documentName("fastMoneyPayIds", payId),
+    fields: { uid: fieldString(uid), createdAt: fieldTimestamp(now) }
+  };
+}
+function makeNewProfileDocument(uid, claims, accountId, payId, now) {
   const displayName = typeof claims.name === "string" ? claims.name.slice(0, 120) : "";
   const email = typeof claims.email === "string" ? claims.email.slice(0, 160) : "";
   const names = displayName.trim().split(/\s+/).filter(Boolean);
@@ -202,6 +215,7 @@ function makeNewProfileDocument(uid, claims, accountId, now) {
     fields: {
       uid: fieldString(uid),
       accountId: fieldString(accountId),
+      payId: fieldString(payId),
       firstName: fieldString(names[0] || ""),
       lastName: fieldString(names.slice(1).join(" ")),
       fullName: fieldString(displayName),
@@ -222,17 +236,17 @@ async function commitWrites(env, writes) {
 
 async function bootstrapAccount(env, claims) {
   const uid = claims.sub;
-  for (let attempt = 0; attempt < 8; attempt++) {
+  for (let attempt = 0; attempt < 12; attempt++) {
     const [profile, wallet] = await Promise.all([
       readDocument(env, "userProfiles", uid),
       readDocument(env, "wallets", uid)
     ]);
     const now = new Date().toISOString();
     let accountId = readString(profile, "accountId");
+    let payId = readString(profile, "payId");
     const writes = [];
-    let newIdReserved = false;
 
-    if (!/^\d{10}$/.test(accountId)) {
+    if (!/^\\d{10}$/.test(accountId)) {
       accountId = newAccountId();
       const registry = await readDocument(env, "fastMoneyAccountIds", accountId);
       if (registry) continue;
@@ -240,7 +254,6 @@ async function bootstrapAccount(env, claims) {
         update: makeRegistryDocument(accountId, now),
         currentDocument: { exists: false }
       });
-      newIdReserved = true;
     } else {
       const registry = await readDocument(env, "fastMoneyAccountIds", accountId);
       if (!registry) {
@@ -251,17 +264,39 @@ async function bootstrapAccount(env, claims) {
       }
     }
 
-    if (!profile) {
+    if (!/^\\d{20}$/.test(payId)) {
+      payId = newPayId();
+      const registry = await readDocument(env, "fastMoneyPayIds", payId);
+      if (registry) continue;
       writes.push({
-        update: makeNewProfileDocument(uid, claims, accountId, now),
+        update: makePayIdRegistryDocument(payId, uid, now),
         currentDocument: { exists: false }
       });
-    } else if (profile) {
+    } else {
+      const registry = await readDocument(env, "fastMoneyPayIds", payId);
+      if (!registry) {
+        writes.push({
+          update: makePayIdRegistryDocument(payId, uid, now),
+          currentDocument: { exists: false }
+        });
+      }
+    }
+
+    if (!profile) {
+      writes.push({
+        update: makeNewProfileDocument(uid, claims, accountId, payId, now),
+        currentDocument: { exists: false }
+      });
+    } else {
       const profileFields = {};
       const fieldPaths = [];
       if (readString(profile, "accountId") !== accountId) {
         profileFields.accountId = fieldString(accountId);
         fieldPaths.push("accountId");
+      }
+      if (readString(profile, "payId") !== payId) {
+        profileFields.payId = fieldString(payId);
+        fieldPaths.push("payId");
       }
       if (readBoolean(profile, "emailVerified") !== (claims.email_verified === true)) {
         profileFields.emailVerified = { booleanValue: claims.email_verified === true };
@@ -289,16 +324,16 @@ async function bootstrapAccount(env, claims) {
     }
 
     if (writes.length === 0) {
-      return { uid, accountId, walletReady: true, created: false };
+      return { uid, accountId, payId, walletReady: true, created: false };
     }
 
     try {
       await commitWrites(env, writes);
-      return { uid, accountId, walletReady: true, created: true };
+      return { uid, accountId, payId, walletReady: true, created: true };
     } catch (error) {
-      // A concurrent signup or rare account-ID collision is safe to retry.
+      // A concurrent signup or rare ID collision is safe to retry.
       if (error.status === 409 || error.status === 400) {
-        if (attempt < 7) continue;
+        if (attempt < 11) continue;
       }
       throw error;
     }
