@@ -501,7 +501,7 @@ async function handlePayIn(request, env, url) {
 function corsHeaders(request) {
   const origin = request.headers.get("origin") || "";
   const headers = {
-    "access-control-allow-methods": "GET, POST, OPTIONS",
+    "access-control-allow-methods": "GET, POST, PUT, OPTIONS",
     "access-control-allow-headers": "Authorization, Content-Type",
     "access-control-max-age": "86400",
     "vary": "Origin"
@@ -516,7 +516,9 @@ export default {
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
     const url = new URL(request.url);
     try {
-      const payInResult = await handlePayIn(request, env, url);\n      if (payInResult) return json(payInResult, 200, cors);\n      if (request.method === "GET" && url.pathname === "/api/health") {
+      const payInResult = await handlePayIn(request, env, url);
+      if (payInResult) return json(payInResult, 200, cors);
+      if (request.method === "GET" && url.pathname === "/api/health") {
         // Confirms the Worker is running and can mint a service-account token.
         await getServiceAccessToken(env);
         return json({
@@ -526,7 +528,7 @@ export default {
           authentication: "ready",
           accountSystem: "ready",
           walletSystem: "server-managed",
-          financialOperations: "not_enabled"
+          financialOperations: "manual_pay_in_enabled"
         }, 200, cors);
       }
       if (request.method === "GET" && url.pathname === "/api/firestore/check") {
