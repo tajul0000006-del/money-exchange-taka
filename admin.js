@@ -34,6 +34,7 @@ import { firebaseConfig } from "./firebase-config.js";
     setupWebsiteContentEditor();
     setupImpactStatsEditor();
     setupExchangeSettingsEditor();
+    setupPayInManagement();
     setupStaffManagement();
     let identity = $("adminIdentity");
     if (!identity) {
@@ -909,6 +910,83 @@ import { firebaseConfig } from "./firebase-config.js";
       status.textContent = "Currency সরানো হয়েছে। স্থায়ী করতে Save All Settings চাপুন।";
     });
     load();
+  }
+
+
+  // Owner-only Pay In configuration and deposit review through FastMoney Core API.
+  function setupPayInManagement() {
+    const panel=$("panel-deposits"), paymentPanel=$("panel-payments");
+    if(!panel || $("payInAdminTools")) return;
+    const CORE="https://fastmoney-core-api.taijulsheikh60.workers.dev";
+    const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    const request=async(path,method="GET",body)=>{
+      const user=auth.currentUser;if(!user)throw new Error("Admin login required");
+      const token=await user.getIdToken(true);
+      const response=await fetch(CORE+path,{method,headers:{Authorization:"Bearer "+token,...(body?{"Content-Type":"application/json"}:{})},...(body?{body:JSON.stringify(body)}:{}),cache:"no-store"});
+      const data=await response.json().catch(()=>({}));
+      if(!response.ok||data.success!==true)throw new Error(data.error||"Pay In API error");
+      return data;
+    };
+    const tools=document.createElement("div");tools.id="payInAdminTools";tools.className="info-strip";tools.style.margin="14px 0";
+    tools.innerHTML=`
+      <h3 style="margin:0 0 8px">Pay In Deposit Review</h3>
+      <p>শুধু Owner অনুমোদিত Deposit Approve/Reject করতে পারবেন। Approve হলে সংশ্লিষ্ট User-এর Wallet-এ সার্ভার থেকে একবারই টাকা যোগ হবে।</p>
+      <button type="button" id="payInReload">Refresh Deposit Queue</button>
+      <p id="payInAdminStatus" role="status" aria-live="polite"></p>
+      <div class="table-wrap"><table><thead><tr><th>Request</th><th>User UID</th><th>Method</th><th>Amount</th><th>Reference / Sender</th><th>Proof</th><th>Status / Action</th></tr></thead><tbody id="payInAdminRows"><tr><td colspan="7">Load deposits to begin.</td></tr></tbody></table></div>`;
+    panel.appendChild(tools);
+    const paySettings=document.createElement("div");paySettings.id="payInSettingsEditor";paySettings.className="info-strip";paySettings.style.margin="14px 0";
+    paySettings.innerHTML=`
+      <h3 style="margin:0 0 8px">Pay In Payment Methods</h3>
+      <p>Crypto, Local বা Bank payment method যোগ করুন। Address, currency, network ও user instruction এখানে সংরক্ষিত হবে। Secret key বা private key এখানে দেবেন না।</p>
+      <label style="display:block;margin:8px 0">Methods JSON<textarea id="payInMethodsJson" rows="12" spellcheck="false" style="width:100%;box-sizing:border-box;font:12px monospace"></textarea></label>
+      <button type="button" id="payInSettingsLoad" class="outline">Load Methods</button>
+      <button type="button" id="payInSettingsSave">Save Pay In Methods</button>
+      <p id="payInSettingsStatus" role="status" aria-live="polite"></p>`;
+    paymentPanel?.appendChild(paySettings);
+    const status=$("payInAdminStatus"), rows=$("payInAdminRows");
+    async function loadQueue(){
+      status.textContent="Loading deposit queue...";
+      try{
+        const data=await request("/api/admin/pay-in/requests");
+        rows.innerHTML="";
+        if(!data.requests.length){rows.innerHTML='<tr><td colspan="7">No Pay In requests yet.</td></tr>';}
+        data.requests.forEach(item=>{
+          const tr=document.createElement("tr");
+          const proof=item.proofUrl&&/^https:\/\//i.test(item.proofUrl)?'<a href="'+esc(item.proofUrl)+'" target="_blank" rel="noopener">Open proof</a>':"—";
+          tr.innerHTML='<td>'+esc(item.requestId)+'</td><td style="max-width:150px;word-break:break-all">'+esc(item.uid)+'</td><td>'+esc(item.methodName)+'</td><td>'+esc(item.amount)+' '+esc(item.currency)+'</td><td>'+esc(item.transactionReference)+'<br>'+esc(item.sender)+'</td><td>'+proof+'</td><td>'+esc(item.status)+'<br>'+(item.status==="pending"?'<button type="button" data-decision="approve">Approve</button> <button type="button" class="danger" data-decision="reject">Reject</button>':"Reviewed")+'</td>';
+          tr.dataset.uid=item.uid;tr.dataset.requestId=item.requestId;rows.appendChild(tr);
+        });
+        status.textContent="Loaded "+data.requests.length+" deposit request(s).";
+      }catch(e){status.textContent="Could not load: "+e.message;}
+    }
+    rows.addEventListener("click",async event=>{
+      const button=event.target.closest("[data-decision]");if(!button)return;
+      const tr=button.closest("tr");const decision=button.dataset.decision;
+      if(!confirm("Are you sure you want to "+decision+" this deposit?"))return;
+      button.disabled=true;status.textContent="Processing "+decision+"...";
+      try{
+        await request("/api/admin/pay-in/decision","POST",{uid:tr.dataset.uid,requestId:tr.dataset.requestId,decision});
+        status.textContent=decision==="approve"?"Approved. Wallet credit was committed with the ledger.":"Deposit rejected.";
+        await loadQueue();
+      }catch(e){status.textContent="Action failed: "+e.message;button.disabled=false;}
+    });
+    $("payInReload").addEventListener("click",loadQueue);
+    const settingsStatus=$("payInSettingsStatus"), json=$("payInMethodsJson");
+    async function loadSettings(){
+      settingsStatus.textContent="Loading payment methods...";
+      try{const data=await request("/api/admin/pay-in/settings");json.value=JSON.stringify(data.settings.methods,null,2);settingsStatus.textContent="Methods loaded.";}
+      catch(e){settingsStatus.textContent="Could not load: "+e.message;}
+    }
+    $("payInSettingsLoad").addEventListener("click",loadSettings);
+    $("payInSettingsSave").addEventListener("click",async()=>{
+      try{
+        const methods=JSON.parse(json.value||"[]");
+        const data=await request("/api/admin/pay-in/settings","PUT",{settings:{methods}});
+        json.value=JSON.stringify(data.settings.methods,null,2);settingsStatus.textContent="Payment methods saved securely.";
+      }catch(e){settingsStatus.textContent="Save failed: "+e.message;}
+    });
+    loadQueue();loadSettings();
   }
 
   // Dashboard section navigation (UI only; management actions remain disabled until APIs exist).
