@@ -1804,7 +1804,7 @@ onAuthStateChanged(auth, async user => {
       throw new Error("The server did not return a valid FastMoney Account ID.");
     }
 
-    if (!/^\\d{20}$/.test(String(bootstrap.payId || ""))) {
+    if (!/^\d{20}$/.test(String(bootstrap.payId || ""))) {
       throw new Error("The server did not return a valid 20-digit Pay ID.");
     }
     document.getElementById("payIdValue").textContent = bootstrap.payId;
