@@ -1577,3 +1577,16 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
 }
 
 </style>
+
+
+/* Add 2px of internal top breathing room inside each wallet card. */
+.wallet-scroller>.wallet-item,
+.wallet-scroller>.pay-id-card{
+  padding-top:calc(17px + 2px)!important;
+}
+@media(max-width:520px){
+  .wallet-scroller>.wallet-item,
+  .wallet-scroller>.pay-id-card{
+    padding-top:calc(15px + 2px)!important;
+  }
+}
