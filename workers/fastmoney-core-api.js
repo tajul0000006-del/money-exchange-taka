@@ -246,7 +246,7 @@ async function bootstrapAccount(env, claims) {
     let payId = readString(profile, "payId");
     const writes = [];
 
-    if (!/^\\d{10}$/.test(accountId)) {
+    if (!/^\d{10}$/.test(accountId)) {
       accountId = newAccountId();
       const registry = await readDocument(env, "fastMoneyAccountIds", accountId);
       if (registry) continue;
@@ -264,7 +264,7 @@ async function bootstrapAccount(env, claims) {
       }
     }
 
-    if (!/^\\d{20}$/.test(payId)) {
+    if (!/^\d{20}$/.test(payId)) {
       payId = newPayId();
       const registry = await readDocument(env, "fastMoneyPayIds", payId);
       if (registry) continue;
