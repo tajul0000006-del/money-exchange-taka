@@ -1595,6 +1595,27 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
   }
 }
 
+
+/* Wallet slider: remove all visual and scrolling animations. */
+.wallet-overview>.wallet-scroller{
+  scroll-behavior:auto!important;
+}
+.wallet-overview>.wallet-scroller,
+.wallet-overview>.wallet-scroller *,
+.wallet-overview>.wallet-scroller *::before,
+.wallet-overview>.wallet-scroller *::after{
+  animation:none!important;
+  transition:none!important;
+}
+.wallet-overview>.wallet-scroller>.wallet-item,
+.wallet-overview>.wallet-scroller>.pay-id-card,
+.wallet-overview>.wallet-scroller>.wallet-item:hover,
+.wallet-overview>.wallet-scroller>.wallet-item:active,
+.wallet-overview>.wallet-scroller>.pay-id-card:hover,
+.wallet-overview>.wallet-scroller>.pay-id-card:active{
+  transform:none!important;
+}
+
 /* Responsive full-width swipe carousel: every wallet card fits the screen. */
 .wallet-overview,
 .wallet-overview *{box-sizing:border-box}
