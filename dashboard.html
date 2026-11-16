@@ -1231,9 +1231,41 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 
 
 <style id="fastmoney-pay-in-temporarily-disabled">
-/* Pay In is intentionally hidden until the owner enables it. */
-#openPayIn,
-#fastMoneyPayInModal{display:none!important;visibility:hidden!important;pointer-events:none!important}
+/* Keep the Wallet shortcut disabled; Pay-in opens from the bottom navigation. */
+#openPayIn{display:none!important;visibility:hidden!important;pointer-events:none!important}
+#fastMoneyPayInModal[hidden]{display:none!important}
+#fastMoneyPayInModal{
+  position:fixed!important;
+  top:76px!important;
+  right:0!important;
+  bottom:82px!important;
+  left:0!important;
+  z-index:2950!important;
+  display:block!important;
+  width:100vw!important;
+  height:auto!important;
+  padding:0!important;
+  overflow:hidden!important;
+  background:#fff!important;
+  color:#172033!important;
+  border:0!important;
+  border-top:1px solid #e7edf2!important;
+}
+#fastMoneyPayInModal>.pay-in-screen-content{
+  width:100%!important;height:100%!important;max-height:none!important;
+  overflow:auto!important;padding:18px clamp(16px,3vw,28px) 24px!important;
+  border:0!important;border-radius:0!important;box-shadow:none!important;
+  background:#fff!important;color:#172033!important;
+}
+#fastMoneyPayInModal #closePayIn{width:38px;height:38px;border:0;border-radius:10px;background:#f1f5f9;color:#334155;font-size:24px;line-height:1;cursor:pointer}
+@media(max-width:760px){
+  #fastMoneyPayInModal{top:66px!important;bottom:82px!important}
+  #fastMoneyPayInModal>.pay-in-screen-content{padding:15px 15px 22px!important}
+}
+@media(prefers-color-scheme:dark){
+  #fastMoneyPayInModal,#fastMoneyPayInModal>.pay-in-screen-content{background:#fff!important;color:#172033!important}
+  #fastMoneyPayInModal #closePayIn{background:#f1f5f9!important;color:#334155!important}
+}
 </style>
 </head>
 <body>
@@ -1309,8 +1341,8 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
     </div>
   </section>
 
-  <section id="fastMoneyPayInModal" hidden role="dialog" aria-modal="true" aria-labelledby="payInTitle" style="position:fixed;inset:0;z-index:10000;background:rgba(5,18,32,.68);padding:16px;overflow:auto;display:none;align-items:center;justify-content:center">
-    <div style="width:min(560px,100%);max-height:92vh;overflow:auto;background:#fff;color:#172033;border-radius:18px;padding:20px;box-shadow:0 24px 70px #0005">
+  <section id="fastMoneyPayInModal" hidden role="dialog" aria-modal="true" aria-labelledby="payInTitle">
+    <div class="pay-in-screen-content">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><h2 id="payInTitle" style="margin:0;font-size:20px">Pay In</h2><button type="button" id="closePayIn" aria-label="Close" style="border:0;background:transparent;font-size:24px;cursor:pointer">×</button></div>
       <p style="font-size:13px;opacity:.75">Send payment using an available method, then submit your transaction details for review.</p>
       <form id="payInForm" style="display:grid;gap:11px">
@@ -1371,7 +1403,7 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
   <button class="dash-btn secondary" id="logoutBtn" type="button" hidden>Log Out</button>
   <nav class="dashboard-bottom-nav" aria-label="Quick service navigation">
     <a class="bottom-nav-item bottom-nav-convert active" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></span><span class="bottom-nav-label">Convert</span></a>
-    <a class="bottom-nav-item bottom-nav-payin" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-circle-arrow-down" aria-hidden="true"></i></span><span class="bottom-nav-label">Pay-in</span></a>
+    <a class="bottom-nav-item bottom-nav-payin" id="bottomNavPayIn" href="#pay-in" aria-controls="fastMoneyPayInModal" aria-expanded="false"><span class="bottom-nav-icon"><i class="fa-solid fa-circle-arrow-down" aria-hidden="true"></i></span><span class="bottom-nav-label">Pay-in</span></a>
     <a class="bottom-nav-item bottom-nav-payout" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-circle-arrow-up" aria-hidden="true"></i></span><span class="bottom-nav-label">Pay-out</span></a>
     <a class="bottom-nav-item bottom-nav-buysell" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i></span><span class="bottom-nav-label">Buy/Sell</span></a>
   </nav>
@@ -1496,8 +1528,11 @@ async function coreRequest(path, token, method = "GET", body = null) {
 let payInMethods = [];
 function showPayInModal(open) {
   const modal=document.getElementById("fastMoneyPayInModal");
+  const trigger=document.getElementById("bottomNavPayIn");
   if(!modal)return;
-  modal.hidden=!open;modal.style.display=open?"flex":"none";
+  modal.hidden=!open;
+  trigger?.setAttribute("aria-expanded",String(open));
+  document.body.style.overflow=open?"hidden":"";
   if(open) loadPayInData();
 }
 function renderPayInMethodDetails() {
@@ -1524,8 +1559,10 @@ async function loadPayInData() {
     });
   }catch(error){status.textContent=error.message;historyBox.textContent="Could not load Pay In history.";}
 }
-document.getElementById("openPayIn")?.addEventListener("click",()=>showPayInModal(true));
+document.getElementById("bottomNavPayIn")?.addEventListener("click",event=>{event.preventDefault();showPayInModal(true);});
 document.getElementById("closePayIn")?.addEventListener("click",()=>showPayInModal(false));
+window.addEventListener("keydown",event=>{if(event.key==="Escape"&&!document.getElementById("fastMoneyPayInModal")?.hidden)showPayInModal(false);});
+window.addEventListener("popstate",()=>{const modal=document.getElementById("fastMoneyPayInModal");if(modal&&!modal.hidden)showPayInModal(false);});
 document.getElementById("payInMethod")?.addEventListener("change",renderPayInMethodDetails);
 document.getElementById("fastMoneyPayInModal")?.addEventListener("click",event=>{if(event.target.id==="fastMoneyPayInModal")showPayInModal(false);});
 document.getElementById("payInForm")?.addEventListener("submit",async event=>{
