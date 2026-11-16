@@ -1788,10 +1788,9 @@ onAuthStateChanged(auth, async user => {
     const payCurrencyCode = String(profile.signupCurrencyCode || profile.currencyCode || "").trim().toUpperCase();
     document.getElementById("payIdCurrency").textContent = (payCurrencyCode || "LOCAL") + " PAY ID";
     document.getElementById("payIdCurrencyBadge").textContent = payCurrencyCode || "—";
-    document.getElementById("payIdValue").textContent = user.uid;
+    document.getElementById("payIdValue").textContent = "Loading…";
     const internalPayId=document.getElementById("internalReceivingPayId");
-    if(internalPayId)internalPayId.textContent=user.uid;
-    document.getElementById("copyPayId")?.setAttribute("data-copy-value", user.uid);
+    if(internalPayId)internalPayId.textContent="Loading…";
     document.getElementById("navAccountName").textContent =
       /^\d{10}$/.test(String(profile.accountId || "")) ? profile.accountId : "Setting up ID…";
     document.getElementById("navAccountEmail").textContent = user.email || "";
@@ -1805,6 +1804,13 @@ onAuthStateChanged(auth, async user => {
       throw new Error("The server did not return a valid FastMoney Account ID.");
     }
 
+    if (!/^\\d{20}$/.test(String(bootstrap.payId || ""))) {
+      throw new Error("The server did not return a valid 20-digit Pay ID.");
+    }
+    document.getElementById("payIdValue").textContent = bootstrap.payId;
+    const internalPayId=document.getElementById("internalReceivingPayId");
+    if(internalPayId)internalPayId.textContent=bootstrap.payId;
+    document.getElementById("copyPayId")?.setAttribute("data-copy-value", bootstrap.payId);
     document.getElementById("navAccountName").textContent = bootstrap.accountId;
     document.getElementById("copyAccountId")?.setAttribute("data-copy-value", bootstrap.accountId);
     const walletResult = await coreRequest("/api/wallet/me", token);
