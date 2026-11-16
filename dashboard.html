@@ -1334,6 +1334,8 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 
       <a href="/dashboard.html"><i class="fa-solid fa-house"></i> Dashboard Home</a>
       <a href="/member-exchange.html"><i class="fa-solid fa-arrow-right-arrow-left"></i> New Exchange</a>
+      <a href="/transfer.html"><i class="fa-solid fa-paper-plane"></i> Send Money</a>
+      <a href="/transactions.html"><i class="fa-solid fa-clock-rotate-left"></i> Transactions</a>
       <a href="/history.html"><i class="fa-solid fa-clock-rotate-left"></i> My Requests</a>
       <a href="/chat.html"><i class="fa-solid fa-headset"></i> Customer Support</a>
       <button type="button" id="headerLogoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
@@ -1354,20 +1356,20 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
     </div>
     <div class="wallet-list-heading"><div><h3>Wallets</h3></div></div>
     <div class="wallet-scroller" role="list" aria-label="Available wallets">
-      <article class="wallet-item wallet-fastmoney-usd" role="listitem"><span class="wallet-symbol wallet-logo">FM</span><span class="wallet-name">FastMoney USD</span><strong>$0.00</strong><small>FastMoney Dollar Wallet</small></article>
+      <article class="wallet-item wallet-fastmoney-usd" data-wallet-key="USD" role="listitem"><span class="wallet-symbol wallet-logo">FM</span><span class="wallet-name">FastMoney USD</span><strong>$0.00</strong><small>FastMoney Dollar Wallet</small></article>
   <section class="pay-id-card" aria-label="Your payment ID">
   <div class="pay-id-top"><span class="pay-id-mark">FM</span><div class="pay-id-title"><strong id="payIdCurrency">— PAY ID</strong><small>Personal payment ID</small></div><span class="pay-id-country" id="payIdCurrencyBadge">—</span></div>
   <div class="pay-id-value-row"><div class="pay-id-value-wrap"><small>PAY ID</small><strong id="payIdValue">Loading…</strong></div><button type="button" class="pay-id-copy" id="copyPayId" aria-label="Copy Pay ID" title="Copy Pay ID"><i class="fa-regular fa-copy"></i><span>Copy</span></button></div>
 </section>
-      <article class="wallet-item wallet-redotpay" role="listitem"><span class="wallet-symbol wallet-logo">R</span><span class="wallet-name">RedotPay USD</span><strong>$0.00</strong><small>RedotPay Dollar Wallet</small></article>
-      <article class="wallet-item wallet-volet" role="listitem"><span class="wallet-symbol wallet-logo">V</span><span class="wallet-name">Volet USD</span><strong>$0.00</strong><small>Volet Dollar Wallet</small></article>
-      <article class="wallet-item wallet-epay" role="listitem"><span class="wallet-symbol wallet-logo">e</span><span class="wallet-name">ePay USD</span><strong>$0.00</strong><small>ePay Dollar Wallet</small></article>
-      <article class="wallet-item wallet-webmoney" role="listitem"><span class="wallet-symbol wallet-logo">W</span><span class="wallet-name">WebMoney USD</span><strong>$0.00</strong><small>WebMoney Dollar Wallet</small></article>
-      <article class="wallet-item wallet-tunepay" role="listitem"><span class="wallet-symbol wallet-logo">T</span><span class="wallet-name">TunePay USD</span><strong>$0.00</strong><small>TunePay Dollar Wallet</small></article>
-      <article class="wallet-item wallet-perfectmoney" role="listitem"><span class="wallet-symbol wallet-logo">PM</span><span class="wallet-name">Perfect Money USD</span><strong>$0.00</strong><small>Perfect Money Dollar Wallet</small></article>
-      <article class="wallet-item wallet-winiti" role="listitem"><span class="wallet-symbol wallet-logo">W</span><span class="wallet-name">Winity USD</span><strong>$0.00</strong><small>Winity Dollar Wallet</small></article>
-      <article class="wallet-item wallet-usdt" role="listitem"><span class="wallet-symbol wallet-logo">₮</span><span class="wallet-name">USDT</span><strong>0.00</strong><small>Tether Wallet</small></article>
-      <article class="wallet-item wallet-rizon" role="listitem"><span class="wallet-symbol wallet-logo">RZ</span><span class="wallet-name">Rizon USD</span><strong>$0.00</strong><small>Rizon Dollar Wallet</small></article>
+      <article class="wallet-item wallet-redotpay" data-wallet-key="REDOTPAY_USD" role="listitem"><span class="wallet-symbol wallet-logo">R</span><span class="wallet-name">RedotPay USD</span><strong>$0.00</strong><small>RedotPay Dollar Wallet</small></article>
+      <article class="wallet-item wallet-volet" data-wallet-key="VOLET_USD" role="listitem"><span class="wallet-symbol wallet-logo">V</span><span class="wallet-name">Volet USD</span><strong>$0.00</strong><small>Volet Dollar Wallet</small></article>
+      <article class="wallet-item wallet-epay" data-wallet-key="EPAY_USD" role="listitem"><span class="wallet-symbol wallet-logo">e</span><span class="wallet-name">ePay USD</span><strong>$0.00</strong><small>ePay Dollar Wallet</small></article>
+      <article class="wallet-item wallet-webmoney" data-wallet-key="WEBMONEY_USD" role="listitem"><span class="wallet-symbol wallet-logo">W</span><span class="wallet-name">WebMoney USD</span><strong>$0.00</strong><small>WebMoney Dollar Wallet</small></article>
+      <article class="wallet-item wallet-tunepay" data-wallet-key="TUNEPAY_USD" role="listitem"><span class="wallet-symbol wallet-logo">T</span><span class="wallet-name">TunePay USD</span><strong>$0.00</strong><small>TunePay Dollar Wallet</small></article>
+      <article class="wallet-item wallet-perfectmoney" data-wallet-key="PERFECTMONEY_USD" role="listitem"><span class="wallet-symbol wallet-logo">PM</span><span class="wallet-name">Perfect Money USD</span><strong>$0.00</strong><small>Perfect Money Dollar Wallet</small></article>
+      <article class="wallet-item wallet-winiti" data-wallet-key="WINITY_USD" role="listitem"><span class="wallet-symbol wallet-logo">W</span><span class="wallet-name">Winity USD</span><strong>$0.00</strong><small>Winity Dollar Wallet</small></article>
+      <article class="wallet-item wallet-usdt" data-wallet-key="USDT" role="listitem"><span class="wallet-symbol wallet-logo">₮</span><span class="wallet-name">USDT</span><strong>0.00</strong><small>Tether Wallet</small></article>
+      <article class="wallet-item wallet-rizon" data-wallet-key="RIZON_USD" role="listitem"><span class="wallet-symbol wallet-logo">RZ</span><span class="wallet-name">Rizon USD</span><strong>$0.00</strong><small>Rizon Dollar Wallet</small></article>
     </div>
   </section>
 
@@ -1397,8 +1399,8 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
       <section class="pay-in-receiving-box" id="internalPayIdBox" aria-label="Your receiving Pay ID">
         <div class="pay-in-receiving-top">
           <div>
-            <span class="pay-in-receiving-eyebrow">YOUR RECEIVING ID</span>
-            <strong>Share this ID to receive money</strong>
+            <span class="pay-in-receiving-eyebrow">YOUR FASTMONEY ACCOUNT ID</span>
+            <strong>Share this 10-digit ID to receive money</strong>
           </div>
           <span class="pay-in-receiving-mark">ID</span>
         </div>
@@ -1408,9 +1410,9 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
         </div>
         <div class="pay-in-receiving-help">
           <strong>How to receive</strong>
-          <p>Share your Pay ID with the person sending you money. They can enter it in the Internal Pay In option from their account. You can also find your Pay ID from your profile.</p>
+          <p>Share your 10-digit FastMoney Account ID with the sender. They can use it on the Send Money page to send funds to your account.</p>
           <strong class="pay-in-warning-title">Important</strong>
-          <p class="pay-in-warning">Only share your Pay ID. Never share your password, verification code or login details. Check the sender and payment details before confirming anything.</p>
+          <p class="pay-in-warning">Only share your public FastMoney Account ID. Never share your Firebase UID, password or verification code.</p>
         </div>
       </section>
     </div>
@@ -1451,7 +1453,7 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
       const localAmount=localCard && localCard.querySelector("strong");
       if(localAmount) localAmount.textContent=format(amount);
       const usdAmount=document.querySelector(".wallet-total-usd strong");
-      if(usdAmount) usdAmount.textContent=format(balances.USD || 0);
+      if(usdAmount) usdAmount.textContent=format(Object.keys(balances).filter(key=>key.endsWith("_USD")).reduce((sum,key)=>sum+Number(balances[key]||0),Number(balances.USD||0))+Number(balances.USDT||0));
     } catch (error) {
       console.warn("FastMoney instant wallet restore skipped.",error);
     }
@@ -1618,22 +1620,22 @@ async function loadPayInData() {
 }
 
 function syncInternalPayId(){
-  const value=document.getElementById("payIdValue")?.textContent?.trim()||"";
+  const value=document.getElementById("navAccountName")?.textContent?.trim()||"";
   const target=document.getElementById("internalReceivingPayId");
-  if(target)target.textContent=value&&value!=="Loading…" ? value : "Your Pay ID is loading…";
+  if(target)target.textContent=/^\\d{10}$/.test(value) ? value : "Your Account ID is loading…";
 }
 
 document.getElementById("copyInternalReceivingPayId")?.addEventListener("click",async()=>{
   syncInternalPayId();
   const value=document.getElementById("internalReceivingPayId")?.textContent?.trim()||"";
-  if(!value||value==="Your Pay ID is loading…")return;
+  if(!/^\\d{10}$/.test(value))return;
   try{
     await navigator.clipboard.writeText(value);
     const button=document.getElementById("copyInternalReceivingPayId");
     button.innerHTML='<i class="fa-solid fa-check" aria-hidden="true"></i><span>Copied</span>';
     setTimeout(()=>{button.innerHTML='<i class="fa-regular fa-copy" aria-hidden="true"></i><span>Copy</span>';},1500);
   }catch{
-    showAccountMessage("Could not copy the Pay ID. Please select and copy it manually.",true);
+    showAccountMessage("Could not copy the Account ID. Please select and copy it manually.",true);
   }
 });
 window.addEventListener("keydown",event=>{if(event.key==="Escape"&&!document.getElementById("fastMoneyPayInModal")?.hidden)showPayInModal(false);});
@@ -1669,29 +1671,18 @@ function setVerification(verified) {
 function renderWallet(wallet, profile) {
   const balances = wallet?.balances || {};
   const localCode = String(profile?.signupCurrencyCode || profile?.currencyCode || "").trim().toUpperCase();
-  const usd = Number(balances.USD || 0);
-  document.querySelector(".wallet-total-usd strong").textContent = formatBalance(usd);
-
-  // The signup-country currency is shown in the Pay ID card, not as a second wallet card.
+  const dollarKeys = Object.keys(balances).filter(key => key.endsWith("_USD"));
+  const usdTotal = dollarKeys.reduce((sum,key)=>sum+Number(balances[key]||0),Number(balances.USD||0))+Number(balances.USDT||0);
+  document.querySelector(".wallet-total-usd strong").textContent = formatBalance(usdTotal);
   const localLabel = document.getElementById("localCurrencyLabel");
   const localBalance = document.getElementById("localCurrencyBalance");
-  if (!localCode) {
-    localLabel.textContent = "—";
-    localBalance.textContent = "—";
-  } else {
-    localLabel.textContent = localCode;
-    localBalance.textContent = formatBalance(Number(balances[localCode] || 0));
-  }
-
-  document.querySelectorAll(".wallet-scroller > .wallet-item").forEach(card => {
-    const name = card.querySelector(".wallet-name")?.textContent.trim() || "";
-    const amount = card.querySelector("strong");
-    if (!amount) return;
-    if (name === "USDT") {
-      amount.textContent = formatBalance(balances.USDT || 0);
-    } else if (name.endsWith(" USD")) {
-      amount.textContent = "$" + formatBalance(balances.USD || 0);
-    }
+  if (!localCode) { localLabel.textContent = "—"; localBalance.textContent = "—"; }
+  else { localLabel.textContent = localCode; localBalance.textContent = formatBalance(Number(balances[localCode] || 0)); }
+  document.querySelectorAll(".wallet-scroller > .wallet-item[data-wallet-key]").forEach(card => {
+    const key=card.dataset.walletKey, amount=card.querySelector("strong");
+    if(!amount)return;
+    const value=Number(balances[key]||0);
+    amount.textContent=key==="USDT"?formatBalance(value):"$"+formatBalance(value);
   });
 }
 
