@@ -945,7 +945,8 @@ export default {
           authentication: "ready",
           accountSystem: "ready",
           walletSystem: "server-managed",
-          financialOperations: "manual_pay_in_enabled"
+          financialOperations: "manual_pay_in_and_owner_reviewed_internal_transfers",
+          internalTransfers: "pending_review_with_atomic_wallet_settlement"
         }, 200, cors);
       }
       if (request.method === "GET" && url.pathname === "/api/firestore/check") {
