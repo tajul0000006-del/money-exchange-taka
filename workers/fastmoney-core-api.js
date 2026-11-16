@@ -325,6 +325,179 @@ async function getWallet(env, uid) {
   };
 }
 
+
+function fieldDouble(value) { return { doubleValue: Number(value) }; }
+function readNumber(document, field) {
+  const value = document?.fields?.[field]?.integerValue ?? document?.fields?.[field]?.doubleValue;
+  const number = Number(value ?? 0);
+  return Number.isFinite(number) ? number : 0;
+}
+function readMap(document, field) { return document?.fields?.[field]?.mapValue?.fields || {}; }
+function safeText(value, max = 160) { return typeof value === "string" ? value.trim().slice(0, max) : ""; }
+function randomId(prefix = "PIN") {
+  return prefix + "-" + crypto.randomUUID().replace(/-/g, "").slice(0, 20).toUpperCase();
+}
+function adminOnly(claims, env) {
+  if (!env.OWNER_UID || claims.sub !== env.OWNER_UID) {
+    const error = new Error("Owner permission required");
+    error.status = 403;
+    throw error;
+  }
+}
+function payInSettingsDocument(settings) {
+  return {
+    name: documentName("payInSettings", "global"),
+    fields: {
+      methods: { arrayValue: { values: settings.methods.map(method => fieldMap({
+        id: fieldString(method.id), name: fieldString(method.name), type: fieldString(method.type),
+        currency: fieldString(method.currency), network: fieldString(method.network || ""),
+        accountType: fieldString(method.accountType || ""), address: fieldString(method.address),
+        instruction: fieldString(method.instruction || ""), enabled: { booleanValue: method.enabled === true }
+      })) } },
+      updatedAt: fieldTimestamp(new Date().toISOString())
+    }
+  };
+}
+function parsePayInMethods(document) {
+  const values = document?.fields?.methods?.arrayValue?.values || [];
+  return values.map(value => {
+    const f = value.mapValue?.fields || {};
+    return {
+      id: f.id?.stringValue || "", name: f.name?.stringValue || "",
+      type: f.type?.stringValue || "", currency: f.currency?.stringValue || "",
+      network: f.network?.stringValue || "", accountType: f.accountType?.stringValue || "",
+      address: f.address?.stringValue || "", instruction: f.instruction?.stringValue || "",
+      enabled: f.enabled?.booleanValue === true
+    };
+  });
+}
+async function getPayInSettings(env) {
+  const document = await readDocument(env, "payInSettings", "global");
+  return { methods: parsePayInMethods(document) };
+}
+async function handlePayIn(request, env, url) {
+  if (request.method === "GET" && url.pathname === "/api/pay-in/methods") {
+    const settings = await getPayInSettings(env);
+    return { success: true, methods: settings.methods.filter(m => m.enabled).map(({id,name,type,currency,network,accountType,address,instruction}) => ({id,name,type,currency,network,accountType,address,instruction})) };
+  }
+  if (url.pathname === "/api/admin/pay-in/settings") {
+    const claims = await requireUser(request); adminOnly(claims, env);
+    if (request.method === "GET") return { success: true, settings: await getPayInSettings(env) };
+    if (request.method === "PUT") {
+      const body = await request.json().catch(() => ({}));
+      const methods = body?.settings?.methods;
+      if (!Array.isArray(methods) || methods.length > 40) throw new Error("Invalid payment methods");
+      const clean = [];
+      const ids = new Set();
+      for (const item of methods) {
+        const method = {
+          id: safeText(item.id, 40), name: safeText(item.name, 80),
+          type: safeText(item.type, 20), currency: safeText(item.currency, 8).toUpperCase(),
+          network: safeText(item.network, 40), accountType: safeText(item.accountType, 40),
+          address: safeText(item.address, 180), instruction: safeText(item.instruction, 500),
+          enabled: item.enabled === true
+        };
+        if (!/^[a-z0-9_-]{2,40}$/.test(method.id) || ids.has(method.id) || !method.name ||
+            !["crypto","local","bank"].includes(method.type) || !["BDT","USD","USDT"].includes(method.currency) ||
+            !method.address) throw new Error("Check each payment method: unique ID, name, type, currency and payment address are required");
+        ids.add(method.id); clean.push(method);
+      }
+      const old = await readDocument(env, "payInSettings", "global");
+      const write = { update: payInSettingsDocument({methods:clean}) };
+      if (old) write.currentDocument = { updateTime: old.updateTime };
+      else write.currentDocument = { exists: false };
+      await commitWrites(env, [write]);
+      return { success: true, settings: { methods: clean } };
+    }
+  }
+  if (url.pathname === "/api/pay-in/requests" && request.method === "POST") {
+    const claims = await requireUser(request);
+    const body = await request.json().catch(() => ({}));
+    const methodId = safeText(body.methodId, 40);
+    const currency = safeText(body.currency, 8).toUpperCase();
+    const amount = Number(body.amount);
+    const transactionReference = safeText(body.transactionReference, 120);
+    const sender = safeText(body.sender, 120);
+    const proofUrl = safeText(body.proofUrl, 2048);
+    if (!Number.isFinite(amount) || amount <= 0 || amount > 1000000 ||
+        !["BDT","USD","USDT"].includes(currency) || !methodId ||
+        transactionReference.length < 4 || !sender) throw new Error("Enter a valid amount, payment reference and sender details");
+    const settings = await getPayInSettings(env);
+    const method = settings.methods.find(m => m.id === methodId && m.enabled);
+    if (!method || method.currency !== currency) throw new Error("This payment method is unavailable for the selected currency");
+    const uid = claims.sub, id = randomId();
+    const now = new Date().toISOString();
+    const fields = {
+      requestId: fieldString(id), uid: fieldString(uid), methodId: fieldString(method.id),
+      methodName: fieldString(method.name), currency: fieldString(currency),
+      amount: fieldDouble(amount), transactionReference: fieldString(transactionReference),
+      sender: fieldString(sender), proofUrl: fieldString(proofUrl),
+      status: fieldString("pending"), createdAt: fieldTimestamp(now)
+    };
+    await commitWrites(env, [
+      { update: { name: documentName("depositRequests/"+uid+"/items", id), fields }, currentDocument: { exists: false } },
+      { update: { name: documentName("payInQueue", id), fields }, currentDocument: { exists: false } }
+    ]);
+    return { success: true, request: { requestId:id, status:"pending", currency, amount, methodName:method.name, createdAt:now } };
+  }
+  if (url.pathname === "/api/pay-in/requests/me" && request.method === "GET") {
+    const claims = await requireUser(request);
+    const result = await firestoreRequest(env, "/depositRequests/"+encodeURIComponent(claims.sub)+"/items?pageSize=100");
+    const requests = (result.data.documents || []).map(doc => {
+      const f=doc.fields||{};
+      return {requestId:f.requestId?.stringValue||doc.name.split("/").pop(),methodName:f.methodName?.stringValue||"",currency:f.currency?.stringValue||"",amount:Number(f.amount?.doubleValue??f.amount?.integerValue??0),transactionReference:f.transactionReference?.stringValue||"",status:f.status?.stringValue||"pending",createdAt:f.createdAt?.timestampValue||""};
+    }).sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
+    return { success:true, requests };
+  }
+  if (url.pathname === "/api/admin/pay-in/requests" && request.method === "GET") {
+    const claims = await requireUser(request); adminOnly(claims, env);
+    const result = await firestoreRequest(env, "/payInQueue?pageSize=100");
+    const requests = (result.data.documents || []).map(doc => {
+      const f=doc.fields||{};
+      return {requestId:f.requestId?.stringValue||doc.name.split("/").pop(),uid:f.uid?.stringValue||"",methodName:f.methodName?.stringValue||"",methodId:f.methodId?.stringValue||"",currency:f.currency?.stringValue||"",amount:Number(f.amount?.doubleValue??f.amount?.integerValue??0),transactionReference:f.transactionReference?.stringValue||"",sender:f.sender?.stringValue||"",proofUrl:f.proofUrl?.stringValue||"",status:f.status?.stringValue||"pending",createdAt:f.createdAt?.timestampValue||""};
+    }).sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
+    return { success:true, requests };
+  }
+  if (url.pathname === "/api/admin/pay-in/decision" && request.method === "POST") {
+    const claims = await requireUser(request); adminOnly(claims, env);
+    const body = await request.json().catch(() => ({}));
+    const uid=safeText(body.uid,128), id=safeText(body.requestId,64), decision=safeText(body.decision,16);
+    if (!uid || !id || !["approve","reject"].includes(decision)) throw new Error("Invalid deposit decision");
+    const [queue, userRequest] = await Promise.all([
+      readDocument(env,"payInQueue",id),
+      readDocument(env,"depositRequests/"+uid+"/items",id)
+    ]);
+    if (!queue || !userRequest || readString(queue,"uid")!==uid || readString(userRequest,"uid")!==uid) {
+      const error=new Error("Deposit request not found");error.status=404;throw error;
+    }
+    if (readString(queue,"status")!=="pending" || readString(userRequest,"status")!=="pending") {
+      const error=new Error("This deposit has already been reviewed");error.status=409;throw error;
+    }
+    const now=new Date().toISOString();
+    const status=decision==="approve"?"approved":"rejected";
+    const writes=[
+      {update:{name:queue.name,fields:{status:fieldString(status),reviewedAt:fieldTimestamp(now),reviewedBy:fieldString(claims.sub)}},updateMask:{fieldPaths:["status","reviewedAt","reviewedBy"]},currentDocument:{updateTime:queue.updateTime}},
+      {update:{name:userRequest.name,fields:{status:fieldString(status),reviewedAt:fieldTimestamp(now),reviewedBy:fieldString(claims.sub)}},updateMask:{fieldPaths:["status","reviewedAt","reviewedBy"]},currentDocument:{updateTime:userRequest.updateTime}}
+    ];
+    if (decision==="approve") {
+      const currency=readString(queue,"currency"), amount=readNumber(queue,"amount");
+      if (!["BDT","USD","USDT"].includes(currency) || !Number.isFinite(amount) || amount<=0) throw new Error("Deposit data is invalid");
+      const wallet=await readDocument(env,"wallets",uid);
+      if (!wallet || readString(wallet,"status")!=="active") throw new Error("User wallet is unavailable or inactive");
+      const balances={...readMap(wallet,"balances")};
+      const current=Number(balances[currency]?.doubleValue??balances[currency]?.integerValue??0);
+      balances[currency]=fieldDouble(current+amount);
+      writes.push({update:{name:wallet.name,fields:{balances:fieldMap(balances),updatedAt:fieldTimestamp(now)}},updateMask:{fieldPaths:["balances","updatedAt"]},currentDocument:{updateTime:wallet.updateTime}});
+      const ledgerId=randomId("LED");
+      const ledgerFields={transactionId:fieldString(ledgerId),uid:fieldString(uid),type:fieldString("pay_in"),direction:fieldString("credit"),currency:fieldString(currency),amount:fieldDouble(amount),referenceId:fieldString(id),description:fieldString("Approved Pay In"),createdAt:fieldTimestamp(now),createdBy:fieldString(claims.sub)};
+      writes.push({update:{name:documentName("ledger/"+uid+"/entries",ledgerId),fields:ledgerFields},currentDocument:{exists:false}});
+    }
+    await commitWrites(env,writes);
+    return {success:true,requestId:id,status};
+  }
+  return null;
+}
+
 function corsHeaders(request) {
   const origin = request.headers.get("origin") || "";
   const headers = {
@@ -343,7 +516,7 @@ export default {
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
     const url = new URL(request.url);
     try {
-      if (request.method === "GET" && url.pathname === "/api/health") {
+      const payInResult = await handlePayIn(request, env, url);\n      if (payInResult) return json(payInResult, 200, cors);\n      if (request.method === "GET" && url.pathname === "/api/health") {
         // Confirms the Worker is running and can mint a service-account token.
         await getServiceAccessToken(env);
         return json({
