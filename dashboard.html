@@ -1233,7 +1233,6 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 <style id="fastmoney-pay-in-temporarily-disabled">
 /* Pay In is intentionally hidden until the owner enables it. */
 #openPayIn,
-.bottom-nav-payin,
 #fastMoneyPayInModal{display:none!important;visibility:hidden!important;pointer-events:none!important}
 </style>
 </head>
@@ -1372,7 +1371,7 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
   <button class="dash-btn secondary" id="logoutBtn" type="button" hidden>Log Out</button>
   <nav class="dashboard-bottom-nav" aria-label="Quick service navigation">
     <a class="bottom-nav-item bottom-nav-convert active" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></span><span class="bottom-nav-label">Convert</span></a>
-    <!-- Pay In navigation is temporarily disabled; retained in the Pay In module for future activation. -->
+    <a class="bottom-nav-item bottom-nav-payin" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-circle-arrow-down" aria-hidden="true"></i></span><span class="bottom-nav-label">Pay-in</span></a>
     <a class="bottom-nav-item bottom-nav-payout" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-circle-arrow-up" aria-hidden="true"></i></span><span class="bottom-nav-label">Pay-out</span></a>
     <a class="bottom-nav-item bottom-nav-buysell" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i></span><span class="bottom-nav-label">Buy/Sell</span></a>
   </nav>
