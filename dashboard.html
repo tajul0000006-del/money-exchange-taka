@@ -1576,17 +1576,61 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
   overflow-y:hidden!important;
 }
 
-</style>
 
-
-/* Add 4px total of extra internal top breathing room inside each wallet card. */
-.wallet-scroller>.wallet-item,
-.wallet-scroller>.pay-id-card{
+/* Responsive full-width swipe carousel: every wallet card fits the screen. */
+.wallet-overview,
+.wallet-overview *{box-sizing:border-box}
+.wallet-overview{overflow:visible!important}
+.wallet-overview>.wallet-scroller{
+  position:relative!important;
+  left:50%!important;
+  transform:translateX(-50%)!important;
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  width:100vw!important;
+  min-width:100vw!important;
+  max-width:100vw!important;
+  margin:0!important;
+  padding:0!important;
+  gap:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:#fff!important;
+  box-shadow:none!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  scroll-snap-type:x mandatory!important;
+  scroll-snap-stop:always!important;
+  scroll-padding-inline:0!important;
+  scroll-behavior:smooth!important;
+  -webkit-overflow-scrolling:touch!important;
+  overscroll-behavior-x:contain!important;
+  scrollbar-width:none!important;
+}
+.wallet-overview>.wallet-scroller::-webkit-scrollbar{display:none!important}
+.wallet-overview>.wallet-scroller>.wallet-item,
+.wallet-overview>.wallet-scroller>.pay-id-card{
+  flex:0 0 calc(100vw - 24px)!important;
+  width:calc(100vw - 24px)!important;
+  min-width:calc(100vw - 24px)!important;
+  max-width:calc(100vw - 24px)!important;
+  margin:0 12px!important;
+  scroll-snap-align:center!important;
+  scroll-snap-stop:always!important;
+  height:166px!important;
+  min-height:166px!important;
+  max-height:166px!important;
   padding-top:calc(17px + 4px)!important;
 }
 @media(max-width:520px){
-  .wallet-scroller>.wallet-item,
-  .wallet-scroller>.pay-id-card{
+  .wallet-overview>.wallet-scroller>.wallet-item,
+  .wallet-overview>.wallet-scroller>.pay-id-card{
     padding-top:calc(15px + 4px)!important;
   }
 }
+@media(prefers-reduced-motion:reduce){
+  .wallet-overview>.wallet-scroller{scroll-behavior:auto!important}
+}
+
+</style>
+
