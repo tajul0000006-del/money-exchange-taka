@@ -95,6 +95,7 @@ function updateAvailable(){
  const available=Math.max(0,Number(balances[key]||0)-Number(reserved[key]||0));
  $("availableBalance").textContent=money(available)+" "+currencyFor(selectedKey());
  $("transferAmount").step=selectedKey()==="USDT"?"0.000001":"0.01";
+ $("transferAmount").min=selectedKey()==="USDT"?"0.000001":"0.01";
 }
 onAuthStateChanged(auth,async user=>{
  if(!user){location.replace("/login.html?next=%2Ftransfer.html");return;}
