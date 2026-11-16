@@ -1283,6 +1283,7 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
         <div class="wallet-total-divider" aria-hidden="true"></div>
         <div class="wallet-total-item wallet-total-local"><span id="localCurrencyLabel">—</span><strong id="localCurrencyBalance">—</strong></div>
       </div>
+      <button type="button" id="openPayIn" style="position:relative;z-index:1;margin-top:16px;padding:10px 18px;border:0;border-radius:10px;background:#fff;color:#124b65;font-weight:800;cursor:pointer">Pay In</button>
     </div>
     <div class="wallet-list-heading"><div><h3>Wallets</h3></div></div>
     <div class="wallet-scroller" role="list" aria-label="Available wallets">
@@ -1300,6 +1301,24 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
       <article class="wallet-item wallet-winiti" role="listitem"><span class="wallet-symbol wallet-logo">W</span><span class="wallet-name">Winity USD</span><strong>$0.00</strong><small>Winity Dollar Wallet</small></article>
       <article class="wallet-item wallet-usdt" role="listitem"><span class="wallet-symbol wallet-logo">₮</span><span class="wallet-name">USDT</span><strong>0.00</strong><small>Tether Wallet</small></article>
       <article class="wallet-item wallet-rizon" role="listitem"><span class="wallet-symbol wallet-logo">RZ</span><span class="wallet-name">Rizon USD</span><strong>$0.00</strong><small>Rizon Dollar Wallet</small></article>
+    </div>
+  </section>
+
+  <section id="fastMoneyPayInModal" hidden role="dialog" aria-modal="true" aria-labelledby="payInTitle" style="position:fixed;inset:0;z-index:10000;background:rgba(5,18,32,.68);padding:16px;overflow:auto;display:none;align-items:center;justify-content:center">
+    <div style="width:min(560px,100%);max-height:92vh;overflow:auto;background:#fff;color:#172033;border-radius:18px;padding:20px;box-shadow:0 24px 70px #0005">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><h2 id="payInTitle" style="margin:0;font-size:20px">Pay In</h2><button type="button" id="closePayIn" aria-label="Close" style="border:0;background:transparent;font-size:24px;cursor:pointer">×</button></div>
+      <p style="font-size:13px;opacity:.75">Send payment using an available method, then submit your transaction details for review.</p>
+      <form id="payInForm" style="display:grid;gap:11px">
+        <label>Payment Method<select id="payInMethod" required style="display:block;width:100%;padding:11px;margin-top:5px;border:1px solid #cbd5e1;border-radius:9px"></select></label>
+        <div id="payInMethodDetails" style="padding:12px;border:1px solid #dbe5ec;border-radius:10px;font-size:13px;white-space:pre-wrap"></div>
+        <label>Amount<input id="payInAmount" type="number" min="0.01" max="1000000" step="0.01" required style="display:block;width:100%;padding:11px;margin-top:5px;border:1px solid #cbd5e1;border-radius:9px"></label>
+        <label>Transaction Reference / TxID<input id="payInReference" required maxlength="120" minlength="4" style="display:block;width:100%;padding:11px;margin-top:5px;border:1px solid #cbd5e1;border-radius:9px"></label>
+        <label>Sender Name / Number / Wallet ID<input id="payInSender" required maxlength="120" style="display:block;width:100%;padding:11px;margin-top:5px;border:1px solid #cbd5e1;border-radius:9px"></label>
+        <label>Payment Proof Image URL (optional)<input id="payInProof" type="url" maxlength="2048" placeholder="https://..." style="display:block;width:100%;padding:11px;margin-top:5px;border:1px solid #cbd5e1;border-radius:9px"></label>
+        <button type="submit" id="submitPayIn" style="padding:12px;border:0;border-radius:10px;background:#087f78;color:#fff;font-weight:800">Submit Pay In Request</button>
+      </form>
+      <p id="payInStatus" role="status" aria-live="polite" style="font-size:13px"></p>
+      <h3 style="font-size:15px;margin:18px 0 8px">My Pay In Requests</h3><div id="myPayInRequests" style="font-size:13px">Loading…</div>
     </div>
   </section>
   <script>
@@ -1453,14 +1472,14 @@ function showAccountMessage(message, isError = false) {
   notice.style.color = isError ? "#9f1239" : "#065f46";
   notice.textContent = message;
 }
-async function coreRequest(path, token, method = "GET") {
+async function coreRequest(path, token, method = "GET", body = null) {
   const response = await fetch(CORE_API + path, {
     method,
     headers: {
       Authorization: "Bearer " + token,
       ...(method === "POST" ? { "Content-Type": "application/json" } : {})
     },
-    ...(method === "POST" ? { body: "{}" } : {})
+    ...(method === "POST" ? { body: JSON.stringify(body || {}) } : {})
   });
   const data = await response.json().catch(() => ({}));
   if (!response.ok || data.success !== true) {
@@ -1468,6 +1487,60 @@ async function coreRequest(path, token, method = "GET") {
   }
   return data;
 }
+
+let payInMethods = [];
+function showPayInModal(open) {
+  const modal=document.getElementById("fastMoneyPayInModal");
+  if(!modal)return;
+  modal.hidden=!open;modal.style.display=open?"flex":"none";
+  if(open) loadPayInData();
+}
+function renderPayInMethodDetails() {
+  const selected=payInMethods.find(m=>m.id===document.getElementById("payInMethod")?.value);
+  const box=document.getElementById("payInMethodDetails");
+  if(!box)return;
+  box.textContent=selected?[selected.name,selected.network,selected.accountType,selected.address,selected.instruction].filter(Boolean).join("\n"):"No payment methods are currently available.";
+}
+async function loadPayInData() {
+  const status=document.getElementById("payInStatus"), select=document.getElementById("payInMethod"), historyBox=document.getElementById("myPayInRequests");
+  try{
+    const token=await auth.currentUser.getIdToken();
+    const methods=await coreRequest("/api/pay-in/methods",token);
+    payInMethods=methods.methods||[];select.replaceChildren();
+    payInMethods.forEach(method=>{const option=document.createElement("option");option.value=method.id;option.textContent=method.name+" · "+method.currency;select.append(option);});
+    renderPayInMethodDetails();
+    const history=await coreRequest("/api/pay-in/requests/me",token);
+    historyBox.replaceChildren();
+    if(!history.requests.length){historyBox.textContent="No Pay In requests yet.";return;}
+    history.requests.forEach(item=>{
+      const row=document.createElement("div");row.style.cssText="padding:9px 0;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;gap:10px";
+      const left=document.createElement("span");left.textContent=item.methodName+" · "+item.amount+" "+item.currency;
+      const right=document.createElement("strong");right.textContent=item.status.toUpperCase();row.append(left,right);historyBox.append(row);
+    });
+  }catch(error){status.textContent=error.message;historyBox.textContent="Could not load Pay In history.";}
+}
+document.getElementById("openPayIn")?.addEventListener("click",()=>showPayInModal(true));
+document.getElementById("closePayIn")?.addEventListener("click",()=>showPayInModal(false));
+document.getElementById("payInMethod")?.addEventListener("change",renderPayInMethodDetails);
+document.getElementById("fastMoneyPayInModal")?.addEventListener("click",event=>{if(event.target.id==="fastMoneyPayInModal")showPayInModal(false);});
+document.getElementById("payInForm")?.addEventListener("submit",async event=>{
+  event.preventDefault();
+  const status=document.getElementById("payInStatus"),button=document.getElementById("submitPayIn");
+  const method=payInMethods.find(m=>m.id===document.getElementById("payInMethod").value);
+  if(!method){status.textContent="No active payment method available.";return;}
+  button.disabled=true;status.textContent="Submitting your Pay In request...";
+  try{
+    const token=await auth.currentUser.getIdToken(true);
+    await coreRequest("/api/pay-in/requests",token,"POST",{
+      methodId:method.id,currency:method.currency,amount:Number(document.getElementById("payInAmount").value),
+      transactionReference:document.getElementById("payInReference").value.trim(),
+      sender:document.getElementById("payInSender").value.trim(),proofUrl:document.getElementById("payInProof").value.trim()
+    });
+    status.textContent="Request submitted. Your balance will update only after admin verification.";
+    event.target.reset();renderPayInMethodDetails();await loadPayInData();
+  }catch(error){status.textContent=error.message||"Could not submit Pay In request.";}
+  finally{button.disabled=false;}
+});
 function setVerification(verified) {
   const el = document.getElementById("navAccountVerify");
   el.classList.toggle("unverified", !verified);
