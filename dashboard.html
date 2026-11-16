@@ -1257,6 +1257,19 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
   border:0!important;border-radius:0!important;box-shadow:none!important;
   background:#fff!important;color:#172033!important;
 }
+#fastMoneyPayInModal .pay-in-heading h2{margin:0;font-size:24px;font-weight:750;letter-spacing:-.5px;color:#142033}
+#fastMoneyPayInModal .pay-in-heading p{margin:6px 0 26px;color:#718096;font-size:14px}
+#fastMoneyPayInModal .pay-in-channel-label{margin:0 0 11px;color:#8290a2;font-size:11px;font-weight:800;letter-spacing:1.15px}
+#fastMoneyPayInModal .pay-in-channel-list{display:grid;gap:12px;max-width:620px}
+#fastMoneyPayInModal .pay-in-channel-option{width:100%;min-height:76px;padding:16px 17px;display:flex;align-items:center;justify-content:space-between;gap:14px;text-align:left;background:#fff;border:1px solid #e5eaf0;border-radius:14px;color:#172033;cursor:pointer;transition:none}
+#fastMoneyPayInModal .pay-in-channel-option.is-selected{border-color:#2563eb;background:#f7faff}
+#fastMoneyPayInModal .pay-in-channel-copy{display:grid;gap:5px}
+#fastMoneyPayInModal .pay-in-channel-copy strong{font-size:15px;font-weight:750}
+#fastMoneyPayInModal .pay-in-channel-copy small{font-size:12px;color:#778497}
+#fastMoneyPayInModal .pay-in-channel-indicator{width:18px;height:18px;flex:0 0 18px;border:1.5px solid #c5ced9;border-radius:50%;position:relative}
+#fastMoneyPayInModal .is-selected .pay-in-channel-indicator{border-color:#2563eb}
+#fastMoneyPayInModal .is-selected .pay-in-channel-indicator:after{content:"";position:absolute;inset:4px;border-radius:50%;background:#2563eb}
+
 #fastMoneyPayInModal #closePayIn{width:38px;height:38px;border:0;border-radius:10px;background:#f1f5f9;color:#334155;font-size:24px;line-height:1;cursor:pointer}
 @media(max-width:760px){
   #fastMoneyPayInModal{top:66px!important;bottom:82px!important}
@@ -1343,7 +1356,27 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 
   <section id="fastMoneyPayInModal" hidden role="dialog" aria-modal="true" aria-labelledby="payInTitle">
     <div class="pay-in-screen-content">
-      <h2 id="payInTitle" style="margin:0;font-size:20px">Pay In</h2>
+      <div class="pay-in-heading">
+        <h2 id="payInTitle">Pay In</h2>
+        <p>Choose a channel</p>
+      </div>
+      <div class="pay-in-channel-label">CHANNEL</div>
+      <div class="pay-in-channel-list" role="group" aria-label="Pay In channel">
+        <button class="pay-in-channel-option is-selected" type="button" data-pay-in-channel="internal" aria-pressed="true">
+          <span class="pay-in-channel-copy">
+            <strong>Internal</strong>
+            <small>User to User Pay In</small>
+          </span>
+          <span class="pay-in-channel-indicator" aria-hidden="true"></span>
+        </button>
+        <button class="pay-in-channel-option" type="button" data-pay-in-channel="external" aria-pressed="false">
+          <span class="pay-in-channel-copy">
+            <strong>External</strong>
+            <small>Pay In from an external wallet or service</small>
+          </span>
+          <span class="pay-in-channel-indicator" aria-hidden="true"></span>
+        </button>
+      </div>
     </div>
   </section>
   <script>
@@ -1548,6 +1581,15 @@ async function loadPayInData() {
   }catch(error){status.textContent=error.message;historyBox.textContent="Could not load Pay In history.";}
 }
 document.getElementById("bottomNavPayIn")?.addEventListener("click",event=>{event.preventDefault();showPayInModal(true);});
+document.querySelectorAll("[data-pay-in-channel]").forEach(button=>{
+  button.addEventListener("click",()=>{
+    document.querySelectorAll("[data-pay-in-channel]").forEach(option=>{
+      const selected=option===button;
+      option.classList.toggle("is-selected",selected);
+      option.setAttribute("aria-pressed",String(selected));
+    });
+  });
+});
 window.addEventListener("keydown",event=>{if(event.key==="Escape"&&!document.getElementById("fastMoneyPayInModal")?.hidden)showPayInModal(false);});
 window.addEventListener("popstate",()=>{const modal=document.getElementById("fastMoneyPayInModal");if(modal&&!modal.hidden){modal.hidden=true;document.getElementById("bottomNavPayIn")?.setAttribute("aria-expanded","false");document.body.style.overflow="";}});
 document.getElementById("payInMethod")?.addEventListener("change",renderPayInMethodDetails);
