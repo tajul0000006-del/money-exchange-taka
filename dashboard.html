@@ -1269,6 +1269,22 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 #fastMoneyPayInModal .pay-in-channel-indicator{width:18px;height:18px;flex:0 0 18px;border:1.5px solid #c5ced9;border-radius:50%;position:relative}
 #fastMoneyPayInModal .is-selected .pay-in-channel-indicator{border-color:#2563eb}
 #fastMoneyPayInModal .is-selected .pay-in-channel-indicator:after{content:"";position:absolute;inset:4px;border-radius:50%;background:#2563eb}
+#fastMoneyPayInModal .pay-in-receiving-box{display:block;max-width:620px;margin-top:18px;padding:16px;border:1px solid #e5eaf0;border-radius:14px;background:#fbfcfe}
+#fastMoneyPayInModal .pay-in-receiving-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+#fastMoneyPayInModal .pay-in-receiving-top>div{display:grid;gap:5px}
+#fastMoneyPayInModal .pay-in-receiving-eyebrow{font-size:10px;font-weight:800;letter-spacing:1px;color:#8290a2}
+#fastMoneyPayInModal .pay-in-receiving-top strong{font-size:14px;color:#172033}
+#fastMoneyPayInModal .pay-in-receiving-mark{display:grid;place-items:center;width:32px;height:32px;border-radius:9px;background:#eaf1ff;color:#2563eb;font-size:11px;font-weight:800}
+#fastMoneyPayInModal .pay-in-receiving-value-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:13px;padding:12px;background:#fff;border:1px solid #e7edf2;border-radius:10px}
+#fastMoneyPayInModal .pay-in-receiving-value-row>strong{min-width:0;overflow-wrap:anywhere;font-size:13px;letter-spacing:.2px;color:#172033}
+#fastMoneyPayInModal .pay-in-receiving-value-row button{display:flex;align-items:center;gap:6px;flex:0 0 auto;padding:8px 11px;border:0;border-radius:8px;background:#eaf1ff;color:#2457b8;font-size:12px;font-weight:700}
+#fastMoneyPayInModal .pay-in-receiving-help{margin-top:14px}
+#fastMoneyPayInModal .pay-in-receiving-help strong{display:block;font-size:12px;color:#344256}
+#fastMoneyPayInModal .pay-in-receiving-help p{margin:5px 0 11px;font-size:11px;line-height:1.55;color:#718096}
+#fastMoneyPayInModal .pay-in-receiving-help .pay-in-warning-title{color:#a45b12}
+#fastMoneyPayInModal .pay-in-receiving-help .pay-in-warning{margin-bottom:0}
+#fastMoneyPayInModal .pay-in-receiving-box[hidden]{display:none!important}
+
 
 #fastMoneyPayInModal #closePayIn{width:38px;height:38px;border:0;border-radius:10px;background:#f1f5f9;color:#334155;font-size:24px;line-height:1;cursor:pointer}
 @media(max-width:760px){
@@ -1377,6 +1393,25 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
           <span class="pay-in-channel-indicator" aria-hidden="true"></span>
         </button>
       </div>
+      <section class="pay-in-receiving-box" id="internalPayIdBox" aria-label="Your receiving Pay ID">
+        <div class="pay-in-receiving-top">
+          <div>
+            <span class="pay-in-receiving-eyebrow">YOUR RECEIVING ID</span>
+            <strong>Share this ID to receive money</strong>
+          </div>
+          <span class="pay-in-receiving-mark">ID</span>
+        </div>
+        <div class="pay-in-receiving-value-row">
+          <strong id="internalReceivingPayId">Loading…</strong>
+          <button type="button" id="copyInternalReceivingPayId"><i class="fa-regular fa-copy" aria-hidden="true"></i><span>Copy</span></button>
+        </div>
+        <div class="pay-in-receiving-help">
+          <strong>How to receive</strong>
+          <p>Share your Pay ID with the person sending you money. They can enter it in the Internal Pay In option from their account. You can also find your Pay ID from your profile.</p>
+          <strong class="pay-in-warning-title">Important</strong>
+          <p class="pay-in-warning">Only share your Pay ID. Never share your password, verification code or login details. Check the sender and payment details before confirming anything.</p>
+        </div>
+      </section>
     </div>
   </section>
   <script>
@@ -1581,6 +1616,11 @@ async function loadPayInData() {
   }catch(error){status.textContent=error.message;historyBox.textContent="Could not load Pay In history.";}
 }
 document.getElementById("bottomNavPayIn")?.addEventListener("click",event=>{event.preventDefault();showPayInModal(true);});
+function syncInternalPayId(){
+  const value=document.getElementById("payIdValue")?.textContent?.trim()||"";
+  const target=document.getElementById("internalReceivingPayId");
+  if(target)target.textContent=value&&value!=="Loading…" ? value : "Your Pay ID is loading…";
+}
 document.querySelectorAll("[data-pay-in-channel]").forEach(button=>{
   button.addEventListener("click",()=>{
     document.querySelectorAll("[data-pay-in-channel]").forEach(option=>{
@@ -1588,7 +1628,23 @@ document.querySelectorAll("[data-pay-in-channel]").forEach(button=>{
       option.classList.toggle("is-selected",selected);
       option.setAttribute("aria-pressed",String(selected));
     });
+    const receivingBox=document.getElementById("internalPayIdBox");
+    if(receivingBox)receivingBox.hidden=button.dataset.payInChannel!=="internal";
+    if(button.dataset.payInChannel==="internal")syncInternalPayId();
   });
+});
+document.getElementById("copyInternalReceivingPayId")?.addEventListener("click",async()=>{
+  syncInternalPayId();
+  const value=document.getElementById("internalReceivingPayId")?.textContent?.trim()||"";
+  if(!value||value==="Your Pay ID is loading…")return;
+  try{
+    await navigator.clipboard.writeText(value);
+    const button=document.getElementById("copyInternalReceivingPayId");
+    button.innerHTML='<i class="fa-solid fa-check" aria-hidden="true"></i><span>Copied</span>';
+    setTimeout(()=>{button.innerHTML='<i class="fa-regular fa-copy" aria-hidden="true"></i><span>Copy</span>';},1500);
+  }catch{
+    showAccountMessage("Could not copy the Pay ID. Please select and copy it manually.",true);
+  }
 });
 window.addEventListener("keydown",event=>{if(event.key==="Escape"&&!document.getElementById("fastMoneyPayInModal")?.hidden)showPayInModal(false);});
 window.addEventListener("popstate",()=>{const modal=document.getElementById("fastMoneyPayInModal");if(modal&&!modal.hidden){modal.hidden=true;document.getElementById("bottomNavPayIn")?.setAttribute("aria-expanded","false");document.body.style.overflow="";}});
@@ -1733,6 +1789,8 @@ onAuthStateChanged(auth, async user => {
     document.getElementById("payIdCurrency").textContent = (payCurrencyCode || "LOCAL") + " PAY ID";
     document.getElementById("payIdCurrencyBadge").textContent = payCurrencyCode || "—";
     document.getElementById("payIdValue").textContent = user.uid;
+    const internalPayId=document.getElementById("internalReceivingPayId");
+    if(internalPayId)internalPayId.textContent=user.uid;
     document.getElementById("copyPayId")?.setAttribute("data-copy-value", user.uid);
     document.getElementById("navAccountName").textContent =
       /^\d{10}$/.test(String(profile.accountId || "")) ? profile.accountId : "Setting up ID…";
