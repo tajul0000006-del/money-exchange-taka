@@ -1622,13 +1622,13 @@ async function loadPayInData() {
 function syncInternalPayId(){
   const value=document.getElementById("navAccountName")?.textContent?.trim()||"";
   const target=document.getElementById("internalReceivingPayId");
-  if(target)target.textContent=/^\\d{10}$/.test(value) ? value : "Your Account ID is loading…";
+  if(target)target.textContent=/^\d{10}$/.test(value) ? value : "Your Account ID is loading…";
 }
 
 document.getElementById("copyInternalReceivingPayId")?.addEventListener("click",async()=>{
   syncInternalPayId();
   const value=document.getElementById("internalReceivingPayId")?.textContent?.trim()||"";
-  if(!/^\\d{10}$/.test(value))return;
+  if(!/^\d{10}$/.test(value))return;
   try{
     await navigator.clipboard.writeText(value);
     const button=document.getElementById("copyInternalReceivingPayId");
