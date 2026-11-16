@@ -422,6 +422,22 @@ function parsePayInMethods(document) {
     };
   });
 }
+function payInBalanceKey(method, currency) {
+  const code = String(currency || "").toUpperCase();
+  if (code === "USDT") return "USDT";
+  if (code !== "USD") return code;
+  const label = (String(method?.id || "") + " " + String(method?.name || "")).toLowerCase().replace(/[^a-z0-9]/g, "");
+  if (label.includes("redotpay")) return "REDOTPAY_USD";
+  if (label.includes("volet")) return "VOLET_USD";
+  if (label.includes("epay")) return "EPAY_USD";
+  if (label.includes("webmoney")) return "WEBMONEY_USD";
+  if (label.includes("tunepay")) return "TUNEPAY_USD";
+  if (label.includes("perfectmoney")) return "PERFECTMONEY_USD";
+  if (label.includes("winity")) return "WINITY_USD";
+  if (label.includes("rizon")) return "RIZON_USD";
+  if (label.includes("paypal")) return "PAYPAL_USD";
+  return "USD";
+}
 async function getPayInSettings(env) {
   const document = await readDocument(env, "payInSettings", "global");
   return { methods: parsePayInMethods(document) };
@@ -485,6 +501,7 @@ async function handlePayIn(request, env, url) {
     const fields = {
       requestId: fieldString(id), uid: fieldString(uid), methodId: fieldString(method.id),
       methodName: fieldString(method.name), currency: fieldString(currency),
+      balanceKey: fieldString(payInBalanceKey(method, currency)),
       amount: fieldDouble(amount), transactionReference: fieldString(transactionReference),
       sender: fieldString(sender), proofUrl: fieldString(proofUrl),
       status: fieldString("pending"), createdAt: fieldTimestamp(now)
@@ -537,12 +554,13 @@ async function handlePayIn(request, env, url) {
     ];
     if (decision==="approve") {
       const currency=readString(queue,"currency"), amount=readNumber(queue,"amount");
-      if (!["BDT","USD","USDT"].includes(currency) || !Number.isFinite(amount) || amount<=0) throw new Error("Deposit data is invalid");
+      const balanceKey=readString(queue,"balanceKey") || currency;
+      if (!["BDT","USD","USDT"].includes(currency) || !/^[A-Z0-9_]{2,24}$/.test(balanceKey) || !Number.isFinite(amount) || amount<=0) throw new Error("Deposit data is invalid");
       const wallet=await readDocument(env,"wallets",uid);
       if (!wallet || readString(wallet,"status")!=="active") throw new Error("User wallet is unavailable or inactive");
       const balances={...readMap(wallet,"balances")};
-      const current=Number(balances[currency]?.doubleValue??balances[currency]?.integerValue??0);
-      balances[currency]=fieldDouble(current+amount);
+      const current=Number(balances[balanceKey]?.doubleValue??balances[balanceKey]?.integerValue??0);
+      balances[balanceKey]=fieldDouble(current+amount);
       writes.push({update:{name:wallet.name,fields:{balances:fieldMap(balances),updatedAt:fieldTimestamp(now)}},updateMask:{fieldPaths:["balances","updatedAt"]},currentDocument:{updateTime:wallet.updateTime}});
       const ledgerId=randomId("LED");
       const ledgerFields={transactionId:fieldString(ledgerId),uid:fieldString(uid),type:fieldString("pay_in"),direction:fieldString("credit"),currency:fieldString(currency),amount:fieldDouble(amount),referenceId:fieldString(id),description:fieldString("Approved Pay In"),createdAt:fieldTimestamp(now),createdBy:fieldString(claims.sub)};
@@ -568,6 +586,7 @@ const INTERNAL_WALLETS = Object.freeze({
   TUNEPAY_USD: { balanceKey: "TUNEPAY_USD", currency: "USD", label: "TunePay USD", dollar: true },
   PERFECTMONEY_USD: { balanceKey: "PERFECTMONEY_USD", currency: "USD", label: "Perfect Money USD", dollar: true },
   WINITY_USD: { balanceKey: "WINITY_USD", currency: "USD", label: "Winity USD", dollar: true },
+  PAYPAL_USD: { balanceKey: "PAYPAL_USD", currency: "USD", label: "PayPal USD", dollar: true },
   RIZON_USD: { balanceKey: "RIZON_USD", currency: "USD", label: "Rizon USD", dollar: true },
   USDT: { balanceKey: "USDT", currency: "USDT", label: "USDT", dollar: true }
 });
