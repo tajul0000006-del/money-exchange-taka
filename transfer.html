@@ -129,7 +129,10 @@ $("transferForm").addEventListener("submit",async event=>{
   $("resultRate").textContent="Exchange Rate: "+t.rate;
   $("transferResult").style.display="block";
   $("transferStatus").className="status success";$("transferStatus").textContent="Your transfer request has been submitted and is awaiting Admin review.";
-  $("transferForm").reset();updateAvailable();
+  $("transferForm").reset();
+  const refreshed=await api("/api/wallet/me",token);
+  currentWallet=refreshed.wallet;
+  updateAvailable();
  }catch(error){$("transferStatus").className="status error";$("transferStatus").textContent=error.message;}
  finally{button.disabled=false;button.textContent="Continue Transfer";}
 });
