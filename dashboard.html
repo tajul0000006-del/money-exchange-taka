@@ -1795,6 +1795,24 @@ onAuthStateChanged(auth, async user => {
     document.getElementById("copyAccountId")?.setAttribute("data-copy-value", bootstrap.accountId);
     const walletResult = await coreRequest("/api/wallet/me", token);
     renderWallet(walletResult.wallet, profile);
+    onSnapshot(doc(db, "wallets", user.uid), snapshot => {
+      if (!snapshot.exists()) return;
+      const liveWallet = snapshot.data();
+      renderWallet(liveWallet, profile);
+      try {
+        localStorage.setItem(walletCacheKey, JSON.stringify({
+          profile: {
+            currencyCode: String(profile.signupCurrencyCode || profile.currencyCode || "").toUpperCase(),
+            signupCurrencyCode: String(profile.signupCurrencyCode || profile.currencyCode || "").toUpperCase(),
+            currencySymbol: profile.signupCurrencySymbol || profile.currencySymbol || "",
+            signupCurrencySymbol: profile.signupCurrencySymbol || profile.currencySymbol || "",
+            country: profile.signupCountry || profile.country || "",
+            signupCountryCode: profile.signupCountryCode || profile.countryCode || ""
+          },
+          wallet: liveWallet
+        }));
+      } catch (cacheError) { console.warn("Live wallet cache update skipped.", cacheError); }
+    }, error => console.error("FastMoney wallet listener failed:", error));
     // Keep the last successful currency code and balances visible during refresh.
     try {
       localStorage.setItem(walletCacheKey, JSON.stringify({
