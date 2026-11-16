@@ -473,603 +473,6 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 }
 @media(prefers-reduced-motion:reduce){.wallet-item{transition:none!important}}
 </style>
-</head>
-<body>
-<main class="dash-wrap" id="dashboard">
-  <header class="dashboard-header" id="dashboardHeader">
-    <a class="dashboard-brand" href="/dashboard.html" aria-label="FastMoney Dashboard">
-      <img src="./assets/fastmoneylogo.png" alt="FastMoney" width="204" height="54">
-    </a>
-    <div class="dashboard-header-actions">
-      <button class="dashboard-icon-btn notification-trigger" id="notificationToggle" type="button" aria-label="Notifications" aria-expanded="false" title="Notifications">
-        <i class="fa-solid fa-bell" aria-hidden="true"></i><span class="notification-dot" aria-hidden="true"></span>
-      </button>
-      <label class="fm-language-control dashboard-language-control" aria-label="Select website language" title="Select website language">
-        <i class="fa-solid fa-globe" aria-hidden="true"></i>
-        <select class="fm-language-select" aria-label="Website language">
-          <option value="en">EN</option><option value="bn">বাংলা</option><option value="ar">العربية</option><option value="zh-CN">中文</option><option value="fr">FR</option><option value="de">DE</option><option value="hi">हिन्दी</option><option value="es">ES</option><option value="it">IT</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="pt">PT</option><option value="ru">RU</option><option value="tr">TR</option><option value="ur">اردو</option>
-        </select>
-        <i class="fa-solid fa-chevron-down fm-language-chevron" aria-hidden="true"></i>
-      </label>
-      <button class="dashboard-icon-btn dashboard-menu-toggle" id="dashboardMenuToggle" type="button" aria-label="Open navigation menu" aria-expanded="false">
-        <i class="fa-solid fa-bars"></i>
-      </button>
-    </div>
-    <section class="notification-screen" id="notificationPopover" aria-label="Notifications" hidden>
-      <div class="notification-screen-list" id="notificationList"></div>
-    </section>
-    <nav class="dashboard-popover dashboard-menu-popover" id="dashboardMenu" aria-label="Dashboard navigation" hidden>
-      <a class="nav-account-summary" href="/profile.html" aria-label="Open My Account">
-        <div class="nav-account-avatar" id="navAccountAvatar"><i class="fa-solid fa-user"></i></div>
-        <div class="nav-account-copy">
-          <div class="nav-account-id-line"><strong id="navAccountName">Loading ID…</strong><button class="nav-account-copy" id="copyAccountId" type="button" aria-label="Copy FastMoney ID" title="Copy FastMoney ID"><i class="fa-regular fa-copy"></i></button><span class="nav-account-verified unverified" id="navAccountVerify"><i class="fa-solid fa-circle-exclamation"></i> UNVERIFIED</span></div>
-          <span class="nav-account-email" id="navAccountEmail">Loading account…</span>
-        </div>
-        <span class="nav-profile-open" aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
-      </a>
-
-      <a href="/dashboard.html"><i class="fa-solid fa-house"></i> Dashboard Home</a>
-      <a href="/member-exchange.html"><i class="fa-solid fa-arrow-right-arrow-left"></i> New Exchange</a>
-      <a href="/history.html"><i class="fa-solid fa-clock-rotate-left"></i> My Requests</a>
-      <a href="/chat.html"><i class="fa-solid fa-headset"></i> Customer Support</a>
-      <button type="button" id="headerLogoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
-    </nav>
-  </header>
-  <div class="notification-detail-backdrop" id="notificationDetailBackdrop" hidden><section class="notification-detail-dialog" role="dialog" aria-modal="true" aria-labelledby="notificationDetailTitle">
-    <div class="notification-detail-content"><h2 id="notificationDetailTitle">Notification</h2><time id="notificationDetailTime"></time><p id="notificationDetailMessage"></p></div>
-  </section></div>
-<section class="wallet-overview" aria-label="Total balance and wallets">
-    <div class="wallet-balance-panel">
-      <h2 class="wallet-total-title"><span class="wallet-total-title-icon"><i class="fa-solid fa-wallet" aria-hidden="true"></i></span><span>Total Balance</span></h2>
-      <div class="wallet-total-values">
-        <div class="wallet-total-item wallet-total-usd"><span>USD</span><strong>0.000</strong></div>
-        <div class="wallet-total-divider" aria-hidden="true"></div>
-        <div class="wallet-total-item wallet-total-local"><span id="localCurrencyLabel">—</span><strong id="localCurrencyBalance">—</strong></div>
-      </div>
-    </div>
-    <div class="wallet-list-heading"><div><h3>Wallets</h3></div></div>
-    <div class="wallet-scroller" role="list" aria-label="Available wallets">
-      <article class="wallet-item wallet-fastmoney-usd" role="listitem"><span class="wallet-symbol wallet-logo">FM</span><span class="wallet-name">FastMoney USD</span><strong>$0.00</strong><small>FastMoney Dollar Wallet</small></article>
-  <section class="pay-id-card" aria-label="Your payment ID">
-  <div class="pay-id-top"><span class="pay-id-mark">FM</span><div class="pay-id-title"><strong id="payIdCurrency">— PAY ID</strong><small>Personal payment ID</small></div><span class="pay-id-country" id="payIdCurrencyBadge">—</span></div>
-  <div class="pay-id-value-row"><div class="pay-id-value-wrap"><small>PAY ID</small><strong id="payIdValue">Loading…</strong></div><button type="button" class="pay-id-copy" id="copyPayId" aria-label="Copy Pay ID" title="Copy Pay ID"><i class="fa-regular fa-copy"></i><span>Copy</span></button></div>
-</section>
-      <article class="wallet-item wallet-redotpay" role="listitem"><span class="wallet-symbol wallet-logo">R</span><span class="wallet-name">RedotPay USD</span><strong>$0.00</strong><small>RedotPay Dollar Wallet</small></article>
-      <article class="wallet-item wallet-volet" role="listitem"><span class="wallet-symbol wallet-logo">V</span><span class="wallet-name">Volet USD</span><strong>$0.00</strong><small>Volet Dollar Wallet</small></article>
-      <article class="wallet-item wallet-epay" role="listitem"><span class="wallet-symbol wallet-logo">e</span><span class="wallet-name">ePay USD</span><strong>$0.00</strong><small>ePay Dollar Wallet</small></article>
-      <article class="wallet-item wallet-webmoney" role="listitem"><span class="wallet-symbol wallet-logo">W</span><span class="wallet-name">WebMoney USD</span><strong>$0.00</strong><small>WebMoney Dollar Wallet</small></article>
-      <article class="wallet-item wallet-tunepay" role="listitem"><span class="wallet-symbol wallet-logo">T</span><span class="wallet-name">TunePay USD</span><strong>$0.00</strong><small>TunePay Dollar Wallet</small></article>
-      <article class="wallet-item wallet-perfectmoney" role="listitem"><span class="wallet-symbol wallet-logo">PM</span><span class="wallet-name">Perfect Money USD</span><strong>$0.00</strong><small>Perfect Money Dollar Wallet</small></article>
-      <article class="wallet-item wallet-winiti" role="listitem"><span class="wallet-symbol wallet-logo">W</span><span class="wallet-name">Winity USD</span><strong>$0.00</strong><small>Winity Dollar Wallet</small></article>
-      <article class="wallet-item wallet-usdt" role="listitem"><span class="wallet-symbol wallet-logo">₮</span><span class="wallet-name">USDT</span><strong>0.00</strong><small>Tether Wallet</small></article>
-      <article class="wallet-item wallet-rizon" role="listitem"><span class="wallet-symbol wallet-logo">RZ</span><span class="wallet-name">Rizon USD</span><strong>$0.00</strong><small>Rizon Dollar Wallet</small></article>
-    </div>
-  </section>
-  <script>
-  // Restore the signed-in user's last confirmed currency and balance before first paint.
-  (function(){
-    try {
-      // Firebase may keep its auth session in IndexedDB, not localStorage.
-      // Remember the last successfully loaded UID separately so the wallet
-      // cache can be restored synchronously before Firebase finishes loading.
-      let cachedUid = localStorage.getItem("fastmoney-last-wallet-user") || "";
-      if (!cachedUid) {
-        for (let i = 0; i < localStorage.length; i++) {
-          const key = localStorage.key(i);
-          if (key && key.startsWith("firebase:authUser:")) {
-            const value = JSON.parse(localStorage.getItem(key) || "null");
-            if (value && value.uid) { cachedUid = value.uid; break; }
-          }
-        }
-      }
-      if (!cachedUid) return;
-      const saved = JSON.parse(localStorage.getItem("fastmoney-wallet-cache-" + cachedUid) || "null");
-      const profile = saved && saved.profile;
-      const wallet = saved && saved.wallet;
-      const code = String(profile && profile.currencyCode || "").trim().toUpperCase();
-      if (!code || !wallet) return;
-      const balances = wallet.balances || {};
-      const amount = Number(balances[code] || 0);
-      const format = value => (Number.isFinite(Number(value)) ? Number(value) : 0).toLocaleString("en-US",{minimumFractionDigits:3,maximumFractionDigits:3});
-      const set = (id,value) => { const el=document.getElementById(id); if(el) el.textContent=value; };
-      set("localCurrencyLabel",code);
-      set("localCurrencyBalance",format(amount));
-      set("localWalletName",code);
-      set("localWalletDescription",profile.country || "Local Currency");
-      set("localWalletSymbol",profile.currencySymbol || code);
-      const localCard=document.querySelector(".wallet-bdt");
-      const localAmount=localCard && localCard.querySelector("strong");
-      if(localAmount) localAmount.textContent=format(amount);
-      const usdAmount=document.querySelector(".wallet-total-usd strong");
-      if(usdAmount) usdAmount.textContent=format(balances.USD || 0);
-    } catch (error) {
-      console.warn("FastMoney instant wallet restore skipped.",error);
-    }
-  })();
-  </script>
-  <button class="dash-btn secondary" id="logoutBtn" type="button" hidden>Log Out</button>
-  <nav class="dashboard-bottom-nav" aria-label="Quick service navigation">
-    <a class="bottom-nav-item bottom-nav-convert active" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></span><span class="bottom-nav-label">Convert</span></a>
-    <a class="bottom-nav-item bottom-nav-payin" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-circle-arrow-down" aria-hidden="true"></i></span><span class="bottom-nav-label">Pay-in</span></a>
-    <a class="bottom-nav-item bottom-nav-payout" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-circle-arrow-up" aria-hidden="true"></i></span><span class="bottom-nav-label">Pay-out</span></a>
-    <a class="bottom-nav-item bottom-nav-buysell" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i></span><span class="bottom-nav-label">Buy/Sell</span></a>
-  </nav>
-</main>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
-import { firebaseConfig } from "./firebase-config.js";
-
-const CORE_API = "https://fastmoney-core-api.taijulsheikh60.workers.dev";
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-const currencyNames = {
-  BDT:"Bangladeshi Taka", USD:"US Dollar", GBP:"British Pound", INR:"Indian Rupee",
-  PKR:"Pakistani Rupee", AED:"UAE Dirham", SAR:"Saudi Riyal", CAD:"Canadian Dollar",
-  AUD:"Australian Dollar", EUR:"Euro", CHF:"Swiss Franc", JPY:"Japanese Yen",
-  CNY:"Chinese Yuan", KRW:"South Korean Won", SGD:"Singapore Dollar", MYR:"Malaysian Ringgit",
-  IDR:"Indonesian Rupiah", THB:"Thai Baht", PHP:"Philippine Peso", NPR:"Nepalese Rupee",
-  LKR:"Sri Lankan Rupee", TRY:"Turkish Lira", ZAR:"South African Rand", NGN:"Nigerian Naira",
-  KES:"Kenyan Shilling", EGP:"Egyptian Pound", NZD:"New Zealand Dollar", MXN:"Mexican Peso",
-  BRL:"Brazilian Real", SEK:"Swedish Krona", NOK:"Norwegian Krone", DKK:"Danish Krone",
-  RUB:"Russian Ruble", AFN:"Afghan Afghani", QAR:"Qatari Riyal", KWD:"Kuwaiti Dinar",
-  OMR:"Omani Rial", BHD:"Bahraini Dinar", JOD:"Jordanian Dinar", GHS:"Ghanaian Cedi",
-  UGX:"Ugandan Shilling", TZS:"Tanzanian Shilling", MAD:"Moroccan Dirham", ARS:"Argentine Peso",
-  CLP:"Chilean Peso", COP:"Colombian Peso", PLN:"Polish Zloty", UAH:"Ukrainian Hryvnia",
-  ILS:"Israeli Shekel", HKD:"Hong Kong Dollar", TWD:"New Taiwan Dollar", VND:"Vietnamese Dong",
-  KHR:"Cambodian Riel", MMK:"Myanmar Kyat", ETB:"Ethiopian Birr"
-};
-const currencySymbols = {
-  BDT:"৳", USD:"$", GBP:"£", INR:"₹", PKR:"₨", AED:"د.إ", SAR:"﷼", EUR:"€",
-  CHF:"Fr", JPY:"¥", CNY:"¥", KRW:"₩", THB:"฿", PHP:"₱", TRY:"₺", ZAR:"R",
-  NGN:"₦", EGP:"E£", BRL:"R$", RUB:"₽", GHS:"₵", VND:"₫", ILS:"₪"
-};
-
-let activeProfileRef = null;
-let currentNotifications = [];
-function notificationDate(value) {
-  try {
-    const date = value?.toDate ? value.toDate() : new Date(Number(value) || value);
-    return Number.isNaN(date.getTime()) ? "" : date.toLocaleString("en-US",{dateStyle:"medium",timeStyle:"short"});
-  } catch { return ""; }
-}
-function renderNotifications(items) {
-  currentNotifications = Array.isArray(items) ? items.slice().sort((a,b) => {
-    const av = a.createdAt?.toMillis ? a.createdAt.toMillis() : Number(a.createdAt) || 0;
-    const bv = b.createdAt?.toMillis ? b.createdAt.toMillis() : Number(b.createdAt) || 0;
-    return bv-av;
-  }) : [];
-  const unread=currentNotifications.some(item=>item.read!==true);
-  const button=document.getElementById("notificationToggle");
-  button?.classList.toggle("has-unread",unread);
-  button?.setAttribute("aria-label",unread?"Notifications, unread updates":"Notifications");
-  const list=document.getElementById("notificationList"); if(!list)return;
-  list.replaceChildren();
-  if(!currentNotifications.length)return;
-  currentNotifications.slice(0,50).forEach((item,index)=>{
-    const card=document.createElement("button");card.type="button";card.className="notification-item"+(item.read===true?"":" unread");card.dataset.notificationIndex=String(index);
-    const title=document.createElement("strong");title.textContent=String(item.title||"FastMoney Update");
-    const message=document.createElement("p");message.textContent=String(item.message||"");card.append(title,message);
-    const when=notificationDate(item.createdAt);if(when){const time=document.createElement("time");time.textContent=when;card.append(time);}list.append(card);
-  });
-}
-async function markNotificationRead(index){
-  const item=currentNotifications[index];if(!item||item.read===true||!activeProfileRef)return;
-  const updated=currentNotifications.map((entry,i)=>i===index?{...entry,read:true,readAt:Date.now()}:entry);renderNotifications(updated);
-  try{await updateDoc(activeProfileRef,{notifications:updated});}catch(error){console.error("Could not save notification read state:",error);}
-}
-function openNotificationDetail(index){
-  const item=currentNotifications[index];if(!item)return;
-  document.getElementById("notificationDetailTitle").textContent=String(item.title||"FastMoney Update");
-  document.getElementById("notificationDetailMessage").textContent=String(item.message||"");
-  document.getElementById("notificationDetailTime").textContent=notificationDate(item.createdAt);
-  document.getElementById("notificationDetailBackdrop").hidden=false;
-  history.pushState({fastMoneyNotificationDetail:true},"","#notification-detail");
-  markNotificationRead(index);
-}
-document.getElementById("notificationList")?.addEventListener("click",event=>{const card=event.target.closest("[data-notification-index]");if(card)openNotificationDetail(Number(card.dataset.notificationIndex));});
-function closeNotificationDetail(){document.getElementById("notificationDetailBackdrop").hidden=true;}
-document.getElementById("notificationDetailBackdrop")?.addEventListener("click",event=>{if(event.target.id==="notificationDetailBackdrop")history.back();});
-document.addEventListener("keydown",event=>{if(event.key==="Escape"){if(!document.getElementById("notificationDetailBackdrop").hidden||!document.getElementById("notificationPopover").hidden)history.back();}});
-function formatBalance(value) {
-  const number = Number(value);
-  return (Number.isFinite(number) ? number : 0).toLocaleString("en-US", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
-}
-function showAccountMessage(message, isError = false) {
-  let notice = document.getElementById("fastMoneyAccountNotice");
-  if (!notice) {
-    notice = document.createElement("div");
-    notice.id = "fastMoneyAccountNotice";
-    notice.style.cssText = "margin:14px 0;padding:12px 15px;border-radius:11px;font-size:13px;line-height:1.6;border:1px solid;";
-    const wallet = document.querySelector(".wallet-overview");
-    if (wallet) wallet.insertAdjacentElement("beforebegin", notice);
-    else document.getElementById("dashboard")?.prepend(notice);
-  }
-  notice.style.background = isError ? "#fff1f2" : "#ecfdf5";
-  notice.style.borderColor = isError ? "#fecdd3" : "#a7f3d0";
-  notice.style.color = isError ? "#9f1239" : "#065f46";
-  notice.textContent = message;
-}
-async function coreRequest(path, token, method = "GET") {
-  const response = await fetch(CORE_API + path, {
-    method,
-    headers: {
-      Authorization: "Bearer " + token,
-      ...(method === "POST" ? { "Content-Type": "application/json" } : {})
-    },
-    ...(method === "POST" ? { body: "{}" } : {})
-  });
-  const data = await response.json().catch(() => ({}));
-  if (!response.ok || data.success !== true) {
-    throw new Error(data.error || "FastMoney server request failed. Please try again.");
-  }
-  return data;
-}
-function setVerification(verified) {
-  const el = document.getElementById("navAccountVerify");
-  el.classList.toggle("unverified", !verified);
-  el.innerHTML = verified
-    ? '<i class="fa-solid fa-circle-check"></i> VERIFIED'
-    : '<i class="fa-solid fa-circle-exclamation"></i> UNVERIFIED';
-  el.title = verified ? "Email verified" : "Email confirmation is temporarily disabled during testing";
-}
-function renderWallet(wallet, profile) {
-  const balances = wallet?.balances || {};
-  const localCode = String(profile?.signupCurrencyCode || profile?.currencyCode || "").trim().toUpperCase();
-  const usd = Number(balances.USD || 0);
-  document.querySelector(".wallet-total-usd strong").textContent = formatBalance(usd);
-
-  // The signup-country currency is shown in the Pay ID card, not as a second wallet card.
-  const localLabel = document.getElementById("localCurrencyLabel");
-  const localBalance = document.getElementById("localCurrencyBalance");
-  if (!localCode) {
-    localLabel.textContent = "—";
-    localBalance.textContent = "—";
-  } else {
-    localLabel.textContent = localCode;
-    localBalance.textContent = formatBalance(Number(balances[localCode] || 0));
-  }
-
-  document.querySelectorAll(".wallet-scroller > .wallet-item").forEach(card => {
-    const name = card.querySelector(".wallet-name")?.textContent.trim() || "";
-    const amount = card.querySelector("strong");
-    if (!amount) return;
-    if (name === "USDT") {
-      amount.textContent = formatBalance(balances.USDT || 0);
-    } else if (name.endsWith(" USD")) {
-      amount.textContent = "$" + formatBalance(balances.USD || 0);
-    }
-  });
-}
-
-onAuthStateChanged(auth, async user => {
-  if (!user) {
-    location.replace("/login.html?next=%2Fdashboard.html");
-    return;
-  }
-
-  // Paint the last confirmed wallet immediately on refresh, then replace it
-  // with the latest server balance once the secure requests finish.
-  const walletCacheKey = "fastmoney-wallet-cache-" + user.uid;
-  try {
-    const cached = JSON.parse(localStorage.getItem(walletCacheKey) || "null");
-    if (cached?.profile?.currencyCode && cached?.wallet) {
-      renderWallet(cached.wallet, cached.profile);
-    }
-  } catch (cacheError) {
-    console.warn("FastMoney wallet cache could not be read.", cacheError);
-  }
-
-  try {
-    await user.reload();
-    const profileRef = doc(db, "userProfiles", user.uid);
-    activeProfileRef = profileRef;
-    onSnapshot(profileRef, snapshot => {
-      if (snapshot.exists()) renderNotifications(snapshot.data().notifications || []);
-    }, error => console.error("FastMoney notifications listener failed:",error));
-    const profileSnap = await getDoc(profileRef);
-    const serverProfile = profileSnap.exists() ? profileSnap.data() : {};
-    const previousCache = JSON.parse(localStorage.getItem(walletCacheKey) || "null");
-    const previousProfile = previousCache?.profile || {};
-    // Never let a temporarily incomplete profile response erase the saved
-    // signup currency while the dashboard is refreshing.
-    // Signup currency is the permanent local-currency choice.
-    // Never replace it with a later editable country/currency field.
-    const signupCurrencyByCountry = {
-      BD:["BDT","৳"],US:["USD","$"],GB:["GBP","£"],IN:["INR","₹"],PK:["PKR","₨"],
-      AE:["AED","د.إ"],SA:["SAR","﷼"],CA:["CAD","$"],AU:["AUD","$"],
-      DE:["EUR","€"],FR:["EUR","€"],IT:["EUR","€"],ES:["EUR","€"],NL:["EUR","€"],
-      IE:["EUR","€"],PT:["EUR","€"],CH:["CHF","Fr"],JP:["JPY","¥"],CN:["CNY","¥"],
-      KR:["KRW","₩"],SG:["SGD","$"],MY:["MYR","RM"],ID:["IDR","Rp"],TH:["THB","฿"],
-      PH:["PHP","₱"],NP:["NPR","रु"],LK:["LKR","Rs"],TR:["TRY","₺"],ZA:["ZAR","R"],
-      NG:["NGN","₦"],KE:["KES","KSh"],EG:["EGP","E£"],NZ:["NZD","$"],MX:["MXN","$"],
-      BR:["BRL","R$"],SE:["SEK","kr"],NO:["NOK","kr"],DK:["DKK","kr"],RU:["RUB","₽"],
-      AF:["AFN","؋"],QA:["QAR","ر.ق"],KW:["KWD","د.ك"],OM:["OMR","ر.ع."],
-      BH:["BHD","د.ب"],JO:["JOD","د.ا"],GH:["GHS","₵"],UG:["UGX","USh"],
-      TZ:["TZS","TSh"],MA:["MAD","د.م."],AR:["ARS","$"],CL:["CLP","$"],
-      CO:["COP","$"],PL:["PLN","zł"],UA:["UAH","₴"],IL:["ILS","₪"],HK:["HKD","$"],
-      TW:["TWD","$"],VN:["VND","₫"],KH:["KHR","៛"],MM:["MMK","K"],ET:["ETB","Br"]
-    };
-    const savedCountryCode = String(serverProfile.signupCountryCode || serverProfile.countryCode || previousProfile.signupCountryCode || previousProfile.countryCode || "").toUpperCase();
-    const countryCurrency = signupCurrencyByCountry[savedCountryCode] || [];
-    const fixedCurrencyCode = String(serverProfile.signupCurrencyCode || previousProfile.signupCurrencyCode || countryCurrency[0] || serverProfile.currencyCode || previousProfile.currencyCode || "").toUpperCase();
-    const fixedCurrencySymbol = serverProfile.signupCurrencySymbol || serverProfile.currencySymbol || previousProfile.signupCurrencySymbol || previousProfile.currencySymbol || countryCurrency[1] || fixedCurrencyCode;
-    const profile = {
-      ...previousProfile,
-      ...serverProfile,
-      country: serverProfile.signupCountry || serverProfile.country || previousProfile.signupCountry || previousProfile.country || "",
-      countryCode: savedCountryCode,
-      signupCountryCode: savedCountryCode,
-      currencyCode: fixedCurrencyCode,
-      signupCurrencyCode: fixedCurrencyCode,
-      currencySymbol: fixedCurrencySymbol,
-      signupCurrencySymbol: fixedCurrencySymbol
-    };
-    if (!Array.isArray(serverProfile.notifications) || serverProfile.notifications.length === 0) {
-      const welcomeNotification = {
-        id: "welcome-" + user.uid,
-        type: "welcome",
-        title: "Welcome to FastMoney!",
-        message: "Your account has been created successfully. Welcome aboard! You can now explore your FastMoney dashboard and services.",
-        read: false,
-        createdAt: Date.now()
-      };
-      try {
-        await updateDoc(profileRef, { notifications: [welcomeNotification] });
-      } catch (notificationError) {
-        console.error("Could not create the account welcome notification:", notificationError);
-      }
-    }
-    const firstName = profile.firstName || user.displayName?.split(" ")[0] || "User";
-
-    const payCurrencyCode = String(profile.signupCurrencyCode || profile.currencyCode || "").trim().toUpperCase();
-    document.getElementById("payIdCurrency").textContent = (payCurrencyCode || "LOCAL") + " PAY ID";
-    document.getElementById("payIdCurrencyBadge").textContent = payCurrencyCode || "—";
-    document.getElementById("payIdValue").textContent = user.uid;
-    document.getElementById("copyPayId")?.setAttribute("data-copy-value", user.uid);
-    document.getElementById("navAccountName").textContent =
-      /^\d{10}$/.test(String(profile.accountId || "")) ? profile.accountId : "Setting up ID…";
-    document.getElementById("navAccountEmail").textContent = user.email || "";
-    document.getElementById("navAccountAvatar").textContent = (firstName[0] || "U").toUpperCase();
-    setVerification(user.emailVerified === true);
-
-    // Email confirmation is temporarily disabled while the owner tests the website.
-    const token = await user.getIdToken(true);
-    const bootstrap = await coreRequest("/api/account/bootstrap", token, "POST");
-    if (!/^\d{10}$/.test(String(bootstrap.accountId || "")) && !/^FM-[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{6}$/.test(String(bootstrap.accountId || "")) && !/^\d{15}$/.test(String(bootstrap.accountId || ""))) {
-      throw new Error("The server did not return a valid FastMoney Account ID.");
-    }
-
-    document.getElementById("navAccountName").textContent = bootstrap.accountId;
-    document.getElementById("copyAccountId")?.setAttribute("data-copy-value", bootstrap.accountId);
-    const walletResult = await coreRequest("/api/wallet/me", token);
-    renderWallet(walletResult.wallet, profile);
-    // Keep the last successful currency code and balances visible during refresh.
-    try {
-      localStorage.setItem(walletCacheKey, JSON.stringify({
-        profile: {
-          currencyCode: String(profile.signupCurrencyCode || profile.currencyCode || "").toUpperCase(),
-          signupCurrencyCode: String(profile.signupCurrencyCode || profile.currencyCode || "").toUpperCase(),
-          currencySymbol: profile.signupCurrencySymbol || profile.currencySymbol || "",
-          signupCurrencySymbol: profile.signupCurrencySymbol || profile.currencySymbol || "",
-          country: profile.signupCountry || profile.country || "",
-          signupCountryCode: profile.signupCountryCode || profile.countryCode || ""
-        },
-        wallet: walletResult.wallet
-      }));
-      localStorage.setItem("fastmoney-last-wallet-user", user.uid);
-    } catch (cacheError) {
-      console.warn("FastMoney wallet cache could not be saved.", cacheError);
-    }
-    // Successful account loading stays silent; only errors are shown.
-  } catch (error) {
-    console.error("FastMoney dashboard initialization failed:", error);
-    showAccountMessage(error.message || "Could not load your account. Please refresh and try again.", true);
-    if (document.getElementById("navAccountName").textContent === "Loading ID…") {
-      document.getElementById("navAccountName").textContent = "Account unavailable";
-    }
-  } finally {
-    document.body.classList.add("fm-auth-ready");
-  }
-});
-
-document.getElementById("copyPayId")?.addEventListener("click", async () => {
-  const value = document.getElementById("payIdValue")?.textContent?.trim();
-  if (!value || value === "Loading…") return;
-  const button = document.getElementById("copyPayId");
-  try {
-    await navigator.clipboard.writeText(value);
-    button.innerHTML = '<i class="fa-solid fa-check"></i><span>Copied</span>';
-    setTimeout(() => { button.innerHTML = '<i class="fa-regular fa-copy"></i><span>Copy</span>'; }, 1500);
-  } catch {
-    showAccountMessage("Could not copy the Pay ID. Please select and copy it manually.", true);
-  }
-});
-
-document.getElementById("copyAccountId")?.addEventListener("click", async () => {
-  const value = document.getElementById("navAccountName")?.textContent?.trim();
-  if (!value || value === "Loading ID…" || value === "Setting up ID…" || value === "Account unavailable") return;
-  try {
-    await navigator.clipboard.writeText(value);
-    const button = document.getElementById("copyAccountId");
-    button.innerHTML = '<i class="fa-solid fa-check"></i>';
-    button.title = "Copied";
-    setTimeout(() => { button.innerHTML = '<i class="fa-regular fa-copy"></i>'; button.title = "Copy FastMoney ID"; }, 1500);
-  } catch {
-    showAccountMessage("Could not copy the ID. Please select and copy it manually.", true);
-  }
-});
-
-document.getElementById("logoutBtn").addEventListener("click", async () => {
-  const button = document.getElementById("logoutBtn");
-  button.disabled = true;
-  button.textContent = "Logging out...";
-  try {
-    await signOut(auth);
-    location.replace("/login.html");
-  } catch (error) {
-    button.disabled = false;
-    button.textContent = "Log Out";
-    alert("Could not log out. Please try again.");
-  }
-});
-</script>
-<script>
-(function(){
- const menuBtn=document.getElementById("dashboardMenuToggle");
- const menu=document.getElementById("dashboardMenu");
- const noticeBtn=document.getElementById("notificationToggle");
- const notice=document.getElementById("notificationPopover");
- function positionNotice(){const rect=document.getElementById("dashboardHeader").getBoundingClientRect();notice.style.setProperty("--notification-top",Math.max(0,rect.bottom)+"px");}
- function closePanels(){menu.hidden=true;notice.hidden=true;menuBtn.setAttribute("aria-expanded","false");noticeBtn.setAttribute("aria-expanded","false");}
- menuBtn.addEventListener("click",function(){const opening=menu.hidden;closePanels();menu.hidden=!opening;menuBtn.setAttribute("aria-expanded",String(opening));});
- noticeBtn.addEventListener("click",function(){if(!notice.hidden){history.back();return;}closePanels();positionNotice();notice.hidden=false;noticeBtn.setAttribute("aria-expanded","true");history.pushState({fastMoneyNotifications:true},"","#notifications");});
- window.addEventListener("resize",function(){if(!notice.hidden)positionNotice();});
- window.addEventListener("popstate",function(){const detail=document.getElementById("notificationDetailBackdrop");if(detail&&!detail.hidden)detail.hidden=true;else if(!notice.hidden){notice.hidden=true;noticeBtn.setAttribute("aria-expanded","false");}if(location.hash!=="#notifications"&&location.hash!=="#notification-detail")closePanels();});
- document.addEventListener("click",function(e){if(!e.target.closest("#dashboardHeader")&&!e.target.closest("#notificationPopover")){menu.hidden=true;menuBtn.setAttribute("aria-expanded","false");}});
- document.getElementById("headerLogoutBtn").addEventListener("click",function(){document.getElementById("logoutBtn").click();});
-})();
-</script>
-<script src="./language.js?v=1" defer></script>
-<style id="fastmoney-notification-screen-style">
-.notification-screen[hidden],.notification-detail-backdrop[hidden]{display:none!important}
-.notification-screen{position:fixed;left:0;right:0;top:var(--notification-top,70px);height:calc(100dvh - var(--notification-top,70px));width:100vw;z-index:1300;display:flex;flex-direction:column;padding:12px clamp(13px,3vw,24px) 18px;background:#f5f8fc;color:#20364e;overflow:hidden;border-top:1px solid #e4ebf2;box-shadow:0 18px 40px rgba(16,39,65,.16)}
-.notification-screen-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex:0 0 auto;max-width:1000px;width:100%;margin:0 auto}
-.notification-kicker{font:800 10px Arial,sans-serif;letter-spacing:1.6px;color:#078397}
-.notification-screen-head h2{display:flex;align-items:center;gap:10px;margin:6px 0 3px;font-size:clamp(21px,4vw,27px);font-weight:800}
-.notification-screen-head h2 i{color:#078397}.notification-screen-head p{margin:0;color:#6b7f94;font-size:13px}
-.notification-close,.notification-detail-head button{width:40px;height:40px;display:grid;place-items:center;flex:0 0 auto;border:1px solid #dce6ef;border-radius:12px;background:#fff;color:#304b65;font-size:17px;cursor:pointer}
-.notification-screen-list{width:100%;max-width:1000px;margin:0 auto;flex:1;min-height:0;overflow:auto;display:grid;align-content:start;gap:10px;padding:2px 2px 12px}
-.notification-item{width:100%;display:block;text-align:left;padding:14px 16px;border:1px solid #e0e9f1;border-radius:14px;background:#fff;color:#233b53;cursor:pointer;overflow:hidden}
-.notification-item.unread{border-left:3px solid #e5484d;background:#fffdfd}
-.notification-item strong{display:block;color:#243b53;font-size:14px;line-height:1.4;font-weight:800}
-.notification-item p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:5px 0 0;color:#61748a;font-size:12px;line-height:1.55}
-.notification-item time{display:block;margin-top:8px;color:#8293a6;font-size:10px}
-.notification-empty{padding:34px 12px;text-align:center;color:#71839a;font-size:13px}
-
-.notification-detail-backdrop{position:fixed;inset:0;z-index:1500;display:grid;place-items:center;padding:18px;background:rgba(10,24,40,.58);backdrop-filter:blur(5px)}
-.notification-detail-dialog{width:min(560px,100%);max-height:min(82dvh,700px);overflow:auto;padding:20px;border:1px solid #e0e9f1;border-radius:20px;background:#fff;color:#20364e;box-shadow:0 24px 70px rgba(0,0,0,.24)}
-.notification-detail-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid #e9eef3}
-.notification-detail-head>span{font:800 10px Arial,sans-serif;letter-spacing:1.2px;color:#078397}.notification-detail-head>span i{margin-right:7px}
-.notification-detail-content{padding:20px 2px}.notification-detail-content h2{margin:0 0 8px;font-size:21px;line-height:1.35;font-weight:800;color:#20364e}
-.notification-detail-content time{display:block;margin-bottom:18px;color:#8393a5;font-size:11px}
-.notification-detail-content p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;color:#536a80;font-size:14px;line-height:1.8}
-
-@media(max-width:520px){.notification-screen{padding:10px 13px 14px;gap:0}.notification-item{padding:13px;border-radius:12px}.notification-item strong{font-size:13px}.notification-detail-backdrop{padding:12px}.notification-detail-dialog{padding:16px;border-radius:17px}.notification-detail-content h2{font-size:19px}}
-@media(prefers-color-scheme:dark){.notification-screen{background:#0d1b2b;color:#e8f0f8;border-color:#263c52;box-shadow:0 18px 45px rgba(0,0,0,.4)}.notification-kicker,.notification-screen-head h2 i{color:#78d3d7}.notification-screen-head p{color:#a8bbcf}.notification-close,.notification-detail-head button{background:#172c42;border-color:#344b62;color:#eaf2fa}.notification-item{background:#14283d;border-color:#30465d;color:#e7eff8}.notification-item.unread{background:#30232c;border-color:#7d4148;border-left-color:#ff686d}.notification-item strong{color:#f0f6fc}.notification-item p{color:#b3c4d6}.notification-item time,.notification-empty{color:#92a9bf}.notification-detail-dialog{background:#14283d;border-color:#344b62;color:#eaf2fa}.notification-detail-content h2{color:#f0f6fc}.notification-detail-content time{color:#91a8bd}.notification-detail-content p{color:#c0cede}}
-</style>
-
-<style id="fastmoney-notification-icon-contrast">
-/* Keep the bell itself readable in both color schemes, regardless of inherited button styles. */
-.dashboard-header .notification-trigger,
-.dashboard-header .notification-trigger .fa-bell{
-  color:#28415e!important;
-  -webkit-text-fill-color:#28415e!important;
-}
-@media(prefers-color-scheme:dark){
-  .dashboard-header .notification-trigger,
-  .dashboard-header .notification-trigger .fa-bell{
-    color:#f1f6fc!important;
-    -webkit-text-fill-color:#f1f6fc!important;
-  }
-}
-</style>
-
-<style id="fastmoney-notification-button-refinement">
-/* Match the notification button outline to the bell button's full footprint. */
-.dashboard-header .notification-trigger{
-  width:44px!important;
-  height:44px!important;
-  min-width:44px!important;
-  padding:0!important;
-  border:0!important;
-  outline:0!important;
-  box-shadow:none!important;
-  border-radius:0!important;
-  background:transparent!important;
-  display:grid!important;
-  place-items:center!important;
-}
-.dashboard-header .notification-trigger.has-unread:after{
-  content:none!important;
-  display:none!important;
-}
-.dashboard-header .notification-dot{
-  top:6px!important;
-  right:6px!important;
-  width:7px!important;
-  height:7px!important;
-  border-width:1.5px!important;
-  box-shadow:none!important;
-}
-@media(prefers-color-scheme:dark){
-  .dashboard-header .notification-trigger{
-    background:transparent!important;
-    border:0!important;
-  }
-  .dashboard-header .notification-dot{border-color:#14283e!important}
-}
-@media(max-width:760px){
-  .dashboard-header .notification-trigger{
-    width:39px!important;
-    height:39px!important;
-    min-width:39px!important;
-    border-radius:0!important;
-    border:0!important;
-  }
-  .dashboard-header .notification-trigger.has-unread:after{content:none!important;display:none!important}
-  .dashboard-header .notification-dot{top:5px!important;right:5px!important}
-}
-</style>
-<style>
-
-/* Keep every wallet, including the signup-country currency wallet, in one horizontal swipe rail. */
-.wallet-scroller{
-  display:flex!important;
-  flex-wrap:nowrap!important;
-  width:100%!important;
-  max-width:100%!important;
-  overflow-x:auto!important;
-  overflow-y:hidden!important;
-  gap:12px!important;
-  padding:4px 0 14px!important;
-  scroll-snap-type:x mandatory!important;
-  scroll-padding-inline:0!important;
-  -webkit-overflow-scrolling:touch!important;
-  overscroll-behavior-x:contain!important;
-}
-.wallet-scroller>.wallet-item{
-  flex:0 0 100%!important;
-  width:100%!important;
-  min-width:100%!important;
-  max-width:100%!important;
-  box-sizing:border-box!important;
-  scroll-snap-align:start!important;
-}
-.wallet-scroll-hint{display:inline-flex!important}
-@media(max-width:760px){
-  .wallet-scroller{gap:10px!important;padding:4px 0 13px!important}
-  .wallet-scroller>.wallet-item{flex-basis:100%!important;min-width:100%!important;width:100%!important}
-}
-
-/* Keep the country-based Pay ID as its own swipeable slide inside the wallet rail. */
-.wallet-scroller>.pay-id-card{
-  box-sizing:border-box!important;
-  flex:0 0 100%!important;
-  width:100%!important;
-  min-width:100%!important;
-  max-width:100%!important;
-  margin:0!important;
-  scroll-snap-align:start!important;
-}
-</style>
-</body></html>
 <style id="fastmoney-verification-status">.nav-account-copy{width:27px;height:27px;display:inline-grid;place-items:center;flex:0 0 auto;border:1px solid #d8e5ee;border-radius:8px;background:#f3f8fb;color:#087f91;font-size:12px;cursor:pointer}.nav-account-copy:hover{background:#e4f5f5}.nav-account-id-line{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.nav-account-verified{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:20px;background:#e7f8ef;color:#168052;font:800 10px Arial,sans-serif;white-space:nowrap}.nav-account-verified.unverified{background:#fff0f0!important;color:#c62828!important;border:1px solid #ffd0d0}@media(prefers-color-scheme:dark){.nav-account-verified.unverified{background:#482326!important;color:#ff9a9a!important;border-color:#71373c!important}}
 /* Refined compact wallet cards: approximately one-third shorter */
 .wallet-item{
@@ -1825,3 +1228,601 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
 .wallet-overview>.wallet-scroller{padding-top:1px!important;padding-bottom:1px!important;}
 </style>
 
+
+</head>
+<body>
+<main class="dash-wrap" id="dashboard">
+  <header class="dashboard-header" id="dashboardHeader">
+    <a class="dashboard-brand" href="/dashboard.html" aria-label="FastMoney Dashboard">
+      <img src="./assets/fastmoneylogo.png" alt="FastMoney" width="204" height="54">
+    </a>
+    <div class="dashboard-header-actions">
+      <button class="dashboard-icon-btn notification-trigger" id="notificationToggle" type="button" aria-label="Notifications" aria-expanded="false" title="Notifications">
+        <i class="fa-solid fa-bell" aria-hidden="true"></i><span class="notification-dot" aria-hidden="true"></span>
+      </button>
+      <label class="fm-language-control dashboard-language-control" aria-label="Select website language" title="Select website language">
+        <i class="fa-solid fa-globe" aria-hidden="true"></i>
+        <select class="fm-language-select" aria-label="Website language">
+          <option value="en">EN</option><option value="bn">বাংলা</option><option value="ar">العربية</option><option value="zh-CN">中文</option><option value="fr">FR</option><option value="de">DE</option><option value="hi">हिन्दी</option><option value="es">ES</option><option value="it">IT</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="pt">PT</option><option value="ru">RU</option><option value="tr">TR</option><option value="ur">اردو</option>
+        </select>
+        <i class="fa-solid fa-chevron-down fm-language-chevron" aria-hidden="true"></i>
+      </label>
+      <button class="dashboard-icon-btn dashboard-menu-toggle" id="dashboardMenuToggle" type="button" aria-label="Open navigation menu" aria-expanded="false">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+    <section class="notification-screen" id="notificationPopover" aria-label="Notifications" hidden>
+      <div class="notification-screen-list" id="notificationList"></div>
+    </section>
+    <nav class="dashboard-popover dashboard-menu-popover" id="dashboardMenu" aria-label="Dashboard navigation" hidden>
+      <a class="nav-account-summary" href="/profile.html" aria-label="Open My Account">
+        <div class="nav-account-avatar" id="navAccountAvatar"><i class="fa-solid fa-user"></i></div>
+        <div class="nav-account-copy">
+          <div class="nav-account-id-line"><strong id="navAccountName">Loading ID…</strong><button class="nav-account-copy" id="copyAccountId" type="button" aria-label="Copy FastMoney ID" title="Copy FastMoney ID"><i class="fa-regular fa-copy"></i></button><span class="nav-account-verified unverified" id="navAccountVerify"><i class="fa-solid fa-circle-exclamation"></i> UNVERIFIED</span></div>
+          <span class="nav-account-email" id="navAccountEmail">Loading account…</span>
+        </div>
+        <span class="nav-profile-open" aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+      </a>
+
+      <a href="/dashboard.html"><i class="fa-solid fa-house"></i> Dashboard Home</a>
+      <a href="/member-exchange.html"><i class="fa-solid fa-arrow-right-arrow-left"></i> New Exchange</a>
+      <a href="/history.html"><i class="fa-solid fa-clock-rotate-left"></i> My Requests</a>
+      <a href="/chat.html"><i class="fa-solid fa-headset"></i> Customer Support</a>
+      <button type="button" id="headerLogoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
+    </nav>
+  </header>
+  <div class="notification-detail-backdrop" id="notificationDetailBackdrop" hidden><section class="notification-detail-dialog" role="dialog" aria-modal="true" aria-labelledby="notificationDetailTitle">
+    <div class="notification-detail-content"><h2 id="notificationDetailTitle">Notification</h2><time id="notificationDetailTime"></time><p id="notificationDetailMessage"></p></div>
+  </section></div>
+<section class="wallet-overview" aria-label="Total balance and wallets">
+    <div class="wallet-balance-panel">
+      <h2 class="wallet-total-title"><span class="wallet-total-title-icon"><i class="fa-solid fa-wallet" aria-hidden="true"></i></span><span>Total Balance</span></h2>
+      <div class="wallet-total-values">
+        <div class="wallet-total-item wallet-total-usd"><span>USD</span><strong>0.000</strong></div>
+        <div class="wallet-total-divider" aria-hidden="true"></div>
+        <div class="wallet-total-item wallet-total-local"><span id="localCurrencyLabel">—</span><strong id="localCurrencyBalance">—</strong></div>
+      </div>
+    </div>
+    <div class="wallet-list-heading"><div><h3>Wallets</h3></div></div>
+    <div class="wallet-scroller" role="list" aria-label="Available wallets">
+      <article class="wallet-item wallet-fastmoney-usd" role="listitem"><span class="wallet-symbol wallet-logo">FM</span><span class="wallet-name">FastMoney USD</span><strong>$0.00</strong><small>FastMoney Dollar Wallet</small></article>
+  <section class="pay-id-card" aria-label="Your payment ID">
+  <div class="pay-id-top"><span class="pay-id-mark">FM</span><div class="pay-id-title"><strong id="payIdCurrency">— PAY ID</strong><small>Personal payment ID</small></div><span class="pay-id-country" id="payIdCurrencyBadge">—</span></div>
+  <div class="pay-id-value-row"><div class="pay-id-value-wrap"><small>PAY ID</small><strong id="payIdValue">Loading…</strong></div><button type="button" class="pay-id-copy" id="copyPayId" aria-label="Copy Pay ID" title="Copy Pay ID"><i class="fa-regular fa-copy"></i><span>Copy</span></button></div>
+</section>
+      <article class="wallet-item wallet-redotpay" role="listitem"><span class="wallet-symbol wallet-logo">R</span><span class="wallet-name">RedotPay USD</span><strong>$0.00</strong><small>RedotPay Dollar Wallet</small></article>
+      <article class="wallet-item wallet-volet" role="listitem"><span class="wallet-symbol wallet-logo">V</span><span class="wallet-name">Volet USD</span><strong>$0.00</strong><small>Volet Dollar Wallet</small></article>
+      <article class="wallet-item wallet-epay" role="listitem"><span class="wallet-symbol wallet-logo">e</span><span class="wallet-name">ePay USD</span><strong>$0.00</strong><small>ePay Dollar Wallet</small></article>
+      <article class="wallet-item wallet-webmoney" role="listitem"><span class="wallet-symbol wallet-logo">W</span><span class="wallet-name">WebMoney USD</span><strong>$0.00</strong><small>WebMoney Dollar Wallet</small></article>
+      <article class="wallet-item wallet-tunepay" role="listitem"><span class="wallet-symbol wallet-logo">T</span><span class="wallet-name">TunePay USD</span><strong>$0.00</strong><small>TunePay Dollar Wallet</small></article>
+      <article class="wallet-item wallet-perfectmoney" role="listitem"><span class="wallet-symbol wallet-logo">PM</span><span class="wallet-name">Perfect Money USD</span><strong>$0.00</strong><small>Perfect Money Dollar Wallet</small></article>
+      <article class="wallet-item wallet-winiti" role="listitem"><span class="wallet-symbol wallet-logo">W</span><span class="wallet-name">Winity USD</span><strong>$0.00</strong><small>Winity Dollar Wallet</small></article>
+      <article class="wallet-item wallet-usdt" role="listitem"><span class="wallet-symbol wallet-logo">₮</span><span class="wallet-name">USDT</span><strong>0.00</strong><small>Tether Wallet</small></article>
+      <article class="wallet-item wallet-rizon" role="listitem"><span class="wallet-symbol wallet-logo">RZ</span><span class="wallet-name">Rizon USD</span><strong>$0.00</strong><small>Rizon Dollar Wallet</small></article>
+    </div>
+  </section>
+  <script>
+  // Restore the signed-in user's last confirmed currency and balance before first paint.
+  (function(){
+    try {
+      // Firebase may keep its auth session in IndexedDB, not localStorage.
+      // Remember the last successfully loaded UID separately so the wallet
+      // cache can be restored synchronously before Firebase finishes loading.
+      let cachedUid = localStorage.getItem("fastmoney-last-wallet-user") || "";
+      if (!cachedUid) {
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key && key.startsWith("firebase:authUser:")) {
+            const value = JSON.parse(localStorage.getItem(key) || "null");
+            if (value && value.uid) { cachedUid = value.uid; break; }
+          }
+        }
+      }
+      if (!cachedUid) return;
+      const saved = JSON.parse(localStorage.getItem("fastmoney-wallet-cache-" + cachedUid) || "null");
+      const profile = saved && saved.profile;
+      const wallet = saved && saved.wallet;
+      const code = String(profile && profile.currencyCode || "").trim().toUpperCase();
+      if (!code || !wallet) return;
+      const balances = wallet.balances || {};
+      const amount = Number(balances[code] || 0);
+      const format = value => (Number.isFinite(Number(value)) ? Number(value) : 0).toLocaleString("en-US",{minimumFractionDigits:3,maximumFractionDigits:3});
+      const set = (id,value) => { const el=document.getElementById(id); if(el) el.textContent=value; };
+      set("localCurrencyLabel",code);
+      set("localCurrencyBalance",format(amount));
+      set("localWalletName",code);
+      set("localWalletDescription",profile.country || "Local Currency");
+      set("localWalletSymbol",profile.currencySymbol || code);
+      const localCard=document.querySelector(".wallet-bdt");
+      const localAmount=localCard && localCard.querySelector("strong");
+      if(localAmount) localAmount.textContent=format(amount);
+      const usdAmount=document.querySelector(".wallet-total-usd strong");
+      if(usdAmount) usdAmount.textContent=format(balances.USD || 0);
+    } catch (error) {
+      console.warn("FastMoney instant wallet restore skipped.",error);
+    }
+  })();
+  </script>
+  <button class="dash-btn secondary" id="logoutBtn" type="button" hidden>Log Out</button>
+  <nav class="dashboard-bottom-nav" aria-label="Quick service navigation">
+    <a class="bottom-nav-item bottom-nav-convert active" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></span><span class="bottom-nav-label">Convert</span></a>
+    <a class="bottom-nav-item bottom-nav-payin" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-circle-arrow-down" aria-hidden="true"></i></span><span class="bottom-nav-label">Pay-in</span></a>
+    <a class="bottom-nav-item bottom-nav-payout" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-circle-arrow-up" aria-hidden="true"></i></span><span class="bottom-nav-label">Pay-out</span></a>
+    <a class="bottom-nav-item bottom-nav-buysell" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i></span><span class="bottom-nav-label">Buy/Sell</span></a>
+  </nav>
+</main>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { firebaseConfig } from "./firebase-config.js";
+
+const CORE_API = "https://fastmoney-core-api.taijulsheikh60.workers.dev";
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const currencyNames = {
+  BDT:"Bangladeshi Taka", USD:"US Dollar", GBP:"British Pound", INR:"Indian Rupee",
+  PKR:"Pakistani Rupee", AED:"UAE Dirham", SAR:"Saudi Riyal", CAD:"Canadian Dollar",
+  AUD:"Australian Dollar", EUR:"Euro", CHF:"Swiss Franc", JPY:"Japanese Yen",
+  CNY:"Chinese Yuan", KRW:"South Korean Won", SGD:"Singapore Dollar", MYR:"Malaysian Ringgit",
+  IDR:"Indonesian Rupiah", THB:"Thai Baht", PHP:"Philippine Peso", NPR:"Nepalese Rupee",
+  LKR:"Sri Lankan Rupee", TRY:"Turkish Lira", ZAR:"South African Rand", NGN:"Nigerian Naira",
+  KES:"Kenyan Shilling", EGP:"Egyptian Pound", NZD:"New Zealand Dollar", MXN:"Mexican Peso",
+  BRL:"Brazilian Real", SEK:"Swedish Krona", NOK:"Norwegian Krone", DKK:"Danish Krone",
+  RUB:"Russian Ruble", AFN:"Afghan Afghani", QAR:"Qatari Riyal", KWD:"Kuwaiti Dinar",
+  OMR:"Omani Rial", BHD:"Bahraini Dinar", JOD:"Jordanian Dinar", GHS:"Ghanaian Cedi",
+  UGX:"Ugandan Shilling", TZS:"Tanzanian Shilling", MAD:"Moroccan Dirham", ARS:"Argentine Peso",
+  CLP:"Chilean Peso", COP:"Colombian Peso", PLN:"Polish Zloty", UAH:"Ukrainian Hryvnia",
+  ILS:"Israeli Shekel", HKD:"Hong Kong Dollar", TWD:"New Taiwan Dollar", VND:"Vietnamese Dong",
+  KHR:"Cambodian Riel", MMK:"Myanmar Kyat", ETB:"Ethiopian Birr"
+};
+const currencySymbols = {
+  BDT:"৳", USD:"$", GBP:"£", INR:"₹", PKR:"₨", AED:"د.إ", SAR:"﷼", EUR:"€",
+  CHF:"Fr", JPY:"¥", CNY:"¥", KRW:"₩", THB:"฿", PHP:"₱", TRY:"₺", ZAR:"R",
+  NGN:"₦", EGP:"E£", BRL:"R$", RUB:"₽", GHS:"₵", VND:"₫", ILS:"₪"
+};
+
+let activeProfileRef = null;
+let currentNotifications = [];
+function notificationDate(value) {
+  try {
+    const date = value?.toDate ? value.toDate() : new Date(Number(value) || value);
+    return Number.isNaN(date.getTime()) ? "" : date.toLocaleString("en-US",{dateStyle:"medium",timeStyle:"short"});
+  } catch { return ""; }
+}
+function renderNotifications(items) {
+  currentNotifications = Array.isArray(items) ? items.slice().sort((a,b) => {
+    const av = a.createdAt?.toMillis ? a.createdAt.toMillis() : Number(a.createdAt) || 0;
+    const bv = b.createdAt?.toMillis ? b.createdAt.toMillis() : Number(b.createdAt) || 0;
+    return bv-av;
+  }) : [];
+  const unread=currentNotifications.some(item=>item.read!==true);
+  const button=document.getElementById("notificationToggle");
+  button?.classList.toggle("has-unread",unread);
+  button?.setAttribute("aria-label",unread?"Notifications, unread updates":"Notifications");
+  const list=document.getElementById("notificationList"); if(!list)return;
+  list.replaceChildren();
+  if(!currentNotifications.length)return;
+  currentNotifications.slice(0,50).forEach((item,index)=>{
+    const card=document.createElement("button");card.type="button";card.className="notification-item"+(item.read===true?"":" unread");card.dataset.notificationIndex=String(index);
+    const title=document.createElement("strong");title.textContent=String(item.title||"FastMoney Update");
+    const message=document.createElement("p");message.textContent=String(item.message||"");card.append(title,message);
+    const when=notificationDate(item.createdAt);if(when){const time=document.createElement("time");time.textContent=when;card.append(time);}list.append(card);
+  });
+}
+async function markNotificationRead(index){
+  const item=currentNotifications[index];if(!item||item.read===true||!activeProfileRef)return;
+  const updated=currentNotifications.map((entry,i)=>i===index?{...entry,read:true,readAt:Date.now()}:entry);renderNotifications(updated);
+  try{await updateDoc(activeProfileRef,{notifications:updated});}catch(error){console.error("Could not save notification read state:",error);}
+}
+function openNotificationDetail(index){
+  const item=currentNotifications[index];if(!item)return;
+  document.getElementById("notificationDetailTitle").textContent=String(item.title||"FastMoney Update");
+  document.getElementById("notificationDetailMessage").textContent=String(item.message||"");
+  document.getElementById("notificationDetailTime").textContent=notificationDate(item.createdAt);
+  document.getElementById("notificationDetailBackdrop").hidden=false;
+  history.pushState({fastMoneyNotificationDetail:true},"","#notification-detail");
+  markNotificationRead(index);
+}
+document.getElementById("notificationList")?.addEventListener("click",event=>{const card=event.target.closest("[data-notification-index]");if(card)openNotificationDetail(Number(card.dataset.notificationIndex));});
+function closeNotificationDetail(){document.getElementById("notificationDetailBackdrop").hidden=true;}
+document.getElementById("notificationDetailBackdrop")?.addEventListener("click",event=>{if(event.target.id==="notificationDetailBackdrop")history.back();});
+document.addEventListener("keydown",event=>{if(event.key==="Escape"){if(!document.getElementById("notificationDetailBackdrop").hidden||!document.getElementById("notificationPopover").hidden)history.back();}});
+function formatBalance(value) {
+  const number = Number(value);
+  return (Number.isFinite(number) ? number : 0).toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+function showAccountMessage(message, isError = false) {
+  let notice = document.getElementById("fastMoneyAccountNotice");
+  if (!notice) {
+    notice = document.createElement("div");
+    notice.id = "fastMoneyAccountNotice";
+    notice.style.cssText = "margin:14px 0;padding:12px 15px;border-radius:11px;font-size:13px;line-height:1.6;border:1px solid;";
+    const wallet = document.querySelector(".wallet-overview");
+    if (wallet) wallet.insertAdjacentElement("beforebegin", notice);
+    else document.getElementById("dashboard")?.prepend(notice);
+  }
+  notice.style.background = isError ? "#fff1f2" : "#ecfdf5";
+  notice.style.borderColor = isError ? "#fecdd3" : "#a7f3d0";
+  notice.style.color = isError ? "#9f1239" : "#065f46";
+  notice.textContent = message;
+}
+async function coreRequest(path, token, method = "GET") {
+  const response = await fetch(CORE_API + path, {
+    method,
+    headers: {
+      Authorization: "Bearer " + token,
+      ...(method === "POST" ? { "Content-Type": "application/json" } : {})
+    },
+    ...(method === "POST" ? { body: "{}" } : {})
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || data.success !== true) {
+    throw new Error(data.error || "FastMoney server request failed. Please try again.");
+  }
+  return data;
+}
+function setVerification(verified) {
+  const el = document.getElementById("navAccountVerify");
+  el.classList.toggle("unverified", !verified);
+  el.innerHTML = verified
+    ? '<i class="fa-solid fa-circle-check"></i> VERIFIED'
+    : '<i class="fa-solid fa-circle-exclamation"></i> UNVERIFIED';
+  el.title = verified ? "Email verified" : "Email confirmation is temporarily disabled during testing";
+}
+function renderWallet(wallet, profile) {
+  const balances = wallet?.balances || {};
+  const localCode = String(profile?.signupCurrencyCode || profile?.currencyCode || "").trim().toUpperCase();
+  const usd = Number(balances.USD || 0);
+  document.querySelector(".wallet-total-usd strong").textContent = formatBalance(usd);
+
+  // The signup-country currency is shown in the Pay ID card, not as a second wallet card.
+  const localLabel = document.getElementById("localCurrencyLabel");
+  const localBalance = document.getElementById("localCurrencyBalance");
+  if (!localCode) {
+    localLabel.textContent = "—";
+    localBalance.textContent = "—";
+  } else {
+    localLabel.textContent = localCode;
+    localBalance.textContent = formatBalance(Number(balances[localCode] || 0));
+  }
+
+  document.querySelectorAll(".wallet-scroller > .wallet-item").forEach(card => {
+    const name = card.querySelector(".wallet-name")?.textContent.trim() || "";
+    const amount = card.querySelector("strong");
+    if (!amount) return;
+    if (name === "USDT") {
+      amount.textContent = formatBalance(balances.USDT || 0);
+    } else if (name.endsWith(" USD")) {
+      amount.textContent = "$" + formatBalance(balances.USD || 0);
+    }
+  });
+}
+
+onAuthStateChanged(auth, async user => {
+  if (!user) {
+    location.replace("/login.html?next=%2Fdashboard.html");
+    return;
+  }
+
+  // Paint the last confirmed wallet immediately on refresh, then replace it
+  // with the latest server balance once the secure requests finish.
+  const walletCacheKey = "fastmoney-wallet-cache-" + user.uid;
+  try {
+    const cached = JSON.parse(localStorage.getItem(walletCacheKey) || "null");
+    if (cached?.profile?.currencyCode && cached?.wallet) {
+      renderWallet(cached.wallet, cached.profile);
+    }
+  } catch (cacheError) {
+    console.warn("FastMoney wallet cache could not be read.", cacheError);
+  }
+
+  try {
+    await user.reload();
+    const profileRef = doc(db, "userProfiles", user.uid);
+    activeProfileRef = profileRef;
+    onSnapshot(profileRef, snapshot => {
+      if (snapshot.exists()) renderNotifications(snapshot.data().notifications || []);
+    }, error => console.error("FastMoney notifications listener failed:",error));
+    const profileSnap = await getDoc(profileRef);
+    const serverProfile = profileSnap.exists() ? profileSnap.data() : {};
+    const previousCache = JSON.parse(localStorage.getItem(walletCacheKey) || "null");
+    const previousProfile = previousCache?.profile || {};
+    // Never let a temporarily incomplete profile response erase the saved
+    // signup currency while the dashboard is refreshing.
+    // Signup currency is the permanent local-currency choice.
+    // Never replace it with a later editable country/currency field.
+    const signupCurrencyByCountry = {
+      BD:["BDT","৳"],US:["USD","$"],GB:["GBP","£"],IN:["INR","₹"],PK:["PKR","₨"],
+      AE:["AED","د.إ"],SA:["SAR","﷼"],CA:["CAD","$"],AU:["AUD","$"],
+      DE:["EUR","€"],FR:["EUR","€"],IT:["EUR","€"],ES:["EUR","€"],NL:["EUR","€"],
+      IE:["EUR","€"],PT:["EUR","€"],CH:["CHF","Fr"],JP:["JPY","¥"],CN:["CNY","¥"],
+      KR:["KRW","₩"],SG:["SGD","$"],MY:["MYR","RM"],ID:["IDR","Rp"],TH:["THB","฿"],
+      PH:["PHP","₱"],NP:["NPR","रु"],LK:["LKR","Rs"],TR:["TRY","₺"],ZA:["ZAR","R"],
+      NG:["NGN","₦"],KE:["KES","KSh"],EG:["EGP","E£"],NZ:["NZD","$"],MX:["MXN","$"],
+      BR:["BRL","R$"],SE:["SEK","kr"],NO:["NOK","kr"],DK:["DKK","kr"],RU:["RUB","₽"],
+      AF:["AFN","؋"],QA:["QAR","ر.ق"],KW:["KWD","د.ك"],OM:["OMR","ر.ع."],
+      BH:["BHD","د.ب"],JO:["JOD","د.ا"],GH:["GHS","₵"],UG:["UGX","USh"],
+      TZ:["TZS","TSh"],MA:["MAD","د.م."],AR:["ARS","$"],CL:["CLP","$"],
+      CO:["COP","$"],PL:["PLN","zł"],UA:["UAH","₴"],IL:["ILS","₪"],HK:["HKD","$"],
+      TW:["TWD","$"],VN:["VND","₫"],KH:["KHR","៛"],MM:["MMK","K"],ET:["ETB","Br"]
+    };
+    const savedCountryCode = String(serverProfile.signupCountryCode || serverProfile.countryCode || previousProfile.signupCountryCode || previousProfile.countryCode || "").toUpperCase();
+    const countryCurrency = signupCurrencyByCountry[savedCountryCode] || [];
+    const fixedCurrencyCode = String(serverProfile.signupCurrencyCode || previousProfile.signupCurrencyCode || countryCurrency[0] || serverProfile.currencyCode || previousProfile.currencyCode || "").toUpperCase();
+    const fixedCurrencySymbol = serverProfile.signupCurrencySymbol || serverProfile.currencySymbol || previousProfile.signupCurrencySymbol || previousProfile.currencySymbol || countryCurrency[1] || fixedCurrencyCode;
+    const profile = {
+      ...previousProfile,
+      ...serverProfile,
+      country: serverProfile.signupCountry || serverProfile.country || previousProfile.signupCountry || previousProfile.country || "",
+      countryCode: savedCountryCode,
+      signupCountryCode: savedCountryCode,
+      currencyCode: fixedCurrencyCode,
+      signupCurrencyCode: fixedCurrencyCode,
+      currencySymbol: fixedCurrencySymbol,
+      signupCurrencySymbol: fixedCurrencySymbol
+    };
+    if (!Array.isArray(serverProfile.notifications) || serverProfile.notifications.length === 0) {
+      const welcomeNotification = {
+        id: "welcome-" + user.uid,
+        type: "welcome",
+        title: "Welcome to FastMoney!",
+        message: "Your account has been created successfully. Welcome aboard! You can now explore your FastMoney dashboard and services.",
+        read: false,
+        createdAt: Date.now()
+      };
+      try {
+        await updateDoc(profileRef, { notifications: [welcomeNotification] });
+      } catch (notificationError) {
+        console.error("Could not create the account welcome notification:", notificationError);
+      }
+    }
+    const firstName = profile.firstName || user.displayName?.split(" ")[0] || "User";
+
+    const payCurrencyCode = String(profile.signupCurrencyCode || profile.currencyCode || "").trim().toUpperCase();
+    document.getElementById("payIdCurrency").textContent = (payCurrencyCode || "LOCAL") + " PAY ID";
+    document.getElementById("payIdCurrencyBadge").textContent = payCurrencyCode || "—";
+    document.getElementById("payIdValue").textContent = user.uid;
+    document.getElementById("copyPayId")?.setAttribute("data-copy-value", user.uid);
+    document.getElementById("navAccountName").textContent =
+      /^\d{10}$/.test(String(profile.accountId || "")) ? profile.accountId : "Setting up ID…";
+    document.getElementById("navAccountEmail").textContent = user.email || "";
+    document.getElementById("navAccountAvatar").textContent = (firstName[0] || "U").toUpperCase();
+    setVerification(user.emailVerified === true);
+
+    // Email confirmation is temporarily disabled while the owner tests the website.
+    const token = await user.getIdToken(true);
+    const bootstrap = await coreRequest("/api/account/bootstrap", token, "POST");
+    if (!/^\d{10}$/.test(String(bootstrap.accountId || "")) && !/^FM-[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{6}$/.test(String(bootstrap.accountId || "")) && !/^\d{15}$/.test(String(bootstrap.accountId || ""))) {
+      throw new Error("The server did not return a valid FastMoney Account ID.");
+    }
+
+    document.getElementById("navAccountName").textContent = bootstrap.accountId;
+    document.getElementById("copyAccountId")?.setAttribute("data-copy-value", bootstrap.accountId);
+    const walletResult = await coreRequest("/api/wallet/me", token);
+    renderWallet(walletResult.wallet, profile);
+    // Keep the last successful currency code and balances visible during refresh.
+    try {
+      localStorage.setItem(walletCacheKey, JSON.stringify({
+        profile: {
+          currencyCode: String(profile.signupCurrencyCode || profile.currencyCode || "").toUpperCase(),
+          signupCurrencyCode: String(profile.signupCurrencyCode || profile.currencyCode || "").toUpperCase(),
+          currencySymbol: profile.signupCurrencySymbol || profile.currencySymbol || "",
+          signupCurrencySymbol: profile.signupCurrencySymbol || profile.currencySymbol || "",
+          country: profile.signupCountry || profile.country || "",
+          signupCountryCode: profile.signupCountryCode || profile.countryCode || ""
+        },
+        wallet: walletResult.wallet
+      }));
+      localStorage.setItem("fastmoney-last-wallet-user", user.uid);
+    } catch (cacheError) {
+      console.warn("FastMoney wallet cache could not be saved.", cacheError);
+    }
+    // Successful account loading stays silent; only errors are shown.
+  } catch (error) {
+    console.error("FastMoney dashboard initialization failed:", error);
+    showAccountMessage(error.message || "Could not load your account. Please refresh and try again.", true);
+    if (document.getElementById("navAccountName").textContent === "Loading ID…") {
+      document.getElementById("navAccountName").textContent = "Account unavailable";
+    }
+  } finally {
+    document.body.classList.add("fm-auth-ready");
+  }
+});
+
+document.getElementById("copyPayId")?.addEventListener("click", async () => {
+  const value = document.getElementById("payIdValue")?.textContent?.trim();
+  if (!value || value === "Loading…") return;
+  const button = document.getElementById("copyPayId");
+  try {
+    await navigator.clipboard.writeText(value);
+    button.innerHTML = '<i class="fa-solid fa-check"></i><span>Copied</span>';
+    setTimeout(() => { button.innerHTML = '<i class="fa-regular fa-copy"></i><span>Copy</span>'; }, 1500);
+  } catch {
+    showAccountMessage("Could not copy the Pay ID. Please select and copy it manually.", true);
+  }
+});
+
+document.getElementById("copyAccountId")?.addEventListener("click", async () => {
+  const value = document.getElementById("navAccountName")?.textContent?.trim();
+  if (!value || value === "Loading ID…" || value === "Setting up ID…" || value === "Account unavailable") return;
+  try {
+    await navigator.clipboard.writeText(value);
+    const button = document.getElementById("copyAccountId");
+    button.innerHTML = '<i class="fa-solid fa-check"></i>';
+    button.title = "Copied";
+    setTimeout(() => { button.innerHTML = '<i class="fa-regular fa-copy"></i>'; button.title = "Copy FastMoney ID"; }, 1500);
+  } catch {
+    showAccountMessage("Could not copy the ID. Please select and copy it manually.", true);
+  }
+});
+
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+  const button = document.getElementById("logoutBtn");
+  button.disabled = true;
+  button.textContent = "Logging out...";
+  try {
+    await signOut(auth);
+    location.replace("/login.html");
+  } catch (error) {
+    button.disabled = false;
+    button.textContent = "Log Out";
+    alert("Could not log out. Please try again.");
+  }
+});
+</script>
+<script>
+(function(){
+ const menuBtn=document.getElementById("dashboardMenuToggle");
+ const menu=document.getElementById("dashboardMenu");
+ const noticeBtn=document.getElementById("notificationToggle");
+ const notice=document.getElementById("notificationPopover");
+ function positionNotice(){const rect=document.getElementById("dashboardHeader").getBoundingClientRect();notice.style.setProperty("--notification-top",Math.max(0,rect.bottom)+"px");}
+ function closePanels(){menu.hidden=true;notice.hidden=true;menuBtn.setAttribute("aria-expanded","false");noticeBtn.setAttribute("aria-expanded","false");}
+ menuBtn.addEventListener("click",function(){const opening=menu.hidden;closePanels();menu.hidden=!opening;menuBtn.setAttribute("aria-expanded",String(opening));});
+ noticeBtn.addEventListener("click",function(){if(!notice.hidden){history.back();return;}closePanels();positionNotice();notice.hidden=false;noticeBtn.setAttribute("aria-expanded","true");history.pushState({fastMoneyNotifications:true},"","#notifications");});
+ window.addEventListener("resize",function(){if(!notice.hidden)positionNotice();});
+ window.addEventListener("popstate",function(){const detail=document.getElementById("notificationDetailBackdrop");if(detail&&!detail.hidden)detail.hidden=true;else if(!notice.hidden){notice.hidden=true;noticeBtn.setAttribute("aria-expanded","false");}if(location.hash!=="#notifications"&&location.hash!=="#notification-detail")closePanels();});
+ document.addEventListener("click",function(e){if(!e.target.closest("#dashboardHeader")&&!e.target.closest("#notificationPopover")){menu.hidden=true;menuBtn.setAttribute("aria-expanded","false");}});
+ document.getElementById("headerLogoutBtn").addEventListener("click",function(){document.getElementById("logoutBtn").click();});
+})();
+</script>
+<script src="./language.js?v=1" defer></script>
+<style id="fastmoney-notification-screen-style">
+.notification-screen[hidden],.notification-detail-backdrop[hidden]{display:none!important}
+.notification-screen{position:fixed;left:0;right:0;top:var(--notification-top,70px);height:calc(100dvh - var(--notification-top,70px));width:100vw;z-index:1300;display:flex;flex-direction:column;padding:12px clamp(13px,3vw,24px) 18px;background:#f5f8fc;color:#20364e;overflow:hidden;border-top:1px solid #e4ebf2;box-shadow:0 18px 40px rgba(16,39,65,.16)}
+.notification-screen-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex:0 0 auto;max-width:1000px;width:100%;margin:0 auto}
+.notification-kicker{font:800 10px Arial,sans-serif;letter-spacing:1.6px;color:#078397}
+.notification-screen-head h2{display:flex;align-items:center;gap:10px;margin:6px 0 3px;font-size:clamp(21px,4vw,27px);font-weight:800}
+.notification-screen-head h2 i{color:#078397}.notification-screen-head p{margin:0;color:#6b7f94;font-size:13px}
+.notification-close,.notification-detail-head button{width:40px;height:40px;display:grid;place-items:center;flex:0 0 auto;border:1px solid #dce6ef;border-radius:12px;background:#fff;color:#304b65;font-size:17px;cursor:pointer}
+.notification-screen-list{width:100%;max-width:1000px;margin:0 auto;flex:1;min-height:0;overflow:auto;display:grid;align-content:start;gap:10px;padding:2px 2px 12px}
+.notification-item{width:100%;display:block;text-align:left;padding:14px 16px;border:1px solid #e0e9f1;border-radius:14px;background:#fff;color:#233b53;cursor:pointer;overflow:hidden}
+.notification-item.unread{border-left:3px solid #e5484d;background:#fffdfd}
+.notification-item strong{display:block;color:#243b53;font-size:14px;line-height:1.4;font-weight:800}
+.notification-item p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:5px 0 0;color:#61748a;font-size:12px;line-height:1.55}
+.notification-item time{display:block;margin-top:8px;color:#8293a6;font-size:10px}
+.notification-empty{padding:34px 12px;text-align:center;color:#71839a;font-size:13px}
+
+.notification-detail-backdrop{position:fixed;inset:0;z-index:1500;display:grid;place-items:center;padding:18px;background:rgba(10,24,40,.58);backdrop-filter:blur(5px)}
+.notification-detail-dialog{width:min(560px,100%);max-height:min(82dvh,700px);overflow:auto;padding:20px;border:1px solid #e0e9f1;border-radius:20px;background:#fff;color:#20364e;box-shadow:0 24px 70px rgba(0,0,0,.24)}
+.notification-detail-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid #e9eef3}
+.notification-detail-head>span{font:800 10px Arial,sans-serif;letter-spacing:1.2px;color:#078397}.notification-detail-head>span i{margin-right:7px}
+.notification-detail-content{padding:20px 2px}.notification-detail-content h2{margin:0 0 8px;font-size:21px;line-height:1.35;font-weight:800;color:#20364e}
+.notification-detail-content time{display:block;margin-bottom:18px;color:#8393a5;font-size:11px}
+.notification-detail-content p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;color:#536a80;font-size:14px;line-height:1.8}
+
+@media(max-width:520px){.notification-screen{padding:10px 13px 14px;gap:0}.notification-item{padding:13px;border-radius:12px}.notification-item strong{font-size:13px}.notification-detail-backdrop{padding:12px}.notification-detail-dialog{padding:16px;border-radius:17px}.notification-detail-content h2{font-size:19px}}
+@media(prefers-color-scheme:dark){.notification-screen{background:#0d1b2b;color:#e8f0f8;border-color:#263c52;box-shadow:0 18px 45px rgba(0,0,0,.4)}.notification-kicker,.notification-screen-head h2 i{color:#78d3d7}.notification-screen-head p{color:#a8bbcf}.notification-close,.notification-detail-head button{background:#172c42;border-color:#344b62;color:#eaf2fa}.notification-item{background:#14283d;border-color:#30465d;color:#e7eff8}.notification-item.unread{background:#30232c;border-color:#7d4148;border-left-color:#ff686d}.notification-item strong{color:#f0f6fc}.notification-item p{color:#b3c4d6}.notification-item time,.notification-empty{color:#92a9bf}.notification-detail-dialog{background:#14283d;border-color:#344b62;color:#eaf2fa}.notification-detail-content h2{color:#f0f6fc}.notification-detail-content time{color:#91a8bd}.notification-detail-content p{color:#c0cede}}
+</style>
+
+<style id="fastmoney-notification-icon-contrast">
+/* Keep the bell itself readable in both color schemes, regardless of inherited button styles. */
+.dashboard-header .notification-trigger,
+.dashboard-header .notification-trigger .fa-bell{
+  color:#28415e!important;
+  -webkit-text-fill-color:#28415e!important;
+}
+@media(prefers-color-scheme:dark){
+  .dashboard-header .notification-trigger,
+  .dashboard-header .notification-trigger .fa-bell{
+    color:#f1f6fc!important;
+    -webkit-text-fill-color:#f1f6fc!important;
+  }
+}
+</style>
+
+<style id="fastmoney-notification-button-refinement">
+/* Match the notification button outline to the bell button's full footprint. */
+.dashboard-header .notification-trigger{
+  width:44px!important;
+  height:44px!important;
+  min-width:44px!important;
+  padding:0!important;
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+  background:transparent!important;
+  display:grid!important;
+  place-items:center!important;
+}
+.dashboard-header .notification-trigger.has-unread:after{
+  content:none!important;
+  display:none!important;
+}
+.dashboard-header .notification-dot{
+  top:6px!important;
+  right:6px!important;
+  width:7px!important;
+  height:7px!important;
+  border-width:1.5px!important;
+  box-shadow:none!important;
+}
+@media(prefers-color-scheme:dark){
+  .dashboard-header .notification-trigger{
+    background:transparent!important;
+    border:0!important;
+  }
+  .dashboard-header .notification-dot{border-color:#14283e!important}
+}
+@media(max-width:760px){
+  .dashboard-header .notification-trigger{
+    width:39px!important;
+    height:39px!important;
+    min-width:39px!important;
+    border-radius:0!important;
+    border:0!important;
+  }
+  .dashboard-header .notification-trigger.has-unread:after{content:none!important;display:none!important}
+  .dashboard-header .notification-dot{top:5px!important;right:5px!important}
+}
+</style>
+<style>
+
+/* Keep every wallet, including the signup-country currency wallet, in one horizontal swipe rail. */
+.wallet-scroller{
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  width:100%!important;
+  max-width:100%!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  gap:12px!important;
+  padding:4px 0 14px!important;
+  scroll-snap-type:x mandatory!important;
+  scroll-padding-inline:0!important;
+  -webkit-overflow-scrolling:touch!important;
+  overscroll-behavior-x:contain!important;
+}
+.wallet-scroller>.wallet-item{
+  flex:0 0 100%!important;
+  width:100%!important;
+  min-width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+  scroll-snap-align:start!important;
+}
+.wallet-scroll-hint{display:inline-flex!important}
+@media(max-width:760px){
+  .wallet-scroller{gap:10px!important;padding:4px 0 13px!important}
+  .wallet-scroller>.wallet-item{flex-basis:100%!important;min-width:100%!important;width:100%!important}
+}
+
+/* Keep the country-based Pay ID as its own swipeable slide inside the wallet rail. */
+.wallet-scroller>.pay-id-card{
+  box-sizing:border-box!important;
+  flex:0 0 100%!important;
+  width:100%!important;
+  min-width:100%!important;
+  max-width:100%!important;
+  margin:0!important;
+  scroll-snap-align:start!important;
+}
+</style>
+</body></html>
