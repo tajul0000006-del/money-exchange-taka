@@ -1230,6 +1230,12 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 </style>
 
 
+<style id="fastmoney-pay-in-temporarily-disabled">
+/* Pay In is intentionally hidden until the owner enables it. */
+#openPayIn,
+.bottom-nav-payin,
+#fastMoneyPayInModal{display:none!important;visibility:hidden!important;pointer-events:none!important}
+</style>
 </head>
 <body>
 <main class="dash-wrap" id="dashboard">
@@ -1283,7 +1289,7 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
         <div class="wallet-total-divider" aria-hidden="true"></div>
         <div class="wallet-total-item wallet-total-local"><span id="localCurrencyLabel">—</span><strong id="localCurrencyBalance">—</strong></div>
       </div>
-      <button type="button" id="openPayIn" style="position:relative;z-index:1;margin-top:16px;padding:10px 18px;border:0;border-radius:10px;background:#fff;color:#124b65;font-weight:800;cursor:pointer">Pay In</button>
+      <!-- Pay In entry point is temporarily disabled; retained for future activation. -->
     </div>
     <div class="wallet-list-heading"><div><h3>Wallets</h3></div></div>
     <div class="wallet-scroller" role="list" aria-label="Available wallets">
@@ -1366,7 +1372,7 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
   <button class="dash-btn secondary" id="logoutBtn" type="button" hidden>Log Out</button>
   <nav class="dashboard-bottom-nav" aria-label="Quick service navigation">
     <a class="bottom-nav-item bottom-nav-convert active" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></span><span class="bottom-nav-label">Convert</span></a>
-    <a class="bottom-nav-item bottom-nav-payin" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-circle-arrow-down" aria-hidden="true"></i></span><span class="bottom-nav-label">Pay-in</span></a>
+    <!-- Pay In navigation is temporarily disabled; retained in the Pay In module for future activation. -->
     <a class="bottom-nav-item bottom-nav-payout" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-circle-arrow-up" aria-hidden="true"></i></span><span class="bottom-nav-label">Pay-out</span></a>
     <a class="bottom-nav-item bottom-nav-buysell" href="/member-exchange.html#exchange"><span class="bottom-nav-icon"><i class="fa-solid fa-cart-shopping" aria-hidden="true"></i></span><span class="bottom-nav-label">Buy/Sell</span></a>
   </nav>
