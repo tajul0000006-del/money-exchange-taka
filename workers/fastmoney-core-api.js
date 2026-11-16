@@ -258,8 +258,14 @@ async function bootstrapAccount(env, claims) {
       const registry = await readDocument(env, "fastMoneyAccountIds", accountId);
       if (!registry) {
         writes.push({
-          update: makeRegistryDocument(accountId, now),
+          update: makeRegistryDocument(accountId, uid, now),
           currentDocument: { exists: false }
+        });
+      } else if (!readString(registry, "uid")) {
+        writes.push({
+          update: { name: registry.name, fields: { uid: fieldString(uid), accountId: fieldString(accountId) } },
+          updateMask: { fieldPaths: ["uid", "accountId"] },
+          currentDocument: { updateTime: registry.updateTime }
         });
       }
     }
