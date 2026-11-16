@@ -1577,6 +1577,24 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
 }
 
 
+
+/* Disable hover-lift animation on touch devices so cards stay level while swiping. */
+@media(hover:none),(pointer:coarse){
+  .wallet-overview>.wallet-scroller>.wallet-item,
+  .wallet-overview>.wallet-scroller>.pay-id-card{
+    transform:none!important;
+    transition:none!important;
+    animation:none!important;
+  }
+  .wallet-overview>.wallet-scroller>.wallet-item:hover,
+  .wallet-overview>.wallet-scroller>.wallet-item:active,
+  .wallet-overview>.wallet-scroller>.pay-id-card:hover,
+  .wallet-overview>.wallet-scroller>.pay-id-card:active{
+    transform:none!important;
+    animation:none!important;
+  }
+}
+
 /* Responsive full-width swipe carousel: every wallet card fits the screen. */
 .wallet-overview,
 .wallet-overview *{box-sizing:border-box}
