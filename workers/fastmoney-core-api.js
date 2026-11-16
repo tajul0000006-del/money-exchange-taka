@@ -903,9 +903,10 @@ async function handleInternalTransfers(request, env, url) {
     const receiverMessage = decision === "approve"
       ? "You received " + t.receiveAmount + " " + t.receiveCurrency + " from " + t.senderAccountId + ". Transfer successful."
       : "The transfer from " + t.senderAccountId + " was rejected. Reason: " + reason;
+    const matchingDetails = " Transaction ID: " + t.transactionId + ". Reference Number: " + t.referenceNumber + ".";
     writes.push(
-      appendNotificationWrite(senderProfile, senderUid, notificationEntry(randomTransferId("NTF"), decision === "approve" ? "Transfer Successful" : "Transfer Rejected", senderMessage, t, now), now),
-      appendNotificationWrite(receiverProfile, receiverUid, notificationEntry(randomTransferId("NTF"), decision === "approve" ? "Money Received" : "Incoming Transfer Rejected", receiverMessage, t, now), now)
+      appendNotificationWrite(senderProfile, senderUid, notificationEntry(randomTransferId("NTF"), decision === "approve" ? "Transfer Successful" : "Transfer Rejected", senderMessage + matchingDetails, t, now), now),
+      appendNotificationWrite(receiverProfile, receiverUid, notificationEntry(randomTransferId("NTF"), decision === "approve" ? "Money Received" : "Incoming Transfer Rejected", receiverMessage + matchingDetails, t, now), now)
     );
     await commitWrites(env, writes);
     return { success: true, requestId: id, transactionId: t.transactionId, referenceNumber: t.referenceNumber, status };
