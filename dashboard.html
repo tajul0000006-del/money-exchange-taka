@@ -1553,4 +1553,27 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
   .wallet-scroller{scroll-behavior:auto!important}
 }
 
+
+/* True edge-to-edge wallet slider: escape the dashboard content side gutters. */
+.wallet-overview > .wallet-scroller{
+  position:relative!important;
+  left:50%!important;
+  transform:translateX(-50%)!important;
+  box-sizing:border-box!important;
+  width:100vw!important;
+  max-width:100vw!important;
+  min-width:100vw!important;
+  margin-left:0!important;
+  margin-right:0!important;
+  padding-left:0!important;
+  padding-right:0!important;
+  border-left:0!important;
+  border-right:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+}
+
 </style>
