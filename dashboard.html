@@ -1269,6 +1269,7 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 #fastMoneyPayInModal .pay-in-channel-indicator{width:18px;height:18px;flex:0 0 18px;border:1.5px solid #c5ced9;border-radius:50%;position:relative}
 #fastMoneyPayInModal .is-selected .pay-in-channel-indicator{border-color:#2563eb}
 #fastMoneyPayInModal .is-selected .pay-in-channel-indicator:after{content:"";position:absolute;inset:4px;border-radius:50%;background:#2563eb}
+#fastMoneyPayInModal .pay-in-receiving-box[hidden]{display:none!important}
 #fastMoneyPayInModal .pay-in-receiving-box{display:block;max-width:620px;margin-top:18px;padding:16px;border:1px solid #e5eaf0;border-radius:14px;background:#fbfcfe}
 #fastMoneyPayInModal .pay-in-receiving-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
 #fastMoneyPayInModal .pay-in-receiving-top>div{display:grid;gap:5px}
@@ -1621,18 +1622,7 @@ function syncInternalPayId(){
   const target=document.getElementById("internalReceivingPayId");
   if(target)target.textContent=value&&value!=="Loading…" ? value : "Your Pay ID is loading…";
 }
-document.querySelectorAll("[data-pay-in-channel]").forEach(button=>{
-  button.addEventListener("click",()=>{
-    document.querySelectorAll("[data-pay-in-channel]").forEach(option=>{
-      const selected=option===button;
-      option.classList.toggle("is-selected",selected);
-      option.setAttribute("aria-pressed",String(selected));
-    });
-    const receivingBox=document.getElementById("internalPayIdBox");
-    if(receivingBox)receivingBox.hidden=button.dataset.payInChannel!=="internal";
-    if(button.dataset.payInChannel==="internal")syncInternalPayId();
-  });
-});
+
 document.getElementById("copyInternalReceivingPayId")?.addEventListener("click",async()=>{
   syncInternalPayId();
   const value=document.getElementById("internalReceivingPayId")?.textContent?.trim()||"";
@@ -2034,6 +2024,26 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
   scroll-snap-align:start!important;
 }
 </style>
+<script id="fastmoney-payin-channel-controls">
+(function(){
+  document.addEventListener("click",function(event){
+    var button=event.target.closest("[data-pay-in-channel]");
+    if(!button) return;
+    document.querySelectorAll("[data-pay-in-channel]").forEach(function(option){
+      var selected=option===button;
+      option.classList.toggle("is-selected",selected);
+      option.setAttribute("aria-pressed",String(selected));
+    });
+    var receivingBox=document.getElementById("internalPayIdBox");
+    if(receivingBox) receivingBox.hidden=button.dataset.payInChannel!=="internal";
+    if(button.dataset.payInChannel==="internal"){
+      var current=document.getElementById("payIdValue");
+      var target=document.getElementById("internalReceivingPayId");
+      if(target) target.textContent=current && /^\\d{20}$/.test(current.textContent.trim()) ? current.textContent.trim() : "Your Pay ID is loading…";
+    }
+  },true);
+})();
+</script>
 <script id="fastmoney-payin-navigation">
 (function(){
   function closePayIn(){
