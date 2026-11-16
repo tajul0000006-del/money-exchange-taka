@@ -1343,19 +1343,10 @@ body{padding-bottom:calc(82px + env(safe-area-inset-bottom))}
 
   <section id="fastMoneyPayInModal" hidden role="dialog" aria-modal="true" aria-labelledby="payInTitle">
     <div class="pay-in-screen-content">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><h2 id="payInTitle" style="margin:0;font-size:20px">Pay In</h2><button type="button" id="closePayIn" aria-label="Close" style="border:0;background:transparent;font-size:24px;cursor:pointer">×</button></div>
-      <p style="font-size:13px;opacity:.75">Send payment using an available method, then submit your transaction details for review.</p>
-      <form id="payInForm" style="display:grid;gap:11px">
-        <label>Payment Method<select id="payInMethod" required style="display:block;width:100%;padding:11px;margin-top:5px;border:1px solid #cbd5e1;border-radius:9px"></select></label>
-        <div id="payInMethodDetails" style="padding:12px;border:1px solid #dbe5ec;border-radius:10px;font-size:13px;white-space:pre-wrap"></div>
-        <label>Amount<input id="payInAmount" type="number" min="0.01" max="1000000" step="0.01" required style="display:block;width:100%;padding:11px;margin-top:5px;border:1px solid #cbd5e1;border-radius:9px"></label>
-        <label>Transaction Reference / TxID<input id="payInReference" required maxlength="120" minlength="4" style="display:block;width:100%;padding:11px;margin-top:5px;border:1px solid #cbd5e1;border-radius:9px"></label>
-        <label>Sender Name / Number / Wallet ID<input id="payInSender" required maxlength="120" style="display:block;width:100%;padding:11px;margin-top:5px;border:1px solid #cbd5e1;border-radius:9px"></label>
-        <label>Payment Proof Image URL (optional)<input id="payInProof" type="url" maxlength="2048" placeholder="https://..." style="display:block;width:100%;padding:11px;margin-top:5px;border:1px solid #cbd5e1;border-radius:9px"></label>
-        <button type="submit" id="submitPayIn" style="padding:12px;border:0;border-radius:10px;background:#087f78;color:#fff;font-weight:800">Submit Pay In Request</button>
-      </form>
-      <p id="payInStatus" role="status" aria-live="polite" style="font-size:13px"></p>
-      <h3 style="font-size:15px;margin:18px 0 8px">My Pay In Requests</h3><div id="myPayInRequests" style="font-size:13px">Loading…</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+        <h2 id="payInTitle" style="margin:0;font-size:20px">Pay In</h2>
+        <button type="button" id="closePayIn" aria-label="Close" style="border:0;border-radius:10px;background:#f1f5f9;color:#334155;width:38px;height:38px;font-size:24px;cursor:pointer">×</button>
+      </div>
     </div>
   </section>
   <script>
@@ -1533,7 +1524,6 @@ function showPayInModal(open) {
   modal.hidden=!open;
   trigger?.setAttribute("aria-expanded",String(open));
   document.body.style.overflow=open?"hidden":"";
-  if(open) loadPayInData();
 }
 function renderPayInMethodDetails() {
   const selected=payInMethods.find(m=>m.id===document.getElementById("payInMethod")?.value);
