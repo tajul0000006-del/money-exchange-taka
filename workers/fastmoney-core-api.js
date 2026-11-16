@@ -714,6 +714,16 @@ async function handleInternalTransfers(request, env, url) {
     if (!Number.isFinite(sendAmount) || sendAmount <= 0 || sendAmount > 100000000) throw new Error("Enter a valid transfer amount");
     if (!Object.prototype.hasOwnProperty.call(INTERNAL_WALLETS, walletKey) && walletKey !== "LOCAL") throw new Error("Choose a supported wallet");
     const senderUid = claims.sub;
+    const idempotencyKey = safeText(body.idempotencyKey, 80);
+    if (idempotencyKey.length < 16) throw new Error("Invalid transfer submission key");
+    const idempotencyId = await referenceKey(senderUid, idempotencyKey);
+    const previousSubmission = await readDocument(env, "internalTransferIdempotency", idempotencyId);
+    if (previousSubmission) {
+      const previousId = readString(previousSubmission, "requestId");
+      const previousTransfer = previousId ? await readDocument(env, "internalTransferQueue", previousId) : null;
+      if (previousTransfer) return { success: true, transfer: transferPublicShape(previousTransfer), duplicate: true };
+      const conflict = new Error("This transfer submission is already being processed. Please retry shortly."); conflict.status = 409; throw conflict;
+    }
     const [senderProfile, senderWallet, receiver] = await Promise.all([
       readDocument(env, "userProfiles", senderUid), readDocument(env, "wallets", senderUid),
       findProfileByAccountId(env, receiverAccountId)
@@ -781,6 +791,7 @@ async function handleInternalTransfers(request, env, url) {
       { update: { name: senderWallet.name, fields: { reservedBalances: fieldMap(senderReserved), updatedAt: fieldTimestamp(now) } },
         updateMask: { fieldPaths: ["reservedBalances", "updatedAt"] }, currentDocument: { updateTime: senderWallet.updateTime } },
       { update: { name: documentName("internalTransferQueue", id), fields: queueFields }, currentDocument: { exists: false } },
+      { update: { name: documentName("internalTransferIdempotency", idempotencyId), fields: { uid: fieldString(senderUid), requestId: fieldString(id), createdAt: fieldTimestamp(now) } }, currentDocument: { exists: false } },
       { update: { name: documentName("transactions/" + senderUid + "/items", id), fields: senderMirror }, currentDocument: { exists: false } },
       { update: { name: documentName("transactions/" + receiver.uid + "/items", id), fields: receiverMirror }, currentDocument: { exists: false } }
     ]);
