@@ -661,6 +661,7 @@ function transferPublicShape(doc) {
   const get = key => f[key]?.stringValue || "";
   return {
     requestId: get("requestId"), transactionId: get("transactionId"), referenceNumber: get("referenceNumber"),
+    direction: get("direction"), otherAccountId: get("otherAccountId"), otherName: get("otherName"),
     senderUid: get("senderUid"), receiverUid: get("receiverUid"),
     senderAccountId: get("senderAccountId"), receiverAccountId: get("receiverAccountId"),
     senderName: get("senderName"), receiverName: get("receiverName"),
