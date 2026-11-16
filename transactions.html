@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Transactions · FastMoney</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f7fa;color:#17324b;font:14px/1.5 Arial,sans-serif}header{height:66px;background:#fff;border-bottom:1px solid #e2eaf1;display:flex;align-items:center;justify-content:space-between;padding:0 max(18px,calc((100vw - 800px)/2))}header a{color:#087f91;text-decoration:none;font-weight:800}main{width:min(100% - 28px,760px);margin:26px auto 60px}h1{font-size:25px;margin:0 0 4px}.sub{margin:0 0 18px;color:#718397;font-size:13px}.list{display:grid;gap:11px}.item{background:#fff;border:1px solid #e2eaf1;border-radius:14px;padding:15px;box-shadow:0 5px 18px #17324b08}.top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.top strong{font-size:14px}.status{font-size:10px;font-weight:800;text-transform:uppercase;padding:5px 8px;border-radius:20px;background:#fef3c7;color:#92400e;white-space:nowrap}.status.successful{background:#e7f7ee;color:#087443}.status.rejected{background:#fff0ef;color:#b42318}.meta{margin-top:8px;color:#718397;font-size:11px;overflow-wrap:anywhere}.amounts{display:flex;justify-content:space-between;gap:12px;margin-top:12px;padding-top:11px;border-top:1px solid #edf1f5}.amounts span{font-size:11px;color:#718397}.amounts strong{display:block;margin-top:3px;font-size:15px;color:#17324b}.details{margin-top:12px;padding-top:11px;border-top:1px solid #edf1f5;display:grid;gap:6px;font-size:12px;color:#52687d;overflow-wrap:anywhere}.details b{color:#24435d}.empty,.error{padding:22px;text-align:center;background:#fff;border:1px solid #e2eaf1;border-radius:14px;color:#718397}.error{color:#b42318}.links{display:flex;gap:16px;margin-top:18px}.links a{color:#087f91;font-weight:700;text-decoration:none;font-size:13px}@media(max-width:520px){main{margin-top:18px}.amounts strong{font-size:13px}}
+</style></head><body>
+<header><a href="/dashboard.html">← Dashboard</a><strong>FASTMONEY</strong></header>
+<main><h1>Transactions</h1><p class="sub">Your sent and received FastMoney transfers.</p><div id="transactionList" class="list"><div class="empty">Loading transactions…</div></div><div class="links"><a href="/transfer.html">Send Money</a><a href="/dashboard.html">Dashboard Home</a></div></main>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { firebaseConfig } from "./firebase-config.js";
+const CORE="https://fastmoney-core-api.taijulsheikh60.workers.dev";
+const app=initializeApp(firebaseConfig),auth=getAuth(app),root=document.getElementById("transactionList");
+const money=(v,c)=>Number(v||0).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:c==="USDT"?6:2})+" "+c;
+function addText(parent,tag,value,strong=false){const el=document.createElement(tag);el.textContent=String(value??"");if(strong)el.style.fontWeight="800";parent.appendChild(el);return el;}
+function render(item){
+ const card=document.createElement("article");card.className="item";
+ const top=document.createElement("div");top.className="top";
+ const left=document.createElement("div");
+ addText(left,"strong",(item.direction==="sent"?"Sent to ":"Received from ")+(item.otherName||"FastMoney User"));
+ addText(left,"div","Account ID: "+(item.otherAccountId||"—"));
+ const badge=addText(top,"span",item.status||"pending");badge.className="status "+String(item.status||"pending").toLowerCase();
+ top.append(left,badge);card.append(top);
+ const meta=addText(card,"div","Date: "+(item.createdAt?new Date(item.createdAt).toLocaleString():"—"));meta.className="meta";
+ const amounts=document.createElement("div");amounts.className="amounts";
+ const sent=document.createElement("div");addText(sent,"span","Amount sent");addText(sent,"strong",money(item.sendAmount,item.sendCurrency));
+ const received=document.createElement("div");addText(received,"span","Amount received");addText(received,"strong",money(item.receiveAmount,item.receiveCurrency));
+ amounts.append(sent,received);card.append(amounts);
+ const details=document.createElement("div");details.className="details";
+ addText(details,"div","Transaction ID: "+item.transactionId);
+ addText(details,"div","Reference Number: "+item.referenceNumber);
+ addText(details,"div","Sender Account ID: "+item.senderAccountId);
+ addText(details,"div","Receiver Account ID: "+item.receiverAccountId);
+ addText(details,"div","Wallet: "+item.walletLabel);
+ addText(details,"div","Exchange Rate: "+item.rate);
+ if(item.rejectionReason)addText(details,"div","Rejection Reason: "+item.rejectionReason);
+ card.append(details);return card;
+}
+onAuthStateChanged(auth,async user=>{
+ if(!user){location.replace("/login.html?next=%2Ftransactions.html");return;}
+ try{
+  const token=await user.getIdToken(true);
+  const response=await fetch(CORE+"/api/transactions/me",{headers:{Authorization:"Bearer "+token},cache:"no-store"});
+  const data=await response.json().catch(()=>({}));
+  if(!response.ok||data.success!==true)throw new Error(data.error||"Could not load transactions");
+  root.replaceChildren();
+  if(!data.transactions.length){const empty=document.createElement("div");empty.className="empty";empty.textContent="No transactions yet.";root.appendChild(empty);return;}
+  data.transactions.forEach(item=>root.appendChild(render(item)));
+ }catch(error){root.replaceChildren();const box=document.createElement("div");box.className="error";box.textContent=error.message;root.appendChild(box);}
+});
+</script></body></html>
