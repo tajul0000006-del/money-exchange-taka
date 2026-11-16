@@ -360,7 +360,7 @@ async function getWallet(env, uid) {
   }
   return {
     accountId: readString(profile, "accountId"),
-    status: readString(wallet, "status) || "active",
+    status: readString(wallet, "status") || "active",
     balances: balanceValues,
     reservedBalances: reservedValues
   };
