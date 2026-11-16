@@ -77,7 +77,7 @@ import { firebaseConfig } from "./firebase-config.js";
 const CORE="https://fastmoney-core-api.taijulsheikh60.workers.dev";
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
 const $=id=>document.getElementById(id);
-let currentWallet=null,localCode="BDT";
+let currentWallet=null,localCode="BDT",activeIdempotencyKey="";
 async function api(path,token,method="GET",body=null){
  const response=await fetch(CORE+path,{method,headers:{Authorization:"Bearer "+token,...(body?{"Content-Type":"application/json"}:{})},...(body?{body:JSON.stringify(body)}:{}),cache:"no-store"});
  const data=await response.json().catch(()=>({}));
@@ -108,19 +108,22 @@ onAuthStateChanged(auth,async user=>{
   updateAvailable();
  }catch(error){$("transferStatus").className="status error";$("transferStatus").textContent=error.message;}
 });
-$("walletKey").addEventListener("change",updateAvailable);
+$("walletKey").addEventListener("change",()=>{activeIdempotencyKey="";updateAvailable();});
+$("receiverAccountId").addEventListener("input",()=>{activeIdempotencyKey="";});
+$("transferAmount").addEventListener("input",()=>{activeIdempotencyKey="";});
 $("transferForm").addEventListener("submit",async event=>{
  event.preventDefault();
  const user=auth.currentUser;if(!user)return;
  const receiverAccountId=$("receiverAccountId").value.trim(),amount=Number($("transferAmount").value),walletKey=selectedKey();
  if(!/^[1-9][0-9]{9}$/.test(receiverAccountId)){ $("transferStatus").className="status error";$("transferStatus").textContent="Enter a valid 10-digit Account ID.";return;}
  if(!Number.isFinite(amount)||amount<=0){$("transferStatus").className="status error";$("transferStatus").textContent="Enter a valid amount.";return;}
+ if(!activeIdempotencyKey)activeIdempotencyKey=crypto.randomUUID();
  const button=$("sendButton");button.disabled=true;button.textContent="Submitting…";
  $("transferStatus").className="status";$("transferStatus").textContent="Submitting transfer request securely…";
  $("transferResult").style.display="none";
  try{
   const token=await user.getIdToken(true);
-  const data=await api("/api/internal-transfer/submit",token,"POST",{receiverAccountId,walletKey,amount});
+  const data=await api("/api/internal-transfer/submit",token,"POST",{receiverAccountId,walletKey,amount,idempotencyKey:activeIdempotencyKey});
   const t=data.transfer;
   $("resultAmounts").textContent=money(t.sendAmount)+" "+t.sendCurrency+" → "+money(t.receiveAmount)+" "+t.receiveCurrency;
   $("resultReceiver").textContent="Receiver Account ID: "+t.receiverAccountId;
@@ -129,9 +132,8 @@ $("transferForm").addEventListener("submit",async event=>{
   $("resultRate").textContent="Exchange Rate: "+t.rate;
   $("transferResult").style.display="block";
   $("transferStatus").className="status success";$("transferStatus").textContent="Your transfer request has been submitted and is awaiting Admin review.";
-  $("transferForm").reset();
-  const refreshed=await api("/api/wallet/me",token);
-  currentWallet=refreshed.wallet;
+  $("transferForm").reset();activeIdempotencyKey="";
+  try{const refreshed=await api("/api/wallet/me",token);currentWallet=refreshed.wallet;}catch(_){ }
   updateAvailable();
  }catch(error){$("transferStatus").className="status error";$("transferStatus").textContent=error.message;}
  finally{button.disabled=false;button.textContent="Continue Transfer";}
