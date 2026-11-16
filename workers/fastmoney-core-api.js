@@ -348,15 +348,21 @@ async function getWallet(env, uid) {
   ]);
   if (!profile || !wallet) return null;
   const balances = wallet.fields?.balances?.mapValue?.fields || {};
-  const balanceValues = {};
+  const reserved = wallet.fields?.reservedBalances?.mapValue?.fields || {};
+  const balanceValues = {}, reservedValues = {};
   for (const [currency, field] of Object.entries(balances)) {
     const value = field.integerValue ?? field.doubleValue ?? "0";
     balanceValues[currency] = Number(value);
   }
+  for (const [currency, field] of Object.entries(reserved)) {
+    const value = field.integerValue ?? field.doubleValue ?? "0";
+    reservedValues[currency] = Number(value);
+  }
   return {
     accountId: readString(profile, "accountId"),
-    status: readString(wallet, "status") || "active",
-    balances: balanceValues
+    status: readString(wallet, "status) || "active",
+    balances: balanceValues,
+    reservedBalances: reservedValues
   };
 }
 
