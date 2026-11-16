@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Send Money · FastMoney</title>
+<style>
+:root{color-scheme:light;--ink:#17324b;--muted:#718397;--line:#e2eaf1;--brand:#087f91;--bg:#f4f7fa}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font:15px/1.5 Arial,sans-serif;color:var(--ink)}
+header{height:66px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(18px,calc((100vw - 760px)/2))}
+header a{color:var(--brand);text-decoration:none;font-weight:800}
+main{width:min(100% - 28px,680px);margin:28px auto 60px}
+h1{font-size:25px;margin:0 0 5px;letter-spacing:-.5px}.sub{color:var(--muted);margin:0 0 20px;font-size:13px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 8px 26px #17324b0a}
+label{display:block;font-size:12px;font-weight:800;color:#52687d;margin:15px 0 6px}
+input,select{width:100%;height:48px;border:1px solid #d8e2eb;border-radius:11px;background:#fff;padding:0 13px;color:var(--ink);font:15px Arial;outline:none}
+input:focus,select:focus{border-color:#1596a5;box-shadow:0 0 0 3px #1596a51a}
+.balance{display:flex;justify-content:space-between;gap:12px;margin-top:8px;padding:11px 13px;border-radius:10px;background:#f1f8f9;font-size:12px;color:#60778a}
+.balance strong{color:#087f91;font-size:13px}
+button{width:100%;height:49px;margin-top:20px;border:0;border-radius:11px;background:linear-gradient(110deg,#087f91,#116d9c);color:#fff;font-weight:800;font-size:14px;cursor:pointer}
+button:disabled{opacity:.55;cursor:wait}
+.notice{margin-top:14px;padding:12px;border-radius:10px;background:#f6f9fc;color:#607489;font-size:12px;line-height:1.6}
+.status{margin-top:15px;font-size:13px;line-height:1.6;overflow-wrap:anywhere}
+.status.error{color:#b42318}.status.success{color:#087443}
+.result{margin-top:15px;padding:15px;border:1px solid #cfe7dc;border-radius:12px;background:#f4fbf7;display:none}
+.result strong{display:block;margin:4px 0;color:#123c2d}.result p{margin:5px 0;font-size:12px;color:#526b61;overflow-wrap:anywhere}
+.links{display:flex;gap:16px;flex-wrap:wrap;margin-top:18px}.links a{font-size:13px;font-weight:700;color:#087f91;text-decoration:none}
+@media(max-width:520px){main{margin-top:18px}.panel{padding:17px;border-radius:15px}h1{font-size:22px}}
+</style>
+</head>
+<body>
+<header><a href="/dashboard.html">← Dashboard</a><strong>FASTMONEY</strong></header>
+<main>
+<h1>Send Money</h1>
+<p class="sub">Send funds to another FastMoney account using their 10-digit Account ID.</p>
+<section class="panel">
+<form id="transferForm">
+<label for="receiverAccountId">Receiver FastMoney Account ID</label>
+<input id="receiverAccountId" inputmode="numeric" autocomplete="off" maxlength="10" pattern="[1-9][0-9]{9}" placeholder="Enter 10-digit Account ID" required>
+<label for="walletKey">From Wallet</label>
+<select id="walletKey" required>
+<option value="LOCAL">Local Balance</option>
+<option value="FASTMONEY_USD">FastMoney USD</option>
+<option value="REDOTPAY_USD">RedotPay USD</option>
+<option value="VOLET_USD">Volet USD</option>
+<option value="EPAY_USD">ePay USD</option>
+<option value="WEBMONEY_USD">WebMoney USD</option>
+<option value="TUNEPAY_USD">TunePay USD</option>
+<option value="PERFECTMONEY_USD">Perfect Money USD</option>
+<option value="WINITY_USD">Winity USD</option>
+<option value="RIZON_USD">Rizon USD</option>
+<option value="USDT">USDT</option>
+</select>
+<div class="balance"><span>Available balance</span><strong id="availableBalance">Loading…</strong></div>
+<label for="transferAmount">Amount to Send</label>
+<input id="transferAmount" type="number" min="0.01" step="0.01" placeholder="0.00" required>
+<button id="sendButton" type="submit">Continue Transfer</button>
+</form>
+<div class="notice">Internal transfers are reviewed by FastMoney Admin. The amount is reserved while pending, but your displayed wallet balance is not deducted until approval. If rejected, the reserved amount is released and the wallet balance remains unchanged. Dollar wallets transfer 1:1 to the same wallet type. Local currencies require an Admin-configured exchange rate.</div>
+<div id="transferStatus" class="status" role="status" aria-live="polite"></div>
+<div id="transferResult" class="result">
+  <b>Transfer request submitted</b>
+  <strong id="resultAmounts"></strong>
+  <p id="resultReceiver"></p>
+  <p id="resultTransaction"></p>
+  <p id="resultReference"></p>
+  <p id="resultRate"></p>
+  <p>Status: Pending Admin Review</p>
+</div>
+<div class="links"><a href="/transactions.html">View Transactions</a><a href="/dashboard.html">Back to Dashboard</a></div>
+</section>
+</main>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { firebaseConfig } from "./firebase-config.js";
+const CORE="https://fastmoney-core-api.taijulsheikh60.workers.dev";
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+const $=id=>document.getElementById(id);
+let currentWallet=null,localCode="BDT";
+async function api(path,token,method="GET",body=null){
+ const response=await fetch(CORE+path,{method,headers:{Authorization:"Bearer "+token,...(body?{"Content-Type":"application/json"}:{})},...(body?{body:JSON.stringify(body)}:{}),cache:"no-store"});
+ const data=await response.json().catch(()=>({}));
+ if(!response.ok||data.success!==true)throw new Error(data.error||"FastMoney request failed");
+ return data;
+}
+function money(value){return Number(value||0).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:6});}
+function selectedKey(){return $("walletKey").value;}
+function balanceKey(key){return key==="LOCAL"?localCode:key==="FASTMONEY_USD"?"USD":key;}
+function currencyFor(key){return key==="LOCAL"?localCode:key==="USDT"?"USDT":"USD";}
+function updateAvailable(){
+ if(!currentWallet)return;
+ const key=balanceKey(selectedKey()),balances=currentWallet.balances||{},reserved=currentWallet.reservedBalances||{};
+ const available=Math.max(0,Number(balances[key]||0)-Number(reserved[key]||0));
+ $("availableBalance").textContent=money(available)+" "+currencyFor(selectedKey());
+ $("transferAmount").step=selectedKey()==="USDT"?"0.000001":"0.01";
+}
+onAuthStateChanged(auth,async user=>{
+ if(!user){location.replace("/login.html?next=%2Ftransfer.html");return;}
+ try{
+  const token=await user.getIdToken(true);
+  await api("/api/account/bootstrap",token,"POST",{});
+  const [walletData,profileSnap]=await Promise.all([api("/api/wallet/me",token),getDoc(doc(db,"userProfiles",user.uid))]);
+  currentWallet=walletData.wallet;
+  const profile=profileSnap.exists()?profileSnap.data():{};
+  localCode=String(profile.signupCurrencyCode||profile.currencyCode||"BDT").toUpperCase();
+  $("walletKey").options[0].textContent="Local Balance ("+localCode+")";
+  updateAvailable();
+ }catch(error){$("transferStatus").className="status error";$("transferStatus").textContent=error.message;}
+});
+$("walletKey").addEventListener("change",updateAvailable);
+$("transferForm").addEventListener("submit",async event=>{
+ event.preventDefault();
+ const user=auth.currentUser;if(!user)return;
+ const receiverAccountId=$("receiverAccountId").value.trim(),amount=Number($("transferAmount").value),walletKey=selectedKey();
+ if(!/^[1-9][0-9]{9}$/.test(receiverAccountId)){ $("transferStatus").className="status error";$("transferStatus").textContent="Enter a valid 10-digit Account ID.";return;}
+ if(!Number.isFinite(amount)||amount<=0){$("transferStatus").className="status error";$("transferStatus").textContent="Enter a valid amount.";return;}
+ const button=$("sendButton");button.disabled=true;button.textContent="Submitting…";
+ $("transferStatus").className="status";$("transferStatus").textContent="Submitting transfer request securely…";
+ $("transferResult").style.display="none";
+ try{
+  const token=await user.getIdToken(true);
+  const data=await api("/api/internal-transfer/submit",token,"POST",{receiverAccountId,walletKey,amount});
+  const t=data.transfer;
+  $("resultAmounts").textContent=money(t.sendAmount)+" "+t.sendCurrency+" → "+money(t.receiveAmount)+" "+t.receiveCurrency;
+  $("resultReceiver").textContent="Receiver Account ID: "+t.receiverAccountId;
+  $("resultTransaction").textContent="Transaction ID: "+t.transactionId;
+  $("resultReference").textContent="Reference Number: "+t.referenceNumber;
+  $("resultRate").textContent="Exchange Rate: "+t.rate;
+  $("transferResult").style.display="block";
+  $("transferStatus").className="status success";$("transferStatus").textContent="Your transfer request has been submitted and is awaiting Admin review.";
+  $("transferForm").reset();updateAvailable();
+ }catch(error){$("transferStatus").className="status error";$("transferStatus").textContent=error.message;}
+ finally{button.disabled=false;button.textContent="Continue Transfer";}
+});
+</script>
+</body></html>
