@@ -1789,8 +1789,7 @@ onAuthStateChanged(auth, async user => {
       throw new Error("The server did not return a valid 20-digit Pay ID.");
     }
     document.getElementById("payIdValue").textContent = bootstrap.payId;
-    const internalPayId=document.getElementById("internalReceivingPayId");
-    if(internalPayId)internalPayId.textContent=bootstrap.payId;
+    if(internalPayId)internalPayId.textContent=bootstrap.accountId;
     document.getElementById("copyPayId")?.setAttribute("data-copy-value", bootstrap.payId);
     document.getElementById("navAccountName").textContent = bootstrap.accountId;
     document.getElementById("copyAccountId")?.setAttribute("data-copy-value", bootstrap.accountId);
