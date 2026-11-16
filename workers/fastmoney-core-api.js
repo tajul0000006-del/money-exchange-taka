@@ -736,15 +736,19 @@ async function handleInternalTransfers(request, env, url) {
       receiveAmount = roundMoney(sendAmount, wallet.currency === "USDT" ? 6 : 2);
     }
     const senderBalances = readMap(senderWallet, "balances");
-    const available = amountValue(senderBalances, sourceBalanceKey);
-    if (available < sendAmount) throw new Error("Insufficient balance in your selected wallet");
+    const senderReserved = { ...readMap(senderWallet, "reservedBalances") };
+    const precision = walletKey === "USDT" ? 6 : 2;
+    const normalizedAmount = roundMoney(sendAmount, precision);
+    const available = amountValue(senderBalances, sourceBalanceKey) - amountValue(senderReserved, sourceBalanceKey);
+    if (available + 1e-9 < normalizedAmount) throw new Error("Insufficient available balance in your selected wallet");
     const id = randomTransferId("FMTR");
     const referenceNumber = randomTransferId("FMR");
     const now = new Date().toISOString();
+    senderReserved[sourceBalanceKey] = fieldDouble(roundMoney(amountValue(senderReserved, sourceBalanceKey) + normalizedAmount, precision));
     const transfer = {
       requestId: id, transactionId: id, referenceNumber, senderUid, receiverUid: receiver.uid,
       senderAccountId, receiverAccountId, senderName, receiverName, walletKey, walletLabel,
-      sourceBalanceKey, sendAmount: roundMoney(sendAmount, walletKey === "USDT" ? 6 : 2),
+      sourceBalanceKey, sendAmount: normalizedAmount,
       sendCurrency, receiveAmount, receiveCurrency, rate, status: "pending", createdAt: now
     };
     const queueFields = {
@@ -761,6 +765,8 @@ async function handleInternalTransfers(request, env, url) {
     const senderMirror = transactionMirrorFields(transfer, senderUid, "sent", "pending", now);
     const receiverMirror = transactionMirrorFields(transfer, receiver.uid, "received", "pending", now);
     await commitWrites(env, [
+      { update: { name: senderWallet.name, fields: { reservedBalances: fieldMap(senderReserved), updatedAt: fieldTimestamp(now) } },
+        updateMask: { fieldPaths: ["reservedBalances", "updatedAt"] }, currentDocument: { updateTime: senderWallet.updateTime } },
       { update: { name: documentName("internalTransferQueue", id), fields: queueFields }, currentDocument: { exists: false } },
       { update: { name: documentName("transactions/" + senderUid + "/items", id), fields: senderMirror }, currentDocument: { exists: false } },
       { update: { name: documentName("transactions/" + receiver.uid + "/items", id), fields: receiverMirror }, currentDocument: { exists: false } }
@@ -815,19 +821,23 @@ async function handleInternalTransfers(request, env, url) {
     if (decision === "approve") {
       if (readString(senderWallet, "status") !== "active" || readString(receiverWallet, "status") !== "active") throw new Error("One of the wallets is inactive");
       const senderBalances = { ...readMap(senderWallet, "balances") };
+      const senderReserved = { ...readMap(senderWallet, "reservedBalances") };
       const receiverBalances = { ...readMap(receiverWallet, "balances") };
+      const precision = t.sendCurrency === "USDT" ? 6 : 2;
       const current = amountValue(senderBalances, sourceBalanceKey);
-      if (current < t.sendAmount) {
-        const error = new Error("Sender balance is no longer sufficient. Transfer cannot be approved."); error.status = 409; throw error;
+      const reserved = amountValue(senderReserved, sourceBalanceKey);
+      if (current + 1e-9 < t.sendAmount || reserved + 1e-9 < t.sendAmount) {
+        const error = new Error("Reserved sender balance is unavailable. Transfer cannot be approved."); error.status = 409; throw error;
       }
       const receiveKey = t.walletKey === "LOCAL" ? t.receiveCurrency : (INTERNAL_WALLETS[t.walletKey]?.balanceKey || "");
       if (!receiveKey) throw new Error("Receiver wallet mapping is invalid");
-      senderBalances[sourceBalanceKey] = fieldDouble(roundMoney(current - t.sendAmount, t.sendCurrency === "USDT" ? 6 : 2));
+      senderBalances[sourceBalanceKey] = fieldDouble(roundMoney(current - t.sendAmount, precision));
+      senderReserved[sourceBalanceKey] = fieldDouble(roundMoney(Math.max(0, reserved - t.sendAmount), precision));
       const receivedCurrent = amountValue(receiverBalances, receiveKey);
       receiverBalances[receiveKey] = fieldDouble(roundMoney(receivedCurrent + t.receiveAmount, t.receiveCurrency === "USDT" ? 6 : 2));
       writes.push(
-        { update: { name: senderWallet.name, fields: { balances: fieldMap(senderBalances), updatedAt: fieldTimestamp(now) } },
-          updateMask: { fieldPaths: ["balances", "updatedAt"] }, currentDocument: { updateTime: senderWallet.updateTime } },
+        { update: { name: senderWallet.name, fields: { balances: fieldMap(senderBalances), reservedBalances: fieldMap(senderReserved), updatedAt: fieldTimestamp(now) } },
+          updateMask: { fieldPaths: ["balances", "reservedBalances", "updatedAt"] }, currentDocument: { updateTime: senderWallet.updateTime } },
         { update: { name: receiverWallet.name, fields: { balances: fieldMap(receiverBalances), updatedAt: fieldTimestamp(now) } },
           updateMask: { fieldPaths: ["balances", "updatedAt"] }, currentDocument: { updateTime: receiverWallet.updateTime } },
         { update: { name: documentName("ledger/" + senderUid + "/entries", randomTransferId("LED")),
@@ -835,6 +845,14 @@ async function handleInternalTransfers(request, env, url) {
         { update: { name: documentName("ledger/" + receiverUid + "/entries", randomTransferId("LED")),
           fields: { transactionId: fieldString(t.transactionId), referenceNumber: fieldString(t.referenceNumber), uid: fieldString(receiverUid), type: fieldString("internal_transfer"), direction: fieldString("credit"), currency: fieldString(t.receiveCurrency), amount: fieldDouble(t.receiveAmount), referenceId: fieldString(id), description: fieldString("Internal transfer received"), createdAt: fieldTimestamp(now) } }, currentDocument: { exists: false } }
       );
+    }
+    if (decision === "reject") {
+      const senderReserved = { ...readMap(senderWallet, "reservedBalances") };
+      const reserved = amountValue(senderReserved, sourceBalanceKey);
+      const precision = t.sendCurrency === "USDT" ? 6 : 2;
+      senderReserved[sourceBalanceKey] = fieldDouble(roundMoney(Math.max(0, reserved - t.sendAmount), precision));
+      writes.push({ update: { name: senderWallet.name, fields: { reservedBalances: fieldMap(senderReserved), updatedAt: fieldTimestamp(now) } },
+        updateMask: { fieldPaths: ["reservedBalances", "updatedAt"] }, currentDocument: { updateTime: senderWallet.updateTime } });
     }
     const senderMessage = decision === "approve"
       ? "Your transfer of " + t.sendAmount + " " + t.sendCurrency + " to " + t.receiverAccountId + " was successful."
